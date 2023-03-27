@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/cerrarSe"
+        android:title="@string/menu_CerrarSe"
+        android:icon="@drawable/ic_baseline_exit_to_app_24"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/CarrComp"
+        android:title="@string/menu_CerrarSe"
+        android:icon="@drawable/ic_baseline_shopping_cart_24"
+        app:showAsAction="ifRoom" />
+
+    <item  android:title="@string/menu"
+        android:icon="@drawable/ic_baseline_more_vert_24"
+        app:showAsAction="always">
+        <menu>
+
+            <item
+                android:title="@string/perfil"
+                android:id="@+id/Perfil"
+                android:icon="@drawable/icon_user"
+                app:showAsAction="never"
+
+                />
+
+            <item
+                android:title="@string/agenda"
+                android:id="@+id/Agenda"
+                android:icon="@drawable/ic_baseline_book_24"
+                app:showAsAction="never"
+
+                />
+
+            <item
+                android:id="@+id/Consulta"
+                android:title="@string/consultas"
+                android:icon="@drawable/ic_baseline_menu_book_24"
+                app:showAsAction="never"
+                />
+            <item
+                android:id="@+id/Pagos"
+                android:title="@string/pagos"
+                android:icon="@drawable/ic_baseline_attach_money_24"
+                app:showAsAction="never"
+                />
+
+            <item
+                android:id="@+id/Pedidos"
+                android:title="@string/pedidos"
+                android:icon="@drawable/ic_baseline_airport_shuttle_24"
+                app:showAsAction="never"
+                />
+
+
+            <item
+                android:id="@+id/Productos"
+                android:title="@string/productos"
+                android:icon="@drawable/ic_baseline_emoji_objects_24"
+                app:showAsAction="never"
+                />
+
+
+            <item
+                android:id="@+id/Historial"
+                android:title="@string/historial"
+                android:icon="@drawable/icons8_historial"
+                app:showAsAction="never"
+                />
+
+
+            <item
+                android:id="@+id/Mapa"
+                android:title="@string/mapa"
+                android:icon="@drawable/icons8_marcador_de_mapa_100"
+                android:visibility="gone"
+                app:showAsAction="never"
+                tools:ignore="HardcodedText" />
+
+
+            <item
+                android:id="@+id/TipoUser"
+                android:title="@string/vendedores"
+                android:icon="@drawable/icons8_conferencia_52"
+                android:visibility="gone"
+                app:showAsAction="never"
+                />
+
+
+
+
+
+        </menu>
+    </item>
+
+</menu>

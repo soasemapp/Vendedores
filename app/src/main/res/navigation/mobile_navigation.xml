@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.kepler201.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <activity
+        android:id="@+id/busquedaActivity"
+        android:name="com.example.kepler201.activities.BusquedaActivity"
+        android:label="BusquedaActivity" />
+    <activity
+        android:id="@+id/activityPerfil"
+        android:name="com.example.kepler201.activities.ActivityPerfil"
+        android:label="ActivityPerfil" />
+    <activity
+        android:id="@+id/activityAgenda"
+        android:name="com.example.kepler201.activities.Agenda.ActivityAgenda"
+        android:label="ActivityAgenda" />
+    <activity
+        android:id="@+id/activityClientes0Ventas"
+        android:name="com.example.kepler201.activities.Consultas.ActivityClientes0Ventas"
+        android:label="activity_clientes0_ventas"
+        tools:layout="@layout/activity_clientes0_ventas" />
+    <activity
+        android:id="@+id/activityAltasPagos"
+        android:name="com.example.kepler201.activities.Pagos.ActivityABCpagos"
+        android:label="activity_altas_pagos"
+        tools:layout="@layout/activity_altas_pagos" />
+
+    <activity
+        android:id="@+id/activityHistorial"
+        android:name="com.example.kepler201.Historial.ActivityHistorial"
+        android:label="ActivityHistorial" />
+    <activity
+        android:id="@+id/activityValdatipo"
+        android:name="com.example.kepler201.activities.ActivityValdatipo"
+        android:label="activity_valdatipo"
+        tools:layout="@layout/activity_valdatipo" />
+    <activity
+        android:id="@+id/activityScreenFirst"
+        android:name="com.example.kepler201.activities.ActivityScreenFirst"
+        android:label="activity_screen_first"
+        tools:layout="@layout/activity_screen_first" />
+    <activity
+        android:id="@+id/locateActivity"
+        android:name="com.example.kepler201.activities.Maps.locateActivity"
+        android:label="locateActivity" />
+    <activity
+        android:id="@+id/listaPreciosActivity"
+        android:name="com.example.kepler201.activities.Productos.ListaPreciosActivity"
+        android:label="activity_lista_precios"
+        tools:layout="@layout/activity_lista_precios" />
+    <activity
+        android:id="@+id/activityConsulCoti"
+        android:name="com.example.kepler201.activities.Pedidos.ActivityConsulCoti"
+        android:label="activity_consul_coti"
+        tools:layout="@layout/activity_consul_coti" />
+    <activity
+        android:id="@+id/activityConsultaProductos"
+        android:name="com.example.kepler201.activities.Productos.ActivityConsultaProductos"
+        android:label="activity_consulta_productos"
+        tools:layout="@layout/activity_consulta_productos" />
+
+
+</navigation>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable-tvdpi/eaglefondoinicio.xml" value="0.1" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable-tvdpi/ic_baseline_check_circle_outline_24.xml" value="0.139" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable-tvdpi/ic_baseline_home_24.xml" value="0.139" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable-tvdpi/partechfondoinicio.xml" value="0.1" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable-tvdpi/rodatechfondoinicio.xml" value="0.2825" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.109" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_baseline_menu_book_24.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_baseline_money_off_24.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_baseline_more_vert_24.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_baseline_post_add_24.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_baseline_save_24.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_baseline_search2.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_baseline_sentiment_very_satisfied_24.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_baseline_shopping_cart_24.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_baseline_signal_wifi_statusbar_connected_no_internet_4_24.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_baseline_style_24.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_baseline_supervised_user_circle_24.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_baseline_warning_24.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_launcher_background.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_menu_camera.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/ic_menu_gallery.xml" value="0.356" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/radi.xml" value="0.1665" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/radius.xml" value="0.2825" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/radiusmacke.xml" value="0.2825" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/radiusperfil.xml" value="0.139" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/drawable/roundbutton.xml" value="0.139" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/action_bar_toolbar.xml" value="0.12864583333333332" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_agenda.xml" value="0.12864583333333332" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_agenda_register.xml" value="0.3052586575459598" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_altas_pagos.xml" value="0.25" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_back_orders.xml" value="0.22" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_back_orders_add.xml" value="0.3052586575459598" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_busqueda.xml" value="0.22830269345874304" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_carrito_compras.xml" value="0.22" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_clientes0_ventas.xml" value="0.21628721541155868" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_consul_coti.xml" value="0.25" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_consul_pedi.xml" value="0.25281473899692936" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_consulta_faturas.xml" value="0.25" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_consulta_pagos.xml" value="0.12864583333333332" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_consulta_productos.xml" value="0.1718683197947841" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_converciones.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_detall_coti.xml" value="0.12864583333333332" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_detall_pedi.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_detallado_productos.xml" value="0.22830269345874304" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_existencia_produc.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_factu_detall.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_facturas_vencidas.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_graphic.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_historial.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_inicio.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_lista_precios.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_locate.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_maps.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_perfil.xml" value="0.25" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_screen_first.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_segumiento_pedidos.xml" value="0.3052586575459598" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_splash.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/activity_valdatipo.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/app_bar_main.xml" value="0.25274725274725274" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/content_main.xml" value="0.12864583333333332" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/fragment_gallery.xml" value="0.278125" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/fragment_home.xml" value="0.2270220588235294" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/fragment_slideshow.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_agenda.xml" value="0.33" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_backorderlist.xml" value="0.3052586575459598" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_carrito.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_clientes.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_consulcoti.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_consulpedi.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_consultafacturas.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_exiscla.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_listprecio.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_product.xml" value="0.22830269345874304" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_productdetall.xml" value="0.25" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_productosnuevoseagle.xml" value="0.22830269345874304" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_productosnuevospartech.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_productosnuevosrodatech.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_productosnuevosshark.xml" value="0.22830269345874304" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/item_list_productosnuevostrackone.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/nav_header_main.xml" value="0.278125" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/pantallacargacarrito.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/toolbarpedidos.xml" value="0.25" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/toolbarproductos.xml" value="0.10560068405301411" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/layout/toolbarsconsul.xml" value="0.25" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/menu/activity_main_drawer.xml" value="0.278125" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/menu/inicio.xml" value="0.22830269345874304" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/menu/menuflow2.xml" value="0.12569474134245404" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/menu/menuflow6.xml" value="0.12569474134245404" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/menu/menuflow7.xml" value="0.3052586575459598" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/menu/menuflow8.xml" value="0.3052586575459598" />
+        <entry key="..\:/Users/j_are/OneDrive/Documentos/ProyectosNuevos/app/src/main/res/menu/menuoverflow.xml" value="0.22830269345874304" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.18257645968489342" />
+      </ProjectState>
+    </option>
+  </component>
+</project>

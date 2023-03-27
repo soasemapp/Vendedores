@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.kepler201">
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the "MyLocation" functionality.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ActivityBackOrdersAdd"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Agenda.ActivityAgendaRegister"
+            android:parentActivityName=".activities.Agenda.ActivityAgenda"
+            android:exported="false" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".activities.inicioActivity"
+            android:label="@string/title_activity_inicio"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.BusquedaActivity"
+            android:parentActivityName=".activities.inicioActivity" />
+        <activity
+            android:name=".activities.DetalladoProductosActivity"
+            android:parentActivityName=".activities.BusquedaActivity" />
+        <activity
+            android:name=".activities.Maps.MapsActivity"
+            android:label="@string/title_activity_maps"
+            android:parentActivityName=".activities.Maps.locateActivity" />
+        <activity
+            android:name=".activities.Maps.locateActivity"
+            android:parentActivityName=".activities.inicioActivity" />
+        <activity android:name=".activities.ActivityValdatipo" />
+        <activity
+            android:name=".activities.Carrito.CarritoComprasActivity"
+            android:parentActivityName=".activities.inicioActivity" />
+        <activity
+            android:name=".activities.Agenda.ActivityAgenda"
+            android:parentActivityName=".activities.inicioActivity" />
+        <activity
+            android:name=".Historial.ActivityHistorial"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.inicioActivity" />
+        <activity
+            android:name=".activities.Productos.ActivityConverciones"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.ActivityScreenFirst"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.Productos.ListaPreciosActivity"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.ActivityScreenFirst"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activities.ActivitySplash" />
+        <activity
+            android:name=".activities.ActivityScreenFirst"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.inicioActivity" />
+        <activity
+            android:name=".activities.Pedidos.ActivityDetallPedi"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.Pedidos.ActivityConsulPedi"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.Pedidos.ActivityDetallCoti"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.Pedidos.ActivityConsulCoti"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.Pedidos.ActivityConsulPedi"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.inicioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.Pedidos.ActivityConsulCoti"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.inicioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.Consultas.ActivityFactuDetall"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.Consultas.ActivityConsultaFaturas" />
+        <activity
+            android:name=".activities.Productos.ActivityExistenciaProduc"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.ActivityScreenFirst"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.Consultas.ActivityConsultaFaturas"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.inicioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.Consultas.ActivityGraphic"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.Consultas.ActivityClientes0Ventas" />
+        <activity
+            android:name=".activities.Productos.ActivityConsultaProductos"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.ActivityScreenFirst" />
+        <activity
+            android:name=".activities.Pedidos.ActivitySegumientoPedidos"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.inicioActivity" />
+        <activity
+            android:name=".activities.Pagos.ActivityConsultaPagos"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.Pagos.ActivityABCpagos" />
+        <activity
+            android:name=".activities.Pagos.ActivityABCpagos"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.inicioActivity" />
+        <activity
+            android:name=".activities.Consultas.ActivityBackOrders"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.inicioActivity" />
+        <activity
+            android:name=".activities.Consultas.ActivityFacturasVencidas"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.ActivityScreenFirst" />
+        <activity
+            android:name=".activities.Consultas.ActivityClientes0Ventas"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.inicioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ActivityPerfil"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.inicioActivity"
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name=".activities.MainActivity"
+            android:configChanges="screenSize|orientation"
+            android:exported="true"
+            tools:ignore="IntentFilterExportedReceiver">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

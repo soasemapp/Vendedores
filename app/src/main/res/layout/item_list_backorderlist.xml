@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/cartable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E1E1E1"
+        android:onClick="SelectFolio"
+        android:orientation="horizontal"
+        tools:ignore="TouchTargetSizeCheck">
+
+        <TextView
+            android:id="@+id/txtFolio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="Folio"
+            android:textColor="#000000"
+            android:textSize="10sp"
+            android:textStyle="bold"></TextView>
+
+        <TextView
+            android:id="@+id/txtClaveP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="Producto"
+            android:textColor="#000000"
+            android:textSize="10sp"
+            android:textStyle="bold"></TextView>
+
+        <TextView
+            android:id="@+id/txtDescripcion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="Descripcion"
+            android:textColor="#000000"
+            android:textSize="10sp"
+            android:textStyle="bold"></TextView>
+
+
+        <TextView
+            android:id="@+id/txtBackOrder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.3"
+            android:gravity="center"
+            android:text="BackOrder"
+            android:textColor="#000000"
+            android:textSize="10sp"
+            android:textStyle="bold"></TextView>
+
+
+        <TextView
+            android:id="@+id/txtExistencia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.3"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="Existencias"
+            android:textColor="#000000"
+            android:textSize="10sp"
+            android:textStyle="bold"></TextView>
+
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/PrimaryColor"
+        />
+
+</LinearLayout>
+
+
+

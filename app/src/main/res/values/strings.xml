@@ -1,0 +1,140 @@
+<resources>
+    <string name="app_name">Kepler</string>
+    <string name="title_activity_menu_componet">MenuComponet</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Kepler</string>
+    <string name="nav_header_subtitle">Ventas</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="title_activity_inicio">inicioActivity</string>
+    <string name="menu_Perfil">Perfil</string>
+    <string name="menu_Clientes0">Clientes con 0 Ventas</string>
+    <string name="menu_ClientesFacturas">Clientes con Facturas vencidas para visitas</string>
+    <string name="menu_Facturas">Facturas vencidas General</string>
+    <string name="menu_SeguimientoPedidos">Seguimientos de pedidos</string>
+    <string name="menu_Listadeprecios">Lista de Precios</string>
+    <string name="menu_Existenciaporcla">Existencia por clasificacion</string>
+    <string name="menu_AltasPagos">Registro de Pagos</string>
+    <string name="menu_ConsultaPagos">ConsulPagos</string>
+    <string name="menu_Agenda">Agenda</string>
+    <string name="menu_Cotizaciones">Cotizaciones</string>
+    <string name="menu_Pedidos">Pedidos</string>
+    <string name="menu_ConsultaProdu">Consulta de Productos</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main_component">MainComponent</string>
+    <string name="menu_CerrarSe">CerrarSesion</string>
+    <string name="title_activity_consulta_productos">ConsultaProductosActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="cliente">CLIENTE</string>
+    <string name="informacion">Informacion</string>
+
+    <string name="iva">Iva</string>
+    <string name="subtotal2">SubTotal2</string>
+    <string name="descuento">Descuento</string>
+    <string name="subtotal">SubTotal</string>
+    <string name="realizar_cotizacion">Realizar Cotizacion</string>
+    <string name="opciones">OPCIONES</string>
+
+    <string name="direccion">Direccion</string>
+
+
+    <string-array name="status">
+        <item>TERMINADO</item>
+        <item>PENDIENTE</item>
+        <item>EN PROCESO</item>
+    </string-array>
+
+
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps_vendedores">Map</string>
+    <string name="menu">Menu</string>
+    <string name="perfil">Perfil</string>
+    <string name="agenda">Agenda</string>
+    <string name="consultas">Consultas</string>
+    <string name="pagos">Pagos</string>
+    <string name="pedidos">Pedidos</string>
+    <string name="productos">Productos</string>
+    <string name="historial">Historial</string>
+    <string name="mapa">Mapa</string>
+    <string name="vendedores">Vendedores</string>
+    <string name="marker_detail_latlng">(%1$.2f, %2$.2f)</string>
+    <string name="fecha">FECHA</string>
+    <string name="vendedor">VENDEDOR</string>
+    <string name="facturas">Facturas</string>
+    <string name="comentarios_1">Comentarios 1</string>
+    <string name="inicia_sesion">INICIA SESION</string>
+    <string name="usuario">Usuario</string>
+    <string name="ingresar">Ingresar</string>
+    <string name="refrescar_grafica">Refrescar Grafica</string>
+    <string name="agenda_de_tareas_con_clientes">Agenda de tareas con clientes</string>
+    <string name="prospectos">Prospectos</string>
+    <string name="nombre">Nombre</string>
+    <string name="apellido">Apellido</string>
+    <string name="tipo">TIPO</string>
+    <string name="email">E-MAIL</string>
+    <string name="codigo_del_vendedor">Codigo del Vendedor</string>
+    <string name="version">2.4</string>
+    <string name="bienvenido">Bienvenido</string>
+    <string name="contrase_a">Contraseña</string>
+    <string name="periodo_sin_ventas_dias">Periodo sin ventas(Dias)</string>
+    <string name="clientes_con_0_ventas">Clientes con 0 Ventas</string>
+    <string name="de_la_fecha">De la fecha</string>
+    <string name="a_la_fecha">A la fecha</string>
+    <string name="agregar">Agregar</string>
+    <string name="comentario">Comentario</string>
+    <string name="confirmados">Confirmados</string>
+    <string name="clave_producto">Clave-Producto</string>
+    <string name="escanear">Escanear</string>
+    <string name="todo">TODO</string>
+    <string name="codigo_competencia">Codigo Competencia</string>
+    <string name="cla_cliente">Cla-Cliente</string>
+    <string name="nom_cliente">Nom-Cliente</string>
+    <string name="convertir_a_pedido">Convertir a Pedido</string>
+    <string name="dir_envio">Dir.Envio</string>
+    <string name="clasificacion">Clasificacion</string>
+    <string name="a_o">Año</string>
+    <string name="lineas">Lineas</string>
+    <string name="lista_de_precios">Lista de Precios</string>
+    <string name="clave_cliente">Clave Cliente</string>
+    <string name="actividad">Actividad</string>
+    <string name="estatus">Estatus</string>
+    <string name="cambiar_status">Cambiar Status</string>
+    <string name="parte">Parte</string>
+    <string name="cantidad">Cantidad</string>
+    <string name="unidad">Unidad</string>
+    <string name="disponibilidad">(Disponibilidad)</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="modificar">Modificar</string>
+    <string name="clave">Clave</string>
+    <string name="ciudad">Ciudad</string>
+    <string name="piezas">Piezas</string>
+    <string name="saldo">Saldo</string>
+    <string name="plazo">Plazo</string>
+    <string name="folio_de_factura">Folio de Factura</string>
+    <string name="fecha_de_factura">Fecha de Factura</string>
+    <string name="fecha_vencimieto">Fecha Vencimieto</string>
+    <string name="codigo_de_barras">Codigo de Barras</string>
+    <string name="nombre_del_producto">Nombre del Producto</string>
+    <string name="codigo_barras">Codigo Barras</string>
+    <string name="consulta_cotizaciones">Consulta Cotizaciones</string>
+    <string name="converciones">Converciones</string>
+    <string name="monto">Monto</string>
+    <string name="buscar">Buscar</string>
+    <string name="title_activity_pantalla1">Pantalla1</string>
+
+
+</resources>

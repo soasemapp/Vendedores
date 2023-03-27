@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/activityPerfil"
+            android:icon="@drawable/icon_user"
+            android:iconTint="@null"
+            android:title="Perfil" />
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_baseline_home_24"
+            android:title="@string/menu_home" />
+
+        <item
+            android:id="@+id/busquedaActivity"
+            android:icon="@drawable/ic_baseline_search_24"
+            android:title="Busqueda" />
+
+        <item
+            android:id="@+id/activityConsultaProductos"
+            android:icon="@drawable/icon_existencia"
+            android:title="Consulta de existencias" />
+
+
+
+        <item
+            android:id="@+id/listaPreciosActivity"
+            android:icon="@drawable/list_precio"
+            android:title="Lista de precios" />
+
+
+        <item
+            android:id="@+id/activityScreenFirst"
+            android:icon="@drawable/ic_baseline_auto_graph_24"
+            android:title="Grafica de Ventas" />
+
+
+        <item
+            android:id="@+id/activityAgenda"
+            android:icon="@drawable/ic_baseline_book_24"
+            android:title="Agenda" />
+
+        <item
+            android:id="@+id/activityClientes0Ventas"
+            android:title="@string/consultas"
+            android:icon="@drawable/ic_baseline_menu_book_24"
+            />
+        <item
+            android:id="@+id/activityAltasPagos"
+            android:title="@string/pagos"
+            android:icon="@drawable/ic_baseline_attach_money_24"
+            />
+
+        <item
+            android:id="@+id/activityConsulCoti"
+            android:title="@string/pedidos"
+            android:icon="@drawable/ic_baseline_airport_shuttle_24"
+            />
+
+
+
+        <item
+            android:id="@+id/activityHistorial"
+            android:title="@string/historial"
+            android:icon="@drawable/icons8_historial"
+            />
+
+
+        <item
+            android:id="@+id/locateActivity"
+            android:title="@string/mapa"
+            android:iconTint="@null"
+            android:icon="@drawable/icons8_marcador_de_mapa_100"
+             />
+
+
+        <item
+            android:id="@+id/activityValdatipo"
+            android:title="@string/vendedores"
+            android:icon="@drawable/icons8_conferencia_52"
+            />
+
+
+
+
+
+    </group>
+</menu>

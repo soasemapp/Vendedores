@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <!--<item
+        android:id="@+id/back"
+        android:icon="@drawable/ic_baseline_arrow_back_24"
+        android:title="@string/menu_CerrarSe"
+        app:showAsAction="ifRoom"></item>-->
+
+    <item
+        android:title="Reiniciar Carrito"
+        android:id="@+id/ReiniCar"
+        android:icon="@drawable/icons8_actualizar_40"
+        app:showAsAction="ifRoom"
+        />
+    <!--
+    <item  android:title="Menu"
+        android:icon="@drawable/ic_baseline_more_vert_24"
+        app:showAsAction="always">
+        <menu>
+
+            <item
+                android:title="Consultar Productos"
+                android:id="@+id/ConsultarPro"
+                android:icon="@drawable/icons8_producto_nuevo_160"
+                app:showAsAction="never"
+                />
+
+            <item
+                android:title="Reiniciar Carrito"
+                android:id="@+id/ReiniCar"
+                android:icon="@drawable/icons8_actualizar_40"
+                app:showAsAction="never"
+                />
+
+
+        </menu>
+    </item>
+
+
+-->
+</menu>
+
