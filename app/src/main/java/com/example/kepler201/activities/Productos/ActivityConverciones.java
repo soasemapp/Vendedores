@@ -36,17 +36,21 @@ import com.example.kepler201.SetterandGetter.CarritoBD;
 import com.example.kepler201.SetterandGetter.CarritoVentasSANDG;
 import com.example.kepler201.SetterandGetter.ConversionesSANDG;
 import com.example.kepler201.SetterandGetter.SearachClientSANDG;
+import com.example.kepler201.SetterandGetter.listDipoSucuSANDG;
 import com.example.kepler201.SetterandGetter.listExistencia2SANG;
 import com.example.kepler201.XMLS.xmlCarritoVentas;
 import com.example.kepler201.XMLS.xmlConver;
 import com.example.kepler201.XMLS.xmlConverProdu;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -193,6 +197,9 @@ public class ActivityConverciones extends AppCompatActivity {
                 Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
                 break;
             case "vazlocolombia.dyndns.org:9085":
+                Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
+                break;
+            default:
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
         }
@@ -465,7 +472,75 @@ public class ActivityConverciones extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conectar();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "conversion=" + productoStr;
+            String url = "http://" + StrServer + "/conversionproapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+
+                    JSONObject jitems, Numero, Clave, Nombre;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    jitems = jsonObject.getJSONObject("Item");
+
+                    for (int i = 0; i < jitems.length(); i++) {
+                        jitems = jsonObject.getJSONObject("Item");
+                        Numero = jitems.getJSONObject("" + i + "");
+
+                        listaExistencia.add(new listExistencia2SANG(
+                                (Numero.getString("k_ClaveSu").equals("anyType{}") ? " " : Numero.getString("k_ClaveSu")),
+                                (Numero.getString("k_NomSuc").equals("anyType{}") ? " " : Numero.getString("k_NomSuc")),
+                                (Numero.getString("k_Exis").equals("anyType{}") ? "0" : Numero.getString("k_Exis")),
+                                (Numero.getString("k_ClavePr").equals("anyType{}") ? " " : Numero.getString("k_ClavePr")),
+                                (Numero.getString("k_Clave").equals("anyType{}") ? " " : Numero.getString("k_Clave")),
+                                (Numero.getString("k_Descr").equals("anyType{}") ? " " : Numero.getString("k_Descr")),
+                                (Numero.getString("k_CodBarra").equals("anyType{}") ? " " : Numero.getString("k_CodBarra")),
+                                (Numero.getString("k_Precio").equals("anyType{}") ? " " : Numero.getString("k_Precio"))));
+
+
+
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConverciones.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConverciones.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
+
             return null;
         }
 
@@ -571,56 +646,6 @@ public class ActivityConverciones extends AppCompatActivity {
     }
 
 
-    private void conectar() {
-        String SOAP_ACTION = "Conver";
-        String METHOD_NAME = "Conver";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlConver soapEnvelope = new xmlConver(SoapEnvelope.VER11);
-            soapEnvelope.xmlConver(strusr, strpass, productoStr);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json = response.getPropertyCount();
-
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                listaExistencia.add(new listExistencia2SANG(
-                        (response0.getPropertyAsString("k_ClaveSu").equals("anyType{}") ? " " : response0.getPropertyAsString("k_ClaveSu")),
-                        (response0.getPropertyAsString("k_NomSuc").equals("anyType{}") ? " " : response0.getPropertyAsString("k_NomSuc")),
-                        (response0.getPropertyAsString("k_Exis").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_Exis")),
-                        (response0.getPropertyAsString("k_ClavePr").equals("anyType{}") ? " " : response0.getPropertyAsString("k_ClavePr")),
-                        (response0.getPropertyAsString("k_Clave").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Clave")),
-                        (response0.getPropertyAsString("k_Descr").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Descr")),
-                        (response0.getPropertyAsString("k_CodBarra").equals("anyType{}") ? " " : response0.getPropertyAsString("k_CodBarra")),
-                        (response0.getPropertyAsString("k_Precio").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Precio"))));
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:No se encontro el producto";
-        }
-    }
-
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
@@ -633,7 +658,67 @@ public class ActivityConverciones extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conecta2();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "producto=" + productoStr;
+            String url = "http://" + StrServer + "/conversionesapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jitems, Numero;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()>0){
+                        jitems = jsonObject.getJSONObject("Item");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            Numero = jitems.getJSONObject("" + i + "");
+
+                            listaconversiones.add(new ConversionesSANDG(
+                                    (Numero.getString("k_ClavePro").equals("") ? "" : Numero.getString("k_ClavePro")),
+                                    (Numero.getString("k_ClaveCompe").equals("") ? "" : Numero.getString("k_ClaveCompe")),
+                                    (Numero.getString("k_NomCompetencia").equals("") ? "" : Numero.getString("k_NomCompetencia"))));
+
+
+                        }
+                    }
+
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConverciones.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConverciones.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
@@ -718,48 +803,7 @@ public class ActivityConverciones extends AppCompatActivity {
     }
 
 
-    private void conecta2() {
-        String SOAP_ACTION = "ConverProdu";
-        String METHOD_NAME = "ConverProdu";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
 
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlConverProdu soapEnvelope = new xmlConverProdu(SoapEnvelope.VER11);
-            soapEnvelope.xmlConverPro(strusr, strpass, strClave);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json = response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                listaconversiones.add(new ConversionesSANDG(response0.getPropertyAsString("k_ClavePro"), response0.getPropertyAsString("k_ClaveCompe"), response0.getPropertyAsString("k_NomCompetencia")));
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
@@ -771,7 +815,64 @@ public class ActivityConverciones extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conectar3();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "vendedor=" + strcode;
+            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+
+                    JSONObject jitems, Numero, Clave, Nombre;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    jitems = jsonObject.getJSONObject("Clientes");
+
+                    for (int i = 0; i < jitems.length(); i++) {
+                        jitems = jsonObject.getJSONObject("Clientes");
+                        Numero = jitems.getJSONObject("" + i + "");
+                        listaclientG.add(new SearachClientSANDG(
+                                Numero.getString("Clave"),
+                                Numero.getString("Nombre")));
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConverciones.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConverciones.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
@@ -791,51 +892,6 @@ public class ActivityConverciones extends AppCompatActivity {
 
 
     }
-
-    private void conectar3() {
-        String SOAP_ACTION = "SearchClient";
-        String METHOD_NAME = "SearchClient";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlSearchClientesG soapEnvelope = new xmlSearchClientesG(SoapEnvelope.VER11);
-            soapEnvelope.xmlSearchG(strusr, strpass, strcode);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json = response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                listaclientG.add(new SearachClientSANDG(response0.getPropertyAsString("k_dscr"), response0.getPropertyAsString("k_line")));
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
-
     private void guardarDatos2() {
         editor.putString("RFC", rfc);
         editor.putString("PLAZO", plazo);
@@ -862,7 +918,93 @@ public class ActivityConverciones extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conectar4();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + strscliente2+"&producto="+productoStr+"&cantidad="+strCantidad+"&existencia=0&sucursal="+strcodBra;
+            String url = "http://" + StrServer + "/carritoapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+
+                    JSONObject jitems, Numero, Clave, Nombre;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    jitems = jsonObject.getJSONObject("Cotizacion");
+
+                    for (int i = 0; i < jitems.length(); i++) {
+                        jitems = jsonObject.getJSONObject("Cotizacion");
+                        Numero = jitems.getJSONObject("" + i + "");
+
+                        listaCarShoping.add(new CarritoVentasSANDG(
+                                (Numero.getString("k_Cliente").equals("anyType{}") ? " " : Numero.getString("k_Cliente")),
+                                (Numero.getString("k_parte").equals("anyType{}") ? " " : Numero.getString("k_parte")),
+                                (Numero.getString("k_exis").equals("anyType{}") ? "0" : Numero.getString("k_exis")),
+                                (Numero.getString("k_Q").equals("anyType{}") ? " " : Numero.getString("k_Q")),
+                                (Numero.getString("k_unidad").equals("anyType{}") ? " " : Numero.getString("k_unidad")),
+                                (Numero.getString("k_precio").equals("anyType{}") ? "" : Numero.getString("k_precio")),
+                                (Numero.getString("k_desc1").equals("anyType{}") ? " " : Numero.getString("k_desc1")),
+                                (Numero.getString("k_desc2").equals("anyType{}") ? " " : Numero.getString("k_desc2")),
+                                (Numero.getString("k_desc3").equals("anyType{}") ? " " : Numero.getString("k_desc3")),
+                                (Numero.getString("k_monto").equals("anyType{}") ? " " : Numero.getString("k_monto")),
+                                (Numero.getString("k_descr").equals("anyType{}") ? " " : Numero.getString("k_descr")),
+                                (Numero.getString("k_rfc").equals("anyType{}") ? " " : Numero.getString("k_rfc")),
+                                (Numero.getString("k_plazo").equals("anyType{}") ? " " : Numero.getString("k_plazo")),
+                                (Numero.getString("k_calle").equals("anyType{}") ? " " : Numero.getString("k_calle")),
+                                (Numero.getString("k_colo").equals("anyType{}") ? " " : Numero.getString("k_colo")),
+                                (Numero.getString("k_pobla").equals("anyType{}") ? " " : Numero.getString("k_pobla")),
+                                (Numero.getString("k_via").equals("anyType{}") ? " " : Numero.getString("k_via")),
+                                (Numero.getString("k_87").equals("anyType{}") ? "0" : Numero.getString("k_87")),
+                                (Numero.getString("k_desc1fac").equals("anyType{}") ? "0" : Numero.getString("k_desc1fac")),
+                                (Numero.getString("k_comentario1").equals("anyType{}") ? "" : Numero.getString("k_comentario1")),
+                                (Numero.getString("k_comentario2").equals("anyType{}") ? "" : Numero.getString("k_comentario2")),
+                                (Numero.getString("k_comentario3").equals("anyType{}") ? "" : Numero.getString("k_comentario3")),
+                                (Numero.getString("k_descEAGLE").equals("anyType{}") ? "" : Numero.getString("k_descEAGLE")),
+                                (Numero.getString("k_descRODATECH").equals("anyType{}") ? "" : Numero.getString("k_descRODATECH")),
+                                (Numero.getString("k_descPARTECH").equals("anyType{}") ? "" : Numero.getString("k_descPARTECH")),
+                                (Numero.getString("k_descSHARK").equals("anyType{}") ? "" : Numero.getString("k_descSHARK")),
+                                (Numero.getString("k_descTRACKONE").equals("anyType{}") ? "" : Numero.getString("k_descTRACKONE"))));
+
+
+
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConverciones.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConverciones.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
@@ -933,69 +1075,6 @@ public class ActivityConverciones extends AppCompatActivity {
 
     }
 
-    private void conectar4() {
-        String SOAP_ACTION = "CarShop";
-        String METHOD_NAME = "CarShop";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlCarritoVentas soapEnvelope = new xmlCarritoVentas(SoapEnvelope.VER11);
-            soapEnvelope.xmlCarritoVen(strusr, strpass, strscliente2, strClave, strCantidad, "11", strcodBra);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json = response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                listaCarShoping.add(new CarritoVentasSANDG((response0.getPropertyAsString("k_Cliente").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Cliente")),
-                        (response0.getPropertyAsString("k_parte").equals("anyType{}") ? " " : response0.getPropertyAsString("k_parte")),
-                        (response0.getPropertyAsString("k_exis").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_exis")),
-                        (response0.getPropertyAsString("k_Q").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Q")),
-                        (response0.getPropertyAsString("k_unidad").equals("anyType{}") ? " " : response0.getPropertyAsString("k_unidad")),
-                        (response0.getPropertyAsString("k_precio").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_precio")),
-                        (response0.getPropertyAsString("k_desc1").equals("anyType{}") ? " " : response0.getPropertyAsString("k_desc1")),
-                        (response0.getPropertyAsString("k_desc2").equals("anyType{}") ? " " : response0.getPropertyAsString("k_desc2")),
-                        (response0.getPropertyAsString("k_desc3").equals("anyType{}") ? " " : response0.getPropertyAsString("k_desc3")),
-                        (response0.getPropertyAsString("k_monto").equals("anyType{}") ? " " : response0.getPropertyAsString("k_monto")),
-                        (response0.getPropertyAsString("k_descr").equals("anyType{}") ? " " : response0.getPropertyAsString("k_descr")),
-                        (response0.getPropertyAsString("k_rfc").equals("anyType{}") ? " " : response0.getPropertyAsString("k_rfc")),
-                        (response0.getPropertyAsString("k_plazo").equals("anyType{}") ? " " : response0.getPropertyAsString("k_plazo")),
-                        (response0.getPropertyAsString("k_calle").equals("anyType{}") ? " " : response0.getPropertyAsString("k_calle")),
-                        (response0.getPropertyAsString("k_colo").equals("anyType{}") ? " " : response0.getPropertyAsString("k_colo")),
-                        (response0.getPropertyAsString("k_pobla").equals("anyType{}") ? " " : response0.getPropertyAsString("k_pobla")),
-                        (response0.getPropertyAsString("k_via").equals("anyType{}") ? " " : response0.getPropertyAsString("k_via")),
-                        (response0.getPropertyAsString("k_87").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_87")),
-                        (response0.getPropertyAsString("k_desc1fac").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_desc1fac")),
-                        (response0.getPropertyAsString("k_comentario1").equals("anyType{}") ? "" : response0.getPropertyAsString("k_comentario1")),
-                        (response0.getPropertyAsString("k_comentario2").equals("anyType{}") ? "" : response0.getPropertyAsString("k_comentario2")),
-                        (response0.getPropertyAsString("k_comentario3").equals("anyType{}") ? "" : response0.getPropertyAsString("k_comentario3"))));
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
 
 
     private void Consulta() {

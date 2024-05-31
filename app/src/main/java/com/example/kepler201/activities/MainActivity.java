@@ -20,14 +20,18 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kepler201.R;
+import com.example.kepler201.SetterandGetter.AgendaSANDG;
 import com.example.kepler201.SetterandGetter.Login;
 import com.example.kepler201.XMLS.xmlLog;
 import com.example.kepler201.XMLS.xmlLogin;
 import com.example.kepler201.XMLS.xmlVerificacionPrecios;
 import com.example.kepler201.XMLS.xmlVersiones;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.includes.HttpHandler;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -62,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mDialog = new SpotsDialog.Builder().setContext(MainActivity.this).setMessage("Espere un momento...").build();
+        mDialog.setCancelable(false);
         usu = findViewById(R.id.txtinUsu);
         clave = findViewById(R.id.txtinCla);
         Button btnSERVIDOR = findViewById(R.id.btnSERVIDOR);
@@ -75,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String[] opciones1 = {"JACVE", "AUTODIS", "CECRA", "GUVI", "PRESSA", "Vipla", "SPR", "COLOMBIA"};
+                String[] opciones1 = {"JACVE", "AUTODIS", "CECRA", "GUVI", "PRESSA", "Vipla", "SPR", "COLOMBIA","MIGRACION"};
 
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -154,6 +159,16 @@ public class MainActivity extends AppCompatActivity {
                                     .fit()
                                     .centerInside()
                                     .into(imgEmpresa);
+                        }else if (which == 8) {
+
+                            StrServer = "cedistabasco.ddns.net:9080";
+                            Picasso.with(getApplicationContext()).
+                                    load(R.drawable.pressa)
+                                    .error(R.drawable.ic_baseline_error_24)
+                                    .fit()
+                                    .centerInside()
+                                    .into(imgEmpresa);
+
                         }
 
                     }
@@ -175,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                     if (usu.length() != 0 && clave.length() != 0) {
                         if (!StrServer.equals("")) {
                             id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-                            AsyncCallWS task = new AsyncCallWS();
+                            LoginAsyc task = new LoginAsyc();
                             task.execute();
                         }else{
 
@@ -233,10 +248,12 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("name", loginSave.getName());
         editor.putString("lname", loginSave.getLastname());
         editor.putString("type", loginSave.getType());
-        editor.putString("branch", loginSave.getBranch());
         editor.putString("email", loginSave.getEmail());
         editor.putString("code", loginSave.getCode());
         editor.putString("codBra", loginSave.getCodeBranch());
+        editor.putString("branch", loginSave.getBranch());
+        editor.putString("codBra2", loginSave.getCodeBranch());
+        editor.putString("branch2", loginSave.getBranch());
         editor.putString("Server", StrServer);
         editor.putString("type2", null);
         //editor.putString("tokenId",token);
@@ -247,17 +264,48 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
-    private class AsyncCallWS extends AsyncTask<Void, Void, Void> {
+    private class LoginAsyc extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
             mDialog.show();
 
         }
-
         @Override
         protected Void doInBackground(Void... params) {
-            Conectar();
+            HttpHandler sh = new HttpHandler();
+            String url = "http://"+StrServer+"/loginapp";
+            String jsonStr = sh.makeServiceCall(url, getUsuario, getPass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    JSONObject jitems, Numero;
+                  int Entro =Integer.parseInt(jsonObject.getString("ok"));
+                    if (Entro==1){
+                        mensaje = "Correcto";
+
+                        jitems = jsonObject.getJSONObject("UserInfo");
+                        loginSave = new Login();
+                        loginSave.setUsers(jitems.getString("k_usr"));
+                        loginSave.setName(jitems.getString("k_name"));
+                        loginSave.setLastname(jitems.getString("k_lname"));
+                        loginSave.setType(jitems.getString("k_type"));
+                        loginSave.setEmail(jitems.getString("k_mail1"));
+                        loginSave.setCode(jitems.getString("k_kcode"));
+                        loginSave.setBranch(jitems.getString("k_dscr"));
+                        loginSave.setCodeBranch(jitems.getString("k_codB"));
+                        result1=1;
+                    }else{
+                        result1=0;
+                        mensaje="Error en el usuario o contraseña";
+                    }
+                } catch (final JSONException e) {
+
+                }//catch JSON EXCEPTION
+            } else {
+
+            }//else
+
             return null;
         }
 
@@ -266,13 +314,24 @@ public class MainActivity extends AppCompatActivity {
 
             if (result1 == 0) {
                 mDialog.dismiss();
-                Toast.makeText(MainActivity.this, mensaje, Toast.LENGTH_LONG).show();
+                AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
+                alerta.setMessage(mensaje).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        mDialog.dismiss();
+                    }
+                });
+
+                AlertDialog titulo = alerta.create();
+                titulo.setTitle("Problemas");
+                titulo.show();
 
             } else if (result1 == 1) {
                 String tipo=loginSave.getType();
                 if (tipo.equals("VENDEDOR") || tipo.equals("ADMIN")){
                     mDialog.dismiss();
-                    AsyncCallWS2 task2 = new AsyncCallWS2();
+                    Log task2 = new Log();
                     task2.execute();
                     trasactiv();
 
@@ -299,59 +358,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void Conectar() {
-
-        String SOAP_ACTION = "login";
-        String METHOD_NAME = "login";
-        String NAMESPACE = "http://" + StrServer + "/WSlogin/";
-        String URL = "http://" + StrServer + "/WSlogin";
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlLogin soapEnvelope = new xmlLogin(SoapEnvelope.VER11);
-            soapEnvelope.valoresLogin(getUsuario, getPass);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            Vector response0 = (Vector) soapEnvelope.getResponse();
-            result1 = Integer.parseInt(response0.get(0).toString());
-
-            if (result1 == 0) {
-                mensaje = "Contraseña y/o Usuario Inconrrecto";
-            } else if (result1 == 1) {
-                mensaje = "Correcto";
-                SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-                response = (SoapObject) response.getProperty("UserInfo");
-                loginSave = new Login();
-                loginSave.setUsers(response.getPropertyAsString("k_usr"));
-                loginSave.setName(response.getPropertyAsString("k_name"));
-                loginSave.setLastname(response.getPropertyAsString("k_lname"));
-                loginSave.setType(response.getPropertyAsString("k_type"));
-                loginSave.setBranch(response.getPropertyAsString("k_dscr"));
-                loginSave.setEmail(response.getPropertyAsString("k_mail1"));
-                loginSave.setCode(response.getPropertyAsString("k_kcode"));
-                loginSave.setCodeBranch(response.getPropertyAsString("k_codB"));
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-
-    }
 
 
     @SuppressWarnings("deprecation")
@@ -366,14 +372,30 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Versiones();
+            HttpHandler sh = new HttpHandler();
+            String url = "http://jacve.dyndns.org:9085/versionesapp?Clave=1";
+            String jsonStr = sh.makeServiceCall(url, "WEBPETI", "W3B3P3T1");
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    version =jsonObject.getString("Version");
+
+
+                    Resultado=1;
+                } catch (final JSONException e) {
+
+                }//catch JSON EXCEPTION
+            } else {
+
+            }//else
+
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             if (Resultado==1){
-                if (version.equals("2.4")) {
+                if (version.equals("2.8")) {
 
                 }else{
                     AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
@@ -400,51 +422,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void Versiones() {
-
-        String SOAP_ACTION = "Versiones";
-        String METHOD_NAME = "Versiones";
-        String NAMESPACE = "http://guvi.ath.cx:9085/WSk75ClientesSOAP/";
-        String URL = "http://guvi.ath.cx:9085/WSk75ClientesSOAP";
-
-
-        try {
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlVersiones soapEnvelope = new xmlVersiones(SoapEnvelope.VER11);
-            soapEnvelope.xmlVersiones("WEBPETI", "W3B3P3T1", "1");
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-
-            SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-
-            version =response0.getPropertyAsString("Version");
-
-
-            Resultado=1;
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-            Resultado=0;
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            Resultado=0;
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-            Resultado=0;
-        }
-
-    }
-
 
 
     private void trasactiv() {
@@ -459,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
-    private class AsyncCallWS2 extends AsyncTask<Void, Void, Void> {
+    private class Log extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -468,7 +445,22 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conectar2();
+            HttpHandler sh = new HttpHandler();
+            String parametros ="usuario="+getUsuario+"&identificador="+id+"&accion=LOG IN&parametro= ";
+            String url = "http://"+StrServer+"/logapp?"+parametros;
+            String jsonStr = sh.makeServiceCall(url, getUsuario, getPass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    String registradolog =jsonObject.getString("Log");
+                } catch (final JSONException e) {
+
+                }//catch JSON EXCEPTION
+            } else {
+
+            }//else
+
+
             return null;
         }
 
@@ -480,40 +472,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-    }
-
-    private void conectar2() {
-        String SOAP_ACTION = "LogAppUs";
-        String METHOD_NAME = "LogAppUs";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlLog soapEnvelope = new xmlLog(SoapEnvelope.VER11);
-            soapEnvelope.xmlLog(getUsuario, getPass, id, "LOG IN", "");
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
     }
 
 }

@@ -24,9 +24,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kepler201.R;
+import com.example.kepler201.SetterandGetter.ConsulCotiSANDG;
 import com.example.kepler201.SetterandGetter.DetallCotiSANDG;
 import com.example.kepler201.SetterandGetter.EnvioSANDG;
 import com.example.kepler201.SetterandGetter.ListaViaSANDG;
+import com.example.kepler201.SetterandGetter.SearachClientSANDG;
 import com.example.kepler201.XMLS.xmlDetallCoti;
 import com.example.kepler201.XMLS.xmlDirEnvio;
 import com.example.kepler201.XMLS.xmlNewDoc42;
@@ -34,8 +36,12 @@ import com.example.kepler201.XMLS.xmlPedido;
 import com.example.kepler201.XMLS.xmlValidaPedColombia;
 import com.example.kepler201.XMLS.xmlValidaPedMexico;
 import com.example.kepler201.XMLS.xmlViaE;
+import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -71,8 +77,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
     TextView txtComentario;
     TableRow fila;
     AlertDialog mDialog;
-    TextView  txtClavePro, txtCant, txtPrecio, txtDesc, txtImporte;
-
+    TextView txtClavePro, txtCant, txtPrecio, txtDesc, txtImporte;
 
 
     String ClaveFolDialog = "";
@@ -107,7 +112,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
     String ColoniaSec;
     String PoblacionSec;
     String NumeroTel;
-    double IvaVariado =0;
+    double IvaVariado = 0;
 
     double DescProstr = 0;
     double Descuento = 0;
@@ -121,6 +126,14 @@ public class ActivityDetallCoti extends AppCompatActivity {
     String Folio1;
     String FolioResul;
     String SubdescuentoValida;
+
+    String Eagle;
+    String Rodatech;
+    String Partech;
+    String Shark;
+    String Trackoone;
+    String DESCdOCUMENTO;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,7 +143,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
 
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
         mDialog = new SpotsDialog.Builder().setContext(ActivityDetallCoti.this).setMessage("Espere un momento...").build();
-
+        mDialog.setCancelable(false);
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");
         strname = preference.getString("name", "null");
@@ -144,10 +157,10 @@ public class ActivityDetallCoti extends AppCompatActivity {
         ClaveFolDialog = getIntent().getStringExtra("Folio");
         ClaveNumDialog = getIntent().getStringExtra("NumSucu");
 
-        Folio =  findViewById(R.id.txtFolio);
-        Sucursal =  findViewById(R.id.txtSucursal);
-        ClaClient =  findViewById(R.id.txtCliente);
-        NomClient =  findViewById(R.id.txtNom);
+        Folio = findViewById(R.id.txtFolio);
+        Sucursal = findViewById(R.id.txtSucursal);
+        ClaClient = findViewById(R.id.txtCliente);
+        NomClient = findViewById(R.id.txtNom);
         txtComentario = findViewById(R.id.txtComentario);
 
 
@@ -155,41 +168,23 @@ public class ActivityDetallCoti extends AppCompatActivity {
         txtDescuento = findViewById(R.id.Descuento);
         txtiva = findViewById(R.id.iva);
         txtSubtotal2 = findViewById(R.id.SubTotal2);
-        txtMontototal =  findViewById(R.id.MontoTotal);
+        txtMontototal = findViewById(R.id.MontoTotal);
         spinnerVia = findViewById(R.id.spinnerVia);
-        pedidoButton= findViewById(R.id.PedidoButton);
+        pedidoButton = findViewById(R.id.PedidoButton);
 
-        IvaVariado= ((!StrServer.equals("vazlocolombia.dyndns.org:9085"))?0.16 : 0.19);
+        IvaVariado = ((!StrServer.equals("vazlocolombia.dyndns.org:9085")) ? 0.16 : 0.19);
 
         MyToolbar.show(this, "Cotizacion:" + ClaveFolDialog, true);
 
 
+        ActivityDetallCoti.AsyncCallWS task = new ActivityDetallCoti.AsyncCallWS();
+        task.execute();
 
+        ActivityDetallCoti.AsyncCallWS5 task2 = new ActivityDetallCoti.AsyncCallWS5();
+        task2.execute();
 
-
-
-
-
-
-            ActivityDetallCoti.AsyncCallWS task = new ActivityDetallCoti.AsyncCallWS();
-            task.execute();
-
-            ActivityDetallCoti.AsyncCallWS5 task2 = new ActivityDetallCoti.AsyncCallWS5();
-            task2.execute();
-
-            ActivityDetallCoti.AsyncCallWS6 task3 = new ActivityDetallCoti.AsyncCallWS6();
-            task3.execute();
-
-
-
-
-
-
-
-
-
-
-
+        ActivityDetallCoti.AsyncCallWS6 task3 = new ActivityDetallCoti.AsyncCallWS6();
+        task3.execute();
 
 
         pedidoButton.setOnClickListener(new View.OnClickListener() {
@@ -197,11 +192,11 @@ public class ActivityDetallCoti extends AppCompatActivity {
             public void onClick(View view) {
                 pedidoButton.setEnabled(false);
 
-                if(StrServer.equals("vazlocolombia.dyndns.org:9085")){
+                if (StrServer.equals("vazlocolombia.dyndns.org:9085")) {
 
                     strClaveCli = listasearch2.get(0).getClaveC();
                     strNombreCliente = listasearch2.get(0).getNombreC();
-                    strComentario =  listasearch2.get(0).getComentario();
+                    strComentario = listasearch2.get(0).getComentario() + listasearch2.get(0).getComentario2() + listasearch2.get(0).getComentario3();
                     StrRFC = listasearch2.get(0).getRFC();
                     StrPlazo = listasearch2.get(0).getPLAZO();
                     StrDescuentoPP = listasearch2.get(0).getDESCUENTOPP();
@@ -210,7 +205,12 @@ public class ActivityDetallCoti extends AppCompatActivity {
                     StrColonia = listasearch2.get(0).getCOLONIA();
                     StrPoblacion = listasearch2.get(0).getPOBLACION();
                     Folio1 = Folio.getText().toString();
-
+                    Eagle = listasearch2.get(0).getEagle();
+                    Rodatech = listasearch2.get(0).getRodatech();
+                    Partech = listasearch2.get(0).getPartech();
+                    Shark = listasearch2.get(0).getShark();
+                    Trackoone = listasearch2.get(0).getTrackoone();
+                    DESCdOCUMENTO = listasearch2.get(0).getDESCdOCUMENTO();
 
 
                     for (int i = 0; i < listasearch4.size(); i++) {
@@ -224,10 +224,10 @@ public class ActivityDetallCoti extends AppCompatActivity {
                     ActivityDetallCoti.AsyncCallWS2 task = new ActivityDetallCoti.AsyncCallWS2();
                     task.execute();
 
-                }else{
+                } else {
                     strClaveCli = listasearch2.get(0).getClaveC();
                     strNombreCliente = listasearch2.get(0).getNombreC();
-                    strComentario =  listasearch2.get(0).getComentario();
+                    strComentario = listasearch2.get(0).getComentario() + listasearch2.get(0).getComentario2() + listasearch2.get(0).getComentario3();
                     StrRFC = listasearch2.get(0).getRFC();
                     StrPlazo = listasearch2.get(0).getPLAZO();
                     StrDescuentoPP = listasearch2.get(0).getDESCUENTOPP();
@@ -236,6 +236,12 @@ public class ActivityDetallCoti extends AppCompatActivity {
                     StrColonia = listasearch2.get(0).getCOLONIA();
                     StrPoblacion = listasearch2.get(0).getPOBLACION();
                     Folio1 = Folio.getText().toString();
+                    Eagle = listasearch2.get(0).getEagle();
+                    Rodatech = listasearch2.get(0).getRodatech();
+                    Partech = listasearch2.get(0).getPartech();
+                    Shark = listasearch2.get(0).getShark();
+                    Trackoone = listasearch2.get(0).getTrackoone();
+                    DESCdOCUMENTO = listasearch2.get(0).getDESCdOCUMENTO();
 
 
                     for (int i = 0; i < listasearch4.size(); i++) {
@@ -245,7 +251,6 @@ public class ActivityDetallCoti extends AppCompatActivity {
                             break;
                         }
                     }
-
 
 
                     ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
@@ -273,8 +278,109 @@ public class ActivityDetallCoti extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conecta1();
+            String saldo;
+            int saldoint;
+            HttpHandler sh = new HttpHandler();
+            String parametros = "sucursal=" + ClaveNumDialog + "&folio=" + ClaveFolDialog;
+            String url = "http://" + StrServer + "/cotizaciondetallapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
 
+
+                    JSONObject jitems, Numero;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("Item");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Item");
+                            Numero = jitems.getJSONObject("" + i + "");
+
+
+                            saldo = (Numero.getString("k_saldo").equals("") ? "0" : Numero.getString("k_saldo"));
+                            saldoint = Integer.parseInt(saldo);
+                            if (saldoint > 0) {
+                                listasearch2.add(new DetallCotiSANDG((Numero.getString("k_Sucursal").equals("") ? " " : Numero.getString("k_Sucursal")),
+                                        (Numero.getString("k_Folio").equals("") ? "" : Numero.getString("k_Folio")),
+                                        (Numero.getString("ClaveC").equals("") ? "" : Numero.getString("ClaveC")),
+                                        (Numero.getString("k_NombreC").equals("") ? "" : Numero.getString("k_NombreC")),
+                                        (Numero.getString("k_ClaveP").equals("") ? "" : Numero.getString("k_ClaveP")),
+                                        (Numero.getString("k_Cant").equals("") ? "" : Numero.getString("k_Cant")),
+                                        (Numero.getString("k_Precio").equals("") ? "" : Numero.getString("k_Precio")),
+                                        (Numero.getString("k_Desc").equals("") ? "" : Numero.getString("k_Desc")),
+                                        (Numero.getString("k_Import").equals("") ? "" : Numero.getString("k_Import")),
+                                        (Numero.getString("k_RFC").equals("") ? "" : Numero.getString("k_RFC")),
+                                        (Numero.getString("k_Plazo").equals("") ? "" : Numero.getString("k_Plazo")),
+                                        (Numero.getString("k_87").equals("") ? "0" : Numero.getString("k_87")),
+                                        (Numero.getString("k_desc1").equals("") ? "0" : Numero.getString("k_desc1")),
+                                        (Numero.getString("k_calle").equals("") ? "" : Numero.getString("k_calle")),
+                                        (Numero.getString("k_colonia").equals("") ? "" : Numero.getString("k_colonia")),
+                                        (Numero.getString("k_poblacion").equals("") ? "" : Numero.getString("k_poblacion")),
+                                        (Numero.getString("k_via").equals("") ? "" : Numero.getString("k_via")),
+                                        (Numero.getString("k_comentario").equals("") ? "" : Numero.getString("k_comentario")),
+                                        (Numero.getString("k_Disponible").equals("") ? "" : Numero.getString("k_Disponible")),
+                                        (Numero.getString("k_BackOrder").equals("") ? "" : Numero.getString("k_BackOrder")),
+                                        (Numero.getString("k_Surtido").equals("") ? "" : Numero.getString("k_Surtido")),
+                                        (Numero.getString("k_precionuevo").equals("") ? "" : Numero.getString("k_precionuevo")),
+                                        (Numero.getString("k_fecha").equals("") ? "" : Numero.getString("k_fecha")),
+                                        (Numero.getString("k_hora").equals("") ? "" : Numero.getString("k_hora")),
+                                        (Numero.getString("k_montoback").equals("") ? "" : Numero.getString("k_montoback")),
+                                        (Numero.getString("k_saldo").equals("") ? "" : Numero.getString("k_saldo")),
+                                        (Numero.getString("k_nomSucursal").equals("") ? "" : Numero.getString("k_nomSucursal")),
+                                        (Numero.getString("k_Descripcion").equals("") ? "" : Numero.getString("k_Descripcion")),
+                                        (Numero.getString("k_Unidad").equals("") ? "" : Numero.getString("k_Unidad")),
+                                        (Numero.getString("k_Partida").equals("") ? "" : Numero.getString("k_Partida")),
+                                        (Numero.getString("k_Comentario2").equals("") ? "" : Numero.getString("k_Comentario2")),
+                                        (Numero.getString("k_Comentario3").equals("") ? "" : Numero.getString("k_Comentario3")),
+                                        (Numero.getString("k_EagleDesc").equals("") ? "" : Numero.getString("k_EagleDesc")),
+                                        (Numero.getString("k_TrackDesc").equals("") ? "" : Numero.getString("k_TrackDesc")),
+                                        (Numero.getString("k_RodatDesc").equals("") ? "" : Numero.getString("k_RodatDesc")),
+                                        (Numero.getString("k_PartechDesc").equals("") ? "" : Numero.getString("k_PartechDesc")),
+                                        (Numero.getString("k_SharckDesc").equals("") ? "" : Numero.getString("k_SharckDesc")),
+                                        (Numero.getString("k_Descdoc").equals("") ? "" : Numero.getString("k_Descdoc"))));
+                            }
+                        }
+                    }
+
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
@@ -286,18 +392,17 @@ public class ActivityDetallCoti extends AppCompatActivity {
             Sucursal.setText(listasearch2.get(0).getNombreSucursal());
             ClaClient.setText(listasearch2.get(0).getClaveC());
             NomClient.setText(listasearch2.get(0).getNombreC());
-            txtComentario.setText(listasearch2.get(0).getComentario());
+            txtComentario.setText(listasearch2.get(0).getComentario() + listasearch2.get(0).getComentario2() + listasearch2.get(0).getComentario3());
             StrVia = listasearch2.get(0).getVIA();
             strClaveCli = listasearch2.get(0).getClaveC();
 
 
-
             DescPro = listasearch2.get(0).getDESCUENTOPP();
 
-            if(StrServer.equals("vazlocolombia.dyndns.org:9085")){
+            if (StrServer.equals("vazlocolombia.dyndns.org:9085")) {
 
                 Desc1 = listasearch2.get(0).getDESCUENTO1();
-            }else{
+            } else {
                 Desc1 = "0";
 
             }
@@ -345,9 +450,6 @@ public class ActivityDetallCoti extends AppCompatActivity {
                     txtPrecio.setPadding(20, 20, 20, 20);
                     txtPrecio.setLayoutParams(layaoutDes);
                     fila.addView(txtPrecio);
-
-
-
 
 
                     txtImporte = new TextView(getApplicationContext());
@@ -425,90 +527,6 @@ public class ActivityDetallCoti extends AppCompatActivity {
 
     }
 
-
-    private void conecta1() {
-
-
-        String SOAP_ACTION = "DetallCot";
-        String METHOD_NAME = "DetallCot";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-        String saldo;
-        int saldoint;
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlDetallCoti soapEnvelope = new xmlDetallCoti(SoapEnvelope.VER11);
-            soapEnvelope.xmlDetallCo(strusr, strpass, ClaveFolDialog, ClaveNumDialog);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                saldo=(response0.getPropertyAsString("k_saldo").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_saldo"));
-                saldoint=Integer.parseInt(saldo);
-                if(saldoint>0){
-                    listasearch2.add(new DetallCotiSANDG((response0.getPropertyAsString("k_Sucursal").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Sucursal")),
-                            (response0.getPropertyAsString("k_Folio").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Folio")),
-                            (response0.getPropertyAsString("ClaveC").equals("anyType{}") ? "" : response0.getPropertyAsString("ClaveC")),
-                            (response0.getPropertyAsString("k_NombreC").equals("anyType{}") ? "" : response0.getPropertyAsString("k_NombreC")),
-                            (response0.getPropertyAsString("k_ClaveP").equals("anyType{}") ? "" : response0.getPropertyAsString("k_ClaveP")),
-                            (response0.getPropertyAsString("k_Cant").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Cant")),
-                            (response0.getPropertyAsString("k_Precio").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Precio")),
-                            (response0.getPropertyAsString("k_Desc").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Desc")),
-                            (response0.getPropertyAsString("k_Import").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Import")),
-                            (response0.getPropertyAsString("k_RFC").equals("anyType{}") ? "" : response0.getPropertyAsString("k_RFC")),
-                            (response0.getPropertyAsString("k_Plazo").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Plazo")),
-                            (response0.getPropertyAsString("k_87").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_87")),
-                            (response0.getPropertyAsString("k_desc1").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_desc1")),
-                            (response0.getPropertyAsString("k_calle").equals("anyType{}") ? "" : response0.getPropertyAsString("k_calle")),
-                            (response0.getPropertyAsString("k_colonia").equals("anyType{}") ? "" : response0.getPropertyAsString("k_colonia")),
-                            (response0.getPropertyAsString("k_poblacion").equals("anyType{}") ? "" : response0.getPropertyAsString("k_poblacion")),
-                            (response0.getPropertyAsString("k_via").equals("anyType{}") ? "" : response0.getPropertyAsString("k_via")),
-                            (response0.getPropertyAsString("k_comentario").equals("anyType{}") ? "" : response0.getPropertyAsString("k_comentario")),
-                            (response0.getPropertyAsString("k_Disponible").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Disponible")),
-                            (response0.getPropertyAsString("k_BackOrder").equals("anyType{}") ? "" : response0.getPropertyAsString("k_BackOrder")),
-                            (response0.getPropertyAsString("k_Surtido").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Surtido")),
-                            (response0.getPropertyAsString("k_precionuevo").equals("anyType{}") ? "" : response0.getPropertyAsString("k_precionuevo")),
-                            (response0.getPropertyAsString("k_fecha").equals("anyType{}") ? "" : response0.getPropertyAsString("k_fecha")),
-                            (response0.getPropertyAsString("k_hora").equals("anyType{}") ? "" : response0.getPropertyAsString("k_hora")),
-                            (response0.getPropertyAsString("k_montoback").equals("anyType{}") ? "" : response0.getPropertyAsString("k_montoback")),
-                            (response0.getPropertyAsString("k_saldo").equals("anyType{}") ? "" : response0.getPropertyAsString("k_saldo")),
-                            (response0.getPropertyAsString("k_nomSucursal").equals("anyType{}") ? "" : response0.getPropertyAsString("k_nomSucursal")),
-                            (response0.getPropertyAsString("k_Descripcion").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Descripcion")),
-                            (response0.getPropertyAsString("k_Unidad").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Unidad")),
-                            (response0.getPropertyAsString("k_Partida").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Partida"))));
-
-                }
-
-
-
-
-            }
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
-
     @SuppressWarnings({"deprecation", "StatementWithEmptyBody"})
     @SuppressLint("StaticFieldLeak")
     private class AsyncCallWS2 extends AsyncTask<Void, Void, Void> {
@@ -520,17 +538,75 @@ public class ActivityDetallCoti extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conecta2();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + strClaveCli + "&monto=" + MontoStr + "&vendedor=" + strcode + "&descuento=" + Desc1 + "&subtotal=" + SubdescuentoValida;
+            String url = "http://" + StrServer + "/validapedcolapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+
+
+                    JSONObject jitems;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("MENSAJE");
+
+                        MenValPedi = jitems.getString("k_messenge");
+                        ValPedido = jitems.getString("k_ValPe");
+                        Desc1Valida = jitems.getString("k_desc1");
+                        DescuentoValida = jitems.getString("Descuento");
+                        SubtotalValida = jitems.getString("Subtotal");
+                        SeCambiovalida = jitems.getString("SeCambio");
+                    }
+
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
         @RequiresApi(api = Build.VERSION_CODES.P)
         @Override
         protected void onPostExecute(Void result) {
-            if(Integer.parseInt(SeCambiovalida) == 1 &&  Integer.parseInt(ValPedido) == 1){
+            if (Integer.parseInt(SeCambiovalida) == 1 && Integer.parseInt(ValPedido) == 1) {
                 double monto;
                 double ivasr;
-                ivasr= Double.parseDouble(SubtotalValida) * IvaVariado;
+                ivasr = Double.parseDouble(SubtotalValida) * IvaVariado;
                 monto = Double.parseDouble(SubtotalValida) + ivasr;
 
 
@@ -600,6 +676,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
                                     overridePendingTransition(0, 0);
                                     startActivity(regreso);
                                     overridePendingTransition(0, 0);
+                                    finish();
 
 
                                     dialogInterface.cancel();
@@ -610,7 +687,6 @@ public class ActivityDetallCoti extends AppCompatActivity {
                             titulo.setTitle("Error");
                             titulo.show();
                         }
-
 
 
                     }
@@ -627,8 +703,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
                 titulo.show();
 
 
-
-            }else{
+            } else {
                 if ("1".equals(ValPedido)) {
                     Calendar c = Calendar.getInstance();
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat dateformatActually = new SimpleDateFormat("yyyy-MM-dd");
@@ -674,7 +749,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
                             overridePendingTransition(0, 0);
                             startActivity(regreso);
                             overridePendingTransition(0, 0);
-
+                            finish();
 
                             dialogInterface.cancel();
                         }
@@ -687,52 +762,9 @@ public class ActivityDetallCoti extends AppCompatActivity {
             }
 
 
-
         }
 
     }
-    private void conecta2() {
-        String SOAP_ACTION = "ValidaPedColombia";
-        String METHOD_NAME = "ValidaPedColombia";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlValidaPedColombia soapEnvelope = new xmlValidaPedColombia(SoapEnvelope.VER11);
-            soapEnvelope.xmlValidaPedColombia(strusr, strpass, strClaveCli, strcode, MontoStr,SubdescuentoValida,Desc1);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-
-            SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-            response0 = (SoapObject) response0.getProperty("MENSAJE");
-            MenValPedi = response0.getPropertyAsString("k_messenge");
-            ValPedido = response0.getPropertyAsString("k_ValPe");
-            Desc1Valida = response0.getPropertyAsString("k_desc1");
-            DescuentoValida = response0.getPropertyAsString("Descuento");
-            SubtotalValida = response0.getPropertyAsString("Subtotal");
-            SeCambiovalida = response0.getPropertyAsString("SeCambio");
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
 
     private static String formatNumberCurrency(String number) {
         DecimalFormat formatter = new DecimalFormat("###,###,##0.00");
@@ -753,7 +785,61 @@ public class ActivityDetallCoti extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            ValidaPedido();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + strClaveCli + "&monto=" + MontoStr + "&vendedor=" + strcode;
+            String url = "http://" + StrServer + "/validapedmexapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+
+
+                    JSONObject jitems;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("MENSAJE");
+
+                        MenValPedi = jitems.getString("k_messenge");
+                        ValPedido = jitems.getString("k_ValPe");
+                    }
+
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
@@ -808,7 +894,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
                         overridePendingTransition(0, 0);
                         startActivity(regreso);
                         overridePendingTransition(0, 0);
-
+                        finish();
 
                         dialogInterface.cancel();
                     }
@@ -822,48 +908,6 @@ public class ActivityDetallCoti extends AppCompatActivity {
         }
 
     }
-    private void ValidaPedido() {
-        String SOAP_ACTION = "ValidaPedMexico";
-        String METHOD_NAME = "ValidaPedMexico";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch ";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlValidaPedMexico soapEnvelope = new xmlValidaPedMexico(SoapEnvelope.VER11);
-            soapEnvelope.xmlValidaPedi(strusr, strpass, strClaveCli, strcode, MontoStr);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-
-            SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-            response0 = (SoapObject) response0.getProperty("MENSAJE");
-            MenValPedi = response0.getPropertyAsString("k_messenge");
-            ValPedido = response0.getPropertyAsString("k_ValPe");
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
-
-
-
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
@@ -890,11 +934,27 @@ public class ActivityDetallCoti extends AppCompatActivity {
             alerta.setMessage(Documento).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    int Cantidad = 0;
+                    for (int j = 0; j < listasearch2.size(); j++) {
 
-                    ActivityDetallCoti.AsyncCallWS7 task4 = new ActivityDetallCoti.AsyncCallWS7();
-                    task4.execute();
+                        if (Integer.parseInt(listasearch2.get(j).getBackOrder()) > 0) {
+                            Cantidad++;
+                        } else {
 
+                        }
+                    }
 
+                    if (Cantidad > 0) {
+                        ActivityDetallCoti.AsyncCallWS7 task4 = new ActivityDetallCoti.AsyncCallWS7();
+                        task4.execute();
+                    } else {
+                        Intent regreso = new Intent(ActivityDetallCoti.this, ActivityConsulCoti.class);
+                        overridePendingTransition(0, 0);
+                        startActivity(regreso);
+                        overridePendingTransition(0, 0);
+                        finish();
+                        mDialog.dismiss();
+                    }
 
 
                     dialogInterface.cancel();
@@ -923,7 +983,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
             SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
             xmlPedido soapEnvelope = new xmlPedido(SoapEnvelope.VER11);
             soapEnvelope.xmlPedido(strComentario, strcode, strNombreCliente, strClaveCli, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass,
-                    StrRFC, StrPlazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, StrCalle, StrColonia, StrPoblacion, Folio1, strVia, stridEnvio, listasearch2, StrServer);
+                    StrRFC, StrPlazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, StrCalle, StrColonia, StrPoblacion, Folio1, strVia, stridEnvio, listasearch2, StrServer, Eagle, Rodatech, Partech, Shark, Trackoone, DESCdOCUMENTO);
             soapEnvelope.dotNet = true;
             soapEnvelope.implicitTypes = true;
             soapEnvelope.setOutputSoapObject(Request);
@@ -952,10 +1012,6 @@ public class ActivityDetallCoti extends AppCompatActivity {
     }
 
 
-
-
-
-
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
     private class AsyncCallWS5 extends AsyncTask<Void, Void, Void> {
@@ -967,7 +1023,65 @@ public class ActivityDetallCoti extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conectar5();
+            HttpHandler sh = new HttpHandler();
+
+            String url = "http://" + StrServer + "/listaviaapp";
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+                    if(json.length()!=0) {
+
+                        JSONObject jitems, Numero, Clave, Nombre;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("Via");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Via");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            listasearch4.add(new ListaViaSANDG((Numero.getString("k_claveVia").equals("") ? " " : Numero.getString("k_claveVia")),
+                                    (Numero.getString("k_nombreVia").equals("") ? " " : Numero.getString("k_nombreVia"))));
+
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
 
             return null;
         }
@@ -983,7 +1097,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, opciones);
             spinnerVia.setAdapter(adapter);
-            if (!StrVia.equals("")){
+            if (!StrVia.equals("")) {
                 String clave;
                 for (int i = 0; i < listasearch4.size(); i++) {
                     clave = listasearch4.get(i).getClave();
@@ -999,53 +1113,6 @@ public class ActivityDetallCoti extends AppCompatActivity {
     }
 
 
-    private void conectar5() {
-        String SOAP_ACTION = "ListaVia";
-        String METHOD_NAME = "ListaVia";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlViaE soapEnvelope = new xmlViaE(SoapEnvelope.VER11);
-            soapEnvelope.xmlViaE(strusr, strpass);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-
-
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                listasearch4.add(new ListaViaSANDG((response0.getPropertyAsString("k_claveVia").equals("anyType{}") ? " " : response0.getPropertyAsString("k_claveVia")),
-                        (response0.getPropertyAsString("k_nombreVia").equals("anyType{}") ? " " : response0.getPropertyAsString("k_nombreVia"))));
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
     private class AsyncCallWS6 extends AsyncTask<Void, Void, Void> {
@@ -1057,8 +1124,71 @@ public class ActivityDetallCoti extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conectar6();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + strClaveCli;
+            String url = "http://" + StrServer + "/enviosapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+                    if (json.length() > 0) {
+                        JSONObject jitems, Numero;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("Dir");
 
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Dir");
+                            Numero = jitems.getJSONObject("" + i + "");
+
+                            listasearch5.add(new EnvioSANDG((Numero.getString("k_id").equals("") ? " " : Numero.getString("k_id")),
+                                    (Numero.getString("k_CalleyNumero").equals("") ? " " : Numero.getString("k_CalleyNumero")),
+                                    (Numero.getString("k_ColoClinte").equals("") ? " " : Numero.getString("k_ColoClinte")),
+                                    (Numero.getString("k_Poblacion").equals("") ? " " : Numero.getString("k_Poblacion")),
+                                    (Numero.getString("k_Numero").equals("") ? " " : Numero.getString("k_Numero"))));
+
+
+                        }
+
+                    }
+
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
@@ -1072,53 +1202,6 @@ public class ActivityDetallCoti extends AppCompatActivity {
     }
 
 
-    private void conectar6() {
-        String SOAP_ACTION = "Envio";
-        String METHOD_NAME = "Envio";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlDirEnvio soapEnvelope = new xmlDirEnvio(SoapEnvelope.VER11);
-            soapEnvelope.xmlDirEnvio(strusr, strpass, strClaveCli);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                listasearch5.add(new EnvioSANDG((response0.getPropertyAsString("k_id").equals("anyType{}") ? " " : response0.getPropertyAsString("k_id")),
-                        (response0.getPropertyAsString("k_CalleyNumero").equals("anyType{}") ? " " : response0.getPropertyAsString("k_CalleyNumero")),
-                        (response0.getPropertyAsString("k_ColoClinte").equals("anyType{}") ? " " : response0.getPropertyAsString("k_ColoClinte")),
-                        (response0.getPropertyAsString("k_Poblacion").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Poblacion")),
-                        (response0.getPropertyAsString("k_Numero").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Numero"))));
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
@@ -1144,6 +1227,8 @@ public class ActivityDetallCoti extends AppCompatActivity {
             overridePendingTransition(0, 0);
             startActivity(regreso);
             overridePendingTransition(0, 0);
+            finish();
+            mDialog.dismiss();
 
         }
 
@@ -1195,10 +1280,8 @@ public class ActivityDetallCoti extends AppCompatActivity {
         }
 
 
-
-
         Subtotal1 = String.valueOf(Subtotal);
-        SubdescuentoValida=Subtotal1;
+        SubdescuentoValida = Subtotal1;
         txtSubtotal.setText(Html.fromHtml("Subtotal:<font color=#000000>$</font><font color=#000000>" + formatNumberCurrency(Subtotal1) + "</font>"));
         DescProstr = Double.parseDouble(Desc1) / 100;
         Descuento = Subtotal * DescProstr;

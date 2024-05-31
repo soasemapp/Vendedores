@@ -8,13 +8,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -25,11 +28,16 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.kepler201.ConexionSQLiteHelper;
 import com.example.kepler201.R;
+import com.example.kepler201.SetterandGetter.SearachClientSANDG;
 import com.example.kepler201.XMLS.xmlVersiones;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.activities.Pagos.ActivityABCpagos;
+import com.example.kepler201.includes.HttpHandler;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -51,7 +59,7 @@ public class inicioActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor2;
 
 
-
+    String CONFIGURACION;
 
     ConexionSQLiteHelper conn;
 
@@ -90,10 +98,10 @@ String mensaje;
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+        // menu should be considered as top level destinations.}
 
             mAppBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_home, R.id.busquedaActivity,R.id.activityConsultaProductos, R.id.activityPerfil, R.id.activityAgenda, R.id.activityClientes0Ventas, R.id.activityAltasPagos
+                    R.id.nav_home, R.id.busquedaActivity,R.id.activityConsultaProductos, R.id.activityPerfil, R.id.activityAgenda, R.id.activityClientes0Ventas, R.id.activityAltasPagos,R.id.regitrodepagosActivity
                     , R.id.activityConsulCoti,  R.id.activityHistorial,R.id.activityValdatipo,R.id.activityScreenFirst,R.id.listaPreciosActivity)
                     .setDrawerLayout(drawer)
                     .build();
@@ -119,7 +127,107 @@ String mensaje;
             nav_Menu.findItem(R.id.activityValdatipo).setVisible(false);
         }
 
+        inicioActivity.AsyncCallWS task = new inicioActivity.AsyncCallWS();
+        task.execute();
+
     }
+
+
+
+    @SuppressWarnings("deprecation")
+    @SuppressLint("StaticFieldLeak")
+    private class AsyncCallWS extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            HttpHandler sh = new HttpHandler();
+            String url = "http://" + StrServer + "/configuracion";
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jItem;
+                    JSONObject jitems;
+                    String Repartidores="";
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jItem = jsonObject.getJSONObject("Item");
+                        for (int i = 0; i < jItem.length(); i++) {
+                            jitems = jItem.getJSONObject("" + i);
+                            CONFIGURACION = jitems.getString("RegistroPagos");
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(inicioActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(inicioActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
+            return null;
+
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.P)
+        @Override
+        protected void onPostExecute(Void result) {
+            if(CONFIGURACION.equals("0")){
+
+                navigationView = findViewById(R.id.nav_view);
+                Menu nav_Menu = navigationView.getMenu();
+                nav_Menu.findItem(R.id.activityAltasPagos).setVisible(true);
+                nav_Menu.findItem(R.id.regitrodepagosActivity).setVisible(false);
+            }else{
+                navigationView = findViewById(R.id.nav_view);
+                Menu nav_Menu = navigationView.getMenu();
+
+                nav_Menu.findItem(R.id.activityAltasPagos).setVisible(false);
+                nav_Menu.findItem(R.id.regitrodepagosActivity).setVisible(true);
+            }
+
+        }
+
+
+    }
+
+
+
+
     @Override
     public void onBackPressed() {
         AlertDialog.Builder mensaje = new AlertDialog.Builder(this);

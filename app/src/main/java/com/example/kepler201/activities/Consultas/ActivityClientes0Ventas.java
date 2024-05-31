@@ -23,12 +23,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kepler201.Adapter.AdaptadorClientes;
+import com.example.kepler201.Adapter.AdapterAgenda;
 import com.example.kepler201.R;
+import com.example.kepler201.SetterandGetter.AgendaSANDG;
 import com.example.kepler201.SetterandGetter.BusquedaCliente0VentasSANDG;
 import com.example.kepler201.XMLS.xmlClient0VeEspe;
 import com.example.kepler201.XMLS.xmlClient0Ventas;
+import com.example.kepler201.activities.Agenda.ActivityAgenda;
+import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -62,6 +68,7 @@ public class ActivityClientes0Ventas extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clientes0_ventas);
         mDialog = new SpotsDialog.Builder().setContext(ActivityClientes0Ventas.this).setMessage("Espere un momento...").build();
+        mDialog.setCancelable(false);
         recyclerClientes =  findViewById(R.id.lisClient);
         eddias =  findViewById(R.id.edidias);
         Button btnbuscar =  findViewById(R.id.btnSearch);
@@ -154,9 +161,7 @@ public class ActivityClientes0Ventas extends AppCompatActivity {
                     recyclerClientes.setLayoutManager(new LinearLayoutManager(ActivityClientes0Ventas.this));
                     strdias = eddias.getText().toString();
 
-                    ActivityClientes0Ventas.AsyncCallWS task = new ActivityClientes0Ventas.AsyncCallWS();
-                    task.execute();
-
+                Cliente0Ventas();
             }
         });
         strdias = eddias.getText().toString();
@@ -166,113 +171,186 @@ public class ActivityClientes0Ventas extends AppCompatActivity {
 
     }
 
-    @SuppressLint("StaticFieldLeak")
-    @SuppressWarnings("deprecation")
-    private class AsyncCallWS extends AsyncTask<Void, Void, Void> {
+    public void Cliente0Ventas() {
+        new ActivityClientes0Ventas.Cliente0Ventas().execute();
+    }
 
+
+    private class Cliente0Ventas extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
-            mDialog.show();
-        }
+            super.onPreExecute();
+
+        }//onPreExecute
 
         @Override
-        protected Void doInBackground(Void... params) {
-            conectar();
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "vendedor="+strcode+"&dias="+strdias;
+            String url = "http://" + StrServer + "/clientes0ventasapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+                    if (json.length()!=0) {
+                        JSONObject jitems, Numero;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("Item");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Item");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            listasearch.add(new BusquedaCliente0VentasSANDG(
+                                    Numero.getString("clave"),
+                                    Numero.getString("nombre"),
+                                    Numero.getString("ciudad"),
+                                    Numero.getString("direccion"),
+                                    Numero.getString("activos")));
+                        }
+                    }
+
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDialog.dismiss();
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityClientes0Ventas.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDialog.dismiss();
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityClientes0Ventas.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
-        }
 
-        @RequiresApi(api = Build.VERSION_CODES.P)
+        }//doInBackground
+
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
 
             AdaptadorClientes adapter = new AdaptadorClientes(listasearch);
 
 
             recyclerClientes.setAdapter(adapter);
             mDialog.dismiss();
-        }
-    }
-
-    public void detalladoCliente(View view) {
-        Clave = "";
-        Folio = "";
-        Fecha = "";
-        Monto = "";
-
-        int position = recyclerClientes.getChildAdapterPosition(Objects.requireNonNull(recyclerClientes.findContainingItemView(view)));
-        ClaveDialog = listasearch.get(position).getClave();
-        ActivityClientes0Ventas.AsyncCallWS2 task2 = new ActivityClientes0Ventas.AsyncCallWS2();
-        task2.execute();
-
-    }
-
-    private void conectar() {
-        String SOAP_ACTION = "Client0Ven";
-        String METHOD_NAME = "Client0Ven";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlClient0Ventas soapEnvelope = new xmlClient0Ventas(SoapEnvelope.VER11);
-            soapEnvelope.xmlClient0V(strusr, strpass, strcode, strdias);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json ;i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                listasearch.add(new BusquedaCliente0VentasSANDG((response0.getPropertyAsString("k_Clave").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Clave")),
-                        (response0.getPropertyAsString("k_Nombre").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Nombre")),
-                        (response0.getPropertyAsString("k_Ciudad").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Ciudad")),
-                        (response0.getPropertyAsString("k_Direccion").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Direccion")),
-                        (response0.getPropertyAsString("k_Activos").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Activos"))));
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
+        }//onPost
     }
 
 
-    @SuppressLint("StaticFieldLeak")
-    @SuppressWarnings("deprecation")
-    private class AsyncCallWS2 extends AsyncTask<Void, Void, Void> {
+    public void Cliente0VentasDeta() {
+        new ActivityClientes0Ventas.Cliente0VentasDetallado().execute();
+    }
 
+
+    private class Cliente0VentasDetallado extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
 
-        }
+        }//onPreExecute
 
         @Override
-        protected Void doInBackground(Void... params) {
-            conectar2();
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente="+ClaveDialog;
+            String url = "http://" + StrServer + "/clientes0ventasdetallapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+                    if (json.length()!=0) {
+                        JSONObject jitems, Numero;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("Item");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Item");
+                            Numero = jitems.getJSONObject("" + i + "");
+                          Clave=Numero.getString("clave");
+                          Folio=Numero.getString("folio");
+                          Fecha=Numero.getString("fecha");
+                          Monto=Numero.getString("monto");;
+                        }
+                    }
+
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDialog.dismiss();
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityClientes0Ventas.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDialog.dismiss();
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityClientes0Ventas.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
-        }
 
-        @RequiresApi(api = Build.VERSION_CODES.P)
+        }//doInBackground
+
         @Override
-        protected void onPostExecute(Void result) {
-
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
             AlertDialog.Builder alerta = new AlertDialog.Builder(ActivityClientes0Ventas.this);
             if (!Clave.isEmpty() && !Fecha.isEmpty() && !Folio.isEmpty() && !Monto.isEmpty()) {
 
@@ -301,60 +379,30 @@ public class ActivityClientes0Ventas extends AppCompatActivity {
                 titulo.setTitle("Ventas");
                 titulo.show();
             }
+        }//onPost
+    }
 
-        }
+
+
+
+
+
+    public void detalladoCliente(View view) {
+        Clave = "";
+        Folio = "";
+        Fecha = "";
+        Monto = "";
+
+        int position = recyclerClientes.getChildAdapterPosition(Objects.requireNonNull(recyclerClientes.findContainingItemView(view)));
+        ClaveDialog = listasearch.get(position).getClave();
+        Cliente0VentasDeta();
+
     }
 
     private static String formatNumberCurrency(String number) {
         DecimalFormat formatter = new DecimalFormat("###,###,##0.00");
         return formatter.format(Double.parseDouble(number));
     }
-
-    private void conectar2() {
-
-        String SOAP_ACTION = "Client0VeEspec";
-        String METHOD_NAME = "Client0VeEspec";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlClient0VeEspe soapEnvelope = new xmlClient0VeEspe(SoapEnvelope.VER11);
-            soapEnvelope.xmlClient0VeEs(strusr, strpass, ClaveDialog);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json ;i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                Clave = (response0.getPropertyAsString("k_Clave").equals("anyType{}") ? "N/A" : response0.getPropertyAsString("k_Clave"));
-                Folio = (response0.getPropertyAsString("k_Folio").equals("anyType{}") ? "N/A" : response0.getPropertyAsString("k_Folio"));
-                Fecha = (response0.getPropertyAsString("k_Fecha").equals("anyType{}") ? "N/A" : response0.getPropertyAsString("k_Fecha"));
-                Monto = (response0.getPropertyAsString("k_Monto").equals("anyType{}") ? "N/A" : response0.getPropertyAsString("k_Monto"));
-
-            }
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menuflow4, menu);

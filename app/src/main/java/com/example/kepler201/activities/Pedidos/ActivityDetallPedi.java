@@ -3,6 +3,7 @@ package com.example.kepler201.activities.Pedidos;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -18,10 +19,14 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kepler201.R;
+import com.example.kepler201.SetterandGetter.ConsulCotiSANDG;
 import com.example.kepler201.SetterandGetter.DetallPediSANDG;
 import com.example.kepler201.XMLS.xmlDetallPe;
+import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -71,6 +76,7 @@ public class ActivityDetallPedi extends AppCompatActivity {
 
 
         mDialog = new SpotsDialog.Builder().setContext(ActivityDetallPedi.this).setMessage("Espere un momento...").build();
+        mDialog.setCancelable(false);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 
         strusr = preference.getString("user", "null");
@@ -119,7 +125,78 @@ public class ActivityDetallPedi extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conecta3();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "sucursal="+strcodBra+"&folio="+ClaveFolDialog;
+            String url = "http://" + StrServer + "/pedidosdetallapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+
+
+                    JSONObject jitems, Numero;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("Item");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Item");
+                            Numero = jitems.getJSONObject("" + i + "");
+
+
+                            listasearch2.add(new DetallPediSANDG((Numero.getString("k_Sucursal").equals("") ? " " : Numero.getString("k_Sucursal")),
+                                    (Numero.getString("k_Folio").equals("") ? " " : Numero.getString("k_Folio")),
+                                    (Numero.getString("k_cCliente").equals("") ? " " : Numero.getString("k_cCliente")),
+                                    (Numero.getString("k_Nombre").equals("") ? " " : Numero.getString("k_Nombre")),
+                                    (Numero.getString("k_cProduct").equals("") ? " " : Numero.getString("k_cProduct")),
+                                    (Numero.getString("k_Cantidad").equals("") ? " " : Numero.getString("k_Cantidad")),
+                                    (Numero.getString("k_Precio").equals("") ? " " : Numero.getString("k_Precio")),
+                                    (Numero.getString("k_Descuento").equals("") ? " " : Numero.getString("k_Descuento")),
+                                    (Numero.getString("k_importe").equals("") ? " " : Numero.getString("k_importe")),
+                                    (Numero.getString("k_comentario").equals("") ? " " : Numero.getString("k_comentario")),
+                                    (Numero.getString("k_NomSucursal").equals("") ? " " : Numero.getString("k_NomSucursal")),
+                                    (Numero.getString("k_descripcion").equals("") ? " " : Numero.getString("k_descripcion")),
+                                    (Numero.getString("k_desc1").equals("") ? " " : Numero.getString("k_desc1"))));
+
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallPedi.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallPedi.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
@@ -261,61 +338,6 @@ public class ActivityDetallPedi extends AppCompatActivity {
 
     }
 
-    private void conecta3() {
-
-
-        String SOAP_ACTION = "DetallPe";
-        String METHOD_NAME = "DetallPe";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlDetallPe soapEnvelope = new xmlDetallPe(SoapEnvelope.VER11);
-            soapEnvelope.xmlDetallP(strusr, strpass, ClaveFolDialog, ClaveNumDialog);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json = response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                listasearch2.add(new DetallPediSANDG((response0.getPropertyAsString("k_Sucursal").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Sucursal")),
-                        (response0.getPropertyAsString("k_Folio").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Folio")),
-                        (response0.getPropertyAsString("k_cCliente").equals("anyType{}") ? " " : response0.getPropertyAsString("k_cCliente")),
-                        (response0.getPropertyAsString("k_Nombre").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Nombre")),
-                        (response0.getPropertyAsString("k_cProduct").equals("anyType{}") ? " " : response0.getPropertyAsString("k_cProduct")),
-                        (response0.getPropertyAsString("k_Cantidad").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Cantidad")),
-                        (response0.getPropertyAsString("k_Precio").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Precio")),
-                        (response0.getPropertyAsString("k_Descuento").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Descuento")),
-                        (response0.getPropertyAsString("k_importe").equals("anyType{}") ? " " : response0.getPropertyAsString("k_importe")),
-                        (response0.getPropertyAsString("k_comentario").equals("anyType{}") ? " " : response0.getPropertyAsString("k_comentario")),
-                        (response0.getPropertyAsString("k_NomSucursal").equals("anyType{}") ? " " : response0.getPropertyAsString("k_NomSucursal")),
-                        (response0.getPropertyAsString("k_descripcion").equals("anyType{}") ? " " : response0.getPropertyAsString("k_descripcion")),
-                        (response0.getPropertyAsString("k_desc1").equals("anyType{}") ? " " : response0.getPropertyAsString("k_desc1"))));
-
-
-            }
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
 
     private void Montototal2() {
 

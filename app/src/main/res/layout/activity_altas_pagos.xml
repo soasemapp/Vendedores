@@ -106,8 +106,8 @@
                         app:boxBackgroundMode="outline"
                         app:boxCornerRadiusTopEnd="10dp"
                         app:boxCornerRadiusTopStart="10dp"
-                        app:startIconDrawable="@drawable/icons_fecha_hasta"
                         app:helperText="Seleccione una fecha"
+                        app:startIconDrawable="@drawable/icons_fecha_hasta"
                         app:startIconTint="@null">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -131,11 +131,10 @@
                         app:boxBackgroundMode="outline"
                         app:boxCornerRadiusTopEnd="10dp"
                         app:boxCornerRadiusTopStart="10dp"
-                        app:startIconDrawable="@drawable/icons_dinero"
-                        app:startIconTint="@null"
                         app:helperText="Ingrese su monto"
                         app:prefixText="$"
-                        >
+                        app:startIconDrawable="@drawable/icons_dinero"
+                        app:startIconTint="@null">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/importe"
@@ -164,11 +163,10 @@
                         android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:hint="@string/facturas"
-                        app:boxBackgroundMode="outline"
-                        app:boxCornerRadiusTopEnd="10dp"
-                        app:boxCornerRadiusTopStart="10dp"
-                        app:startIconDrawable="@drawable/icons_documento"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="100"
                         app:helperText="Ingrese el folio de cada factura a ingresar pago"
+                        app:startIconDrawable="@drawable/icons_documento"
                         app:startIconTint="@null">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -260,6 +258,8 @@
                         app:boxBackgroundMode="outline"
                         app:boxCornerRadiusTopEnd="10dp"
                         app:boxCornerRadiusTopStart="10dp"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="60"
                         app:startIconDrawable="@drawable/icons_burbuja_de_di_logo_con_puntos"
                         app:startIconTint="@null">
 
@@ -282,7 +282,6 @@
                     android:orientation="horizontal">
 
 
-
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="0dp"
@@ -294,6 +293,8 @@
                         app:boxBackgroundMode="outline"
                         app:boxCornerRadiusTopEnd="10dp"
                         app:boxCornerRadiusTopStart="10dp"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="60"
                         app:startIconDrawable="@drawable/icons_burbuja_de_di_logo_con_puntos"
                         app:startIconTint="@null">
 
@@ -315,8 +316,6 @@
                     android:orientation="horizontal">
 
 
-
-
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="0dp"
@@ -328,9 +327,10 @@
                         app:boxBackgroundMode="outline"
                         app:boxCornerRadiusTopEnd="10dp"
                         app:boxCornerRadiusTopStart="10dp"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="60"
                         app:startIconDrawable="@drawable/icons_burbuja_de_di_logo_con_puntos"
-                        app:startIconTint="@null"
-                        >
+                        app:startIconTint="@null">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/comentarios3"

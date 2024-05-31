@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:id="@+id/seleccionar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/seleccionarcheck"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="resaltar2"
+                    ></com.google.android.material.checkbox.MaterialCheckBox>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/suc"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Suc"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/folio"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Folio"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/fecha"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Fecha"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/saldo"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Saldo"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/monto"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Monto"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/ddp"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="DDP"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/pagoddp"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="PAGO-DDP"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/montoapagar"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Monto a pagar"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/vence"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Vence"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/roundbutton"
+                    android:backgroundTint="@color/cardview_dark_background"
+                    android:onClick="Comentario"
+                    app:icon="@drawable/baseline_insert_comment_24"
+                    android:textColor="#FFFFFF" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+
+
+
+
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/PrimaryColor" />
+
+</LinearLayout>

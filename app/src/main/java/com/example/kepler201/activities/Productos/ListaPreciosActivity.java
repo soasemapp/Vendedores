@@ -33,8 +33,11 @@ import com.example.kepler201.XMLS.xmlListLine;
 import com.example.kepler201.XMLS.xmlListPrecio;
 import com.example.kepler201.XMLS.xmlListType;
 import com.example.kepler201.activities.DetalladoProductosActivity;
+import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -134,7 +137,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
                 Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
                 break;
             case "vazlocolombia.dyndns.org:9085":
-                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
+                Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
                 break;
         }
 
@@ -294,7 +297,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
 
 
     public void addCarListPrecio(View view) {
-        int position = recyclerPrecios.getChildAdapterPosition(Objects.requireNonNull(recyclerPrecios.findContainingItemView(view)));
+        int position = recyclerPrecios.getChildPosition(Objects.requireNonNull(recyclerPrecios.findContainingItemView(view)));
         Productoadd = listaLisPrec.get(position).getCodeProdu();
 
         Intent Coti = new Intent(ListaPreciosActivity.this, DetalladoProductosActivity.class);
@@ -320,7 +323,65 @@ public class ListaPreciosActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conectar();
+            HttpHandler sh = new HttpHandler();
+            String url = "http://" + StrServer + "/ListLiPreapp";
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jitems, Numero, Clave, Nombre;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    jitems = jsonObject.getJSONObject("item");
+
+                    for (int i = 0; i < jitems.length(); i++) {
+                        jitems = jsonObject.getJSONObject("item");
+                        Numero = jitems.getJSONObject("" + i + "");
+
+                        if(!Numero.getString("k_Linea").equals("")) {
+                            listaLinea.add(new ListLineaSANDG((Numero.getString("k_CodeLinea").equals("") ? "" : Numero.getString("k_CodeLinea")),
+                                    (Numero.getString("k_Linea").equals("") ? "" : Numero.getString("k_Linea"))));
+                        }
+
+
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ListaPreciosActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ListaPreciosActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
+
             return null;
         }
 
@@ -344,51 +405,6 @@ public class ListaPreciosActivity extends AppCompatActivity {
 
     }
 
-    private void conectar() {
-        String SOAP_ACTION = "ListLiPre";
-        String METHOD_NAME = "ListLiPre";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlListLine soapEnvelope = new xmlListLine(SoapEnvelope.VER11);
-            soapEnvelope.xmlListLine(strusr, strpass);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            for (int i = 0; i < response.getPropertyCount(); i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                if(!response0.getPropertyAsString("k_Linea").equals("anyType{}")) {
-                    listaLinea.add(new ListLineaSANDG((response0.getPropertyAsString("k_CodeLinea").equals("anyType{}") ? "" : response0.getPropertyAsString("k_CodeLinea")),
-                            (response0.getPropertyAsString("k_Linea").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Linea"))));
-                }
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
@@ -401,7 +417,67 @@ public class ListaPreciosActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conectar2();
+            HttpHandler sh = new HttpHandler();
+            String url = "http://" + StrServer + "/ListLiTyapp";
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jitems, Numero, Clave, Nombre;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    jitems = jsonObject.getJSONObject("item");
+
+                    for (int i = 0; i < jitems.length(); i++) {
+                        jitems = jsonObject.getJSONObject("item");
+                        Numero = jitems.getJSONObject("" + i + "");
+
+                        if(!Numero.getString("k_Type").equals("")){
+
+                            listaTipo.add(new ListTypeSANDG((Numero.getString("k_CodeType").equals("")?"":Numero.getString("k_CodeType")),
+                                    (Numero.getString("k_Type").equals("")?"":Numero.getString("k_Type"))));
+
+                        }
+
+
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ListaPreciosActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ListaPreciosActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
+
             return null;
         }
 
@@ -427,52 +503,6 @@ public class ListaPreciosActivity extends AppCompatActivity {
 
     }
 
-    private void conectar2() {
-        String SOAP_ACTION = "ListLiTy";
-        String METHOD_NAME = "ListLiTy";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlListType soapEnvelope = new xmlListType(SoapEnvelope.VER11);
-            soapEnvelope.xmlListType(strusr, strpass);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            for (int i = 0; i < response.getPropertyCount(); i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                if(!response0.getPropertyAsString("k_Type").equals("anyType{}")){
-
-                    listaTipo.add(new ListTypeSANDG((response0.getPropertyAsString("k_CodeType").equals("anyType{}")?"":response0.getPropertyAsString("k_CodeType")),
-                            (response0.getPropertyAsString("k_Type").equals("anyType{}")?"":response0.getPropertyAsString("k_Type"))));
-
-                }
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
 
 
     @SuppressWarnings("deprecation")
@@ -486,7 +516,75 @@ public class ListaPreciosActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conectar3();
+            HttpHandler sh = new HttpHandler();
+
+            String parametros ;
+            if(linea.isChecked()){
+                parametros = "linea=" + strLinea+"&sucursal="+strcodBra;
+            }else{
+                parametros = "tipo="+strType+"&sucursal="+strcodBra;
+            }
+
+            String url = "http://" + StrServer + "/lisprecioapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jitems, Numero, Clave, Nombre;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    jitems = jsonObject.getJSONObject("Item");
+
+                    for (int i = 0; i < jitems.length(); i++) {
+                        jitems = jsonObject.getJSONObject("Item");
+                        Numero = jitems.getJSONObject("" + i + "");
+
+                        listaLisPrec.add(new ListPrecSANDG((Numero.getString("k_CodeProd").equals("") ? " " : Numero.getString("k_CodeProd")),
+                                (Numero.getString("k_NomPro").equals("") ? " " : Numero.getString("k_NomPro")),
+                                (Numero.getString("k_CodBarras").equals("") ? "S/N" : Numero.getString("k_CodBarras")),
+                                (Numero.getString("k_Existencia1").equals("") ? "" : Numero.getString("k_Existencia1")),
+                                (Numero.getString("k_Importe").equals("") ? " " : Numero.getString("k_Importe"))));
+
+
+
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ListaPreciosActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ListaPreciosActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
+
             return null;
         }
 
@@ -502,47 +600,6 @@ public class ListaPreciosActivity extends AppCompatActivity {
 
     }
 
-    private void conectar3() {
-        String SOAP_ACTION = "ListPrec";
-        String METHOD_NAME = "ListPrec";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlListPrecio soapEnvelope = new xmlListPrecio(SoapEnvelope.VER11);
-            soapEnvelope.xmlListPrecio(strusr, strpass, strLinea, strType,strcodBra);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            for (int i = 0; i < response.getPropertyCount(); i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                listaLisPrec.add(new ListPrecSANDG((response0.getPropertyAsString("k_CodeProd").equals("anyType{}") ? " " : response0.getPropertyAsString("k_CodeProd")),
-                        (response0.getPropertyAsString("k_NomPro").equals("anyType{}") ? " " : response0.getPropertyAsString("k_NomPro")),
-                        (response0.getPropertyAsString("k_CodBarras").equals("anyType{}") ? "S/N" : response0.getPropertyAsString("k_CodBarras")),
-                        (response0.getPropertyAsString("k_Existencia1").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Existencia1")),
-                        (response0.getPropertyAsString("k_Importe").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Importe"))));
-            }
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
 
     public void ListaPrecExiste (View view){
         listaExistencia.clear();
@@ -563,7 +620,66 @@ public class ListaPreciosActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            ListPrec();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "sucursal=" + strcodBra+"&producto="+Productoadd;
+            String url = "http://" + StrServer + "/disposucapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jitems, Numero, Clave, Nombre;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    jitems = jsonObject.getJSONObject("Item");
+
+                    for (int i = 0; i < jitems.length(); i++) {
+                        jitems = jsonObject.getJSONObject("Item");
+                        Numero = jitems.getJSONObject("" + i + "");
+
+                        listaExistencia.add(new listDipoSucuSANDG(
+                                (Numero.getString("k_Clave").equals("")? " " : Numero.getString("k_Clave")),
+                                (Numero.getString("k_Nom").equals("")? " " : Numero.getString("k_Nom")),
+                                (Numero.getString("k_Disp").equals("")? " " : Numero.getString("k_Disp"))));
+
+
+
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ListaPreciosActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ListaPreciosActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
@@ -602,55 +718,10 @@ public class ListaPreciosActivity extends AppCompatActivity {
                 titulo.show();
             }
 
+            mDialog.dismiss();
         }
 
 
     }
 
-    private void ListPrec() {
-        String SOAP_ACTION = "DispoSuc";
-        String METHOD_NAME = "DispoSuc";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlDispoSuc soapEnvelope = new xmlDispoSuc(SoapEnvelope.VER11);
-            soapEnvelope.xmlDispoSuc(strusr, strpass, Productoadd, strcodBra);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-
-
-            for (int i = 0; i < response.getPropertyCount(); i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                listaExistencia.add(new listDipoSucuSANDG(
-                        (response0.getPropertyAsString("k_Clave").equals("anyType{}")? " " : response0.getPropertyAsString("k_Clave")),
-                        (response0.getPropertyAsString("k_Nom").equals("anyType{}")? " " : response0.getPropertyAsString("k_Nom")),
-                        (response0.getPropertyAsString("k_Disp").equals("anyType{}")? " " : response0.getPropertyAsString("k_Disp"))));
-
-            }
-
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:No se encontro el producto";
-        }
-    }
 }

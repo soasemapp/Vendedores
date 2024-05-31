@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,10 +14,16 @@ import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.kepler201.ConexionSQLiteHelper;
 import com.example.kepler201.R;
+import com.example.kepler201.SetterandGetter.SearachClientSANDG;
 import com.example.kepler201.SetterandGetter.ValTipousSANDG;
 import com.example.kepler201.XMLS.xmlValTipo;
+import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.includes.HttpHandler;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.transport.HttpTransportSE;
@@ -26,17 +33,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ActivityValdatipo extends AppCompatActivity {
-    private SharedPreferences.Editor editor;
+    private SharedPreferences.Editor editor,editor2;
     String strusr, strpass, strname, strlname, strtype, strbran, strma, strco, strcodBra, StrServer;
     ArrayList<ValTipousSANDG> listasearch = new ArrayList<>();
-
+    ConexionSQLiteHelper conn;
+    private SharedPreferences preferenceClie;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_valdatipo);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
         editor = preference.edit();
-
+        preferenceClie = getSharedPreferences("clienteCompra", Context.MODE_PRIVATE);
+        editor2 = preferenceClie.edit();
 
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");
@@ -69,9 +78,74 @@ public class ActivityValdatipo extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conectar();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "vendedor=" + strco;
+            String url = "http://" + StrServer + "/listasvendedoresapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
 
+                    if(json.length()!=0) {
+                        JSONObject jitems, Numero;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("Dir");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Dir");
+                            Numero = jitems.getJSONObject("" + i + "");
+
+                            listasearch.add(new ValTipousSANDG(
+                                    (Numero.getString("nombres").equals("anyType{}") ? "" : Numero.getString("nombres")),
+                                    (Numero.getString("apellidos").equals("anyType{}") ? "" : Numero.getString("apellidos")),
+                                    (Numero.getString("email").equals("anyType{}") ? "" : Numero.getString("email")),
+                                    (Numero.getString("sucursal").equals("anyType{}") ? "" : Numero.getString("sucursal")),
+                                    (Numero.getString("clave").equals("anyType{}") ? "" : Numero.getString("clave")),
+                                    (Numero.getString("type2").equals("anyType{}") ? "" : Numero.getString("type2")),
+                                    (Numero.getString("descrabra").equals("anyType{}") ? "" : Numero.getString("descrabra"))));
+
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityValdatipo.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityValdatipo.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
+
         }
 
         @RequiresApi(api = Build.VERSION_CODES.P)
@@ -84,6 +158,7 @@ public class ActivityValdatipo extends AppCompatActivity {
             for (int i = 0; i < listasearch.size(); i++) {
                 opciones[i] = listasearch.get(i).getNombre() + " " + listasearch.get(i).getApellido();
             }
+
 
             AlertDialog.Builder builder = new AlertDialog.Builder(ActivityValdatipo.this);
             builder.setTitle("SELECCIONE UN VENDEDOR");
@@ -103,8 +178,10 @@ public class ActivityValdatipo extends AppCompatActivity {
                     editor.putString("type2",tipoad);
                     editor.putString("branch", listasearch.get(which).getDescr());
                     editor.commit();
-
-
+                    editor2.clear();
+                    editor2.commit();
+                    editor2.apply();
+                    BorrarCarrito();
 
                     Intent ScreenFir = new Intent(ActivityValdatipo.this, inicioActivity.class);
                     startActivity(ScreenFir);
@@ -121,47 +198,15 @@ public class ActivityValdatipo extends AppCompatActivity {
     }
 
 
-    private void conectar() {
-        String SOAP_ACTION = "ValTipoUser";
-        String METHOD_NAME = "ValTipoUser";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
+    private void BorrarCarrito() {
+        conn = new ConexionSQLiteHelper(ActivityValdatipo.this, "bd_Carrito", null, 1);
+        SQLiteDatabase db = conn.getReadableDatabase();
 
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlValTipo soapEnvelope = new xmlValTipo(SoapEnvelope.VER11);
-            soapEnvelope.xmlValTipo(strusr, strpass);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                listasearch.add(new ValTipousSANDG(
-                        (response0.getPropertyAsString("k_Nombres").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Nombres")),
-                        (response0.getPropertyAsString("k_Apellidos").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Apellidos")),
-                        (response0.getPropertyAsString("k_Email").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Email")),
-                        (response0.getPropertyAsString("k_Sucursal").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Sucursal")),
-                        (response0.getPropertyAsString("k_Clave").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Clave")),
-                        (response0.getPropertyAsString("k_type2").equals("anyType{}") ? "" : response0.getPropertyAsString("k_type2")),
-                        (response0.getPropertyAsString("k_descBra").equals("anyType{}") ? "" : response0.getPropertyAsString("k_descBra"))));
-
-
-            }
-
-        } catch (XmlPullParserException | IOException soapFault) {
-            soapFault.printStackTrace();
-        } catch (Exception ignored) {
-        }
+        db.delete("carrito", null, null);
+        db.execSQL("DELETE FROM sqlite_sequence WHERE name='carrito'");
+        db.close();
     }
+
 
 
     public void valdidatipo() {

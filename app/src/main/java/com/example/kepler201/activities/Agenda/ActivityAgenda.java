@@ -20,11 +20,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.kepler201.Adapter.AdapterAgenda;
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.AgendaSANDG;
+import com.example.kepler201.SetterandGetter.FacturasnoregistradasNewSANDG;
 import com.example.kepler201.XMLS.xmlAgenda;
 import com.example.kepler201.XMLS.xmlStatusAgen;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.activities.Productos.ActivityConsultaProductos;
+import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -62,6 +68,7 @@ public class ActivityAgenda extends AppCompatActivity {
         MyToolbar.show(this, "Agenda", true);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
         mDialog = new SpotsDialog.Builder().setContext(ActivityAgenda.this).setMessage("Espere un momento...").build();
+        mDialog.setCancelable(false);
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");
         strname = preference.getString("name", "null");
@@ -83,8 +90,7 @@ public class ActivityAgenda extends AppCompatActivity {
         String fechaactual = dateformatActually.format(c.getTime());
         fecha.setText(fechaactual);
         StrFecha = fecha.getText().toString();
-        AsyncCallWS task = new AsyncCallWS();
-        task.execute();
+        ListaAgenda();
 
     }
 
@@ -110,8 +116,7 @@ public class ActivityAgenda extends AppCompatActivity {
                         Actividad = listaAgenda.get(position).getActividad();
                         Status= listaAgenda.get(position).getEstatus();
                         Status2=status[cont];
-                        AsyncCallWS2 task = new AsyncCallWS2();
-                        task.execute();
+                        StatusAgenda();
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
@@ -134,26 +139,187 @@ public class ActivityAgenda extends AppCompatActivity {
 
     }
 
-    @SuppressWarnings("deprecation")
-    @SuppressLint("StaticFieldLeak")
-    private class AsyncCallWS2 extends AsyncTask<Void, Void, Void> {
 
+
+
+
+
+
+    public void ListaAgenda() {
+        new ActivityAgenda.agenda().execute();
+    }
+
+
+    private class agenda extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
-            mDialog.show();
-        }
+            super.onPreExecute();
+
+        }//onPreExecute
 
         @Override
-        protected Void doInBackground(Void... params) {
-            conecta2();
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "vendedor="+strcode+"&fecha="+StrFecha;
+            String url = "http://" + StrServer + "/agendaapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+                    if (json.length()!=0) {
+                        JSONObject jitems, Numero;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("Item");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Item");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            listaAgenda.add(new AgendaSANDG(
+                                    Numero.getString("fecha"),
+                                    Numero.getString("cliente"),
+                                    Numero.getString("nombre"),
+                                    Numero.getString("actividad"),
+                                    Numero.getString("estatus"),
+                                    Numero.getString("comentario")));
+                        }
+                    }
+
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDialog.dismiss();
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityAgenda.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDialog.dismiss();
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityAgenda.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
-        }
 
+        }//doInBackground
 
-        @RequiresApi(api = Build.VERSION_CODES.P)
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
+            AdapterAgenda adapter = new AdapterAgenda(listaAgenda);
+            recyclerAgenda.setAdapter(adapter);
+            mDialog.dismiss();
+        }//onPost
+    }
 
+
+    public void StatusAgenda() {
+        new ActivityAgenda.agendastatus().execute();
+    }
+
+
+    private class agendastatus extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }//onPreExecute
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+
+            HttpHandler sh = new HttpHandler();
+            String parametros = "vendedor="+strcode+"&fecha="+Fecha2+"&cliente="+ClaveCliente+"&actividad="+Actividad+"&status="+Status+"&statuscambio="+Status2;
+            String url = "http://" + StrServer + "/statusagendaapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+                    if (json.length()!=0) {
+                        JSONObject jitems, Numero = null;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("Mensaje");
+
+
+
+                        Mensaje = jitems.getString("k_respuesta");
+
+                    }
+
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDialog.dismiss();
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityAgenda.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDialog.dismiss();
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityAgenda.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
+            return null;
+
+        }//doInBackground
+
+        @Override
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
             AlertDialog.Builder alerta = new AlertDialog.Builder(ActivityAgenda.this);
             alerta.setMessage(Mensaje).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
@@ -171,123 +337,11 @@ public class ActivityAgenda extends AppCompatActivity {
             titulo.setTitle("AVISO");
             titulo.show();
             mDialog.dismiss();
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    @SuppressLint("StaticFieldLeak")
-    private class AsyncCallWS extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            mDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            conecta();
-            return null;
-        }
-
-
-        @RequiresApi(api = Build.VERSION_CODES.P)
-        @Override
-        protected void onPostExecute(Void result) {
-
-            AdapterAgenda adapter = new AdapterAgenda(listaAgenda);
-            recyclerAgenda.setAdapter(adapter);
-            mDialog.dismiss();
-        }
+        }//onPost
     }
 
 
-    private void conecta() {
-        String SOAP_ACTION = "Agen";
-        String METHOD_NAME = "Agen";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
 
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlAgenda soapEnvelope = new xmlAgenda(SoapEnvelope.VER11);
-            soapEnvelope.xmlAgenda(strusr, strpass, strcode, StrFecha);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-
-            int json=response.getPropertyCount()-1;
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                //(response0.getPropertyAsString("k_code").equals("anyType{}")?" ":response0.getPropertyAsString("k_Hora"))
-                listaAgenda.add(new AgendaSANDG((response0.getPropertyAsString("k_Fecha").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Fecha")),
-                        (response0.getPropertyAsString("k_Cliente").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Cliente")),
-                        (response0.getPropertyAsString("k_Nombre").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Nombre")),
-                        (response0.getPropertyAsString("k_Actividad").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Actividad")),
-                        (response0.getPropertyAsString("k_Estatus").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Estatus")),
-                        (response0.getPropertyAsString("k_Comentario").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Comentario"))));
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
-    private void conecta2() {
-        String SOAP_ACTION = "statusAgenda";
-        String METHOD_NAME = "statusAgenda";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlStatusAgen soapEnvelope = new xmlStatusAgen(SoapEnvelope.VER11);
-            soapEnvelope.xmlStatusAgen(strusr, strpass,Fecha2,strcode,ClaveCliente,Actividad,Status,Status2);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            response = (SoapObject) response.getProperty("Branch");
-            Mensaje= response.getPropertyAsString("k_respuesta");
-
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menuflow7, menu);

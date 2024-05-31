@@ -32,8 +32,16 @@ public class DetallCotiSANDG {
     String Descripcion;
     String Unidad;
     String Partida;
+    String Comentario2;
+    String Comentario3;
+    String Eagle;
+    String Rodatech;
+    String Partech;
+    String Shark;
+    String Trackoone;
+    String DESCdOCUMENTO;
 
-    public DetallCotiSANDG(String sucursal, String folio, String claveC, String nombreC, String claveP, String cant, String precio, String desc, String importe, String RFC, String PLAZO, String DESCUENTOPP, String DESCUENTO1, String CALLE, String COLONIA, String POBLACION, String VIA, String comentario, String disponible, String backOrder, String surtido, String precioNuevo, String fecha, String hora, String montoBack, String saldo, String nombreSucursal, String descripcion, String unidad, String partida) {
+    public DetallCotiSANDG(String sucursal, String folio, String claveC, String nombreC, String claveP, String cant, String precio, String desc, String importe, String RFC, String PLAZO, String DESCUENTOPP, String DESCUENTO1, String CALLE, String COLONIA, String POBLACION, String VIA, String comentario, String disponible, String backOrder, String surtido, String precioNuevo, String fecha, String hora, String montoBack, String saldo, String nombreSucursal, String descripcion, String unidad, String partida, String comentario2, String comentario3, String eagle, String rodatech, String partech, String shark, String trackoone, String DESCdOCUMENTO) {
         Sucursal = sucursal;
         Folio = folio;
         ClaveC = claveC;
@@ -64,6 +72,14 @@ public class DetallCotiSANDG {
         Descripcion = descripcion;
         Unidad = unidad;
         Partida = partida;
+        Comentario2 = comentario2;
+        Comentario3 = comentario3;
+        Eagle = eagle;
+        Rodatech = rodatech;
+        Partech = partech;
+        Shark = shark;
+        Trackoone = trackoone;
+        this.DESCdOCUMENTO = DESCdOCUMENTO;
     }
 
     public String getSucursal() {
@@ -304,5 +320,69 @@ public class DetallCotiSANDG {
 
     public void setPartida(String partida) {
         Partida = partida;
+    }
+
+    public String getComentario2() {
+        return Comentario2;
+    }
+
+    public void setComentario2(String comentario2) {
+        Comentario2 = comentario2;
+    }
+
+    public String getComentario3() {
+        return Comentario3;
+    }
+
+    public void setComentario3(String comentario3) {
+        Comentario3 = comentario3;
+    }
+
+    public String getEagle() {
+        return Eagle;
+    }
+
+    public void setEagle(String eagle) {
+        Eagle = eagle;
+    }
+
+    public String getRodatech() {
+        return Rodatech;
+    }
+
+    public void setRodatech(String rodatech) {
+        Rodatech = rodatech;
+    }
+
+    public String getPartech() {
+        return Partech;
+    }
+
+    public void setPartech(String partech) {
+        Partech = partech;
+    }
+
+    public String getShark() {
+        return Shark;
+    }
+
+    public void setShark(String shark) {
+        Shark = shark;
+    }
+
+    public String getTrackoone() {
+        return Trackoone;
+    }
+
+    public void setTrackoone(String trackoone) {
+        Trackoone = trackoone;
+    }
+
+    public String getDESCdOCUMENTO() {
+        return DESCdOCUMENTO;
+    }
+
+    public void setDESCdOCUMENTO(String DESCdOCUMENTO) {
+        this.DESCdOCUMENTO = DESCdOCUMENTO;
     }
 }

@@ -40,10 +40,14 @@ import com.example.kepler201.XMLS.xmlProductosNuevos;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
 import com.example.kepler201.XMLS.xmlVersiones;
 import com.example.kepler201.activities.BusquedaActivity;
+import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
 import com.example.kepler201.activities.DetalladoProductosActivity;
 import com.example.kepler201.activities.MainActivity;
 import com.example.kepler201.activities.inicioActivity;
+import com.example.kepler201.includes.HttpHandler;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -183,6 +187,9 @@ public class HomeFragment extends Fragment {
             case "vazlocolombia.dyndns.org:9085":
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
+            default:
+                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
+                break;
         }
 
         Cliente = preferenceClie.getString("CodeClien", "null");
@@ -234,8 +241,7 @@ public class HomeFragment extends Fragment {
                 if (ProductosNuevosStr.equals("0")) {
                     editor.putString("Productosnuevos", "1");
                     editor.apply();
-                    HomeFragment.ProductosNuevos task = new HomeFragment.ProductosNuevos();
-                    task.execute();
+                    ProductosNuevosAscy();
                 } else {
                     Consulta();
                 }
@@ -250,8 +256,7 @@ public class HomeFragment extends Fragment {
 
 
         }else{
-            HomeFragment.ProductosNuevos task = new HomeFragment.ProductosNuevos();
-            task.execute();
+            ProductosNuevosAscy();
 
         }
 
@@ -272,8 +277,7 @@ public class HomeFragment extends Fragment {
                         startActivity(BusquedaProdcuto);
                     } else {
 
-                        HomeFragment.AsyncClientes task1 = new HomeFragment.AsyncClientes();
-                        task1.execute();
+                        Listaclientes();
                         dato = 1;
 
                     }
@@ -432,8 +436,8 @@ public class HomeFragment extends Fragment {
                         } else {
                             int position = recyclerViewEagle.getChildAdapterPosition(Objects.requireNonNull(recyclerViewEagle.findContainingItemView(view)));
                             ProductosNuevos = ListaProductosEagle.get(position).getClave();
-                            HomeFragment.AsyncClientes task1 = new HomeFragment.AsyncClientes();
-                            task1.execute();
+
+                            Listaclientes();
                             dato = 2;
 
                         }
@@ -456,8 +460,8 @@ public class HomeFragment extends Fragment {
                         } else {
                             int position = recyclerViewTrackone.getChildAdapterPosition(Objects.requireNonNull(recyclerViewTrackone.findContainingItemView(view)));
                             ProductosNuevos = ListaProductosTrackone.get(position).getClave();
-                            HomeFragment.AsyncClientes task1 = new HomeFragment.AsyncClientes();
-                            task1.execute();
+
+                            Listaclientes();
                             dato = 2;
 
                         }
@@ -481,8 +485,8 @@ public class HomeFragment extends Fragment {
                             int position = recyclerViewRodatech.getChildAdapterPosition(Objects.requireNonNull(recyclerViewRodatech.findContainingItemView(view)));
                             ProductosNuevos = ListaProductosRodatech.get(position).getClave();
 
-                            HomeFragment.AsyncClientes task1 = new HomeFragment.AsyncClientes();
-                            task1.execute();
+
+                            Listaclientes();
                             dato = 2;
 
                         }
@@ -503,8 +507,8 @@ public class HomeFragment extends Fragment {
                             int position = recyclerViewPartech.getChildAdapterPosition(Objects.requireNonNull(recyclerViewPartech.findContainingItemView(view)));
                             ProductosNuevos = ListaProductosPartech.get(position).getClave();
 
-                            HomeFragment.AsyncClientes task1 = new HomeFragment.AsyncClientes();
-                            task1.execute();
+
+                            Listaclientes();
                             dato = 2;
 
                         }
@@ -525,8 +529,8 @@ public class HomeFragment extends Fragment {
                         } else {
                             int position = recyclerViewShark.getChildAdapterPosition(Objects.requireNonNull(recyclerViewShark.findContainingItemView(view)));
                             ProductosNuevos = ListaProductosShark.get(position).getClave();
-                            HomeFragment.AsyncClientes task1 = new HomeFragment.AsyncClientes();
-                            task1.execute();
+
+                            Listaclientes();
                             dato = 2;
 
                         }
@@ -543,101 +547,119 @@ public class HomeFragment extends Fragment {
 
     }
 
-    @SuppressWarnings("deprecation")
-    @SuppressLint("StaticFieldLeak")
-    private class CarritoCompras extends AsyncTask<Void, Void, Void> {
+    public void CarritoComprasASYC() {
+        new HomeFragment.CarritoComprasay().execute();
+    }
 
+
+    private class CarritoComprasay extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
             mDialog.show();
-        }
+        }//onPreExecute
 
         @Override
-        protected Void doInBackground(Void... params) {
-            CarritoValidado();
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + strscliente+"&producto=1000R&cantidad=1&existencia=0&sucursal="+strcodBra;
+            String url = "http://" + StrServer + "/carritoapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+                    JSONObject jitems, Numero, Clave, Nombre;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    jitems = jsonObject.getJSONObject("Cotizacion");
+
+                    for (int i = 0; i < jitems.length(); i++) {
+                        jitems = jsonObject.getJSONObject("Cotizacion");
+                        Numero = jitems.getJSONObject("" + i + "");
+
+                        rfc = (Numero.getString("k_rfc").equals("anyType{}") ? " " : Numero.getString("k_rfc"));
+                        plazo = (Numero.getString("k_plazo").equals("anyType{}") ? " " : Numero.getString("k_plazo"));
+                        Calle = (Numero.getString("k_calle").equals("anyType{}") ? " " : Numero.getString("k_calle"));
+                        Colonia = (Numero.getString("k_colo").equals("anyType{}") ? " " : Numero.getString("k_colo"));
+                        Poblacion = (Numero.getString("k_pobla").equals("anyType{}") ? " " : Numero.getString("k_pobla"));
+                        Via = (Numero.getString("k_via").equals("anyType{}") ? " " : Numero.getString("k_via"));
+                        K87 = (Numero.getString("k_87").equals("anyType{}") ? "0" : Numero.getString("k_87"));
+                        Desc1fa = (Numero.getString("k_desc1fac").equals("anyType{}") ? "0" : Numero.getString("k_desc1fac"));
+                        Comentario1 = (Numero.getString("k_comentario1").equals("anyType{}") ? "" : Numero.getString("k_comentario1"));
+                        Comentario2 = (Numero.getString("k_comentario2").equals("anyType{}") ? "" : Numero.getString("k_comentario2"));
+                        Comentario3 = (Numero.getString("k_comentario3").equals("anyType{}") ? "" : Numero.getString("k_comentario3"));
+
+
+
+                    }
+                } catch (final JSONException e) {
+
+                }//catch JSON EXCEPTION
+            } else {
+
+            }//else
             return null;
-        }
 
-        @RequiresApi(api = Build.VERSION_CODES.P)
+        }//doInBackground
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
             if (preferenceClie.contains("CodeClien")) {
 
             } else {
                 guardarDatos();
             }
-
-
-        }
-    }
-
-    private void CarritoValidado() {
-        String SOAP_ACTION = "CarShop";
-        String METHOD_NAME = "CarShop";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlCarritoVentas soapEnvelope = new xmlCarritoVentas(SoapEnvelope.VER11);
-            soapEnvelope.xmlCarritoVen(strusr, strpass, strscliente, "1000R", "1", "0", strcodBra);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-            response0 = (SoapObject) response0.getProperty(0);
-            rfc = (response0.getPropertyAsString("k_rfc").equals("anyType{}") ? " " : response0.getPropertyAsString("k_rfc"));
-            plazo = (response0.getPropertyAsString("k_plazo").equals("anyType{}") ? " " : response0.getPropertyAsString("k_plazo"));
-            Calle = (response0.getPropertyAsString("k_calle").equals("anyType{}") ? " " : response0.getPropertyAsString("k_calle"));
-            Colonia = (response0.getPropertyAsString("k_colo").equals("anyType{}") ? " " : response0.getPropertyAsString("k_colo"));
-            Poblacion = (response0.getPropertyAsString("k_pobla").equals("anyType{}") ? " " : response0.getPropertyAsString("k_pobla"));
-            Via = (response0.getPropertyAsString("k_via").equals("anyType{}") ? " " : response0.getPropertyAsString("k_via"));
-            K87 = (response0.getPropertyAsString("k_87").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_87"));
-            Desc1fa = (response0.getPropertyAsString("k_desc1fac").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_desc1fac"));
-            Comentario1 = (response0.getPropertyAsString("k_comentario1").equals("anyType{}") ? "" : response0.getPropertyAsString("k_comentario1"));
-            Comentario2 = (response0.getPropertyAsString("k_comentario2").equals("anyType{}") ? "" : response0.getPropertyAsString("k_comentario2"));
-            Comentario3 = (response0.getPropertyAsString("k_comentario3").equals("anyType{}") ? "" : response0.getPropertyAsString("k_comentario3"));
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
+        }//onPost
     }
 
 
-    @SuppressWarnings("deprecation")
-    @SuppressLint("StaticFieldLeak")
-    private class AsyncClientes extends AsyncTask<Void, Void, Void> {
+    public void Listaclientes() {
+        new HomeFragment.Cliente().execute();
+    }
 
+
+    private class Cliente extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
             mDialog.show();
-        }
+        }//onPreExecute
 
         @Override
-        protected Void doInBackground(Void... params) {
-            Clientes();
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "vendedor=" + strco;
+            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+
+                    JSONObject jitems, Numero, Clave, Nombre;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    jitems = jsonObject.getJSONObject("Clientes");
+
+                    for (int i = 0; i < jitems.length(); i++) {
+                        jitems = jsonObject.getJSONObject("Clientes");
+                        Numero = jitems.getJSONObject("" + i + "");
+                        listaclientG.add(new SearachClientSANDG(
+                                Numero.getString("Clave"),
+                                Numero.getString("Nombre")));
+                    }
+                } catch (final JSONException e) {
+
+                }//catch JSON EXCEPTION
+            } else {
+
+            }//else
             return null;
-        }
 
-        @RequiresApi(api = Build.VERSION_CODES.P)
+        }//doInBackground
+
         @Override
-        protected void onPostExecute(Void result) {
-
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
             String[] opciones = new String[listaclientG.size()];
 
             for (int i = 0; i < listaclientG.size(); i++) {
@@ -654,19 +676,14 @@ public class HomeFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     strscliente = listaclientG.get(which).getUserCliente();
                     strscliente3 = listaclientG.get(which).getNombreCliente();
-                    HomeFragment.CarritoCompras task1 = new HomeFragment.CarritoCompras();
-                    task1.execute();
+                    CarritoComprasASYC();
                 }
             });
 // create and show the alert dialog
             AlertDialog dialog = builder.create();
             dialog.show();
             mDialog.dismiss();
-
-
-        }
-
-
+        }//onPost
     }
 
     private void guardarDatos() {
@@ -707,53 +724,15 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void Clientes() {
-        String SOAP_ACTION = "SearchClient";
-        String METHOD_NAME = "SearchClient";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
 
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlSearchClientesG soapEnvelope = new xmlSearchClientesG(SoapEnvelope.VER11);
-            soapEnvelope.xmlSearchG(strusr, strpass, strco);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                listaclientG.add(new SearachClientSANDG(response0.getPropertyAsString("k_dscr"), response0.getPropertyAsString("k_line")));
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
+    public void ProductosNuevosAscy() {
+        new HomeFragment.ProductosNuevosa().execute();
     }
 
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
-    private class ProductosNuevos extends AsyncTask<Void, Void, Void> {
+    private class ProductosNuevosa extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -762,7 +741,34 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conectar3();
+            HttpHandler sh = new HttpHandler();
+            String url = "http://" + StrServer + "/listapronuevosapp";
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+
+
+
+                    JSONObject jitems, Numero;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("Item");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Item");
+                            Numero = jitems.getJSONObject("" + i + "");
+
+                            ListaProductosGeneral.add(new ProductosNuevosSANDG((Numero.getString("k_Producto").equals("") ? "" : Numero.getString("k_Producto")),
+                                    (Numero.getString("k_Descripcion").equals("") ? "" : Numero.getString("k_Descripcion")),
+                                    (Numero.getString("k_Tipo").equals("") ? "" : Numero.getString("k_Tipo"))));
+                        }
+                    }
+                } catch (final JSONException e) {
+String mensaje =e.getMessage().toString();
+                }//catch JSON EXCEPTION
+            } else {
+
+            }//else
             return null;
         }
 
@@ -838,8 +844,8 @@ public class HomeFragment extends Fragment {
                     } else {
                         int position = recyclerViewEagle.getChildAdapterPosition(Objects.requireNonNull(recyclerViewEagle.findContainingItemView(view)));
                         ProductosNuevos = ListaProductosEagle.get(position).getClave();
-                        HomeFragment.AsyncClientes task1 = new HomeFragment.AsyncClientes();
-                        task1.execute();
+
+                        Listaclientes();
                         dato = 2;
 
                     }
@@ -861,8 +867,8 @@ public class HomeFragment extends Fragment {
                     } else {
                         int position = recyclerViewTrackone.getChildAdapterPosition(Objects.requireNonNull(recyclerViewTrackone.findContainingItemView(view)));
                         ProductosNuevos = ListaProductosTrackone.get(position).getClave();
-                        HomeFragment.AsyncClientes task1 = new HomeFragment.AsyncClientes();
-                        task1.execute();
+
+                        Listaclientes();
                         dato = 2;
 
                     }
@@ -885,8 +891,7 @@ public class HomeFragment extends Fragment {
                         int position = recyclerViewRodatech.getChildAdapterPosition(Objects.requireNonNull(recyclerViewRodatech.findContainingItemView(view)));
                         ProductosNuevos = ListaProductosRodatech.get(position).getClave();
 
-                        HomeFragment.AsyncClientes task1 = new HomeFragment.AsyncClientes();
-                        task1.execute();
+                        Listaclientes();
                         dato = 2;
 
                     }
@@ -906,8 +911,8 @@ public class HomeFragment extends Fragment {
                         int position = recyclerViewPartech.getChildAdapterPosition(Objects.requireNonNull(recyclerViewPartech.findContainingItemView(view)));
                         ProductosNuevos = ListaProductosPartech.get(position).getClave();
 
-                        HomeFragment.AsyncClientes task1 = new HomeFragment.AsyncClientes();
-                        task1.execute();
+
+                        Listaclientes();
                         dato = 2;
 
                     }
@@ -927,8 +932,8 @@ public class HomeFragment extends Fragment {
                     } else {
                         int position = recyclerViewShark.getChildAdapterPosition(Objects.requireNonNull(recyclerViewShark.findContainingItemView(view)));
                         ProductosNuevos = ListaProductosShark.get(position).getClave();
-                        HomeFragment.AsyncClientes task1 = new HomeFragment.AsyncClientes();
-                        task1.execute();
+
+                        Listaclientes();
                         dato = 2;
 
                     }
@@ -946,44 +951,6 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void conectar3() {
-        String SOAP_ACTION = "ProdcutosNuevos";
-        String METHOD_NAME = "ProdcutosNuevos";
-        String NAMESPACE = "http://" + StrServer + "/WSk75ClientesSOAP/";
-        String URL = "http://" + StrServer + "/WSk75ClientesSOAP";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlProductosNuevos soapEnvelope = new xmlProductosNuevos(SoapEnvelope.VER11);
-            soapEnvelope.xmlProductosNuevos(strusr, strpass,strcodBra);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                ListaProductosGeneral.add(new ProductosNuevosSANDG((response0.getPropertyAsString("k_Producto").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Producto")),
-                        (response0.getPropertyAsString("k_Descripcion").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Descripcion")),
-                        (response0.getPropertyAsString("k_Tipo").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Tipo"))));
-
-            }
-
-
-        } catch (XmlPullParserException | IOException soapFault) {
-            mDialog.dismiss();
-            soapFault.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-        }
-    }
 
 
 
@@ -999,14 +966,31 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Versiones();
+            HttpHandler sh = new HttpHandler();
+            String url = "http://jacve.dyndns.org:9085/versionesapp?Clave=1";
+            String jsonStr = sh.makeServiceCall(url, "WEBPETI", "W3B3P3T1");
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        version = jsonObject.getString("Version");
+
+
+                        Resultado = 1;
+                    }
+                } catch (final JSONException e) {
+
+                }//catch JSON EXCEPTION
+            } else {
+
+            }//else
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             if (Resultado==1){
-                if (version.equals("2.4")) {
+                if (version.equals("2.8")) {
 
                 }else{
                     AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());
@@ -1030,54 +1014,5 @@ public class HomeFragment extends Fragment {
         }
 
     }
-
-
-    private void Versiones() {
-
-        String SOAP_ACTION = "Versiones";
-        String METHOD_NAME = "Versiones";
-        String NAMESPACE = "http://guvi.ath.cx:9085/WSk75ClientesSOAP/";
-        String URL = "http://guvi.ath.cx:9085/WSk75ClientesSOAP";
-
-
-        try {
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlVersiones soapEnvelope = new xmlVersiones(SoapEnvelope.VER11);
-            soapEnvelope.xmlVersiones("WEBPETI", "W3B3P3T1", "1");
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-
-            SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-
-            version =response0.getPropertyAsString("Version");
-
-
-            Resultado=1;
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-            Resultado=0;
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            Resultado=0;
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-            Resultado=0;
-        }
-
-    }
-
-
-
 
 }

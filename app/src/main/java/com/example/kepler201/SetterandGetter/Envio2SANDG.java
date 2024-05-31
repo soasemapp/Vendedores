@@ -3,20 +3,13 @@ package com.example.kepler201.SetterandGetter;
 public class Envio2SANDG {
 
     String id;
-    String Calle;
-    String Colonia;
-    String Poblacion;
-    String Numero;
+    String Direccion;
     String latitud;
     String longitud;
 
-
-    public Envio2SANDG(String id, String calle, String colonia, String poblacion, String numero, String latitud, String longitud) {
+    public Envio2SANDG(String id, String direccion, String latitud, String longitud) {
         this.id = id;
-        Calle = calle;
-        Colonia = colonia;
-        Poblacion = poblacion;
-        Numero = numero;
+        Direccion = direccion;
         this.latitud = latitud;
         this.longitud = longitud;
     }
@@ -29,36 +22,12 @@ public class Envio2SANDG {
         this.id = id;
     }
 
-    public String getCalle() {
-        return Calle;
+    public String getDireccion() {
+        return Direccion;
     }
 
-    public void setCalle(String calle) {
-        Calle = calle;
-    }
-
-    public String getColonia() {
-        return Colonia;
-    }
-
-    public void setColonia(String colonia) {
-        Colonia = colonia;
-    }
-
-    public String getPoblacion() {
-        return Poblacion;
-    }
-
-    public void setPoblacion(String poblacion) {
-        Poblacion = poblacion;
-    }
-
-    public String getNumero() {
-        return Numero;
-    }
-
-    public void setNumero(String numero) {
-        Numero = numero;
+    public void setDireccion(String direccion) {
+        Direccion = direccion;
     }
 
     public String getLatitud() {

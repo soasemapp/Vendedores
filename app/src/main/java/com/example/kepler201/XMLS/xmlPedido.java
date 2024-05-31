@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class xmlPedido extends SoapSerializationEnvelope {
-    String Comentario = "";
+    String Comentario = "",Comentario1="",Comentario2="",Comentario3="";;
     String ClaveVendedor = "";
     String NombreCliente = "";
     String ClaveCliente = "";
@@ -45,7 +45,12 @@ public class xmlPedido extends SoapSerializationEnvelope {
     double monto2;
     double monto3;
     String Server;
-
+    String Eagle;
+    String Rodatech;
+    String Partech;
+    String Shark;
+    String Trackoone;
+    String DESCdOCUMENTO;
 
 
 
@@ -57,7 +62,8 @@ public class xmlPedido extends SoapSerializationEnvelope {
 
     public void xmlPedido( String comentario, String claveVendedor, String nombreCliente, String claveCliente, String fechaActual, String fechaVencimiento,
                      String sucursal, String usuario, String clave, String rfcCliente, String plazo, String montototal, String iva, String descuento, String descuentoPro,
-                     String Desc1,String calle, String colonia, String poblacion, String folioPrev,String Via,String stridEnvio,ArrayList<DetallCotiSANDG> listasearch2, String StrServer) {
+                     String Desc1,String calle, String colonia, String poblacion, String folioPrev,String Via,String stridEnvio,ArrayList<DetallCotiSANDG> listasearch2,
+                           String StrServer,String eagle, String rodatech, String partech, String shark, String trackoone, String DESCdOCUMENTO) {
         this.Comentario = comentario;
         this.ClaveVendedor = claveVendedor;
         this.NombreCliente = nombreCliente;
@@ -82,6 +88,13 @@ public class xmlPedido extends SoapSerializationEnvelope {
         this.stridEnvio = stridEnvio;
         this.listasearch2 = listasearch2;
         this.Server = StrServer;
+        this.Eagle = eagle;
+        this.Rodatech = rodatech;
+        this.Partech = partech;
+        this.Shark = shark;
+        this.Trackoone = trackoone;
+        this.DESCdOCUMENTO = DESCdOCUMENTO;
+
 
     }
 
@@ -206,8 +219,47 @@ public class xmlPedido extends SoapSerializationEnvelope {
         writer.text("");
         writer.endTag(tem, "k_cond");
 
+
+        int tamaño=Comentario.length();
+        if (tamaño <=60) {
+            if (tamaño == 60) {
+                Comentario1 = Comentario.substring(0, 59);
+            } else {
+                Comentario1 = Comentario.substring(0, Comentario.length());
+            }
+        }else if(tamaño <=120 && tamaño > 60){
+            if (tamaño == 120) {
+                Comentario1 = Comentario.substring(0, 59);
+                Comentario2 = Comentario.substring(60, 119);
+            } else {
+                Comentario1 = Comentario.substring(0,59);
+                Comentario2 = Comentario.substring(60, Comentario.length());
+            }
+        }else if (tamaño <=180 && tamaño > 120){
+            if (tamaño == 180) {
+                Comentario1 = Comentario.substring(0, 59);
+                Comentario2 = Comentario.substring(60, 119);
+                Comentario3 = Comentario.substring(120, 179);
+            } else {
+                Comentario1 = Comentario.substring(0, 59);
+                Comentario2 = Comentario.substring(60, 119);
+                Comentario3 = Comentario.substring(120,tamaño);
+            }
+        }else{
+            if (tamaño == 180) {
+                Comentario1 = Comentario.substring(0, 59);
+                Comentario2 = Comentario.substring(60, 119);
+                Comentario3 = Comentario.substring(120, 179);
+            } else {
+                Comentario1 = Comentario.substring(0,59);
+                Comentario2 = Comentario.substring(60, 119);
+                Comentario3 = Comentario.substring(120,tamaño);
+            }
+        }
+
+
         writer.startTag(tem, "k_coment");
-        writer.text(Comentario);
+        writer.text(Comentario1);
         writer.endTag(tem, "k_coment");
 
         double Subtotal = 0;
@@ -308,30 +360,36 @@ public class xmlPedido extends SoapSerializationEnvelope {
 
 
         writer.startTag(tem, "k_97");
-        writer.text("UD4101-");         //Eagle
+        writer.text(Eagle);         //Eagle
         writer.endTag(tem, "k_97");
 
         writer.startTag(tem, "k_98");
-        writer.text("UD4101-");         //Track
+        writer.text(Trackoone);         //Track
         writer.endTag(tem, "k_98");
 
         writer.startTag(tem, "k_99");
-        writer.text("UD4101-");         //Rodatech
+        writer.text(Rodatech);         //Rodatech
         writer.endTag(tem, "k_99");
 
         writer.startTag(tem, "k_100");
-        writer.text("UD4101-");         //Partech
+        writer.text(Partech);         //Partech
         writer.endTag(tem, "k_100");
 
         writer.startTag(tem, "k_101");
-        writer.text("UD4101-");         //Shark
+        writer.text(Shark);         //Shark
         writer.endTag(tem, "k_101");
 
         writer.startTag(tem, "k_102");
-        writer.text("UD4101-");         //Descuento documento
+        writer.text(DESCdOCUMENTO);         //Descuento documento
         writer.endTag(tem, "k_102");
 
+        writer.startTag(tem, "k_25");
+        writer.text(Comentario2);
+        writer.endTag(tem, "k_25");
 
+        writer.startTag(tem, "k_26");
+        writer.text(Comentario3);
+        writer.endTag(tem, "k_26");
 
 
 

@@ -56,6 +56,12 @@
             />
 
         <item
+            android:id="@+id/regitrodepagosActivity"
+            android:title="@string/pagos"
+            android:icon="@drawable/ic_baseline_attach_money_24"
+            />
+
+        <item
             android:id="@+id/activityConsulCoti"
             android:title="@string/pedidos"
             android:icon="@drawable/ic_baseline_airport_shuttle_24"

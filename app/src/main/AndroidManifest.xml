@@ -18,18 +18,23 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activities.Pagos.RegitrodepagosActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.inicioActivity"  />
+        />
         <activity
             android:name=".ActivityBackOrdersAdd"
             android:exported="false" />
         <activity
             android:name=".activities.Agenda.ActivityAgendaRegister"
-            android:parentActivityName=".activities.Agenda.ActivityAgenda"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".activities.Agenda.ActivityAgenda" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -157,14 +162,11 @@
             android:configChanges="screenSize|orientation"
             android:parentActivityName=".activities.inicioActivity"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="screenSize|orientation"
             android:exported="true"
             tools:ignore="IntentFilterExportedReceiver">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

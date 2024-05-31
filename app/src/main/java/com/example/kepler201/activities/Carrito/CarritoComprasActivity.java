@@ -17,6 +17,7 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -38,16 +39,12 @@ import com.example.kepler201.SetterandGetter.SearachClientSANDG;
 import com.example.kepler201.SetterandGetter.listExistenciaSANG;
 import com.example.kepler201.XMLS.xmlCarritoCompras;
 import com.example.kepler201.XMLS.xmlCarritoCompras2;
-import com.example.kepler201.XMLS.xmlCarritoVentas;
-import com.example.kepler201.XMLS.xmlConsultaProductos;
-import com.example.kepler201.XMLS.xmlEquiva;
-import com.example.kepler201.XMLS.xmlSearchClientesG;
-import com.example.kepler201.XMLS.xmlValidaPedColombia2;
-import com.example.kepler201.XMLS.xmlValidaPedMexico2;
-import com.example.kepler201.XMLS.xmlVerificacionPrecios;
 import com.example.kepler201.activities.DetalladoProductosActivity;
+import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -72,8 +69,8 @@ public class CarritoComprasActivity extends AppCompatActivity {
     double DescProstr = 0;
     double Descuento = 0;
     double IvaVariado = 0;
-    String Clave ="";
-    String Empresa="";
+    String Clave = "";
+    String Empresa = "";
     TextView txtClaveCliente;
     TextView txtSubtotal;
     TextView txtSubtotal2;
@@ -128,7 +125,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
 
 
     String ExistenciaProd;
-    String ClaveProducto="";
+    String ClaveProducto = "";
     String DescripcionProd;
     String CodBarras;
     String Precios;
@@ -144,7 +141,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
     String MontoStr;
     String Comentario;
     String mensaje = "";
-    String Cliente="";
+    String Cliente = "";
     String Nombre;
     String rfc;
     String plazo;
@@ -153,14 +150,14 @@ public class CarritoComprasActivity extends AppCompatActivity {
     String Poblacion;
     String Via;
     String DescPro;
-    String Desc1;
+    String Desc1="0";
     String StrFechaActaul;
     String StrFechaVencimiento;
     String productoStr = "";
     String SubdescuentoValida;
     String Mensaje;
-    String Documento="";
-    String Folio="";
+    String Documento = "";
+    String Folio = "";
     String DescuentoStr;
 
     private SharedPreferences.Editor editor;
@@ -177,7 +174,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carrito_compras);
         mDialog = new SpotsDialog.Builder().setContext(CarritoComprasActivity.this).setMessage("Espere un momento...").build();
-
+        mDialog.setCancelable(false);
         MyToolbar.show(this, "Carrito", true);
         recyclerCarrtio = findViewById(R.id.lisCarrito);
 
@@ -189,18 +186,18 @@ public class CarritoComprasActivity extends AppCompatActivity {
         CliOcul = findViewById(R.id.ClienteLaya);
         ButtonResCarshop = findViewById(R.id.btnRest);
         ButtonAdd = findViewById(R.id.btnAgregar);
-        ButtonCot =  findViewById(R.id.btnCotizar);
-        txtClaveCliente =  findViewById(R.id.ClaveCliente);
+        ButtonCot = findViewById(R.id.btnCotizar);
+        txtClaveCliente = findViewById(R.id.ClaveCliente);
         comentario = findViewById(R.id.edComentario);
-        spinerClie =  findViewById(R.id.spinnerClie);
+        spinerClie = findViewById(R.id.spinnerClie);
         txtSubtotal = findViewById(R.id.SubTotal);
         txtDescuento = findViewById(R.id.Descuento);
         txtiva = findViewById(R.id.iva);
         Infor = findViewById(R.id.Informacion);
         txtSubtotal2 = findViewById(R.id.SubTotal2);
-        txtMontototal =  findViewById(R.id.MontoTotal);
-        productosEd =  findViewById(R.id.Producto);
-        Cantidad123 =  findViewById(R.id.Canti);
+        txtMontototal = findViewById(R.id.MontoTotal);
+        productosEd = findViewById(R.id.Producto);
+        Cantidad123 = findViewById(R.id.Canti);
         ButtonCliente = findViewById(R.id.btnClientes);
 
 
@@ -251,25 +248,22 @@ public class CarritoComprasActivity extends AppCompatActivity {
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
             case "sprautomotive.servehttp.com:9090":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9095":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9080":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9085":
                 Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
                 break;
             case "vazlocolombia.dyndns.org:9085":
+                Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
+                break;
+            default:
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
         }
 
         Cantidad123.setText("1");
 
-        IvaVariado =  ((!StrServer.equals("vazlocolombia.dyndns.org:9085")) ? 0.16 : 0.19);
+        IvaVariado = ((!StrServer.equals("vazlocolombia.dyndns.org:9085")) ? 0.16 : 0.19);
 
 
         vald = getIntent().getIntExtra("val", 0);
@@ -310,17 +304,15 @@ public class CarritoComprasActivity extends AppCompatActivity {
         });
 
 
-
-
         ButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+ButtonAdd.setEnabled(false);
                 ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
                 productoStr = productosEd.getText().toString();
                 if (networkInfo != null && networkInfo.isConnected()) {
-                    if (!productoStr.isEmpty() && !Cliente.equals("null")) {
+                    if (!productoStr.isEmpty() && !Cliente.equals("null") && !Cantidad123.getText().toString().equals("")) {
                         if (listaCarShoping.size() > 0) {
 
                             for (int i = 0; i < listaCarShoping.size(); i++) {
@@ -331,6 +323,8 @@ public class CarritoComprasActivity extends AppCompatActivity {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             dialogInterface.cancel();
+                                            mDialog.dismiss();
+                                            ButtonAdd.setEnabled(true);
                                         }
                                     });
 
@@ -345,23 +339,27 @@ public class CarritoComprasActivity extends AppCompatActivity {
                             }
                             if (ban == 1) {
                                 listaExistencia = new ArrayList<>();
-                                CarritoComprasActivity.AsyncCallWSProductos task = new CarritoComprasActivity.AsyncCallWSProductos();
-                                task.execute();
+
+                                new AsyncBackOrder().execute();
+
+
                             }
 
 
                         } else {
                             listaExistencia = new ArrayList<>();
-                            CarritoComprasActivity.AsyncCallWSProductos task = new CarritoComprasActivity.AsyncCallWSProductos();
-                            task.execute();
+                            new AsyncBackOrder().execute();
+
 
                         }
                     } else {
+                        mDialog.dismiss();
                         AlertDialog.Builder alerta = new AlertDialog.Builder(CarritoComprasActivity.this);
                         alerta.setMessage("Porfavor ingrese todos los campos faltantes").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.cancel();
+                                ButtonAdd.setEnabled(true);
                             }
                         });
 
@@ -371,11 +369,13 @@ public class CarritoComprasActivity extends AppCompatActivity {
 
                     }
                 } else {
+                    mDialog.dismiss();
                     AlertDialog.Builder alerta = new AlertDialog.Builder(CarritoComprasActivity.this);
                     alerta.setMessage("No hay Conexion a Internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.cancel();
+                            ButtonAdd.setEnabled(true);
                         }
                     });
 
@@ -405,8 +405,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
                         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateformatActually = new SimpleDateFormat("yyyy-MM-dd");
                         c.add(Calendar.DAY_OF_YEAR, 30);
                         StrFechaVencimiento = dateformatActually.format(c.getTime());
-                        CarritoComprasActivity.AsyncCallWS2 task = new CarritoComprasActivity.AsyncCallWS2();
-                        task.execute();
+                        ValidaPedColAsyc();
 
 
                     } else {
@@ -431,8 +430,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
                         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateformatActually = new SimpleDateFormat("yyyy-MM-dd");
                         c.add(Calendar.DAY_OF_YEAR, 30);
                         StrFechaVencimiento = dateformatActually.format(c.getTime());
-                        CarritoComprasActivity.ValidaPedidoMexico task = new CarritoComprasActivity.ValidaPedidoMexico();
-                        task.execute();
+                        ValidaPedmex2Asyc();
 
 
                     } else {
@@ -457,8 +455,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
         });
 
         if (!preferenceClie.contains("CodeClien")) {
-            AsyncClientes task1 = new AsyncClientes();
-            task1.execute();
+            Listaclientes();
         }
 
 
@@ -502,7 +499,6 @@ public class CarritoComprasActivity extends AppCompatActivity {
     }
 
 
-
     private void Validacion() {
         if (preferenceClie.contains("CodeClien")) {
             CliOcul.setVisibility(View.GONE);
@@ -510,99 +506,168 @@ public class CarritoComprasActivity extends AppCompatActivity {
             CliOcul.setVisibility(View.VISIBLE);
         }
     }
+    public void ConsultaProductosAsyc() {
+        new CarritoComprasActivity.ConsultaProductos().execute();
+    }
 
-
-    @SuppressWarnings("deprecation")
-    @SuppressLint("StaticFieldLeak")
-    private class AsyncCallWSProductos extends AsyncTask<Void, Void, Void> {
-
+    private class ConsultaProductos extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
             mDialog.show();
-        }
+        }//onPreExecute
 
         @Override
-        protected Void doInBackground(Void... params) {
-            ConProd();
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "producto="+productoStr+"&sucursal="+strcodBra;
+            String url = "http://" + StrServer + "/productoconsultaapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+
+
+                    JSONObject jitems;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("Item");
+
+
+                        ExistenciaProd = jitems.getString("k_Exis");
+                        ClaveProducto = jitems.getString("k_ClavePr");
+                        ;
+                        DescripcionProd = jitems.getString("k_Descr");
+                        ;
+                        CodBarras = jitems.getString("k_CodBarra");
+                        ;
+                        Precios = jitems.getString("k_Precio");
+                        ;
+                    }
+
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                    ButtonAdd.setEnabled(true);
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                                ButtonAdd.setEnabled(true);
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
-        }
 
-        @RequiresApi(api = Build.VERSION_CODES.P)
-        @Override
-        protected void onPostExecute(Void result) {
-
+        }//doInBackground
+        // @Override
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
             productosEd.requestFocus();
-            CarritoComprasActivity.EquivaProdu task5 = new CarritoComprasActivity.EquivaProdu();
-            task5.execute();
-
-
-        }
-
-
+            EquivalenciaAsyc();
+        }//onPost
     }
 
 
-    private void ConProd() {
-        String SOAP_ACTION = "ConsultaProducto";
-        String METHOD_NAME = "ConsultaProducto";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlConsultaProductos soapEnvelope = new xmlConsultaProductos(SoapEnvelope.VER11);
-            soapEnvelope.xmlConsultaProduc(strusr, strpass, productoStr, strcodBra);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-
-
-            response0 = (SoapObject) response0.getProperty("Item");
-            ExistenciaProd = response0.getPropertyAsString("k_Exis").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_Exis");
-            ClaveProducto = response0.getPropertyAsString("k_ClavePr").equals("anyType{}") ? "" : response0.getPropertyAsString("k_ClavePr");
-            DescripcionProd = response0.getPropertyAsString("k_Descr").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Descr");
-            CodBarras = response0.getPropertyAsString("k_CodBarra").equals("anyType{}") ? "" : response0.getPropertyAsString("k_CodBarra");
-            Precios = response0.getPropertyAsString("k_Precio").equals("anyType{}") ? "0.00" : response0.getPropertyAsString("k_Precio");
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:No se encontro el producto";
-        }
+    public void EquivalenciaAsyc() {
+        new CarritoComprasActivity.Equivalencia().execute();
     }
 
-
-    @SuppressLint("StaticFieldLeak")
-    @SuppressWarnings("deprecation")
-    private class EquivaProdu extends AsyncTask<Void, Void, Void> {
-
+    private class Equivalencia extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
-        }
+            super.onPreExecute();
+            mDialog.show();
+        }//onPreExecute
 
         @Override
-        protected Void doInBackground(Void... params) {
-            Equiva();
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "producto="+ClaveProducto+"&sucursal="+strcodBra;
+            String url = "http://" + StrServer + "/equivalenciaapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+
+
+                    JSONObject jitems;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("MENSAJE");
+                        MensajePro = jitems.getString("k_mensaje");
+                        ProductoEqui = jitems.getString("k_Producto");
+                        ValidaEqui = jitems.getString("k_Val");
+                    }
+
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                    ButtonAdd.setEnabled(true);
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                                ButtonAdd.setEnabled(true);
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
-        }
 
-        @RequiresApi(api = Build.VERSION_CODES.P)
-        @Override
-        protected void onPostExecute(Void result) {
+        }//doInBackground
+        // @Override
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
             productosEd.requestFocus();
             strClave = null;
             if (!ClaveProducto.equals("No se encontraron Datos")) {
@@ -619,8 +684,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
                             int Diponibilidad = Integer.parseInt(ExistenciaProd);
 
                             if (Diponibilidad > 0) {
-                                CarritoComprasActivity.CarritoCompras task4 = new CarritoComprasActivity.CarritoCompras();
-                                task4.execute();
+                                CarritoComprasASYC();
 
                             } else if (Diponibilidad == 0 && ValidaEqui.equals("0")) {
 
@@ -634,8 +698,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
 
                                     public void onClick(DialogInterface dialog, int which) {
                                         strClave = ProductoEqui;
-                                        CarritoComprasActivity.CarritoCompras task4 = new CarritoComprasActivity.CarritoCompras();
-                                        task4.execute();
+                                        CarritoComprasASYC();
                                         dialog.dismiss();
 
                                     }
@@ -646,8 +709,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
-                                        CarritoComprasActivity.CarritoCompras task4 = new CarritoComprasActivity.CarritoCompras();
-                                        task4.execute();
+                                        CarritoComprasASYC();
                                         dialog.dismiss();
                                     }
                                 });
@@ -656,8 +718,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
                                 alert.show();
 
                             } else {
-                                CarritoComprasActivity.CarritoCompras task4 = new CarritoComprasActivity.CarritoCompras();
-                                task4.execute();
+                                CarritoComprasASYC();
 
                             }
 
@@ -667,6 +728,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     dialogInterface.cancel();
+                                    mDialog.dismiss();
                                 }
                             });
 
@@ -681,6 +743,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.cancel();
+                                mDialog.dismiss();
                             }
                         });
 
@@ -701,8 +764,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
                             strCantidad = Cantidad123.getText().toString();
                             strscliente2 = preferenceClie.getString("CodeClien", "null");
 
-                            CarritoComprasActivity.CarritoCompras task4 = new CarritoComprasActivity.CarritoCompras();
-                            task4.execute();
+                            CarritoComprasASYC();
 
                         } else if (Diponibilidad == 0 && ValidaEqui.equals("0")) {
 
@@ -722,8 +784,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
                                     strCantidad = Cantidad123.getText().toString();
                                     strscliente2 = preferenceClie.getString("CodeClien", "null");
 
-                                    CarritoComprasActivity.CarritoCompras task4 = new CarritoComprasActivity.CarritoCompras();
-                                    task4.execute();
+                                    CarritoComprasASYC();
                                     dialog.dismiss();
 
 
@@ -741,8 +802,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
                                     strCantidad = Cantidad123.getText().toString();
                                     strscliente2 = preferenceClie.getString("CodeClien", "null");
 
-                                    CarritoComprasActivity.CarritoCompras task4 = new CarritoComprasActivity.CarritoCompras();
-                                    task4.execute();
+                                    CarritoComprasASYC();
                                     dialog.dismiss();
 
                                 }
@@ -759,8 +819,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
                             strCantidad = Cantidad123.getText().toString();
                             strscliente2 = preferenceClie.getString("CodeClien", "null");
 
-                            CarritoComprasActivity.CarritoCompras task4 = new CarritoComprasActivity.CarritoCompras();
-                            task4.execute();
+                            CarritoComprasASYC();
 
                         }
 
@@ -770,6 +829,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.cancel();
+                                mDialog.dismiss();
                             }
                         });
                         AlertDialog titulo1 = alerta1.create();
@@ -780,11 +840,15 @@ public class CarritoComprasActivity extends AppCompatActivity {
 
 
             } else {
+                mDialog.dismiss();
                 AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
                 alerta1.setMessage("No se encontro el producto buscado ").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
+                        productosEd.setText("");
+                        Cantidad123.setText("");
+                        mDialog.dismiss();
                     }
                 });
                 AlertDialog titulo1 = alerta1.create();
@@ -792,73 +856,235 @@ public class CarritoComprasActivity extends AppCompatActivity {
                 titulo1.show();
             }
 
-
-        }
-
-
+        }//onPost
     }
 
 
-    private void Equiva() {
-        String SOAP_ACTION = "Equiva";
-        String METHOD_NAME = "Equiva";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlEquiva soapEnvelope = new xmlEquiva(SoapEnvelope.VER11);
-            soapEnvelope.xmlEquiva(strusr, strpass, ClaveProducto, strcodBra);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-            response0 = (SoapObject) response0.getProperty("MENSAJE");
-            MensajePro = response0.getPropertyAsString("k_mensaje");
-            ProductoEqui = response0.getPropertyAsString("k_Producto");
-            ValidaEqui = response0.getPropertyAsString("k_Val");
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
-
-    @SuppressWarnings({"deprecation", "StatementWithEmptyBody"})
     @SuppressLint("StaticFieldLeak")
-    private class CarritoCompras extends AsyncTask<Void, Void, Void> {
+    @SuppressWarnings("deprecation")
+
+
+
+    private class AsyncBackOrder extends AsyncTask<Void, Void, Void> {
+
+
+        private boolean conn;
+
 
         @Override
         protected void onPreExecute() {
-            mDialog.setMessage("Consultando Productos");
+            super.onPreExecute();
             mDialog.show();
-        }
+        }//onPreExecute
 
         @Override
-        protected Void doInBackground(Void... params) {
-            CarritoValidado();
+        protected Void doInBackground(Void... voids) {
+
+
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + strscliente + "&sucursal=" + strcodBra + "&producto=" + productoStr;
+            String url = "http://" + StrServer + "/backorder?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jfacturas;
+                    JSONObject jitems;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jfacturas = jsonObject.getJSONObject("Response");
+                        jitems = jfacturas.getJSONObject("Back");
+                        mensaje = jitems.getString("Valida");
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                            alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                    ButtonAdd.setEnabled(true);
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+                            mDialog.dismiss();
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                                ButtonAdd.setEnabled(true);
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+                        mDialog.dismiss();
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
-        }
 
-        @SuppressWarnings("CatchMayIgnoreException")
-        @RequiresApi(api = Build.VERSION_CODES.P)
+        }//doInBackground
+
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
+            if (mensaje.equals("0")) {
+                ConsultaProductosAsyc();
+
+            } else if(mensaje.equals("1")) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(CarritoComprasActivity.this);
+
+                builder.setTitle("Confirma");
+                builder.setMessage("El producto ya cuenta  con BackOrder,¿Deseas agregar este producto a tu pedido?");
+
+                builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        ConsultaProductosAsyc();
+                        dialog.dismiss();
+
+                    }
+                });
+
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        mDialog.dismiss();
+                        dialog.dismiss();
+                        ButtonAdd.setEnabled(true);
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+        }//onPost
+    }//CambiarCajas
+
+
+
+    public void CarritoComprasASYC() {
+        new CarritoComprasActivity.CarritoComprasay().execute();
+    }
+
+
+    private class CarritoComprasay extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mDialog.show();
+        }//onPreExecute
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + strscliente2+"&producto="+strClave+"&cantidad="+strCantidad+"&existencia=0&sucursal="+strcodBra;
+            String url = "http://" + StrServer + "/carritoapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+
+                    JSONObject jitems, Numero, Clave, Nombre;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("Cotizacion");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Cotizacion");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            listaCarShoping2.add(new CarritoVentasSANDG(
+                                    (Numero.getString("k_Cliente").equals("") ? "" : Numero.getString("k_Cliente")),
+                                    (Numero.getString("k_parte").equals("") ? "" : Numero.getString("k_parte")),
+                                    (Numero.getString("k_exis").equals("") ? "" : Numero.getString("k_exis")),
+                                    (Numero.getString("k_Q").equals("") ? "" : Numero.getString("k_Q")),
+                                    (Numero.getString("k_unidad").equals("") ? "" : Numero.getString("k_unidad")),
+                                    (Numero.getString("k_precio").equals("") ? "" : Numero.getString("k_precio")),
+                                    (Numero.getString("k_desc1").equals("") ? "0" : Numero.getString("k_desc1")),
+                                    (Numero.getString("k_desc2").equals("") ? "0" : Numero.getString("k_desc2")),
+                                    (Numero.getString("k_desc3").equals("") ? "0" : Numero.getString("k_desc3")),
+                                    (Numero.getString("k_monto").equals("") ? "0" : Numero.getString("k_monto")),
+                                    (Numero.getString("k_descr").equals("") ? "" : Numero.getString("k_descr")),
+                                    (Numero.getString("k_rfc").equals("") ? "" : Numero.getString("k_rfc")),
+                                    (Numero.getString("k_plazo").equals("") ? "0" : Numero.getString("k_plazo")),
+                                    (Numero.getString("k_calle").equals("") ? "" : Numero.getString("k_calle")),
+                                    (Numero.getString("k_colo").equals("") ? "" : Numero.getString("k_colo")),
+                                    (Numero.getString("k_pobla").equals("") ? "" : Numero.getString("k_pobla")),
+                                    (Numero.getString("k_via").equals("") ? "" : Numero.getString("k_via")),
+                                    (Numero.getString("k_87").equals("") ? "" : Numero.getString("k_87")),
+                                    (Numero.getString("k_desc1fac").equals("") ? "0" : Numero.getString("k_desc1fac")),
+                                    (Numero.getString("k_comentario1").equals("") ? "" : Numero.getString("k_comentario1")),
+                                    (Numero.getString("k_comentario2").equals("") ? "" : Numero.getString("k_comentario2")),
+                                    (Numero.getString("k_comentario3").equals("") ? "" : Numero.getString("k_comentario3")),
+                                    (Numero.getString("k_descEAGLE").equals("") ? "0" : Numero.getString("k_descEAGLE")),
+                                    (Numero.getString("k_descRODATECH").equals("") ? "0" : Numero.getString("k_descRODATECH")),
+                                    (Numero.getString("k_descPARTECH").equals("") ? "0" : Numero.getString("k_descPARTECH")),
+                                    (Numero.getString("k_descSHARK").equals("") ? "0" : Numero.getString("k_descSHARK")),
+                                    (Numero.getString("k_descTRACKONE").equals("") ? "0" : Numero.getString("k_descTRACKONE"))));
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                    ButtonAdd.setEnabled(true);
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                                ButtonAdd.setEnabled(true);
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
+            return null;
+
+        }//doInBackground
+        @Override
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
 
             if (preferenceClie.contains("RFC") && preferenceClie.contains("PLAZO")) {
 
@@ -912,148 +1138,94 @@ public class CarritoComprasActivity extends AppCompatActivity {
             } catch (Exception ignored) {
                 ignored.printStackTrace();
             }
-        }
-
-
+        }//onPost
     }
 
-    private void CarritoValidado() {
-        String SOAP_ACTION = "CarShop";
-        String METHOD_NAME = "CarShop";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
 
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlCarritoVentas soapEnvelope = new xmlCarritoVentas(SoapEnvelope.VER11);
-            soapEnvelope.xmlCarritoVen(strusr, strpass, strscliente2, strClave, strCantidad, "0", strcodBra);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-
-            int json = response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                listaCarShoping2.add(new CarritoVentasSANDG(
-                        (response0.getPropertyAsString("k_Cliente").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Cliente")),
-                        (response0.getPropertyAsString("k_parte").equals("anyType{}") ? " " : response0.getPropertyAsString("k_parte")),
-                        (response0.getPropertyAsString("k_exis").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_exis")),
-                        (response0.getPropertyAsString("k_Q").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Q")),
-                        (response0.getPropertyAsString("k_unidad").equals("anyType{}") ? " " : response0.getPropertyAsString("k_unidad")),
-                        (response0.getPropertyAsString("k_precio").equals("anyType{}") ? "" : response0.getPropertyAsString("k_precio")),
-                        (response0.getPropertyAsString("k_desc1").equals("anyType{}") ? " " : response0.getPropertyAsString("k_desc1")),
-                        (response0.getPropertyAsString("k_desc2").equals("anyType{}") ? " " : response0.getPropertyAsString("k_desc2")),
-                        (response0.getPropertyAsString("k_desc3").equals("anyType{}") ? " " : response0.getPropertyAsString("k_desc3")),
-                        (response0.getPropertyAsString("k_monto").equals("anyType{}") ? " " : response0.getPropertyAsString("k_monto")),
-                        (response0.getPropertyAsString("k_descr").equals("anyType{}") ? " " : response0.getPropertyAsString("k_descr")),
-                        (response0.getPropertyAsString("k_rfc").equals("anyType{}") ? " " : response0.getPropertyAsString("k_rfc")),
-                        (response0.getPropertyAsString("k_plazo").equals("anyType{}") ? " " : response0.getPropertyAsString("k_plazo")),
-                        (response0.getPropertyAsString("k_calle").equals("anyType{}") ? " " : response0.getPropertyAsString("k_calle")),
-                        (response0.getPropertyAsString("k_colo").equals("anyType{}") ? " " : response0.getPropertyAsString("k_colo")),
-                        (response0.getPropertyAsString("k_pobla").equals("anyType{}") ? " " : response0.getPropertyAsString("k_pobla")),
-                        (response0.getPropertyAsString("k_via").equals("anyType{}") ? " " : response0.getPropertyAsString("k_via")),
-                        (response0.getPropertyAsString("k_87").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_87")),
-                        (response0.getPropertyAsString("k_desc1fac").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_desc1fac")),
-                        (response0.getPropertyAsString("k_comentario1").equals("anyType{}") ? "" : response0.getPropertyAsString("k_comentario1")),
-                        (response0.getPropertyAsString("k_comentario2").equals("anyType{}") ? "" : response0.getPropertyAsString("k_comentario2")),
-                        (response0.getPropertyAsString("k_comentario3").equals("anyType{}") ? "" : response0.getPropertyAsString("k_comentario3")),
-                        (response0.getPropertyAsString("k_descEAGLE").equals("anyType{}") ? "" : response0.getPropertyAsString("k_descEAGLE")),
-                        (response0.getPropertyAsString("k_descRODATECH").equals("anyType{}") ? "" : response0.getPropertyAsString("k_descRODATECH")),
-                        (response0.getPropertyAsString("k_descPARTECH").equals("anyType{}") ? "" : response0.getPropertyAsString("k_descPARTECH")),
-                        (response0.getPropertyAsString("k_descSHARK").equals("anyType{}") ? "" : response0.getPropertyAsString("k_descSHARK")),
-                        (response0.getPropertyAsString("k_descTRACKONE").equals("anyType{}") ? "" : response0.getPropertyAsString("k_descTRACKONE"))));
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
+    public void Listaclientes() {
+        new CarritoComprasActivity.Cliente().execute();
     }
 
-    @SuppressLint("StaticFieldLeak")
-    @SuppressWarnings("deprecation")
-    private class AsyncClientes extends AsyncTask<Void, Void, Void> {
 
+    private class Cliente extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
             mDialog.show();
-        }
+        }//onPreExecute
 
         @Override
-        protected Void doInBackground(Void... params) {
-            Clientes();
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "vendedor=" + strcode;
+            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+                    if(json.length()!=0) {
+                        JSONObject jitems, Numero, Clave, Nombre;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("Clientes");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Clientes");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            listaclientG.add(new SearachClientSANDG(
+                                    Numero.getString("Clave"),
+                                    Numero.getString("Nombre")));
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
-        }
 
-        @RequiresApi(api = Build.VERSION_CODES.P)
+        }//doInBackground
+
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
             mDialog.dismiss();
-        }
-
-
+        }//onPost
     }
 
-    private void Clientes() {
-        String SOAP_ACTION = "SearchClient";
-        String METHOD_NAME = "SearchClient";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlSearchClientesG soapEnvelope = new xmlSearchClientesG(SoapEnvelope.VER11);
-            soapEnvelope.xmlSearchG(strusr, strpass, strcode);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json =response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                listaclientG.add(new SearachClientSANDG(response0.getPropertyAsString("k_dscr"), response0.getPropertyAsString("k_line")));
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
 
 
     @SuppressLint("StaticFieldLeak")
@@ -1106,7 +1278,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
 
                 ButtonCot.setEnabled(true);
 
-            }else{
+            } else {
                 AlertDialog.Builder alerta = new AlertDialog.Builder(CarritoComprasActivity.this);
                 alerta.setMessage("Hubo un problema con la conexion verifique su conexion eh intentelo nuevamente").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
@@ -1142,7 +1314,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
 
             SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
             xmlCarritoCompras soapEnvelope = new xmlCarritoCompras(SoapEnvelope.VER11);
-            soapEnvelope.xmlCarritoCompras(Comentario, strcode, Nombre, Cliente, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass, rfc, plazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, Calle, Colonia, Poblacion, listaCarShoping, StrServer,Clave,descuEagle,descuRodatech,descuPartec,descuShark,descuTrackone);
+            soapEnvelope.xmlCarritoCompras(Comentario, strcode, Nombre, Cliente, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass, rfc, plazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, Calle, Colonia, Poblacion, listaCarShoping, StrServer, Clave, descuEagle, descuRodatech, descuPartec, descuShark, descuTrackone);
             soapEnvelope.dotNet = true;
             soapEnvelope.implicitTypes = true;
             soapEnvelope.setOutputSoapObject(Request);
@@ -1155,7 +1327,6 @@ public class CarritoComprasActivity extends AppCompatActivity {
             Mensaje = (response0.getPropertyAsString("message").equals("anyType{}") ? "" : response0.getPropertyAsString("message"));
             Documento = (response0.getPropertyAsString("doc").equals("anyType{}") ? "" : response0.getPropertyAsString("doc"));
             Folio = (response0.getPropertyAsString("folio").equals("anyType{}") ? "" : response0.getPropertyAsString("folio"));
-            
 
 
         } catch (SoapFault | XmlPullParserException soapFault) {
@@ -1224,7 +1395,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
 
                 ButtonCot.setEnabled(true);
 
-            }else{
+            } else {
                 AlertDialog.Builder alerta = new AlertDialog.Builder(CarritoComprasActivity.this);
                 alerta.setMessage("Hubo un problema con la conexion porfavor intentelo nuevamente").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
@@ -1242,8 +1413,6 @@ public class CarritoComprasActivity extends AppCompatActivity {
                 ButtonCot.setEnabled(true);
 
             }
-
-
 
 
         }
@@ -1291,274 +1460,215 @@ public class CarritoComprasActivity extends AppCompatActivity {
     }
 
 
-    @SuppressLint("StaticFieldLeak")
-    @SuppressWarnings("deprecation")
-    private class AsyncCallWS2 extends AsyncTask<Void, Void, Void> {
 
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            conectar2();
-            return null;
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.P)
-        @Override
-        protected void onPostExecute(Void result) {
-
-
-            AlertDialog.Builder alerta = new AlertDialog.Builder(CarritoComprasActivity.this);
-            alerta.setMessage(MenValPedi).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-
-                    CarritoComprasActivity.VerificacionPrecios task4 = new CarritoComprasActivity.VerificacionPrecios();
-                    task4.execute();
-                }
-            });
-
-            AlertDialog titulo = alerta.create();
-            titulo.setTitle("Pedido");
-            titulo.show();
-
-
-        }
-
-
+    public void ValidaPedColAsyc() {
+        new CarritoComprasActivity.validapedcol2().execute();
     }
 
 
-    private void conectar2() {
-        String SOAP_ACTION = "ValidaPedColombia2";
-        String METHOD_NAME = "ValidaPedColombia2";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlValidaPedColombia2 soapEnvelope = new xmlValidaPedColombia2(SoapEnvelope.VER11);
-            soapEnvelope.xmlValidaPedColombia(strusr, strpass, Cliente, strcode, MontoStr, SubdescuentoValida, Desc1);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-
-            SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-            response0 = (SoapObject) response0.getProperty("MENSAJE");
-            MenValPedi = response0.getPropertyAsString("k_messenge");
-            Desc1Valida = response0.getPropertyAsString("k_desc1");
-            DescuentoValida = response0.getPropertyAsString("Descuento");
-            SubtotalValida = response0.getPropertyAsString("Subtotal");
-            SeCambiovalida = response0.getPropertyAsString("SeCambio");
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
-
-    @SuppressLint("StaticFieldLeak")
-    @SuppressWarnings("deprecation")
-    private class ValidaPedidoMexico extends AsyncTask<Void, Void, Void> {
-
+    private class validapedcol2 extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
-            mDialog.setMessage("Validando su pedido");
+            super.onPreExecute();
             mDialog.show();
-        }
-
+        }//onPreExecute
         @Override
-        protected Void doInBackground(Void... params) {
-            ValidaPed();
-            return null;
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.P)
-        @Override
-        protected void onPostExecute(Void result) {
-
-            mDialog.dismiss();
-            AlertDialog.Builder alerta = new AlertDialog.Builder(CarritoComprasActivity.this);
-            alerta.setMessage(MenValPedi).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    CarritoComprasActivity.VerificacionPrecios task4 = new CarritoComprasActivity.VerificacionPrecios();
-                    task4.execute();
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + Cliente+"&monto="+MontoStr+"&vendedor="+strcode+"&descuento="+Desc1+"&subtotal="+SubdescuentoValida;
+            String url = "http://" + StrServer + "/validapedcol2app?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
 
 
-                }
-            });
+                    JSONObject jitems;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("MENSAJE");
 
-            AlertDialog titulo = alerta.create();
-            titulo.setTitle("Pedido");
-            titulo.show();
-
-
-        }
-
-
-    }
-
-
-    private void ValidaPed() {
-        String SOAP_ACTION = "ValidaPedMexico2";
-        String METHOD_NAME = "ValidaPedMexico2";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlValidaPedMexico2 soapEnvelope = new xmlValidaPedMexico2(SoapEnvelope.VER11);
-            soapEnvelope.xmlValidaPedi(strusr, strpass, Cliente, strcode, MontoStr);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-
-            SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-            response0 = (SoapObject) response0.getProperty("MENSAJE");
-            MenValPedi = response0.getPropertyAsString("k_messenge");
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
-
-    @SuppressLint("StaticFieldLeak")
-    @SuppressWarnings("deprecation")
-    private class VerificacionPrecios extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            mDialog.setMessage("Generando su Folio");
-            mDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085" ) ) {
-                Verifica();
-            }
-            return null;
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.P)
-        @Override
-        protected void onPostExecute(Void result) {
-
-            if (StrServer.equals("vazlocolombia.dyndns.org:9085")) {
-                CarritoComprasActivity.CarritoColombia task4 = new CarritoComprasActivity.CarritoColombia();
-                task4.execute();
-            }else{
-                CarritoComprasActivity.AsyncCallWS task4 = new CarritoComprasActivity.AsyncCallWS();
-                task4.execute();
-            }
-
-
-        }
-
-
-    }
-
-
-    private void Verifica() {
-        String SOAP_ACTION = "VerificaPrecios";
-        String METHOD_NAME = "VerificaPrecios";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-        String Producto;
-        String Precio;
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlVerificacionPrecios soapEnvelope = new xmlVerificacionPrecios(SoapEnvelope.VER11);
-            soapEnvelope.xmlVerificacionPrecios(strusr, strpass, Cliente,Desc1,listaCarShoping);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-
-            SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-
-            Clave = response0.getPropertyAsString("Clave");
-            mensaje =response0.getPropertyAsString("MENSAJE");
-
-            if(!Clave .equals("1") ){
-
-                response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty("iteams");
-                int json=response0.getPropertyCount();
-                for (int i = 0; i < json; i++) {
-                    response0 = (SoapObject) soapEnvelope.bodyIn;
-                    response0 = (SoapObject) response0.getProperty("iteams");
-                    response0 = (SoapObject) response0.getProperty(i);
-                    Producto =response0.getPropertyAsString("Producto");
-                    for (int j = 0; j < listaCarShoping.size(); j++) {
-                        if (Producto.equals(listaCarShoping.get(j).getParte())){
-                            Precio =response0.getPropertyAsString("Precio");
-                            listaCarShoping.get(j).setPrecio(Precio);
-                            break;
-                        }
+                        MenValPedi = jitems.getString("k_messenge");
+                        Desc1Valida = jitems.getString("k_desc1");
+                        DescuentoValida = jitems.getString("Descuento");
+                        SubtotalValida = jitems.getString("Subtotal");
+                        SeCambiovalida = jitems.getString("SeCambio");
 
                     }
 
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
+            return null;
+
+        }//doInBackground
+
+        @Override
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
+
+            AlertDialog.Builder alerta = new AlertDialog.Builder(CarritoComprasActivity.this);
+            alerta.setMessage(MenValPedi).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                    mDialog.setMessage("Generando su Folio");
+                    mDialog.show();
+
+                    if (StrServer.equals("vazlocolombia.dyndns.org:9085")) {
+                        CarritoComprasActivity.CarritoColombia task4 = new CarritoComprasActivity.CarritoColombia();
+                        task4.execute();
+                    } else {
+                        CarritoComprasActivity.AsyncCallWS task4 = new CarritoComprasActivity.AsyncCallWS();
+                        task4.execute();
+                    }
                 }
-            }
+            });
 
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
+            AlertDialog titulo = alerta.create();
+            titulo.setTitle("Pedido");
+            titulo.show();
+        }//onPost
     }
 
 
+    public void ValidaPedmex2Asyc() {
+        new CarritoComprasActivity.validapedmex2().execute();
+    }
+
+
+    private class validapedmex2 extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mDialog.show();
+        }//onPreExecute
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + Cliente+"&monto="+MontoStr+"&vendedor="+strcode;
+            String url = "http://" + StrServer + "/validapedmex2app?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+
+
+                    JSONObject jitems;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("MENSAJE");
+
+                        MenValPedi = jitems.getString("k_messenge");
+                    }
+
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
+            return null;
+
+        }//doInBackground
+
+        @Override
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
+
+
+            mDialog.dismiss();
+            AlertDialog.Builder alerta = new AlertDialog.Builder(CarritoComprasActivity.this);
+            alerta.setMessage(MenValPedi).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                    mDialog.setMessage("Generando su Folio");
+                    mDialog.show();
+
+                    if (StrServer.equals("vazlocolombia.dyndns.org:9085")) {
+                        CarritoComprasActivity.CarritoColombia task4 = new CarritoComprasActivity.CarritoColombia();
+                        task4.execute();
+                    } else {
+                        CarritoComprasActivity.AsyncCallWS task4 = new CarritoComprasActivity.AsyncCallWS();
+                        task4.execute();
+                    }
+
+
+                }
+            });
+
+            AlertDialog titulo = alerta.create();
+            titulo.setTitle("Pedido");
+            titulo.show();
+        }//onPost
+    }
 
 
     private static String formatNumberCurrency(String number) {
@@ -1602,6 +1712,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
 
 
     public void Actualizar(final View view) {
+        mDialog.show();
         final int position = recyclerCarrtio.getChildAdapterPosition(Objects.requireNonNull(recyclerCarrtio.findContainingItemView(view)));
         String prod = listaCarShoping.get(position).getParte();
         AlertDialog.Builder alerta = new AlertDialog.Builder(CarritoComprasActivity.this);
@@ -2110,12 +2221,13 @@ public class CarritoComprasActivity extends AppCompatActivity {
         AlertDialog titulo = alerta.create();
         titulo.setTitle("Modificar:" + prod);
         titulo.show();
-
+        mDialog.dismiss();
 
     }
 
 
     public void Delete(View view) {
+        mDialog.show();
         int position = recyclerCarrtio.getChildAdapterPosition(Objects.requireNonNull(recyclerCarrtio.findContainingItemView(view)));
 
 
@@ -2149,6 +2261,10 @@ public class CarritoComprasActivity extends AppCompatActivity {
                         db.delete("carrito", "ID=" + ID, null);
                         db.execSQL("DELETE FROM sqlite_sequence WHERE name='carrito'");
                         db.close();
+                        overridePendingTransition(0, 0);
+                        startActivity(getIntent());
+                        overridePendingTransition(0, 0);
+                        finish();
 
 
                     }
@@ -2354,10 +2470,10 @@ public class CarritoComprasActivity extends AppCompatActivity {
                         fila.getString(11)));
             } while (fila.moveToNext());
         }
-        AdaptadorCarrito adapter = new AdaptadorCarrito(listaCarShoping,Desc1,StrServer,context,Empresa);
+        AdaptadorCarrito adapter = new AdaptadorCarrito(listaCarShoping, Desc1, StrServer, context, Empresa);
         recyclerCarrtio.setAdapter(adapter);
         db.close();
-
+        mDialog.dismiss();
     }
 
 
@@ -2380,7 +2496,6 @@ public class CarritoComprasActivity extends AppCompatActivity {
             Infor.setVisibility(View.GONE);
         }
     }
-
 
 
     public boolean onCreateOptionsMenu(Menu menu) {

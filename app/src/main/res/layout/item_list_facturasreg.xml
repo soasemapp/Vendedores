@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:id="@+id/seleccionar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:onClick="resaltar">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/fecha"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="FECHA"
+                    android:textSize="15dp"
+                    android:maxLines="1"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/hora"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="HORA"
+                    android:textSize="15dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/clavecliente"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="ClaveCliente"
+                    android:textSize="15dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/nombrecliente"
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Nombre del CLiente"
+                    android:textSize="15dp"
+                    />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/facturas"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="facturas"
+                    android:textSize="15dp"
+                    android:maxLines="1"
+                    />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/importe"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="importe"
+                    android:textSize="15dp"
+                    />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/banco"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="banco"
+                    android:textSize="15dp"
+                    />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/formadepago"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="formadepago"
+                    android:textSize="15dp"
+                    />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/comentario1"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="comentario1"
+                    android:textSize="15dp"
+                    android:maxLines="1"
+                    />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/comentario2"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="comentario2"
+                    android:textSize="15dp"
+                    android:maxLines="1"
+                    />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/comentario3"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="comentario3"
+                    android:textSize="15dp"
+                    android:maxLines="1"
+                    />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+
+
+
+
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/PrimaryColor" />
+
+</LinearLayout>

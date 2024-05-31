@@ -30,9 +30,9 @@ public class xmlNewDoc42 extends SoapSerializationEnvelope {
     String Calle = "";
     String Colonia = "";
     String Poblacion = "";
-    String FolioPrev="";
-    String Via="";
-    String stridEnvio="";
+    String FolioPrev = "";
+    String Via = "";
+    String stridEnvio = "";
     ArrayList<DetallCotiSANDG> listasearch2 = new ArrayList<>();
     double DescProstr = 0;
     double Descuentorec = 0;
@@ -52,9 +52,9 @@ public class xmlNewDoc42 extends SoapSerializationEnvelope {
     }
 
 
-    public void xmlNewDoc42( String comentario, String claveVendedor, String nombreCliente, String claveCliente, String fechaActual, String fechaVencimiento,
-                           String sucursal, String usuario, String clave, String rfcCliente, String plazo, String montototal, String iva, String descuento, String descuentoPro,
-                           String Desc1,String calle, String colonia, String poblacion, String folioPrev,String Via,String stridEnvio, ArrayList<DetallCotiSANDG> listasearch2 ,String StrServer) {
+    public void xmlNewDoc42(String comentario, String claveVendedor, String nombreCliente, String claveCliente, String fechaActual, String fechaVencimiento,
+                            String sucursal, String usuario, String clave, String rfcCliente, String plazo, String montototal, String iva, String descuento, String descuentoPro,
+                            String Desc1, String calle, String colonia, String poblacion, String folioPrev, String Via, String stridEnvio, ArrayList<DetallCotiSANDG> listasearch2, String StrServer) {
         this.Comentario = comentario;
         this.ClaveVendedor = claveVendedor;
         this.NombreCliente = nombreCliente;
@@ -74,7 +74,7 @@ public class xmlNewDoc42 extends SoapSerializationEnvelope {
         this.Calle = calle;
         this.Colonia = colonia;
         this.Poblacion = poblacion;
-        this. FolioPrev = folioPrev;
+        this.FolioPrev = folioPrev;
         this.Via = Via;
         this.stridEnvio = stridEnvio;
         this.listasearch2 = listasearch2;
@@ -217,21 +217,18 @@ public class xmlNewDoc42 extends SoapSerializationEnvelope {
         }
 
 
-
-
-
-        DescProstr=Double.parseDouble(Desc1)/100;
-        Descuentorec = Subtotal*DescProstr;
+        DescProstr = Double.parseDouble(Desc1) / 100;
+        Descuentorec = Subtotal * DescProstr;
         DescuentoStr = String.valueOf(Descuentorec);
 
         double Subtotal2;
-        Subtotal2 =Subtotal-Descuentorec;
+        Subtotal2 = Subtotal - Descuentorec;
 
 
         double ivaCal;
         double MontoTotal;
 
-        ivaCal = Subtotal2 * (!Server.equals("vazlocolombia.dyndns.org:9085")?0.16 : 0.19);
+        ivaCal = Subtotal2 * (!Server.equals("vazlocolombia.dyndns.org:9085") ? 0.16 : 0.19);
         MontoTotal = Subtotal2 + ivaCal;
 
         Iva = String.valueOf(ivaCal);
@@ -263,7 +260,6 @@ public class xmlNewDoc42 extends SoapSerializationEnvelope {
         writer.endTag(tem, "k_70");
 
 
-
         writer.startTag(tem, "k_74");
         writer.text(stridEnvio);
         writer.endTag(tem, "k_74");
@@ -278,76 +274,68 @@ public class xmlNewDoc42 extends SoapSerializationEnvelope {
         /*Items*/
         writer.startTag(tem, "k_items");
         for (int i = 0; i < listasearch2.size(); i++) {
-
-            precio=Double.valueOf(listasearch2.get(i).getPrecio());
-            cantidad =Double.valueOf(listasearch2.get(i).getBackOrder());
-            descuento =Double.valueOf(listasearch2.get(i).getDesc());
-            monto=precio * cantidad;
-            monto2 = monto * (descuento/100);
-            monto3 =monto-monto2;
-
-
+            if (Integer.parseInt(listasearch2.get(i).getBackOrder())>0) {
+                precio = Double.valueOf(listasearch2.get(i).getPrecio());
+                cantidad = Double.valueOf(listasearch2.get(i).getBackOrder());
+                descuento = Double.valueOf(listasearch2.get(i).getDesc());
+                monto = precio * cantidad;
+                monto2 = monto * (descuento / 100);
+                monto3 = monto - monto2;
 
 
-            writer.startTag(tem, "item");
+                writer.startTag(tem, "item");
 
-            writer.startTag(tem, "k_parte");
-            writer.text(listasearch2.get(i).getClaveP());
-            writer.endTag(tem, "k_parte");
-
-
-            writer.startTag(tem, "k_Q");
-            writer.text(String.valueOf(listasearch2.get(i).getBackOrder()));
-            writer.endTag(tem, "k_Q");
-
-            writer.startTag(tem, "k_desc1");
-            writer.text(listasearch2.get(i).getDesc());
-            writer.endTag(tem, "k_desc1");
-
-            writer.startTag(tem, "k_descr");
-            writer.text(listasearch2.get(i).getDescripcion());
-            writer.endTag(tem, "k_descr");
-
-            writer.startTag(tem, "k_unidad");
-            writer.text(listasearch2.get(i).getUnidad());
-            writer.endTag(tem, "k_unidad");
+                writer.startTag(tem, "k_parte");
+                writer.text(listasearch2.get(i).getClaveP());
+                writer.endTag(tem, "k_parte");
 
 
+                writer.startTag(tem, "k_Q");
+                writer.text(String.valueOf(listasearch2.get(i).getBackOrder()));
+                writer.endTag(tem, "k_Q");
+
+                writer.startTag(tem, "k_desc1");
+                writer.text(listasearch2.get(i).getDesc());
+                writer.endTag(tem, "k_desc1");
+
+                writer.startTag(tem, "k_descr");
+                writer.text(listasearch2.get(i).getDescripcion());
+                writer.endTag(tem, "k_descr");
+
+                writer.startTag(tem, "k_unidad");
+                writer.text(listasearch2.get(i).getUnidad());
+                writer.endTag(tem, "k_unidad");
 
 
-            writer.startTag(tem, "k_precio");
-            writer.text(listasearch2.get(i).getPrecio());
-            writer.endTag(tem, "k_precio");
+                writer.startTag(tem, "k_precio");
+                writer.text(listasearch2.get(i).getPrecio());
+                writer.endTag(tem, "k_precio");
 
 
+                writer.startTag(tem, "k_monto");
+                writer.text(formato1.format(monto3));
+                writer.endTag(tem, "k_monto");
+
+                writer.startTag(tem, "k_iva");
+                writer.text((!Server.equals("vazlocolombia.dyndns.org:9085") ? "16" : "19"));
+                writer.endTag(tem, "k_iva");
+
+                writer.startTag(tem, "k_ieps");
+                writer.text("0");
+                writer.endTag(tem, "k_ieps");
+
+                writer.startTag(tem, "k_sucursal");
+                writer.text(Sucursal);
+                writer.endTag(tem, "k_sucursal");
+
+                writer.startTag(tem, "k_genero");
+                writer.text("U");
+                writer.endTag(tem, "k_genero");
 
 
+                writer.endTag(tem, "item");
 
-
-
-            writer.startTag(tem, "k_monto");
-            writer.text(formato1.format(monto3));
-            writer.endTag(tem, "k_monto");
-
-            writer.startTag(tem, "k_iva");
-            writer.text((!Server.equals("vazlocolombia.dyndns.org:9085")?"16" : "19"));
-            writer.endTag(tem, "k_iva");
-
-            writer.startTag(tem, "k_ieps");
-            writer.text("0");
-            writer.endTag(tem, "k_ieps");
-
-            writer.startTag(tem, "k_sucursal");
-            writer.text(Sucursal);
-            writer.endTag(tem, "k_sucursal");
-
-            writer.startTag(tem, "k_genero");
-            writer.text("U");
-            writer.endTag(tem, "k_genero");
-
-
-
-            writer.endTag(tem, "item");
+            }
 
         }
         writer.endTag(tem, "k_items");

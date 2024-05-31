@@ -11,16 +11,18 @@ public class xmlConFactDetall  extends SoapSerializationEnvelope {
     String clave = "";
     String Folio= "";
     String Sucursal="";
+    String Cliente="";
 
     public xmlConFactDetall(int version) {
         super(version);
     }
 
-    public void xmlConFactDeta( String usuario, String clave, String folio,String Sucursals) {
+    public void xmlConFactDeta( String usuario, String clave, String folio,String Sucursals,String Cliente) {
         this.usuario = usuario;
         this.clave = clave;
         Folio = folio;
         Sucursal=Sucursals;
+        this.Cliente=Cliente;
     }
 
 
@@ -58,6 +60,10 @@ public class xmlConFactDetall  extends SoapSerializationEnvelope {
         writer.startTag(tem, "k_Sucursal");
         writer.text(Sucursal);
         writer.endTag(tem, "k_Sucursal");
+
+        writer.startTag(tem, "k_Cliente");
+        writer.text(Cliente);
+        writer.endTag(tem, "k_Cliente");
 
 
 

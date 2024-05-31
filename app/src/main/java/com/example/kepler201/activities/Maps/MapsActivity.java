@@ -31,7 +31,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kepler201.ParserTask.DownloadTask;
 import com.example.kepler201.*;
+import com.example.kepler201.SetterandGetter.SearachClientSANDG;
 import com.example.kepler201.XMLS.xmlAsignaCordenadas;
+import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -414,8 +417,60 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
         @Override
         protected Void doInBackground(Void... params) {
-            ActuLoca();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + ClaveCliente+"&direccion="+idDireccion+"&latitud="+String.valueOf(Latitud)+"&longitud="+String.valueOf(Longitud)+"&valcon=1";
+            String url = "http://" + StrServer + "/asigncordenadasapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
 
+                    if(json.length()!=0) {
+                        JSONObject jitems, Numero, Clave, Nombre;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("MENSAJE");
+
+                        MensajeUpdate = jitems.getString("k_mensaje").equals("anyType{}") ? " " : jitems.getString("k_mensaje");
+                        Validacion = jitems.getString("k_Val").equals("anyType{}") ? " " : jitems.getString("k_Val");
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(MapsActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(MapsActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
@@ -459,7 +514,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
     }
 
 
-    private void ActuLoca() {
+  /*  private void ActuLoca() {
         String SOAP_ACTION = "AsignCordenadas";
         String METHOD_NAME = "AsignCordenadas";
         String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
@@ -501,7 +556,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             mDialog.dismiss();
             mensaje = "Error:" + ex.getMessage();
         }
-    }
+    }*/
 
 
     public void saveLoca(View view) {

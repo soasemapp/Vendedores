@@ -29,8 +29,9 @@ public class xmlCarritoCompras2 extends SoapSerializationEnvelope {
     String Calle = "";
     String Colonia = "";
     String Poblacion = "";
-    String Server ;
+    String Server,Comentario1="",Comentario2="",Comentario3="";
     ArrayList<CarritoBD> listaCarShoping = new ArrayList<>();
+
     public xmlCarritoCompras2(int version) {
         super(version);
     }
@@ -181,6 +182,54 @@ public class xmlCarritoCompras2 extends SoapSerializationEnvelope {
         writer.startTag(tem, "k_cond");
         writer.text("");
         writer.endTag(tem, "k_cond");
+
+        writer.startTag(tem, "k_25");
+        writer.text(Comentario2);
+        writer.endTag(tem, "k_25");
+
+        writer.startTag(tem, "k_26");
+        writer.text(Comentario3);
+        writer.endTag(tem, "k_26");
+
+        int tamaño=Comentario.length();
+        if (tamaño <=60) {
+            if (tamaño == 60) {
+                Comentario1 = Comentario.substring(0, 59);
+            } else {
+                Comentario1 = Comentario.substring(0, tamaño);
+            }
+        }else if(tamaño <=120 && tamaño > 60){
+            if (tamaño == 120) {
+                Comentario1 = Comentario.substring(0, 59);
+                Comentario2 = Comentario.substring(60, 119);
+            } else {
+                Comentario1 = Comentario.substring(0,59);
+                Comentario2 = Comentario.substring(60, tamaño);
+            }
+        }else if (tamaño <=180 && tamaño > 120){
+            if (tamaño == 180) {
+                Comentario1 = Comentario.substring(0, 59);
+                Comentario2 = Comentario.substring(60, 119);
+                Comentario3 = Comentario.substring(120, 179);
+            } else {
+                Comentario1 = Comentario.substring(0, 59);
+                Comentario2 = Comentario.substring(60, 119);
+                Comentario3 = Comentario.substring(120,tamaño);
+            }
+        }else{
+            if (tamaño == 180) {
+                Comentario1 = Comentario.substring(0, 59);
+                Comentario2 = Comentario.substring(60, 119);
+                Comentario3 = Comentario.substring(120, 179);
+            } else {
+                Comentario1 = Comentario.substring(0,59);
+                Comentario2 = Comentario.substring(60, 119);
+                Comentario3 = Comentario.substring(120,tamaño);
+            }
+        }
+
+
+
 
         writer.startTag(tem, "k_coment");
         writer.text(Comentario);

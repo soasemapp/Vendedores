@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +28,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.kepler201.Adapter.AdapterSearchProduct;
+import com.example.kepler201.ConexionSQLiteHelper;
 import com.example.kepler201.R;
+import com.example.kepler201.SetterandGetter.CarritoVentasSANDG;
 import com.example.kepler201.SetterandGetter.ListLineaSANDG;
 import com.example.kepler201.SetterandGetter.ListLineaSANDG2;
 import com.example.kepler201.SetterandGetter.SearachClientSANDG;
@@ -43,9 +46,13 @@ import com.example.kepler201.XMLS.xmlListLine2;
 import com.example.kepler201.XMLS.xmlListMarca;
 import com.example.kepler201.XMLS.xmlListModelo;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
+import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -87,10 +94,10 @@ public class BusquedaActivity extends AppCompatActivity {
     LinearLayout linearFiltro;
     int ban = 1;
 
-    String[] search = new String[73];
+    String[] search = new String[75];
 
     String BusquedaProducto = null;
-    String strscliente = "" , strscliente3 = "";
+    String strscliente = "", strscliente3 = "";
     String K87;
     String Desc1fa;
     String Nombre;
@@ -115,6 +122,7 @@ public class BusquedaActivity extends AppCompatActivity {
 
 
         mDialog = new SpotsDialog.Builder().setContext(BusquedaActivity.this).setMessage("Espere un momento...").build();
+        mDialog.setCancelable(false);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
         MyToolbar.show(this, "Busqueda", true);
         editor = preference.edit();
@@ -164,6 +172,9 @@ public class BusquedaActivity extends AppCompatActivity {
                 Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
                 break;
             case "vazlocolombia.dyndns.org:9085":
+                Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
+                break;
+            default:
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
         }
@@ -211,10 +222,10 @@ public class BusquedaActivity extends AppCompatActivity {
             }
         });
 
-        String[] opciones = new String[73];
-        for (int i=0;i<opciones.length;i++){
-            opciones[i]=String.valueOf(1950+i);
-            search[i]=String.valueOf(1950+i);
+        String[] opciones = new String[75];
+        for (int i = 0; i < opciones.length; i++) {
+            opciones[i] = String.valueOf(1950 + i);
+            search[i] = String.valueOf(1950 + i);
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, opciones);
         spineryear.setAdapter(adapter);
@@ -262,8 +273,7 @@ public class BusquedaActivity extends AppCompatActivity {
                     }
                 } else {
 
-                    BusquedaActivity.AsyncClientes task1 = new BusquedaActivity.AsyncClientes();
-                    task1.execute();
+                    Listaclientes();
                     dato = 2;
 
                 }
@@ -276,10 +286,10 @@ public class BusquedaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (yearCheck.isChecked()) {
-                   check="1";
-                   spineryear.setEnabled(true);
+                    check = "1";
+                    spineryear.setEnabled(true);
                 } else {
-                    check="0";
+                    check = "0";
                     spineryear.setEnabled(false);
                 }
             }
@@ -414,8 +424,7 @@ public class BusquedaActivity extends AppCompatActivity {
                         task.execute();
                     } else {
 
-                        BusquedaActivity.AsyncClientes task1 = new BusquedaActivity.AsyncClientes();
-                        task1.execute();
+                        Listaclientes();
                         dato = 1;
 
                     }
@@ -436,66 +445,87 @@ public class BusquedaActivity extends AppCompatActivity {
 
     }
 
-
-    private void Clientes() {
-        String SOAP_ACTION = "SearchClient";
-        String METHOD_NAME = "SearchClient";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlSearchClientesG soapEnvelope = new xmlSearchClientesG(SoapEnvelope.VER11);
-            soapEnvelope.xmlSearchG(strusr, strpass, strco);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            for (int i = 0; i < response.getPropertyCount(); i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                listaclientG.add(new SearachClientSANDG(response0.getPropertyAsString("k_dscr"), response0.getPropertyAsString("k_line")));
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
+    public void Listaclientes() {
+        new BusquedaActivity.Cliente().execute();
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class AsyncClientes extends AsyncTask<Void, Void, Void> {
 
+    private class Cliente extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
             mDialog.show();
-        }
+        }//onPreExecute
 
         @Override
-        protected Void doInBackground(Void... params) {
-            Clientes();
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "vendedor=" + strco;
+            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+                    if(json.length()!=0) {
+                        JSONObject jitems, Numero, Clave, Nombre;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("Clientes");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Clientes");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            listaclientG.add(new SearachClientSANDG(
+                                    Numero.getString("Clave"),
+                                    Numero.getString("Nombre")));
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
-        }
 
-        @RequiresApi(api = Build.VERSION_CODES.P)
+        }//doInBackground
+
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
+
 
             String[] opciones = new String[listaclientG.size()];
 
@@ -513,46 +543,112 @@ public class BusquedaActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     strscliente = listaclientG.get(which).getUserCliente();
                     strscliente3 = listaclientG.get(which).getNombreCliente();
-                    BusquedaActivity.CarritoCompras task1 = new BusquedaActivity.CarritoCompras();
-                    task1.execute();
+                    CarritoComprasASYC();
                 }
             });
 // create and show the alert dialog
             AlertDialog dialog = builder.create();
             dialog.show();
             mDialog.dismiss();
-
-
-        }
-
-
+        }//onPost
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class CarritoCompras extends AsyncTask<Void, Void, Void> {
 
+    public void CarritoComprasASYC() {
+        new BusquedaActivity.CarritoComprasay().execute();
+    }
+
+
+    private class CarritoComprasay extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
             mDialog.show();
-        }
+        }//onPreExecute
 
         @Override
-        protected Void doInBackground(Void... params) {
-            CarritoValidado();
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + strscliente + "&producto=1000R&cantidad=1&existencia=0&sucursal=" + strcodBra;
+            String url = "http://" + StrServer + "/carritoapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+                    if(json.length()!=0) {
+                    JSONObject jitems, Numero, Clave, Nombre;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    jitems = jsonObject.getJSONObject("Cotizacion");
+
+                    for (int i = 0; i < jitems.length(); i++) {
+                        jitems = jsonObject.getJSONObject("Cotizacion");
+                        Numero = jitems.getJSONObject("" + i + "");
+
+                        rfc = (Numero.getString("k_rfc").equals("anyType{}") ? " " : Numero.getString("k_rfc"));
+                        plazo = (Numero.getString("k_plazo").equals("anyType{}") ? " " : Numero.getString("k_plazo"));
+                        Calle = (Numero.getString("k_calle").equals("anyType{}") ? " " : Numero.getString("k_calle"));
+                        Colonia = (Numero.getString("k_colo").equals("anyType{}") ? " " : Numero.getString("k_colo"));
+                        Poblacion = (Numero.getString("k_pobla").equals("anyType{}") ? " " : Numero.getString("k_pobla"));
+                        Via = (Numero.getString("k_via").equals("anyType{}") ? " " : Numero.getString("k_via"));
+                        K87 = (Numero.getString("k_87").equals("anyType{}") ? "0" : Numero.getString("k_87"));
+                        Desc1fa = (Numero.getString("k_desc1fac").equals("anyType{}") ? "0" : Numero.getString("k_desc1fac"));
+                        Comentario1 = (Numero.getString("k_comentario1").equals("anyType{}") ? "" : Numero.getString("k_comentario1"));
+                        Comentario2 = (Numero.getString("k_comentario2").equals("anyType{}") ? "" : Numero.getString("k_comentario2"));
+                        Comentario3 = (Numero.getString("k_comentario3").equals("anyType{}") ? "" : Numero.getString("k_comentario3"));
+
+                    }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
-        }
 
-        @RequiresApi(api = Build.VERSION_CODES.P)
+        }//doInBackground
+
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
             if (preferenceClie.contains("CodeClien")) {
 
             } else {
                 guardarDatos();
             }
-
-
-        }
+        }//onPost
     }
 
     private void guardarDatos() {
@@ -605,54 +701,6 @@ public class BusquedaActivity extends AppCompatActivity {
 
     }
 
-    private void CarritoValidado() {
-        String SOAP_ACTION = "CarShop";
-        String METHOD_NAME = "CarShop";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlCarritoVentas soapEnvelope = new xmlCarritoVentas(SoapEnvelope.VER11);
-            soapEnvelope.xmlCarritoVen(strusr, strpass, strscliente, "1000R", "1", "0", strcodBra);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-            response0 = (SoapObject) response0.getProperty(0);
-            rfc = (response0.getPropertyAsString("k_rfc").equals("anyType{}") ? " " : response0.getPropertyAsString("k_rfc"));
-            plazo = (response0.getPropertyAsString("k_plazo").equals("anyType{}") ? " " : response0.getPropertyAsString("k_plazo"));
-            Calle = (response0.getPropertyAsString("k_calle").equals("anyType{}") ? " " : response0.getPropertyAsString("k_calle"));
-            Colonia = (response0.getPropertyAsString("k_colo").equals("anyType{}") ? " " : response0.getPropertyAsString("k_colo"));
-            Poblacion = (response0.getPropertyAsString("k_pobla").equals("anyType{}") ? " " : response0.getPropertyAsString("k_pobla"));
-            Via = (response0.getPropertyAsString("k_via").equals("anyType{}") ? " " : response0.getPropertyAsString("k_via"));
-            K87 = (response0.getPropertyAsString("k_87").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_87"));
-            Desc1fa = (response0.getPropertyAsString("k_desc1fac").equals("anyType{}") ? "0" : response0.getPropertyAsString("k_desc1fac"));
-            Comentario1 = (response0.getPropertyAsString("k_comentario1").equals("anyType{}") ? "" : response0.getPropertyAsString("k_comentario1"));
-            Comentario2 = (response0.getPropertyAsString("k_comentario2").equals("anyType{}") ? "" : response0.getPropertyAsString("k_comentario2"));
-            Comentario3 = (response0.getPropertyAsString("k_comentario3").equals("anyType{}") ? "" : response0.getPropertyAsString("k_comentario3"));
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
-
     public void borrarmarca(View view) {
         marca = "";
         modelo = "";
@@ -696,7 +744,68 @@ public class BusquedaActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conectar3();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "marca=" + marca + "&modelo=" + modelo;
+            String url = "http://" + StrServer + "/listalineasapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+
+
+                    JSONObject jitems, Numero;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("Item");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Item");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            if (!Numero.getString("k_Linea").equals("")) {
+                                listaLinea.add(new ListLineaSANDG2((Numero.getString("k_Linea").equals("") ? "" : Numero.getString("k_Linea"))));
+                            }
+
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
+
+
             return null;
         }
 
@@ -712,63 +821,81 @@ public class BusquedaActivity extends AppCompatActivity {
 
     }
 
-    private void conectar3() {
-        String SOAP_ACTION = "listlineas";
-        String METHOD_NAME = "listlineas";
-        String NAMESPACE = "http://" + StrServer + "/WSk75ClientesSOAP/";
-        String URL = "http://" + StrServer + "/WSk75ClientesSOAP";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlListLine2 soapEnvelope = new xmlListLine2(SoapEnvelope.VER11);
-            soapEnvelope.xmlListLine2(strusr, strpass,marca ,modelo);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            for (int i = 0; i < response.getPropertyCount(); i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                if (!response0.getPropertyAsString("k_Linea").equals("anyType{}")) {
-                    listaLinea.add(new ListLineaSANDG2((response0.getPropertyAsString("k_Linea").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Linea"))));
-                }
-
-            }
-
-
-        } catch (XmlPullParserException | IOException soapFault) {
-            mDialog.dismiss();
-            soapFault.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-        }
-    }
-
 
     @SuppressLint("StaticFieldLeak")
     private class ListMarca extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
-mDialog.show();
+            mDialog.show();
 
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            WebServiceListMarca();
+            HttpHandler sh = new HttpHandler();
+            String url = "http://" + StrServer + "/listamarcaapp";
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+
+
+                    JSONObject jitems, Numero;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("Item");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Item");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            listMarca.add(new SetGetListMarca2(
+                                    (Numero.getString("k_Descripcion").equals("anyType{}") ? "" : Numero.getString("k_Descripcion"))));
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-mDialog.dismiss();
+            mDialog.dismiss();
 
         }
     }
@@ -785,7 +912,64 @@ mDialog.dismiss();
 
         @Override
         protected Void doInBackground(Void... params) {
-            WebServiceListModelo();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "marca=" + claveMarca;
+            String url = "http://" + StrServer + "/listalineasmodelosapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+
+
+                    JSONObject jitems, Numero;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("Item");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Item");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            listModelo.add(new SetGetListModelo2(
+                                    (Numero.getString("k_Descripcion").equals("") ? "" : Numero.getString("k_Descripcion"))));
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
@@ -808,14 +992,87 @@ mDialog.dismiss();
 
         @Override
         protected Void doInBackground(Void... params) {
-            WebServiceListProducto();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + strscliente + "&fechainicial=" + fechainicio + "&marca=" + marca + "&modelo=" + modelo + "&linea=" + linea + "&checkano=" + check;
+            String url = "http://" + StrServer + "/buscadormmfapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+
+
+                    JSONObject jitems, Numero, Precio;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("Item");
+
+                        String Producto;
+                        String Descripcion;
+                        String Linea;
+                        String precio_base;
+                        String precio_ajuste;
+                        for (int i = 0; i < jitems.length(); i++) {
+
+                            jitems = jsonObject.getJSONObject("Item");
+                            Numero = jitems.getJSONObject("" + i + "");
+
+                            Producto = Numero.getString("Producto");
+                            Descripcion = Numero.getString("Descripcion");
+                            Linea = Numero.getString("Linea");
+                            Precio = Numero.getJSONObject("precio_base");
+                            precio_base = Precio.getString("valor").equals("") ? "0" : Precio.getString("valor");
+                            Precio = Numero.getJSONObject("precio_ajuste");
+                            precio_ajuste = Precio.getString("valor").equals("") ? "0" : Precio.getString("valor");
+
+                            listProdu1.add(new SetGetListProductos(Producto, Descripcion, Linea, precio_base, precio_ajuste));
+
+
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
 
-            if (listProdu1.size()==0){
+            if (listProdu1.size() == 0) {
                 AlertDialog.Builder alerta = new AlertDialog.Builder(BusquedaActivity.this);
                 alerta.setMessage("No se ah encontrado ningun resultado").setIcon(R.drawable.ic_baseline_error_24).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
@@ -830,7 +1087,7 @@ mDialog.dismiss();
             }
 
 
-            AdapterSearchProduct adapter = new AdapterSearchProduct(listProdu1, context,Empresa);
+            AdapterSearchProduct adapter = new AdapterSearchProduct(listProdu1, context, Empresa);
             adapter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -839,8 +1096,8 @@ mDialog.dismiss();
                     Intent ProductosDetallados = new Intent(BusquedaActivity.this, DetalladoProductosActivity.class);
                     String Producto = listProdu1.get(position).getProductos();
                     String Descripcion = listProdu1.get(position).getDescripcion();
-                    String PrecioAjuste =  listProdu1.get(position).getPrecioAjuste();
-                    String PrecioBase =  listProdu1.get(position).getPrecioBase();
+                    String PrecioAjuste = listProdu1.get(position).getPrecioAjuste();
+                    String PrecioBase = listProdu1.get(position).getPrecioBase();
                     ProductosDetallados.putExtra("Producto", Producto);
                     ProductosDetallados.putExtra("Descripcion", Descripcion);
                     ProductosDetallados.putExtra("PrecioAjuste", PrecioAjuste);
@@ -857,134 +1114,6 @@ mDialog.dismiss();
 
     }
 
-    private void WebServiceListProducto() {
-        String SOAP_ACTION = "busqueProductos";
-        String METHOD_NAME = "busqueProductos";
-        String NAMESPACE = "http://" + StrServer + "/WSk75ClientesSOAP/";
-        String URL = "http://" + StrServer + "/WSk75ClientesSOAP";
-
-
-        try {
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlBusqueProductos soapEnvelope = new xmlBusqueProductos(SoapEnvelope.VER11);
-            soapEnvelope.xmlBusqueProductos(strusr, strpass, fechainicio, marca, modelo, linea, check, strscliente);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-
-            String Producto;
-            String Descripcion;
-            String Linea;
-            String precio_base;
-            String precio_ajuste;
-
-
-
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                Producto = response0.getPropertyAsString("Producto");
-                Descripcion = response0.getPropertyAsString("Descripcion");
-                Linea = response0.getPropertyAsString("Linea");
-                response0 = (SoapObject) response0.getProperty("precio_base");
-                precio_base = response0.getPropertyAsString("valor").equals("anyType{}") ? "0" : response0.getPropertyAsString("valor");
-                response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                response0 = (SoapObject) response0.getProperty("precio_ajuste");
-                precio_ajuste = response0.getPropertyAsString("valor").equals("anyType{}") ? "0" : response0.getPropertyAsString("valor");
-
-                listProdu1.add(new SetGetListProductos(Producto, Descripcion,Linea, precio_base, precio_ajuste));
-
-
-            }
-
-
-        } catch (XmlPullParserException | IOException soapFault) {
-            soapFault.printStackTrace();
-        } catch (Exception ignored) {
-        }
-    }
-
-
-    private void WebServiceListMarca() {
-        String SOAP_ACTION = "listmarca";
-        String METHOD_NAME = "listmarca";
-        String NAMESPACE = "http://" + StrServer + "/WSk75ClientesSOAP/";
-        String URL = "http://" + StrServer + "/WSk75ClientesSOAP";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlListMarca soapEnvelope = new xmlListMarca(SoapEnvelope.VER11);
-            soapEnvelope.xmlListMarca(strusr, strpass);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                listMarca.add(new SetGetListMarca2(
-                        (response0.getPropertyAsString("k_Descripcion").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Descripcion"))));
-
-
-            }
-
-        } catch (XmlPullParserException | IOException soapFault) {
-            soapFault.printStackTrace();
-        } catch (Exception ignored) {
-        }
-    }
-
-    private void WebServiceListModelo() {
-        String SOAP_ACTION = "listmodelo";
-        String METHOD_NAME = "listmodelo";
-        String NAMESPACE = "http://" + StrServer + "/WSk75ClientesSOAP/";
-        String URL = "http://" + StrServer + "/WSk75ClientesSOAP";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlListModelo soapEnvelope = new xmlListModelo(SoapEnvelope.VER11);
-            soapEnvelope.xmlListModelo(strusr, strpass, claveMarca);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                listModelo.add(new SetGetListModelo2(
-                        (response0.getPropertyAsString("k_Descripcion").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Descripcion"))));
-
-
-            }
-
-        } catch (XmlPullParserException | IOException soapFault) {
-            soapFault.printStackTrace();
-        } catch (Exception ignored) {
-        }
-    }
 
     @SuppressLint("StaticFieldLeak")
     private class BusquedaGeneral extends AsyncTask<Void, Void, Void> {
@@ -997,7 +1126,81 @@ mDialog.dismiss();
 
         @Override
         protected Void doInBackground(Void... params) {
-            BusquedaGeneral();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + strscliente + "&producto=" + BusquedaProducto ;
+            String url = "http://" + StrServer + "/buscadorgeneralapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+
+
+                    JSONObject jitems, Numero, Precio;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                        jitems = jsonObject.getJSONObject("Item");
+
+                        String Producto;
+                        String Descripcion;
+                        String Linea;
+                        String precio_base;
+                        String precio_ajuste;
+                        for (int i = 0; i < jitems.length(); i++) {
+
+                            jitems = jsonObject.getJSONObject("Item");
+                            Numero = jitems.getJSONObject("" + i + "");
+
+                            Producto = Numero.getString("Producto");
+                            Descripcion = Numero.getString("Descripcion");
+                            Linea = Numero.getString("Linea");
+                            Precio = Numero.getJSONObject("precio_base");
+                            precio_base = Precio.getString("valor").equals("") ? "0" : Precio.getString("valor");
+                            Precio = Numero.getJSONObject("precio_ajuste");
+                            precio_ajuste = Precio.getString("valor").equals("") ? "0" : Precio.getString("valor");
+
+                            listProdu1.add(new SetGetListProductos(Producto, Descripcion, Linea, precio_base, precio_ajuste));
+
+
+                        }
+                    }
+
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
@@ -1006,20 +1209,20 @@ mDialog.dismiss();
         protected void onPostExecute(Void result) {
 
 
-if (listProdu1.size()==0){
-    AlertDialog.Builder alerta = new AlertDialog.Builder(BusquedaActivity.this);
-    alerta.setMessage("No se ah encontrado ningun resultado").setIcon(R.drawable.ic_baseline_error_24).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
-            dialogInterface.cancel();
-        }
-    });
+            if (listProdu1.size() == 0) {
+                AlertDialog.Builder alerta = new AlertDialog.Builder(BusquedaActivity.this);
+                alerta.setMessage("No se ah encontrado ningun resultado").setIcon(R.drawable.ic_baseline_error_24).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
 
-    AlertDialog titulo = alerta.create();
-    titulo.setTitle("");
-    titulo.show();
-}
-            AdapterSearchProduct adapter = new AdapterSearchProduct(listProdu1, context,Empresa);
+                AlertDialog titulo = alerta.create();
+                titulo.setTitle("");
+                titulo.show();
+            }
+            AdapterSearchProduct adapter = new AdapterSearchProduct(listProdu1, context, Empresa);
             adapter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -1028,8 +1231,8 @@ if (listProdu1.size()==0){
                     Intent ProductosDetallados = new Intent(BusquedaActivity.this, DetalladoProductosActivity.class);
                     String Producto = listProdu1.get(position).getProductos();
                     String Descripcion = listProdu1.get(position).getDescripcion();
-                    String PrecioAjuste =  listProdu1.get(position).getPrecioAjuste();
-                    String PrecioBase =  listProdu1.get(position).getPrecioBase();
+                    String PrecioAjuste = listProdu1.get(position).getPrecioAjuste();
+                    String PrecioBase = listProdu1.get(position).getPrecioBase();
                     ProductosDetallados.putExtra("Producto", Producto);
                     ProductosDetallados.putExtra("Descripcion", Descripcion);
                     ProductosDetallados.putExtra("PrecioAjuste", PrecioAjuste);
@@ -1046,60 +1249,6 @@ if (listProdu1.size()==0){
         }
 
 
-    }
-
-    private void BusquedaGeneral() {
-        String SOAP_ACTION = "ProductoConsultaApp";
-        String METHOD_NAME = "ProductoConsultaApp";
-        String NAMESPACE = "http://" + StrServer + "/WSk75ClienteSSoap/";
-        String URL = "http://" + StrServer + "/WSk75ClienteSSoap";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlBusqueGeneral soapEnvelope = new xmlBusqueGeneral(SoapEnvelope.VER11);
-            soapEnvelope.xmlBusqueGeneral(strusr, strpass, strscliente, BusquedaProducto);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-
-            String Producto;
-            String Descripcion;
-            String Linea;
-            String precio_base;
-            String precio_ajuste;
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                Producto = response0.getPropertyAsString("Producto");
-                Descripcion = response0.getPropertyAsString("Descripcion");
-                Linea = response0.getPropertyAsString("Linea");
-                response0 = (SoapObject) response0.getProperty("precio_base");
-                precio_base = response0.getPropertyAsString("valor").equals("anyType{}") ? "0" : response0.getPropertyAsString("valor");
-                response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                response0 = (SoapObject) response0.getProperty("precio_ajuste");
-                precio_ajuste = response0.getPropertyAsString("valor").equals("anyType{}") ? "0" : response0.getPropertyAsString("valor");
-
-                listProdu1.add(new SetGetListProductos(Producto, Descripcion,Linea, precio_base, precio_ajuste));
-
-
-            }
-
-
-        } catch (XmlPullParserException | IOException soapFault) {
-            mDialog.dismiss();
-            soapFault.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-        }
     }
 
 

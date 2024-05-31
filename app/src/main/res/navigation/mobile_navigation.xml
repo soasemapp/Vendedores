@@ -67,6 +67,10 @@
         android:name="com.example.kepler201.activities.Productos.ActivityConsultaProductos"
         android:label="activity_consulta_productos"
         tools:layout="@layout/activity_consulta_productos" />
+    <activity
+        android:id="@+id/regitrodepagosActivity"
+        android:name="com.example.kepler201.activities.Pagos.RegitrodepagosActivity"
+        android:label="RegitrodepagosActivity" />
 
 
 </navigation>

@@ -6,11 +6,15 @@ public class PresupuestoLineaSANDG {
     String PresopUesto;
     String ResultadoPV;
 
-    public PresupuestoLineaSANDG(String vendido, String linea, String presopUesto, String resultadoPV) {
+    String LineaName;
+
+
+    public PresupuestoLineaSANDG(String vendido, String linea, String presopUesto, String resultadoPV, String lineaName) {
         Vendido = vendido;
         Linea = linea;
         PresopUesto = presopUesto;
         ResultadoPV = resultadoPV;
+        LineaName = lineaName;
     }
 
     public String getVendido() {
@@ -43,5 +47,13 @@ public class PresupuestoLineaSANDG {
 
     public void setResultadoPV(String resultadoPV) {
         ResultadoPV = resultadoPV;
+    }
+
+    public String getLineaName() {
+        return LineaName;
+    }
+
+    public void setLineaName(String lineaName) {
+        LineaName = lineaName;
     }
 }

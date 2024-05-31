@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,8 +34,13 @@ import com.example.kepler201.SetterandGetter.BackOrdersSANDG;
 import com.example.kepler201.SetterandGetter.SearachClientSANDG;
 import com.example.kepler201.XMLS.xmlBackOrders;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
+import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
+import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -82,6 +90,7 @@ public class ActivityBackOrders extends AppCompatActivity {
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 
         mDialog = new SpotsDialog.Builder().setContext(ActivityBackOrders.this).setMessage("Espere un momento...").build();
+        mDialog.setCancelable(false);
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");
         strname = preference.getString("name", "null");
@@ -161,8 +170,7 @@ public class ActivityBackOrders extends AppCompatActivity {
         });
 
 
-        ActivityBackOrders.AsyncCallWS task = new ActivityBackOrders.AsyncCallWS();
-        task.execute();
+        Listaclientes();
 
         Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
@@ -219,8 +227,7 @@ public class ActivityBackOrders extends AppCompatActivity {
 
                     if (!FechaIncial.isEmpty() && !FechaFinal.isEmpty() && spinerClie.getSelectedItemPosition() != 0) {
 
-                        ActivityBackOrders.AsyncCallWS2 task = new ActivityBackOrders.AsyncCallWS2();
-                        task.execute();
+                        BackorderLista();
                     } else {
                         AlertDialog.Builder alerta = new AlertDialog.Builder(ActivityBackOrders.this);
                         alerta.setMessage("Ingrese datos faltantes").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
@@ -257,23 +264,98 @@ public class ActivityBackOrders extends AppCompatActivity {
 
     }
 
-    @SuppressWarnings("deprecation")
-    @SuppressLint("StaticFieldLeak")
-    private class AsyncCallWS extends AsyncTask<Void, Void, Void> {
+    public boolean firtMet() {//firtMet
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {//si hay conexion a internet
+            return true;
+        } else {
+            return false;
+        }//else
+    }//Fir
 
+
+    public void Listaclientes() {
+        new ActivityBackOrders.Cliente().execute();
+    }
+
+
+    private class Cliente extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
-        }
+            super.onPreExecute();
+            mDialog.show();
+        }//onPreExecute
 
         @Override
-        protected Void doInBackground(Void... params) {
-            conectar();
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "vendedor=" + strcode;
+            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+                    if(json.length()!=0) {
+
+                        JSONObject jitems, Numero, Clave, Nombre;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("Clientes");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Clientes");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            listaclientG.add(new SearachClientSANDG(
+                                    Numero.getString("Clave"),
+                                    Numero.getString("Nombre")));
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityBackOrders.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityBackOrders.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
-        }
 
-        @RequiresApi(api = Build.VERSION_CODES.P)
+        }//doInBackground
+
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
             String[] opciones = new String[listaclientG.size() + 1];
             opciones[0] = "Cliente";
             search2[0] = "Cliente";
@@ -283,275 +365,246 @@ public class ActivityBackOrders extends AppCompatActivity {
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, opciones);
             spinerClie.setAdapter(adapter);
-        }
-
-
+            mDialog.dismiss();
+        }//onPost
     }
 
 
-    private void conectar() {
-        String SOAP_ACTION = "SearchClient";
-        String METHOD_NAME = "SearchClient";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlSearchClientesG soapEnvelope = new xmlSearchClientesG(SoapEnvelope.VER11);
-            soapEnvelope.xmlSearchG(strusr, strpass, strcode);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json =response.getPropertyCount();
-            for (int i = 0; i < json ;i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                listaclientG.add(new SearachClientSANDG((response0.getPropertyAsString("k_dscr").equals("anyType{}") ?"" : response0.getPropertyAsString("k_dscr")), (response0.getPropertyAsString("k_line").equals("anyType{}") ?"" : response0.getPropertyAsString("k_line"))));
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
+    public void BackorderLista() {
+        new ActivityBackOrders.BackOrders().execute();
     }
+        private class BackOrders extends AsyncTask<Void, Void, Void> {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
 
-    @SuppressLint("StaticFieldLeak")
-    @SuppressWarnings("deprecation")
-    private class AsyncCallWS2 extends AsyncTask<Void, Void, Void> {
+            }//onPreExecute
 
-        @Override
-        protected void onPreExecute() {
-            mDialog.show();
-        }
+            @Override
+            protected Void doInBackground(Void... voids) {
+                HttpHandler sh = new HttpHandler();
+                String parametros = "cliente="+strscliente+"&fechae="+FechaIncial+"&fechas="+FechaFinal+"&sucursal="+strcodBra;
+                String url = "http://" + StrServer + "/backorderscliapp?" + parametros;
+                String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+                if (jsonStr != null) {
+                    try {
+                        JSONObject json = new JSONObject(jsonStr);
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            conecta2();
-            return null;
-        }
+                        if (json.length()!=0) {
+                            JSONObject jitems, Numero;
+                            JSONObject jsonObject = new JSONObject(jsonStr);
+                            jitems = jsonObject.getJSONObject("Item");
 
-        @SuppressLint({"ResourceAsColor", "SetTextI18n"})
-        @RequiresApi(api = Build.VERSION_CODES.P)
-        @Override
-        protected void onPostExecute(Void result) {
+                            for (int i = 0; i < jitems.length(); i++) {
+                                jitems = jsonObject.getJSONObject("Item");
+                                Numero = jitems.getJSONObject("" + i + "");
+                                listaBackOrders.add(new BackOrdersSANDG(Numero.getString("clave"),
+                                        Numero.getString("fecha"),
+                                        Numero.getString("clavepro"),
+                                        Numero.getString("descripcion"),
+                                        Numero.getString("backorder"),
+                                        Numero.getString("folio"),
+                                        Numero.getString("existencia")));
+                            }
+                        }
 
-            TableRow.LayoutParams layaoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-            TableRow.LayoutParams layaoutDes = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-            tableLayout.setBackgroundColor(Color.parseColor("#043B72"));
-            for (int i = -1; i < listaBackOrders.size(); i++) {
-                fila = new TableRow(getApplicationContext());
-                fila.setLayoutParams(layaoutFila);
-                if (i == -1) {
-                    txtClave = new TextView(getApplicationContext());
-                    txtClave.setText("Clave");
-                    txtClave.setGravity(Gravity.START);
-                    txtClave.setBackgroundColor(Color.BLUE);
-                    txtClave.setTextColor(Color.WHITE);
-                    txtClave.setPadding(20, 20, 20, 20);
-                    txtClave.setLayoutParams(layaoutDes);
-                    fila.addView(txtClave);
+                    } catch (final JSONException e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mDialog.dismiss();
+                                AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityBackOrders.this);
+                                alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
 
-                    txtFecha = new TextView(getApplicationContext());
-                    txtFecha.setText("Fecha");
-                    txtFecha.setGravity(Gravity.START);
-                    txtFecha.setBackgroundColor(Color.BLUE);
-                    txtFecha.setTextColor(Color.WHITE);
-                    txtFecha.setPadding(20, 20, 20, 20);
-                    txtFecha.setLayoutParams(layaoutDes);
-                    fila.addView(txtFecha);
+                                    }
+                                });
+                                AlertDialog titulo1 = alerta1.create();
+                                titulo1.setTitle("Hubo un problema");
+                                titulo1.show();
 
-                    txtClaveDelProducto = new TextView(getApplicationContext());
-                    txtClaveDelProducto.setText("Clave del Producto");
-                    txtClaveDelProducto.setGravity(Gravity.START);
-                    txtClaveDelProducto.setBackgroundColor(Color.BLUE);
-                    txtClaveDelProducto.setTextColor(Color.WHITE);
-                    txtClaveDelProducto.setPadding(20, 20, 20, 20);
-                    txtClaveDelProducto.setLayoutParams(layaoutDes);
-                    fila.addView(txtClaveDelProducto);
-
-                    getTxtDescP = new TextView(getApplicationContext());
-                    getTxtDescP.setText("Descripcion del Producto");
-                    getTxtDescP.setGravity(Gravity.START);
-                    getTxtDescP.setBackgroundColor(Color.BLUE);
-                    getTxtDescP.setTextColor(Color.WHITE);
-                    getTxtDescP.setPadding(20, 20, 20, 20);
-                    getTxtDescP.setLayoutParams(layaoutDes);
-                    fila.addView(getTxtDescP);
-
-                    txtBackOrder = new TextView(getApplicationContext());
-                    txtBackOrder.setText("BackOrder");
-                    txtBackOrder.setGravity(Gravity.START);
-                    txtBackOrder.setBackgroundColor(Color.BLUE);
-                    txtBackOrder.setTextColor(Color.WHITE);
-                    txtBackOrder.setPadding(20, 20, 20, 20);
-                    txtBackOrder.setLayoutParams(layaoutDes);
-                    fila.addView(txtBackOrder);
-
-
-                    txtFolio = new TextView(getApplicationContext());
-                    txtFolio.setText("Folio");
-                    txtFolio.setGravity(Gravity.START);
-                    txtFolio.setBackgroundColor(Color.BLUE);
-                    txtFolio.setTextColor(Color.WHITE);
-                    txtFolio.setPadding(20, 20, 20, 20);
-                    txtFolio.setLayoutParams(layaoutDes);
-                    fila.addView(txtFolio);
-
-                    Existencia = new TextView(getApplicationContext());
-                    Existencia.setText("Existencia");
-                    Existencia.setGravity(Gravity.START);
-                    Existencia.setBackgroundColor(Color.BLUE);
-                    Existencia.setTextColor(Color.WHITE);
-                    Existencia.setPadding(20, 20, 20, 20);
-                    Existencia.setLayoutParams(layaoutDes);
-                    fila.addView(Existencia);
-
+                            }//run
+                        });
+                    }//catch JSON EXCEPTION
                 } else {
-                    multicolor = !multicolor;
-                    txtClave = new TextView(getApplicationContext());
-                    txtClave.setGravity(Gravity.START);
-                    txtClave.setBackgroundColor(Color.BLACK);
-                    txtClave.setText(listaBackOrders.get(i).getClave());
-                    txtClave.setPadding(20, 20, 20, 20);
-                    txtClave.setTextColor(Color.WHITE);
-                    txtClave.setLayoutParams(layaoutDes);
-                    fila.addView(txtClave);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDialog.dismiss();
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityBackOrders.this);
+                            alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
 
-                    txtFecha = new TextView(getApplicationContext());
-                    txtFecha.setBackgroundColor(Color.GRAY);
-                    txtFecha.setGravity(Gravity.START);
-                    txtFecha.setText(listaBackOrders.get(i).getFecha());
-                    txtFecha.setPadding(20, 20, 20, 20);
-                    txtFecha.setTextColor(Color.WHITE);
-                    txtFecha.setLayoutParams(layaoutDes);
-                    fila.addView(txtFecha);
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
 
-                    txtClaveDelProducto = new TextView(getApplicationContext());
-                    txtClaveDelProducto.setBackgroundColor(Color.BLACK);
-                    txtClaveDelProducto.setGravity(Gravity.START);
-                    txtClaveDelProducto.setText(listaBackOrders.get(i).getClaveProducto());
-                    txtClaveDelProducto.setPadding(20, 20, 20, 20);
-                    txtClaveDelProducto.setTextColor(Color.WHITE);
-                    txtClaveDelProducto.setLayoutParams(layaoutDes);
-                    fila.addView(txtClaveDelProducto);
+                        }//run
+                    });//runUniTthread
+                }//else
+                return null;
 
-                    getTxtDescP = new TextView(getApplicationContext());
-                    getTxtDescP.setBackgroundColor(Color.GRAY);
-                    getTxtDescP.setGravity(Gravity.START);
-                    getTxtDescP.setText(listaBackOrders.get(i).getDescripcion());
-                    getTxtDescP.setPadding(20, 20, 20, 20);
-                    getTxtDescP.setTextColor(Color.WHITE);
-                    getTxtDescP.setLayoutParams(layaoutDes);
-                    fila.addView(getTxtDescP);
+            }//doInBackground
+
+            @Override
+            protected void onPostExecute(Void aBoolean) {
+                super.onPostExecute(aBoolean);
+                TableRow.LayoutParams layaoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+                TableRow.LayoutParams layaoutDes = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+                tableLayout.setBackgroundColor(Color.parseColor("#043B72"));
+                for (int i = -1; i < listaBackOrders.size(); i++) {
+                    fila = new TableRow(getApplicationContext());
+                    fila.setLayoutParams(layaoutFila);
+                    if (i == -1) {
+                        txtClave = new TextView(getApplicationContext());
+                        txtClave.setText("Clave");
+                        txtClave.setGravity(Gravity.START);
+                        txtClave.setBackgroundColor(Color.BLUE);
+                        txtClave.setTextColor(Color.WHITE);
+                        txtClave.setPadding(20, 20, 20, 20);
+                        txtClave.setLayoutParams(layaoutDes);
+                        fila.addView(txtClave);
+
+                        txtFecha = new TextView(getApplicationContext());
+                        txtFecha.setText("Fecha");
+                        txtFecha.setGravity(Gravity.START);
+                        txtFecha.setBackgroundColor(Color.BLUE);
+                        txtFecha.setTextColor(Color.WHITE);
+                        txtFecha.setPadding(20, 20, 20, 20);
+                        txtFecha.setLayoutParams(layaoutDes);
+                        fila.addView(txtFecha);
+
+                        txtClaveDelProducto = new TextView(getApplicationContext());
+                        txtClaveDelProducto.setText("Clave del Producto");
+                        txtClaveDelProducto.setGravity(Gravity.START);
+                        txtClaveDelProducto.setBackgroundColor(Color.BLUE);
+                        txtClaveDelProducto.setTextColor(Color.WHITE);
+                        txtClaveDelProducto.setPadding(20, 20, 20, 20);
+                        txtClaveDelProducto.setLayoutParams(layaoutDes);
+                        fila.addView(txtClaveDelProducto);
+
+                        getTxtDescP = new TextView(getApplicationContext());
+                        getTxtDescP.setText("Descripcion del Producto");
+                        getTxtDescP.setGravity(Gravity.START);
+                        getTxtDescP.setBackgroundColor(Color.BLUE);
+                        getTxtDescP.setTextColor(Color.WHITE);
+                        getTxtDescP.setPadding(20, 20, 20, 20);
+                        getTxtDescP.setLayoutParams(layaoutDes);
+                        fila.addView(getTxtDescP);
+
+                        txtBackOrder = new TextView(getApplicationContext());
+                        txtBackOrder.setText("BackOrder");
+                        txtBackOrder.setGravity(Gravity.START);
+                        txtBackOrder.setBackgroundColor(Color.BLUE);
+                        txtBackOrder.setTextColor(Color.WHITE);
+                        txtBackOrder.setPadding(20, 20, 20, 20);
+                        txtBackOrder.setLayoutParams(layaoutDes);
+                        fila.addView(txtBackOrder);
 
 
-                    txtBackOrder = new TextView(getApplicationContext());
-                    txtBackOrder.setBackgroundColor(Color.BLACK);
-                    txtBackOrder.setGravity(Gravity.START);
-                    txtBackOrder.setText(listaBackOrders.get(i).getBackOrder());
-                    txtBackOrder.setPadding(20, 20, 20, 20);
-                    txtBackOrder.setTextColor(Color.WHITE);
-                    txtBackOrder.setLayoutParams(layaoutDes);
-                    fila.addView(txtBackOrder);
+                        txtFolio = new TextView(getApplicationContext());
+                        txtFolio.setText("Folio");
+                        txtFolio.setGravity(Gravity.START);
+                        txtFolio.setBackgroundColor(Color.BLUE);
+                        txtFolio.setTextColor(Color.WHITE);
+                        txtFolio.setPadding(20, 20, 20, 20);
+                        txtFolio.setLayoutParams(layaoutDes);
+                        fila.addView(txtFolio);
 
-                    txtFolio = new TextView(getApplicationContext());
-                    txtFolio.setBackgroundColor(Color.GRAY);
-                    txtFolio.setGravity(Gravity.START);
-                    txtFolio.setText(listaBackOrders.get(i).getFolio());
-                    txtFolio.setPadding(20, 20, 20, 20);
-                    txtFolio.setTextColor(Color.WHITE);
-                    txtFolio.setLayoutParams(layaoutDes);
-                    fila.addView(txtFolio);
+                        Existencia = new TextView(getApplicationContext());
+                        Existencia.setText("Existencia");
+                        Existencia.setGravity(Gravity.START);
+                        Existencia.setBackgroundColor(Color.BLUE);
+                        Existencia.setTextColor(Color.WHITE);
+                        Existencia.setPadding(20, 20, 20, 20);
+                        Existencia.setLayoutParams(layaoutDes);
+                        fila.addView(Existencia);
+
+                    } else {
+                        multicolor = !multicolor;
+                        txtClave = new TextView(getApplicationContext());
+                        txtClave.setGravity(Gravity.START);
+                        txtClave.setBackgroundColor(Color.BLACK);
+                        txtClave.setText(listaBackOrders.get(i).getClave());
+                        txtClave.setPadding(20, 20, 20, 20);
+                        txtClave.setTextColor(Color.WHITE);
+                        txtClave.setLayoutParams(layaoutDes);
+                        fila.addView(txtClave);
+
+                        txtFecha = new TextView(getApplicationContext());
+                        txtFecha.setBackgroundColor(Color.GRAY);
+                        txtFecha.setGravity(Gravity.START);
+                        txtFecha.setText(listaBackOrders.get(i).getFecha());
+                        txtFecha.setPadding(20, 20, 20, 20);
+                        txtFecha.setTextColor(Color.WHITE);
+                        txtFecha.setLayoutParams(layaoutDes);
+                        fila.addView(txtFecha);
+
+                        txtClaveDelProducto = new TextView(getApplicationContext());
+                        txtClaveDelProducto.setBackgroundColor(Color.BLACK);
+                        txtClaveDelProducto.setGravity(Gravity.START);
+                        txtClaveDelProducto.setText(listaBackOrders.get(i).getClaveProducto());
+                        txtClaveDelProducto.setPadding(20, 20, 20, 20);
+                        txtClaveDelProducto.setTextColor(Color.WHITE);
+                        txtClaveDelProducto.setLayoutParams(layaoutDes);
+                        fila.addView(txtClaveDelProducto);
+
+                        getTxtDescP = new TextView(getApplicationContext());
+                        getTxtDescP.setBackgroundColor(Color.GRAY);
+                        getTxtDescP.setGravity(Gravity.START);
+                        getTxtDescP.setText(listaBackOrders.get(i).getDescripcion());
+                        getTxtDescP.setPadding(20, 20, 20, 20);
+                        getTxtDescP.setTextColor(Color.WHITE);
+                        getTxtDescP.setLayoutParams(layaoutDes);
+                        fila.addView(getTxtDescP);
 
 
-                    Existencia = new TextView(getApplicationContext());
-                    Existencia.setBackgroundColor(Color.BLACK);
-                    Existencia.setGravity(Gravity.END);
-                    Existencia.setText(listaBackOrders.get(i).getExistencia());
-                    Existencia.setPadding(20, 20, 20, 20);
-                    Existencia.setTextColor(Color.WHITE);
-                    Existencia.setLayoutParams(layaoutDes);
-                    fila.addView(Existencia);
+                        txtBackOrder = new TextView(getApplicationContext());
+                        txtBackOrder.setBackgroundColor(Color.BLACK);
+                        txtBackOrder.setGravity(Gravity.START);
+                        txtBackOrder.setText(listaBackOrders.get(i).getBackOrder());
+                        txtBackOrder.setPadding(20, 20, 20, 20);
+                        txtBackOrder.setTextColor(Color.WHITE);
+                        txtBackOrder.setLayoutParams(layaoutDes);
+                        fila.addView(txtBackOrder);
 
-                    fila.setPadding(2, 2, 2, 2);
+                        txtFolio = new TextView(getApplicationContext());
+                        txtFolio.setBackgroundColor(Color.GRAY);
+                        txtFolio.setGravity(Gravity.START);
+                        txtFolio.setText(listaBackOrders.get(i).getFolio());
+                        txtFolio.setPadding(20, 20, 20, 20);
+                        txtFolio.setTextColor(Color.WHITE);
+                        txtFolio.setLayoutParams(layaoutDes);
+                        fila.addView(txtFolio);
+
+
+                        Existencia = new TextView(getApplicationContext());
+                        Existencia.setBackgroundColor(Color.BLACK);
+                        Existencia.setGravity(Gravity.END);
+                        Existencia.setText(listaBackOrders.get(i).getExistencia());
+                        Existencia.setPadding(20, 20, 20, 20);
+                        Existencia.setTextColor(Color.WHITE);
+                        Existencia.setLayoutParams(layaoutDes);
+                        fila.addView(Existencia);
+
+                        fila.setPadding(2, 2, 2, 2);
+
+                    }
+                    tableLayout.addView(fila);
 
                 }
-                tableLayout.addView(fila);
-
-            }
-            mDialog.dismiss();
-
-
+                mDialog.dismiss();
+            }//onPost
         }
 
 
-        private void conecta2() {
-            String SOAP_ACTION = "BackOrders";
-            String METHOD_NAME = "BackOrders";
-            String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-            String URL = "http://" + StrServer + "/WSk75items";
 
-
-            try {
-
-                SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-                xmlBackOrders soapEnvelope = new xmlBackOrders(SoapEnvelope.VER11);
-                soapEnvelope.xmlBackOrdersdatos(strusr, strpass, strscliente, FechaIncial, FechaFinal,strcodBra);
-                soapEnvelope.dotNet = true;
-                soapEnvelope.implicitTypes = true;
-                soapEnvelope.setOutputSoapObject(Request);
-                HttpTransportSE trasport = new HttpTransportSE(URL);
-                trasport.debug = true;
-                trasport.call(SOAP_ACTION, soapEnvelope);
-                SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-                int json=response.getPropertyCount();
-                for (int i = 0; i < json ; i++) {
-                    SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                    response0 = (SoapObject) response0.getProperty(i);
-                    //(response0.getPropertyAsString("k_code").equals("anyType{}")?" ":response0.getPropertyAsString("k_Hora"))
-                    listaBackOrders.add(new BackOrdersSANDG((response0.getPropertyAsString("k_Clave").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Clave")),
-                            (response0.getPropertyAsString("k_Fecha").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Fecha")),
-                            (response0.getPropertyAsString("k_ClavePro").equals("anyType{}") ? " " : response0.getPropertyAsString("k_ClavePro")),
-                            (response0.getPropertyAsString("k_Descr").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Descr")),
-                            (response0.getPropertyAsString("k_BackOrder").equals("anyType{}") ? " " : response0.getPropertyAsString("k_BackOrder")),
-                            (response0.getPropertyAsString("k_Folio").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Folio")),
-                            (response0.getPropertyAsString("k_Existencia").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Existencia"))));
-
-
-                }
-
-
-            } catch (SoapFault | XmlPullParserException soapFault) {
-                mDialog.dismiss();
-                mensaje = "Error:" + soapFault.getMessage();
-                soapFault.printStackTrace();
-            } catch (IOException e) {
-                mDialog.dismiss();
-                mensaje = "No se encontro servidor";
-                e.printStackTrace();
-            } catch (Exception ex) {
-                mDialog.dismiss();
-                mensaje = "Error:" + ex.getMessage();
-            }
-        }
 
     }
 
-}

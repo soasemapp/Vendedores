@@ -21,9 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.kepler201.Adapter.AdaptadorConsulCoti;
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.ConsulCotiSANDG;
+import com.example.kepler201.SetterandGetter.SetGetListModelo2;
 import com.example.kepler201.XMLS.xmlConsulCoti;
+import com.example.kepler201.activities.BusquedaActivity;
+import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -51,7 +56,7 @@ public class ActivityConsulCoti extends AppCompatActivity {
 
         MyToolbar.show(this, "Cotizaciones", true);
         mDialog = new SpotsDialog.Builder().setContext(ActivityConsulCoti.this).setMessage("Espere un momento...").build();
-
+        mDialog.setCancelable(false);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 
         strusr = preference.getString("user", "null");
@@ -135,7 +140,72 @@ public class ActivityConsulCoti extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conecta();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "sucursal="+strcodBra+"&vendedor="+strcode;
+            String url = "http://" + StrServer + "/cotizacionesapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+
+
+                    JSONObject jitems, Numero;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    if(jsonObject.length()!=0) {
+                    jitems = jsonObject.getJSONObject("Item");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Item");
+                            Numero = jitems.getJSONObject("" + i + "");
+
+                            listaConsulCoti.add(new ConsulCotiSANDG((Numero.getString("k_Sucursal").equals("") ? "" : Numero.getString("k_Sucursal")),
+                                    (Numero.getString("k_Folio").equals("") ? "" : Numero.getString("k_Folio")),
+                                    (Numero.getString("k_Fecha").equals("") ? "" : Numero.getString("k_Fecha")),
+                                    (Numero.getString("k_cCliente").equals("") ? "" : Numero.getString("k_cCliente")),
+                                    (Numero.getString("k_Nombre").equals("") ? "" : Numero.getString("k_Nombre")),
+                                    (Numero.getString("k_Importe").equals("") ? "" : Numero.getString("k_Importe")),
+                                    (Numero.getString("k_Piezas").equals("") ? "" : Numero.getString("k_Piezas")),
+                                    (Numero.getString("k_nomsucursal").equals("") ? "" : Numero.getString("k_nomsucursal")),
+                                    (Numero.getString("k_comentario").equals("") ? "" : Numero.getString("k_comentario"))));
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConsulCoti.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConsulCoti.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
@@ -155,6 +225,7 @@ public class ActivityConsulCoti extends AppCompatActivity {
                 AlertDialog titulo = alerta.create();
                 titulo.setTitle("No hay Cotizaciones");
                 titulo.show();
+                mDialog.dismiss();
             } else {
                 AdaptadorConsulCoti adapter = new AdaptadorConsulCoti(listaConsulCoti);
                 recyclerConsulCoti.setAdapter(adapter);
@@ -177,58 +248,7 @@ public class ActivityConsulCoti extends AppCompatActivity {
         startActivity(Coti);
     }
 
-    private void conecta() {
-        String SOAP_ACTION = "ConsulCot";
-        String METHOD_NAME = "ConsulCot";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
 
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlConsulCoti soapEnvelope = new xmlConsulCoti(SoapEnvelope.VER11);
-            soapEnvelope.xmlConsulCoti(strusr, strpass, strcodBra, strcode);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                listaConsulCoti.add(new ConsulCotiSANDG((response0.getPropertyAsString("k_Sucursal").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Sucursal")),
-                        (response0.getPropertyAsString("k_Folio").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Folio")),
-                        (response0.getPropertyAsString("k_Fecha").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Fecha")),
-                        (response0.getPropertyAsString("k_cCliente").equals("anyType{}") ? " " : response0.getPropertyAsString("k_cCliente")),
-                        (response0.getPropertyAsString("k_Nombre").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Nombre")),
-                        (response0.getPropertyAsString("k_Importe").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Importe")),
-                        (response0.getPropertyAsString("k_Piezas").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Piezas")),
-                        (response0.getPropertyAsString("k_nomsucursal").equals("anyType{}") ? " " : response0.getPropertyAsString("k_nomsucursal")),
-                        (response0.getPropertyAsString("k_comentario").equals("anyType{}") ? " " : response0.getPropertyAsString("k_comentario"))));
-
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
 
 
 

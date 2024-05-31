@@ -20,6 +20,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,8 +33,11 @@ import com.example.kepler201.SetterandGetter.ConsulFacfturasSANDG;
 import com.example.kepler201.SetterandGetter.SearachClientSANDG;
 import com.example.kepler201.XMLS.xmlConsulFacturas;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
+import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -61,6 +65,8 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
     String ClaveFolDialog = "";
     String ClaveNumDialog = "";
 
+    String Cliente = "";
+
 
     String Clave, FFactura, FechaFact, Plazo, FechaVen, Saldo;
 
@@ -85,10 +91,11 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
 
         MyToolbar.show(this, "Consulta-Facturas", true);
 
-        recyclerConsulta =  findViewById(R.id.lisFacturas);
+        recyclerConsulta = findViewById(R.id.lisFacturas);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 
         mDialog = new SpotsDialog.Builder().setContext(ActivityConsultaFaturas.this).setMessage("Espere un momento...").build();
+        mDialog.setCancelable(false);
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");
         strname = preference.getString("name", "null");
@@ -101,14 +108,14 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
         StrServer = preference.getString("Server", "null");
 
 
-        spinerClie =  findViewById(R.id.spinnerClie);
-        fechaEn =  findViewById(R.id.fechaendtrada);
-        fechaSa =  findViewById(R.id.fechasalida);
-        Button btnsearch =  findViewById(R.id.btnSearch);
-        ConsultaFacturas =  findViewById(R.id.SearchProducto);
-        BackOreders =  findViewById(R.id.BackOrders);
+        spinerClie = findViewById(R.id.spinnerClie);
+        fechaEn = findViewById(R.id.fechaendtrada);
+        fechaSa = findViewById(R.id.fechasalida);
+        Button btnsearch = findViewById(R.id.btnSearch);
+        ConsultaFacturas = findViewById(R.id.SearchProducto);
+        BackOreders = findViewById(R.id.BackOrders);
         FacturasVencidas = findViewById(R.id.FacturasVencidas);
-        Cliente0Ventas =  findViewById(R.id.Cliente0Ventas);
+        Cliente0Ventas = findViewById(R.id.Cliente0Ventas);
 
 
         ConsultaFacturas.setOnClickListener(new View.OnClickListener() {
@@ -163,8 +170,7 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
             }
         });
 
-        ActivityConsultaFaturas.AsyncCallWS task = new ActivityConsultaFaturas.AsyncCallWS();
-        task.execute();
+        Listaclientes();
 
 
         Calendar calendar = Calendar.getInstance();
@@ -207,42 +213,37 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
             public void onClick(View view) {
 
 
+                listasearch = new ArrayList<>();
+                recyclerConsulta.setLayoutManager(new LinearLayoutManager(ActivityConsultaFaturas.this));
+                FechaIncial = fechaEn.getText().toString();
+                FechaFinal = fechaSa.getText().toString();
+                for (int i = 0; i < search2.length; i++) {
+                    int posi = spinerClie.getSelectedItemPosition();
+                    if (posi == i) {
+                        strscliente = search2[i];
+                        break;
+                    }
+                }
 
+                if (!FechaIncial.isEmpty() && !FechaFinal.isEmpty() && spinerClie.getSelectedItemPosition() != 0) {
 
-                    listasearch = new ArrayList<>();
-                    recyclerConsulta.setLayoutManager(new LinearLayoutManager(ActivityConsultaFaturas.this));
-                    FechaIncial = fechaEn.getText().toString();
-                    FechaFinal = fechaSa.getText().toString();
-                    for (int i = 0; i < search2.length; i++) {
-                        int posi = spinerClie.getSelectedItemPosition();
-                        if (posi == i) {
-                            strscliente = search2[i];
-                            break;
+                    ListadeFacturas();
+                } else if (!FechaIncial.isEmpty() && !FechaFinal.isEmpty() && spinerClie.getSelectedItemPosition() == 0) {
+                    strscliente = "";
+                    ListadeFacturas();
+                } else {
+                    AlertDialog.Builder alerta = new AlertDialog.Builder(ActivityConsultaFaturas.this);
+                    alerta.setMessage("Ingrese datos faltantes").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
                         }
-                    }
+                    });
 
-                    if (!FechaIncial.isEmpty() && !FechaFinal.isEmpty() && spinerClie.getSelectedItemPosition() != 0) {
-
-                        ActivityConsultaFaturas.AsyncCallWS2 task2 = new ActivityConsultaFaturas.AsyncCallWS2();
-                        task2.execute();
-                    } else if (!FechaIncial.isEmpty() && !FechaFinal.isEmpty() && spinerClie.getSelectedItemPosition() == 0) {
-                        strscliente = "";
-                        ActivityConsultaFaturas.AsyncCallWS2 task2 = new ActivityConsultaFaturas.AsyncCallWS2();
-                        task2.execute();
-                    } else {
-                        AlertDialog.Builder alerta = new AlertDialog.Builder(ActivityConsultaFaturas.this);
-                        alerta.setMessage("Ingrese datos faltantes").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-
-                        AlertDialog titulo = alerta.create();
-                        titulo.setTitle("¡ERROR!");
-                        titulo.show();
-                    }
-
+                    AlertDialog titulo = alerta.create();
+                    titulo.setTitle("¡ERROR!");
+                    titulo.show();
+                }
 
 
             }
@@ -270,104 +271,159 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
     }
 
 
+    public void Listaclientes() {
+        new ActivityConsultaFaturas.Cliente().execute();
+    }
 
 
-    @SuppressWarnings("deprecation")
-    @SuppressLint("StaticFieldLeak")
-    private class AsyncCallWS extends AsyncTask<Void, Void, Void> {
-
+    private class Cliente extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
-        }
+            super.onPreExecute();
+            mDialog.show();
+        }//onPreExecute
 
         @Override
-        protected Void doInBackground(Void... params) {
-            conectar();
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "vendedor=" + strcode;
+            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+                    if(json.length()!=0) {
+
+                        JSONObject jitems, Numero, Clave, Nombre;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("Clientes");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Clientes");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            listaclientG.add(new SearachClientSANDG(
+                                    Numero.getString("Clave"),
+                                    Numero.getString("Nombre")));
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConsultaFaturas.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConsultaFaturas.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
-        }
 
-        @RequiresApi(api = Build.VERSION_CODES.P)
+        }//doInBackground
+
         @Override
-        protected void onPostExecute(Void result) {
-
-
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
+            mDialog.dismiss();
             String[] opciones = new String[listaclientG.size() + 1];
-            opciones[0] = "Todos los clientes";
-            search2[0] = "Todos los clientes";
+            opciones[0] = "Cliente";
+            search2[0] = "Cliente";
             for (int i = 1; i <= listaclientG.size(); i++) {
                 opciones[i] = listaclientG.get(i - 1).getUserCliente() + ":" + listaclientG.get(i - 1).getNombreCliente();
                 search2[i] = listaclientG.get(i - 1).getUserCliente();
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, opciones);
             spinerClie.setAdapter(adapter);
-        }
-
-
+        }//onPost
     }
 
 
-    private void conectar() {
-        String SOAP_ACTION = "SearchClient";
-        String METHOD_NAME = "SearchClient";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlSearchClientesG soapEnvelope = new xmlSearchClientesG(SoapEnvelope.VER11);
-            soapEnvelope.xmlSearchG(strusr, strpass, strcode);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                listaclientG.add(new SearachClientSANDG((response0.getPropertyAsString("k_dscr").equals("anyType{}") ? "" : response0.getPropertyAsString("k_dscr")), (response0.getPropertyAsString("k_line").equals("anyType{}") ? "" : response0.getPropertyAsString("k_line"))));
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
+    public void ListadeFacturas() {
+        new ActivityConsultaFaturas.Facturas().execute();
     }
 
-    @SuppressWarnings("deprecation")
-    @SuppressLint("StaticFieldLeak")
-    private class AsyncCallWS2 extends AsyncTask<Void, Void, Void> {
 
+    private class Facturas extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
             mDialog.show();
-        }
+        }//onPreExecute
 
         @Override
-        protected Void doInBackground(Void... params) {
-            conecta2();
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "vendedor=" + strcode + "&cliente=" + strscliente + "&fechainicial=" + FechaIncial + "&fechafinal=" + FechaFinal;
+            String url = "http://" + StrServer + "/consultafacturasapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+
+                    JSONObject jitems, Numero;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+
+                    if(jsonObject.length()>0){
+                        jitems = jsonObject.getJSONObject("Item");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Item");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            listasearch.add(new ConsulFacfturasSANDG(Numero.getString("clave"),
+                                    Numero.getString("nombre"),
+                                    Numero.getString("folio"),
+                                    Numero.getString("fechaFa"),
+                                    Numero.getString("plazo"),
+                                    Numero.getString("fechaVenc"),
+                                    Numero.getString("saldo"),
+                                    Numero.getString("monto"),
+                                    Numero.getString("numSu"),
+                                    Numero.getString("nomSu")));
+
+                        }
+                    }else{
+
+                    }
+
+                } catch (final JSONException e) {
+                }//catch JSON EXCEPTION
+            } else {
+               }//else
             return null;
-        }
 
-        @RequiresApi(api = Build.VERSION_CODES.P)
+        }//doInBackground
+
         @Override
-        protected void onPostExecute(Void result) {
-
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
 
             if (listasearch.size() > 0) {
                 AdaptadorConsulFacturas adapter = new AdaptadorConsulFacturas(listasearch);
@@ -386,12 +442,9 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
                 AlertDialog titulo = alerta.create();
                 titulo.setTitle("No existen Facturas");
                 titulo.show();
-
-            }
-
+            }//onPost
         }
     }
-
 
     public void detalleFactura(View view) {
         Clave = "";
@@ -402,69 +455,13 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
         Saldo = "";
 
         int position = recyclerConsulta.getChildAdapterPosition(Objects.requireNonNull(recyclerConsulta.findContainingItemView(view)));
-
-
         ClaveFolDialog = listasearch.get(position).getFoliodelDocumento();
         ClaveNumDialog = listasearch.get(position).getNumSuc();
-
+        Cliente = listasearch.get(position).getCliente();
         Intent FactutaDetall = new Intent(ActivityConsultaFaturas.this, ActivityFactuDetall.class);
         FactutaDetall.putExtra("Folio", ClaveFolDialog);
         FactutaDetall.putExtra("NumSucu", ClaveNumDialog);
+        FactutaDetall.putExtra("Cliente", Cliente);
         startActivity(FactutaDetall);
     }
-
-
-    private void conecta2() {
-        String SOAP_ACTION = "ConsulFact";
-        String METHOD_NAME = "ConsulFact";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlConsulFacturas soapEnvelope = new xmlConsulFacturas(SoapEnvelope.VER11);
-            soapEnvelope.xmlConsulFactur(strusr, strpass, strcode, strscliente, FechaIncial, FechaFinal);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            int json=response.getPropertyCount();
-            for (int i = 0; i < json; i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                listasearch.add(new ConsulFacfturasSANDG((response0.getPropertyAsString("k_Clave").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Clave")),
-                        (response0.getPropertyAsString("k_Nombre").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Nombre")),
-                        (response0.getPropertyAsString("k_Folio").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Folio")),
-                        (response0.getPropertyAsString("k_FechaFa").equals("anyType{}") ? " " : response0.getPropertyAsString("k_FechaFa")),
-                        (response0.getPropertyAsString("k_Plazo").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Plazo")),
-                        (response0.getPropertyAsString("k_FechaVenc").equals("anyType{}") ? " " : response0.getPropertyAsString("k_FechaVenc")),
-                        (response0.getPropertyAsString("k_Saldo").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Saldo")),
-                        (response0.getPropertyAsString("k_Monto").equals("anyType{}") ? " " : response0.getPropertyAsString("k_Monto")),
-                        (response0.getPropertyAsString("k_NumSu").equals("anyType{}") ? " " : response0.getPropertyAsString("k_NumSu")),
-                        (response0.getPropertyAsString("k_NomSu").equals("anyType{}") ? " " : response0.getPropertyAsString("k_NomSu"))));
-
-
-            }
-
-
-        } catch (SoapFault | XmlPullParserException soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
 }

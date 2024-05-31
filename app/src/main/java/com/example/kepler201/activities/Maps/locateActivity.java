@@ -23,14 +23,20 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.Envio2SANDG;
+import com.example.kepler201.SetterandGetter.RegistroPagosSANDG;
 import com.example.kepler201.SetterandGetter.SearachClientSANDG;
 import com.example.kepler201.XMLS.xmlDirEnvio;
 import com.example.kepler201.XMLS.xmlDirEnvioMapas;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.activities.Pagos.ActivityConsultaPagos;
+import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
+import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -60,12 +66,12 @@ public class locateActivity extends AppCompatActivity {
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
     AutoCompleteTextView /*spinerClie, spinnerDireccion,*/spinnerOpciones;
-    TextInputLayout viewDireccion,viewOpciones;
+    TextInputLayout viewDireccion, viewOpciones;
 
     String mensaje = "";
     String strClaveCli;
 
-    int positionClient,positionDireccion;
+    int positionClient, positionDireccion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +80,7 @@ public class locateActivity extends AppCompatActivity {
         MyToolbar.show(this, "", true);
 
         mDialog = new SpotsDialog.Builder().setContext(locateActivity.this).setMessage("Espere un momento...").build();
-
+        mDialog.setCancelable(false);
         preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
         editor = preference.edit();
 
@@ -107,7 +113,7 @@ public class locateActivity extends AppCompatActivity {
         ButtonDireccion.setEnabled(false);
         AsyncClientes task = new AsyncClientes();
         task.execute();
-        String[] btn_Opcion = {"Mi Localizacion","Cambiar Localizacion","Localizacion Cliente","Trazar Ruta"};
+        String[] btn_Opcion = {"Mi Localizacion", "Cambiar Localizacion", "Localizacion Cliente", "Trazar Ruta"};
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, btn_Opcion);
@@ -137,14 +143,14 @@ public class locateActivity extends AppCompatActivity {
         spinnerOpciones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i==0){
+                if (i == 0) {
                     String NombreCliente = listaclientG.get(positionClient).getNombreCliente();
-                    String claveCliente  = listaclientG.get(positionClient).getUserCliente();
-                    String Direccion =listasearch5.get(positionDireccion).getCalle()+"\n"+listasearch5.get(positionDireccion).getColonia()+"\n"+listasearch5.get(positionDireccion).getNumero()+"\n"+listasearch5.get(positionDireccion).getPoblacion();
+                    String claveCliente = listaclientG.get(positionClient).getUserCliente();
+                    String Direccion = listasearch5.get(positionDireccion).getDireccion();
                     String idDireccion = listasearch5.get(positionDireccion).getId();
                     String DirLatitud = listasearch5.get(positionDireccion).getLatitud();
-                    String DirLongitud =listasearch5.get(positionDireccion).getLongitud();
-                    Intent  vendedoresMaps = new Intent(locateActivity.this, MapsActivity.class);
+                    String DirLongitud = listasearch5.get(positionDireccion).getLongitud();
+                    Intent vendedoresMaps = new Intent(locateActivity.this, MapsActivity.class);
                     vendedoresMaps.putExtra("val", 0);
                     vendedoresMaps.putExtra("NomCliente", NombreCliente);
                     vendedoresMaps.putExtra("NomCliente", NombreCliente);
@@ -156,20 +162,17 @@ public class locateActivity extends AppCompatActivity {
                     startActivity(vendedoresMaps);
 
 
-
-
-
-                }else if (i==1){
+                } else if (i == 1) {
 
                     String NombreCliente = listaclientG.get(positionClient).getNombreCliente();
-                    String claveCliente  = listaclientG.get(positionClient).getUserCliente();
-                    String Direccion =listasearch5.get(positionDireccion).getCalle()+"\n"+listasearch5.get(positionDireccion).getColonia()+"\n"+listasearch5.get(positionDireccion).getNumero()+"\n"+listasearch5.get(positionDireccion).getPoblacion();
+                    String claveCliente = listaclientG.get(positionClient).getUserCliente();
+                    String Direccion = listasearch5.get(positionDireccion).getDireccion();
                     String idDireccion = listasearch5.get(positionDireccion).getId();
                     String DirLatitud = listasearch5.get(positionDireccion).getLatitud();
-                    String DirLongitud =listasearch5.get(positionDireccion).getLongitud();
+                    String DirLongitud = listasearch5.get(positionDireccion).getLongitud();
 
 
-                    Intent  vendedoresMaps = new Intent(locateActivity.this, MapsActivity.class);
+                    Intent vendedoresMaps = new Intent(locateActivity.this, MapsActivity.class);
                     vendedoresMaps.putExtra("val", 1);
                     vendedoresMaps.putExtra("NomCliente", NombreCliente);
                     vendedoresMaps.putExtra("NomCliente", NombreCliente);
@@ -180,17 +183,17 @@ public class locateActivity extends AppCompatActivity {
                     vendedoresMaps.putExtra("DirLongitud", DirLongitud);
 
                     startActivity(vendedoresMaps);
-                }else if (i==2){
+                } else if (i == 2) {
 
                     String NombreCliente = listaclientG.get(positionClient).getNombreCliente();
-                    String claveCliente  = listaclientG.get(positionClient).getUserCliente();
-                    String Direccion =listasearch5.get(positionDireccion).getCalle()+"\n"+listasearch5.get(positionDireccion).getColonia()+"\n"+listasearch5.get(positionDireccion).getNumero()+"\n"+listasearch5.get(positionDireccion).getPoblacion();
+                    String claveCliente = listaclientG.get(positionClient).getUserCliente();
+                    String Direccion = listasearch5.get(positionDireccion).getDireccion();
                     String idDireccion = listasearch5.get(positionDireccion).getId();
                     String DirLatitud = listasearch5.get(positionDireccion).getLatitud();
-                    String DirLongitud =listasearch5.get(positionDireccion).getLongitud();
+                    String DirLongitud = listasearch5.get(positionDireccion).getLongitud();
 
 
-                    if(Double.valueOf(DirLatitud)==0 && Double.valueOf(DirLongitud)==0){
+                    if (Double.valueOf(DirLatitud) == 0 && Double.valueOf(DirLongitud) == 0) {
                         AlertDialog.Builder alerta = new AlertDialog.Builder(locateActivity.this);
                         alerta.setMessage("La direccion de este cliente no a sido dada de alta").setIcon(R.drawable.icons8_error_100).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
@@ -204,9 +207,8 @@ public class locateActivity extends AppCompatActivity {
                         titulo.show();
 
 
-
-                    }else{
-                        Intent  vendedoresMaps = new Intent(locateActivity.this, MapsActivity.class);
+                    } else {
+                        Intent vendedoresMaps = new Intent(locateActivity.this, MapsActivity.class);
                         vendedoresMaps.putExtra("val", 2);
                         vendedoresMaps.putExtra("NomCliente", NombreCliente);
                         vendedoresMaps.putExtra("NomCliente", NombreCliente);
@@ -219,19 +221,18 @@ public class locateActivity extends AppCompatActivity {
                     }
 
 
-
-                }else if (i==3){
+                } else if (i == 3) {
 
 
                     String NombreCliente = listaclientG.get(positionClient).getNombreCliente();
-                    String claveCliente  = listaclientG.get(positionClient).getUserCliente();
-                    String Direccion =listasearch5.get(positionDireccion).getCalle()+"\n"+listasearch5.get(positionDireccion).getColonia()+"\n"+listasearch5.get(positionDireccion).getNumero()+"\n"+listasearch5.get(positionDireccion).getPoblacion();
+                    String claveCliente = listaclientG.get(positionClient).getUserCliente();
+                    String Direccion = listasearch5.get(positionDireccion).getDireccion();
                     String idDireccion = listasearch5.get(positionDireccion).getId();
                     String DirLatitud = listasearch5.get(positionDireccion).getLatitud();
-                    String DirLongitud =listasearch5.get(positionDireccion).getLongitud();
+                    String DirLongitud = listasearch5.get(positionDireccion).getLongitud();
 
 
-                    if(Double.valueOf(DirLatitud)==0 && Double.valueOf(DirLongitud)==0){
+                    if (Double.valueOf(DirLatitud) == 0 && Double.valueOf(DirLongitud) == 0) {
                         AlertDialog.Builder alerta = new AlertDialog.Builder(locateActivity.this);
                         alerta.setMessage("La direccion de este cliente no a sido dada de alta").setIcon(R.drawable.icons8_error_100).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
@@ -245,9 +246,8 @@ public class locateActivity extends AppCompatActivity {
                         titulo.show();
 
 
-
-                    }else{
-                        Intent  vendedoresMaps = new Intent(locateActivity.this, MapsActivity.class);
+                    } else {
+                        Intent vendedoresMaps = new Intent(locateActivity.this, MapsActivity.class);
                         vendedoresMaps.putExtra("val", 3);
                         vendedoresMaps.putExtra("NomCliente", NombreCliente);
                         vendedoresMaps.putExtra("NomCliente", NombreCliente);
@@ -281,7 +281,9 @@ public class locateActivity extends AppCompatActivity {
                 builder.setItems(opciones, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        positionClient =which;
+                        ButtonDireccion.setText("SELECCIONA UNA DIRECCION");
+                        listasearch5.clear();
+                        positionClient = which;
                         strClaveCli = listaclientG.get(which).getUserCliente();
                         ButtonCliente.setText(listaclientG.get(which).getNombreCliente());
                         AsyncCallWS6 task = new AsyncCallWS6();
@@ -300,7 +302,7 @@ public class locateActivity extends AppCompatActivity {
                 String[] opciones = new String[listasearch5.size()];
 
                 for (int i = 0; i < listasearch5.size(); i++) {
-                    opciones[i] = listasearch5.get(i).getCalle() + "," + listasearch5.get(i).getColonia()+","+listasearch5.get(i).getNumero()+","+listasearch5.get(i).getPoblacion();
+                    opciones[i] = listasearch5.get(i).getDireccion();
                 }
 
 
@@ -312,8 +314,8 @@ public class locateActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        positionDireccion =which;
-                        ButtonDireccion.setText(listasearch5.get(which).getCalle()+","+listasearch5.get(which).getColonia()+","+listasearch5.get(which).getPoblacion());
+                        positionDireccion = which;
+                        ButtonDireccion.setText(listasearch5.get(which).getDireccion());
                     }
                 });
 // create and show the alert dialog
@@ -331,8 +333,6 @@ public class locateActivity extends AppCompatActivity {
     }
 
 
-
-
     private class AsyncClientes extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -342,7 +342,65 @@ public class locateActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Clientes();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "vendedor=" + strcode;
+            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+                    if(json.length()!=0) {
+
+                        JSONObject jitems, Numero, Clave, Nombre;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("Clientes");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Clientes");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            listaclientG.add(new SearachClientSANDG(
+                                    Numero.getString("Clave"),
+                                    Numero.getString("Nombre")));
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(locateActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(locateActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
             return null;
         }
 
@@ -362,51 +420,6 @@ public class locateActivity extends AppCompatActivity {
 
     }
 
-    private void Clientes() {
-        String SOAP_ACTION = "SearchClient";
-        String METHOD_NAME = "SearchClient";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
-
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlSearchClientesG soapEnvelope = new xmlSearchClientesG(SoapEnvelope.VER11);
-            soapEnvelope.xmlSearchG(strusr, strpass, strcode);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            for (int i = 0; i < response.getPropertyCount(); i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-                listaclientG.add(new SearachClientSANDG(response0.getPropertyAsString("k_dscr"), response0.getPropertyAsString("k_line")));
-
-
-            }
-
-
-        } catch (SoapFault soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (XmlPullParserException e) {
-            mDialog.dismiss();
-            mensaje = "Error:" + e.getMessage();
-            e.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
 
     private class AsyncCallWS6 extends AsyncTask<Void, Void, Void> {
 
@@ -417,7 +430,69 @@ public class locateActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            conectar6();
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + strClaveCli;
+            String url = "http://" + StrServer + "/enviomapaapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+                    if(json.length()!=0) {
+                        JSONObject jitems, Numero;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("Dir");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Dir");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            listasearch5.add(new Envio2SANDG((Numero.getString("k_id").equals("") ? "" : Numero.getString("k_id")),
+                                    (Numero.getString("k_direcciones").equals("") ? "" : Numero.getString("k_direcciones")),
+                                    (Numero.getString("k_latitud").equals("") ? "0" : Numero.getString("k_latitud")),
+                                    (Numero.getString("k_longitud").equals("") ? "0" : Numero.getString("k_longitud"))));
+
+
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(locateActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(locateActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
+
 
             return null;
         }
@@ -428,21 +503,19 @@ public class locateActivity extends AppCompatActivity {
             String[] opciones = new String[listasearch5.size()];
 
             for (int i = 0; i < listasearch5.size(); i++) {
-                opciones[i] = "Calle:"+listasearch5.get(i).getCalle() + ",Poblacion:" + listasearch5.get(i).getPoblacion();
+                opciones[i] = listasearch5.get(i).getDireccion();
                 search3[i] = listasearch5.get(i).getId();
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, opciones);
 
 
-
-
             if (listasearch5.size() > 0) {
-           //     viewDireccion.setEnabled(true);
+                //     viewDireccion.setEnabled(true);
                 viewOpciones.setEnabled(true);
                 ButtonDireccion.setEnabled(true);
 
 
-                     } else {
+            } else {
 
                 AlertDialog.Builder alerta = new AlertDialog.Builder(locateActivity.this);
                 alerta.setMessage("No se encontro una direccion del cliente").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
@@ -466,65 +539,7 @@ public class locateActivity extends AppCompatActivity {
         }
 
     }
-
-
-    private void conectar6() {
-        String SOAP_ACTION = "EnvioMapa";
-        String METHOD_NAME = "EnvioMapa";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
-
-        try {
-
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            xmlDirEnvioMapas soapEnvelope = new xmlDirEnvioMapas(SoapEnvelope.VER11);
-            soapEnvelope.xmlDirEnvioMapas(strusr, strpass, strClaveCli);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.implicitTypes = true;
-            soapEnvelope.setOutputSoapObject(Request);
-            HttpTransportSE trasport = new HttpTransportSE(URL);
-            trasport.debug = true;
-            trasport.call(SOAP_ACTION, soapEnvelope);
-
-            SoapObject response = (SoapObject) soapEnvelope.bodyIn;
-            for (int i = 0; i < response.getPropertyCount(); i++) {
-                SoapObject response0 = (SoapObject) soapEnvelope.bodyIn;
-                response0 = (SoapObject) response0.getProperty(i);
-
-                listasearch5.add(new Envio2SANDG((response0.getPropertyAsString("k_id").equals("anyType{}") ? "" : response0.getPropertyAsString("k_id")),
-                        (response0.getPropertyAsString("k_CalleyNumero").equals("anyType{}") ? "" : response0.getPropertyAsString("k_CalleyNumero")),
-                        (response0.getPropertyAsString("k_ColoClinte").equals("anyType{}") ? "" : response0.getPropertyAsString("k_ColoClinte")),
-                        (response0.getPropertyAsString("k_Poblacion").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Poblacion")),
-                        (response0.getPropertyAsString("k_Numero").equals("anyType{}") ? "" : response0.getPropertyAsString("k_Numero")),
-                        (response0.getPropertyAsString("k_latitud").equals("anyType{}") ? "" : response0.getPropertyAsString("k_latitud")),
-                        (response0.getPropertyAsString("k_longitud").equals("anyType{}") ? "" : response0.getPropertyAsString("k_longitud"))));
-
-
-
-            }
-
-
-        } catch (SoapFault soapFault) {
-            mDialog.dismiss();
-            mensaje = "Error:" + soapFault.getMessage();
-            soapFault.printStackTrace();
-        } catch (XmlPullParserException e) {
-            mDialog.dismiss();
-            mensaje = "Error:" + e.getMessage();
-            e.printStackTrace();
-        } catch (IOException e) {
-            mDialog.dismiss();
-            mensaje = "No se encontro servidor";
-            e.printStackTrace();
-        } catch (Exception ex) {
-            mDialog.dismiss();
-            mensaje = "Error:" + ex.getMessage();
-        }
-    }
-
-
-
-
 }
+
 
 
