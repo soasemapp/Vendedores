@@ -58,8 +58,8 @@ public class ActivityAgendaRegister extends AppCompatActivity {
     private EditText fecha, edcomentario;
     String strusr, strpass, strname, strlname, strtype, strbran, strma, StrServer, strcodBra, strcode, Strdate = "", Strdatetoday = "";
     String mensaje, stractividad = "", strcomentario = "";
-    RadioButton Todoyes, Todono,Eagleyes, Eagleno, TrackOneyes, TrackOneno, Rodatechyes, Rodatechno, Partechyes, Partechno, TGyes, TGno;
-    String Eagle = "N", Trackone = "N", Rodatech = "N", Partech = "N", TG = "N";
+    RadioButton Todoyes, Todono,Eagleyes, Eagleno, TrackOneyes, TrackOneno, Rodatechyes, Rodatechno, Partechyes, Partechno, TGyes, TGno,Vazsi,Vazno;
+    String Eagle = "N", Trackone = "N", Rodatech = "N", Partech = "N", TG = "N",Vazlo = "N";
     TextView etiqueta;
     ArrayList<SearachClientSANDG> listaclientG = new ArrayList<>();
     ArrayList<SearachClientSANDG> listaActividades = new ArrayList<>();
@@ -88,6 +88,8 @@ public class ActivityAgendaRegister extends AppCompatActivity {
         Partechno = findViewById(R.id.partechno);
         TGyes = findViewById(R.id.tgyes);
         TGno = findViewById(R.id.tgno);
+        Vazsi=findViewById(R.id.vazsi);
+        Vazno=findViewById(R.id.vazno);
         fecha = findViewById(R.id.fecha);
         edcomentario = findViewById(R.id.idcomentario);
         etiqueta = findViewById(R.id.txtetiqueta);
@@ -127,12 +129,14 @@ public class ActivityAgendaRegister extends AppCompatActivity {
                 Rodatechno.setChecked(false);
                 Partechno.setChecked(false);
                 TGno.setChecked(false);
+                Vazno.setChecked(false);
 
                 Eagleyes.setChecked(true);
                 TrackOneyes.setChecked(true);
                 Rodatechyes.setChecked(true);
                 Partechyes.setChecked(true);
                 TGyes.setChecked(true);
+                Vazsi.setChecked(true);
             }
         });
         Todono.setOnClickListener(new View.OnClickListener() {
@@ -143,12 +147,14 @@ public class ActivityAgendaRegister extends AppCompatActivity {
                 Rodatechyes.setChecked(false);
                 Partechyes.setChecked(false);
                 TGyes.setChecked(false);
+                Vazsi.setChecked(false);
 
                 Eagleno.setChecked(true);
                 TrackOneno.setChecked(true);
                 Rodatechno.setChecked(true);
                 Partechno.setChecked(true);
                 TGno.setChecked(true);
+                Vazno.setChecked(true);
             }
         });
 
@@ -495,6 +501,12 @@ public class ActivityAgendaRegister extends AppCompatActivity {
             } else {
                 TG = "N";
             }
+
+            if (Vazsi.isChecked()) {
+                Vazlo = "S";
+            } else {
+                Vazlo = "N";
+            }
             strcomentario = edcomentario.getText().toString();
             if (!strsActividades.equals("")) {
                 if (!strscliente.equals("")) {
@@ -544,7 +556,7 @@ public class ActivityAgendaRegister extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
-            String parametros = "fecha="+Strdatetoday+"&vendedor="+strcode+"&cliente="+strscliente+"&actividad="+strsActividades+"&parteh="+Partech+"&eagle="+Eagle+"&rodatech="+Rodatech+"&tg="+TG+"&trackone="+Trackone+"&fechavis="+Strdate+"&comentario="+strcomentario+"&agendo="+strusr;
+            String parametros = "fecha="+Strdatetoday+"&vendedor="+strcode+"&cliente="+strscliente+"&actividad="+strsActividades+"&parteh="+Partech+"&eagle="+Eagle+"&rodatech="+Rodatech+"&tg="+TG+"&trackone="+Trackone+"&vazlo="+Vazlo+"&fechavis="+Strdate+"&comentario="+strcomentario+"&agendo="+strusr;
             String url = "http://" + StrServer + "/agendaregisterapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
