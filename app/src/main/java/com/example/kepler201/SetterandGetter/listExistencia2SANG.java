@@ -9,8 +9,10 @@ public class listExistencia2SANG {
     String  Descr;
     String CodBarras;
     String Precio;
+    String FotosTipo;
+    String FotosLinea;
 
-    public listExistencia2SANG(String claveSu, String nombre, String existencia, String claveProdu, String claveCompetecia, String descr, String codBarras, String precio) {
+    public listExistencia2SANG(String claveSu, String nombre, String existencia, String claveProdu, String claveCompetecia, String descr, String codBarras, String precio, String fotosTipo, String fotosLinea) {
         ClaveSu = claveSu;
         Nombre = nombre;
         Existencia = existencia;
@@ -19,8 +21,9 @@ public class listExistencia2SANG {
         Descr = descr;
         CodBarras = codBarras;
         Precio = precio;
+        FotosTipo = fotosTipo;
+        FotosLinea = fotosLinea;
     }
-
 
     public String getClaveSu() {
         return ClaveSu;
@@ -84,5 +87,21 @@ public class listExistencia2SANG {
 
     public void setPrecio(String precio) {
         Precio = precio;
+    }
+
+    public String getFotosTipo() {
+        return FotosTipo;
+    }
+
+    public void setFotosTipo(String fotosTipo) {
+        FotosTipo = fotosTipo;
+    }
+
+    public String getFotosLinea() {
+        return FotosLinea;
+    }
+
+    public void setFotosLinea(String fotosLinea) {
+        FotosLinea = fotosLinea;
     }
 }

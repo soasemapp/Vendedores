@@ -23,6 +23,7 @@ public class AdaptadorProductosPartech extends RecyclerView.Adapter<AdaptadorPro
     private View.OnClickListener listener;
     String Empresa;
     String EmpresaNuevaa="";
+    String EmpresaAd;
 
 
     public AdaptadorProductosPartech(ArrayList<ProductosNuevosSANDG> listaConsulCoti, Context context,String empresa) {
@@ -42,18 +43,22 @@ public class AdaptadorProductosPartech extends RecyclerView.Adapter<AdaptadorPro
 
     @Override
     public void onBindViewHolder(ViewHolderProductosNuevos holder, int position) {
-        if (!EmpresaNuevaa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
-            Empresa="";
-            Empresa=EmpresaNuevaa+listaproductos.get(position).getClave()+"/4.webp";
-        }else{
-            Empresa="";
-            Empresa=EmpresaNuevaa+listaproductos.get(position).getClave()+".jpg";
+        if(Empresa.equals("https://www.jacve.mx/imagenes/")){
+            EmpresaAd = "";
+            EmpresaAd=Empresa+listaproductos.get(position).getFotoTipo()+"/"+listaproductos.get(position).getFotoLinea()+"/"+listaproductos.get(position).getClave()+"/2.jpg";
+        }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
+            EmpresaAd="";
+            EmpresaAd=Empresa+listaproductos.get(position).getClave()+"/4.webp";
 
+        }else {
+            EmpresaAd = "";
+            EmpresaAd = Empresa + listaproductos.get(position).getClave() + ".jpg";
         }
+
 
         holder.Parte.setText(listaproductos.get(position).getClave());
         Picasso.with(context).
-                load(Empresa)
+                load(EmpresaAd)
                 .error(R.drawable.noimage)
                 .placeholder(R.drawable.loadingpro)
                 .fit()

@@ -92,18 +92,21 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.View
         int Existencia = Integer.parseInt(listaCarrito.get(position).getExistencia());
         int Cantidad = Integer.parseInt((listaCarrito.get(position).getCantidad()));
 
-        if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
+
+
+        if(Empresa.equals("https://www.jacve.mx/imagenes/")){
+            EmpresaAd = "";
+            EmpresaAd=Empresa+listaCarrito.get(position).getFotosTipo()+"/"+listaCarrito.get(position).getFotosLinea()+"/"+listaCarrito.get(position).getParte()+"/2.jpg";
+        }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
             EmpresaAd="";
             EmpresaAd=Empresa+listaCarrito.get(position).getParte()+"/4.webp";
 
-        }else{
-            EmpresaAd="";
-            EmpresaAd=Empresa+listaCarrito.get(position).getParte()+".jpg";
-
+        }else {
+            EmpresaAd = "";
+            EmpresaAd = Empresa + listaCarrito.get(position).getParte() + ".jpg";
         }
 
-
-        holder.Diponiblidad.setText(Html.fromHtml((Existencia<Cantidad)?"(<font color = #FF0000>NO HAY DISPONIBILIDAD)</font>)":"(<font color = #4CAF50>HAY DISPONIBLES)</font>)"));
+            holder.Diponiblidad.setText(Html.fromHtml((Existencia<Cantidad)?"(<font color = #FF0000>NO HAY DISPONIBILIDAD)</font>)":"(<font color = #4CAF50>HAY DISPONIBLES)</font>)"));
         Picasso.with(context).
                 load(EmpresaAd)
                 .placeholder(R.drawable.loadingpro)

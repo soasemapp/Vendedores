@@ -324,9 +324,16 @@ public class ActivityAgendaRegister extends AppCompatActivity {
                     for (int i = 0; i < jitems.length(); i++) {
                         jitems = jsonObject.getJSONObject("Clientes");
                         Numero = jitems.getJSONObject("" + i + "");
+
+                        String Clavestr,Nombrestr;
+
+                        Clavestr=Numero.getString("Clave");
+                        Nombrestr=Numero.getString("Nombre");
+
+
                         listaclientG.add(new SearachClientSANDG(
-                                Numero.getString("Clave"),
-                                Numero.getString("Nombre")));
+                                Clavestr,
+                                Nombrestr));
                     }
                     }
                 } catch (final JSONException e) {
@@ -400,9 +407,14 @@ public class ActivityAgendaRegister extends AppCompatActivity {
                         for (int i = 0; i < jitems.length(); i++) {
                             jitems = jsonObject.getJSONObject("Item");
                             Numero = jitems.getJSONObject("" + i + "");
+
+
+                            String ClaveString,descripcion;
+                            ClaveString= Numero.getString("clave");
+                            descripcion=Numero.getString("descripcion");
                             listaActividades.add(new SearachClientSANDG(
-                                    Numero.getString("clave"),
-                                    Numero.getString("descripcion")));
+                                    ClaveString,
+                                    descripcion));
                         }
                     }
                 } catch (final JSONException e) {

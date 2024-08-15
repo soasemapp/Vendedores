@@ -26,35 +26,27 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.kepler201.Adapter.AdaptadorProductosGSP;
+import com.example.kepler201.Adapter.AdaptadorProductosKFF;
+import com.example.kepler201.Adapter.AdaptadorProductosMechanic;
 import com.example.kepler201.Adapter.AdaptadorProductosNuevos;
 import com.example.kepler201.Adapter.AdaptadorProductosPartech;
 import com.example.kepler201.Adapter.AdaptadorProductosRodatech;
 import com.example.kepler201.Adapter.AdaptadorProductosShark;
+import com.example.kepler201.Adapter.AdaptadorProductosVazlo;
+import com.example.kepler201.Adapter.AdaptadorProductosZoms;
 import com.example.kepler201.Adapter.AdaptadorProductostrackone;
 import com.example.kepler201.ConexionSQLiteHelper;
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.ProductosNuevosSANDG;
 import com.example.kepler201.SetterandGetter.SearachClientSANDG;
-import com.example.kepler201.XMLS.xmlCarritoVentas;
-import com.example.kepler201.XMLS.xmlProductosNuevos;
-import com.example.kepler201.XMLS.xmlSearchClientesG;
-import com.example.kepler201.XMLS.xmlVersiones;
 import com.example.kepler201.activities.BusquedaActivity;
-import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
 import com.example.kepler201.activities.DetalladoProductosActivity;
-import com.example.kepler201.activities.MainActivity;
-import com.example.kepler201.activities.inicioActivity;
 import com.example.kepler201.includes.HttpHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
@@ -63,7 +55,7 @@ import dmax.dialog.SpotsDialog;
 
 public class HomeFragment extends Fragment {
 
-    RecyclerView recyclerViewEagle, recyclerViewTrackone, recyclerViewRodatech, recyclerViewPartech, recyclerViewShark;
+    RecyclerView recyclerViewEagle, recyclerViewTrackone, recyclerViewRodatech, recyclerViewPartech, recyclerViewShark,recyclerViewMechanic,recyclerViewGSP,recyclerViewVazlo,recyclerViewZoms,recyclerViewKFF;
 
     String strusr, strpass, strname, strlname, strtype, strbran, strma, strco, strcodBra, StrServer;
 
@@ -107,11 +99,16 @@ public class HomeFragment extends Fragment {
     ArrayList<ProductosNuevosSANDG> ListaProductosRodatech = new ArrayList<>();
     ArrayList<ProductosNuevosSANDG> ListaProductosPartech = new ArrayList<>();
     ArrayList<ProductosNuevosSANDG> ListaProductosShark = new ArrayList<>();
+    ArrayList<ProductosNuevosSANDG> ListaProductosMechanic = new ArrayList<>();
+    ArrayList<ProductosNuevosSANDG> ListaProductosGSP = new ArrayList<>();
+    ArrayList<ProductosNuevosSANDG> ListaProductosVazlo = new ArrayList<>();
+    ArrayList<ProductosNuevosSANDG> ListaProductoszoms = new ArrayList<>();
+    ArrayList<ProductosNuevosSANDG> ListaProductoskff = new ArrayList<>();
 
 
     EditText BusquedaProducto;
     String ProductosNuevosStr,Empresa;
-    LinearLayout EagleOcultar, TrackOneOcultar, RodatechOcultar, PartechOcultar, SharkOcultar;
+    LinearLayout EagleOcultar, TrackOneOcultar, RodatechOcultar, PartechOcultar, SharkOcultar,MechanicOcultar,GspOcultar,VazloOcultar,ZoomsOcultar,KFFOcultar;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -127,12 +124,25 @@ public class HomeFragment extends Fragment {
         recyclerViewRodatech = view.findViewById(R.id.listProductosRodatech);
         recyclerViewPartech = view.findViewById(R.id.listProductosPartech);
         recyclerViewShark = view.findViewById(R.id.listProductosShark);
+        recyclerViewMechanic = view.findViewById(R.id.listProductosMechanic);
+        recyclerViewGSP = view.findViewById(R.id.listProductosGSP);
+        recyclerViewVazlo = view.findViewById(R.id.listProductosVazlo);
+        recyclerViewZoms = view.findViewById(R.id.listProductoszoms);
+        recyclerViewKFF = view.findViewById(R.id.listProductoskff);
+
+
+
         BusquedaProducto = view.findViewById(R.id.idBusqueda);
         EagleOcultar = view.findViewById(R.id.EagleOcultar);
         TrackOneOcultar = view.findViewById(R.id.TrackoneOcultar);
         RodatechOcultar = view.findViewById(R.id.RodatechOcultar);
         PartechOcultar = view.findViewById(R.id.PartechOcultar);
         SharkOcultar = view.findViewById(R.id.SharkOcultar);
+        MechanicOcultar = view.findViewById(R.id.MechanicOcultar);
+        GspOcultar = view.findViewById(R.id.GSPOcultar);
+        VazloOcultar = view.findViewById(R.id.VazloOcultar);
+        ZoomsOcultar = view.findViewById(R.id.ZoomsOcultar);
+        KFFOcultar= view.findViewById(R.id.KFFOcultar);
 
         //Preference
         SharedPreferences preference = requireActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
@@ -158,7 +168,7 @@ public class HomeFragment extends Fragment {
 
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.jacve.mx/imagenes/";
                 break;
             case "autodis.ath.cx:9085":
                 Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
@@ -228,6 +238,29 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager horizontalLayoutManagaer4 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewShark.setLayoutManager(horizontalLayoutManagaer4);
 
+        ListaProductosMechanic = new ArrayList<>();
+        LinearLayoutManager horizontalLayoutManagaer5 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewMechanic.setLayoutManager(horizontalLayoutManagaer5);
+
+        ListaProductosGSP = new ArrayList<>();
+        LinearLayoutManager horizontalLayoutManagaer6 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewGSP.setLayoutManager(horizontalLayoutManagaer6);
+
+
+        ListaProductosVazlo = new ArrayList<>();
+        LinearLayoutManager horizontalLayoutManagaer7 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewVazlo.setLayoutManager(horizontalLayoutManagaer7);
+
+        ListaProductoskff = new ArrayList<>();
+        LinearLayoutManager horizontalLayoutManagaer8 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewKFF.setLayoutManager(horizontalLayoutManagaer8);
+
+        ListaProductoszoms = new ArrayList<>();
+        LinearLayoutManager horizontalLayoutManagaer9 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewZoms.setLayoutManager(horizontalLayoutManagaer9);
+
+
+
 
         Calendar calendar = Calendar.getInstance();
         final int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -295,7 +328,11 @@ public class HomeFragment extends Fragment {
                 RodatechOcultar.setVisibility(View.VISIBLE);
                 PartechOcultar.setVisibility(View.GONE);
                 SharkOcultar.setVisibility(View.GONE);
-
+                VazloOcultar.setVisibility(View.GONE);
+                MechanicOcultar.setVisibility(View.GONE);
+                GspOcultar.setVisibility(View.GONE);
+                ZoomsOcultar.setVisibility(View.GONE);
+                KFFOcultar.setVisibility(View.GONE);
 
                 break;
             case "sprautomotive.servehttp.com:9095":
@@ -303,7 +340,12 @@ public class HomeFragment extends Fragment {
                 TrackOneOcultar.setVisibility(View.GONE);
                 RodatechOcultar.setVisibility(View.GONE);
                 PartechOcultar.setVisibility(View.VISIBLE);
+                VazloOcultar.setVisibility(View.GONE);
                 SharkOcultar.setVisibility(View.GONE);
+                MechanicOcultar.setVisibility(View.GONE);
+                GspOcultar.setVisibility(View.GONE);
+                ZoomsOcultar.setVisibility(View.GONE);
+                KFFOcultar.setVisibility(View.GONE);
                 break;
             case "sprautomotive.servehttp.com:9080":
                 EagleOcultar.setVisibility(View.GONE);
@@ -311,6 +353,11 @@ public class HomeFragment extends Fragment {
                 RodatechOcultar.setVisibility(View.GONE);
                 PartechOcultar.setVisibility(View.GONE);
                 SharkOcultar.setVisibility(View.VISIBLE);
+                VazloOcultar.setVisibility(View.GONE);
+                MechanicOcultar.setVisibility(View.GONE);
+                GspOcultar.setVisibility(View.GONE);
+                ZoomsOcultar.setVisibility(View.GONE);
+                KFFOcultar.setVisibility(View.GONE);
                 break;
             case "vazlocolombia.dyndns.org:9085":
                 EagleOcultar.setVisibility(View.VISIBLE);
@@ -318,6 +365,38 @@ public class HomeFragment extends Fragment {
                 RodatechOcultar.setVisibility(View.GONE);
                 PartechOcultar.setVisibility(View.GONE);
                 SharkOcultar.setVisibility(View.GONE);
+                VazloOcultar.setVisibility(View.GONE);
+                MechanicOcultar.setVisibility(View.GONE);
+                GspOcultar.setVisibility(View.GONE);
+                ZoomsOcultar.setVisibility(View.GONE);
+                KFFOcultar.setVisibility(View.GONE);
+                break;
+            case "autodis.ath.cx:9085":
+                EagleOcultar.setVisibility(View.VISIBLE);
+                TrackOneOcultar.setVisibility(View.VISIBLE);
+                RodatechOcultar.setVisibility(View.GONE);
+                PartechOcultar.setVisibility(View.GONE);
+                SharkOcultar.setVisibility(View.GONE);
+                VazloOcultar.setVisibility(View.GONE);
+                MechanicOcultar.setVisibility(View.GONE);
+                GspOcultar.setVisibility(View.GONE);
+                ZoomsOcultar.setVisibility(View.GONE);
+                KFFOcultar.setVisibility(View.GONE);
+                break;
+            case "jacve.dyndns.org:9085":
+                EagleOcultar.setVisibility(View.GONE);
+                TrackOneOcultar.setVisibility(View.GONE);
+                RodatechOcultar.setVisibility(View.GONE);
+                PartechOcultar.setVisibility(View.GONE);
+                SharkOcultar.setVisibility(View.GONE);
+                VazloOcultar.setVisibility(View.GONE);
+                MechanicOcultar.setVisibility(View.VISIBLE);
+                GspOcultar.setVisibility(View.VISIBLE);
+                ZoomsOcultar.setVisibility(View.VISIBLE);
+                KFFOcultar.setVisibility(View.VISIBLE);
+
+
+
                 break;
             default:
                 EagleOcultar.setVisibility(View.VISIBLE);
@@ -325,6 +404,11 @@ public class HomeFragment extends Fragment {
                 RodatechOcultar.setVisibility(View.VISIBLE);
                 PartechOcultar.setVisibility(View.VISIBLE);
                 SharkOcultar.setVisibility(View.VISIBLE);
+                VazloOcultar.setVisibility(View.VISIBLE);
+                MechanicOcultar.setVisibility(View.GONE);
+                GspOcultar.setVisibility(View.GONE);
+                ZoomsOcultar.setVisibility(View.GONE);
+                KFFOcultar.setVisibility(View.GONE);
 
                 break;
         }
@@ -365,6 +449,11 @@ public class HomeFragment extends Fragment {
         ListaProductosPartech = new ArrayList<>();
         ListaProductosShark = new ArrayList<>();
         ListaProductosTrackone = new ArrayList<>();
+        ListaProductosMechanic = new ArrayList<>();
+        ListaProductosGSP = new ArrayList<>();
+        ListaProductosVazlo = new ArrayList<>();
+        ListaProductoszoms = new ArrayList<>();
+        ListaProductoskff = new ArrayList<>();
         conn = new ConexionSQLiteHelper(getActivity(), "bd_Carrito", null, 1);
         SQLiteDatabase db = conn.getReadableDatabase();
         @SuppressLint("Recycle") Cursor fila = db.rawQuery("select * from productos ", null);
@@ -373,33 +462,86 @@ public class HomeFragment extends Fragment {
 
                 ListaProductosGeneral.add(new ProductosNuevosSANDG(fila.getString(1),
                         fila.getString(2),
-                        fila.getString(3)));
+                        fila.getString(3),
+                        fila.getString(4),
+                        fila.getString(5)));
 
                 switch (fila.getString(3)) {
                     case "1":
                         ListaProductosEagle.add(new ProductosNuevosSANDG(fila.getString(1),
                                 fila.getString(2),
-                                fila.getString(3)));
+                                fila.getString(3),
+                                fila.getString(4),
+                                fila.getString(5)));
                         break;
                     case "2":
                         ListaProductosRodatech.add(new ProductosNuevosSANDG(fila.getString(1),
                                 fila.getString(2),
-                                fila.getString(3)));
-                        break;
+                                fila.getString(3),
+                                fila.getString(4),
+                                fila.getString(5)));
                     case "3":
                         ListaProductosPartech.add(new ProductosNuevosSANDG(fila.getString(1),
                                 fila.getString(2),
-                                fila.getString(3)));
+                                fila.getString(3),
+                                fila.getString(4),
+                                fila.getString(5)));
                         break;
                     case "4":
                         ListaProductosShark.add(new ProductosNuevosSANDG(fila.getString(1),
                                 fila.getString(2),
-                                fila.getString(3)));
+                                fila.getString(3),
+                                fila.getString(4),
+                                fila.getString(5)));
                         break;
                     case "6":
                         ListaProductosTrackone.add(new ProductosNuevosSANDG(fila.getString(1),
                                 fila.getString(2),
-                                fila.getString(3)));
+                                fila.getString(3),
+                                fila.getString(4),
+                                fila.getString(5)));
+                        break;
+
+                    case "8":
+                    case "9":
+                    case "10":
+                    case "11":
+                    case "12":
+                        ListaProductosGSP.add(new ProductosNuevosSANDG(fila.getString(1),
+                                fila.getString(2),
+                                fila.getString(3),
+                                fila.getString(4),
+                                fila.getString(5)));
+                        break;
+                    case "13":
+                        ListaProductosMechanic.add(new ProductosNuevosSANDG(fila.getString(1),
+                                fila.getString(2),
+                                fila.getString(3),
+                                fila.getString(4),
+                                fila.getString(5)));
+                        break;
+                    case "14":
+                       if (!StrServer.equals("jacve.dyndns.org:9085")){
+                           ListaProductosVazlo.add(new ProductosNuevosSANDG(fila.getString(1),
+                                   fila.getString(2),
+                                   fila.getString(3),
+                                   fila.getString(4),
+                                   fila.getString(5)));
+                       }else {
+                           ListaProductoskff.add(new ProductosNuevosSANDG(fila.getString(1),
+                                   fila.getString(2),
+                                   fila.getString(3),
+                                   fila.getString(4),
+                                   fila.getString(5)));
+
+                       }
+                        break;
+                    case "15":
+                        ListaProductoszoms.add(new ProductosNuevosSANDG(fila.getString(1),
+                                fila.getString(2),
+                                fila.getString(3),
+                                fila.getString(4),
+                                fila.getString(5)));
                         break;
                     default:
                         break;
@@ -419,6 +561,18 @@ public class HomeFragment extends Fragment {
                 recyclerViewPartech.setAdapter(adapter3);
                 AdaptadorProductosShark adapter4 = new AdaptadorProductosShark(ListaProductosShark, context,Empresa);
                 recyclerViewShark.setAdapter(adapter4);
+                AdaptadorProductosMechanic adapter5 = new AdaptadorProductosMechanic(ListaProductosMechanic, context,Empresa);
+                recyclerViewMechanic.setAdapter(adapter5);
+                AdaptadorProductosGSP adapter6 = new AdaptadorProductosGSP(ListaProductosGSP, context,Empresa);
+                recyclerViewGSP.setAdapter(adapter6);
+                AdaptadorProductosVazlo adapter7 = new AdaptadorProductosVazlo(ListaProductosVazlo, context,Empresa);
+                recyclerViewVazlo.setAdapter(adapter7);
+                AdaptadorProductosKFF adapter8= new AdaptadorProductosKFF(ListaProductoskff, context,Empresa);
+                recyclerViewKFF.setAdapter(adapter8);
+                AdaptadorProductosZoms adapter9 = new AdaptadorProductosZoms(ListaProductoszoms, context,Empresa);
+                recyclerViewZoms.setAdapter(adapter9);
+
+
 
 
                 adapter.setOnClickListener(new View.OnClickListener() {
@@ -529,6 +683,123 @@ public class HomeFragment extends Fragment {
                         } else {
                             int position = recyclerViewShark.getChildAdapterPosition(Objects.requireNonNull(recyclerViewShark.findContainingItemView(view)));
                             ProductosNuevos = ListaProductosShark.get(position).getClave();
+
+                            Listaclientes();
+                            dato = 2;
+
+                        }
+
+
+                    }
+                });
+
+                adapter5.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (preferenceClie.contains("CodeClien")) {
+                            int position = recyclerViewMechanic.getChildAdapterPosition(Objects.requireNonNull(recyclerViewMechanic.findContainingItemView(view)));
+                            Intent ProductosDetallados = new Intent(getActivity(), DetalladoProductosActivity.class);
+                            String Producto = ListaProductosMechanic.get(position).getClave();
+                            ProductosDetallados.putExtra("Producto", Producto);
+                            ProductosDetallados.putExtra("claveVentana", "1");
+                            startActivity(ProductosDetallados);
+                        } else {
+                            int position = recyclerViewMechanic.getChildAdapterPosition(Objects.requireNonNull(recyclerViewMechanic.findContainingItemView(view)));
+                            ProductosNuevos = ListaProductosMechanic.get(position).getClave();
+
+                            Listaclientes();
+                            dato = 2;
+
+                        }
+
+
+                    }
+                });
+
+                adapter6.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (preferenceClie.contains("CodeClien")) {
+                            int position = recyclerViewGSP.getChildAdapterPosition(Objects.requireNonNull(recyclerViewGSP.findContainingItemView(view)));
+                            Intent ProductosDetallados = new Intent(getActivity(), DetalladoProductosActivity.class);
+                            String Producto = ListaProductosGSP.get(position).getClave();
+                            ProductosDetallados.putExtra("Producto", Producto);
+                            ProductosDetallados.putExtra("claveVentana", "1");
+                            startActivity(ProductosDetallados);
+                        } else {
+                            int position = recyclerViewGSP.getChildAdapterPosition(Objects.requireNonNull(recyclerViewGSP.findContainingItemView(view)));
+                            ProductosNuevos = ListaProductosGSP.get(position).getClave();
+
+                            Listaclientes();
+                            dato = 2;
+
+                        }
+
+
+                    }
+                });
+
+                adapter7.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (preferenceClie.contains("CodeClien")) {
+                            int position = recyclerViewVazlo.getChildAdapterPosition(Objects.requireNonNull(recyclerViewVazlo.findContainingItemView(view)));
+                            Intent ProductosDetallados = new Intent(getActivity(), DetalladoProductosActivity.class);
+                            String Producto = ListaProductosVazlo.get(position).getClave();
+                            ProductosDetallados.putExtra("Producto", Producto);
+                            ProductosDetallados.putExtra("claveVentana", "1");
+                            startActivity(ProductosDetallados);
+                        } else {
+                            int position = recyclerViewVazlo.getChildAdapterPosition(Objects.requireNonNull(recyclerViewVazlo.findContainingItemView(view)));
+                            ProductosNuevos = ListaProductosVazlo.get(position).getClave();
+
+                            Listaclientes();
+                            dato = 2;
+
+                        }
+
+
+                    }
+                });
+
+
+                adapter8.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (preferenceClie.contains("CodeClien")) {
+                            int position = recyclerViewKFF.getChildAdapterPosition(Objects.requireNonNull(recyclerViewKFF.findContainingItemView(view)));
+                            Intent ProductosDetallados = new Intent(getActivity(), DetalladoProductosActivity.class);
+                            String Producto = ListaProductoskff.get(position).getClave();
+                            ProductosDetallados.putExtra("Producto", Producto);
+                            ProductosDetallados.putExtra("claveVentana", "1");
+                            startActivity(ProductosDetallados);
+                        } else {
+                            int position = recyclerViewKFF.getChildAdapterPosition(Objects.requireNonNull(recyclerViewKFF.findContainingItemView(view)));
+                            ProductosNuevos = ListaProductoskff.get(position).getClave();
+
+                            Listaclientes();
+                            dato = 2;
+
+                        }
+
+
+                    }
+                });
+
+
+                adapter9.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (preferenceClie.contains("CodeClien")) {
+                            int position = recyclerViewZoms.getChildAdapterPosition(Objects.requireNonNull(recyclerViewZoms.findContainingItemView(view)));
+                            Intent ProductosDetallados = new Intent(getActivity(), DetalladoProductosActivity.class);
+                            String Producto = ListaProductoszoms.get(position).getClave();
+                            ProductosDetallados.putExtra("Producto", Producto);
+                            ProductosDetallados.putExtra("claveVentana", "1");
+                            startActivity(ProductosDetallados);
+                        } else {
+                            int position = recyclerViewZoms.getChildAdapterPosition(Objects.requireNonNull(recyclerViewZoms.findContainingItemView(view)));
+                            ProductosNuevos = ListaProductoszoms.get(position).getClave();
 
                             Listaclientes();
                             dato = 2;
@@ -760,7 +1031,9 @@ public class HomeFragment extends Fragment {
 
                             ListaProductosGeneral.add(new ProductosNuevosSANDG((Numero.getString("k_Producto").equals("") ? "" : Numero.getString("k_Producto")),
                                     (Numero.getString("k_Descripcion").equals("") ? "" : Numero.getString("k_Descripcion")),
-                                    (Numero.getString("k_Tipo").equals("") ? "" : Numero.getString("k_Tipo"))));
+                                    (Numero.getString("k_Tipo").equals("") ? "" : Numero.getString("k_Tipo")),
+                                    (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("k_FotosTipo").equals("") ? "0" : Numero.getString("k_FotosTipo")):""),
+                                    (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("k_FotosLinea").equals("") ? "0" : Numero.getString("k_FotosLinea")):"")));
                         }
                     }
                 } catch (final JSONException e) {
@@ -784,33 +1057,72 @@ String mensaje =e.getMessage().toString();
                 String Clave = ListaProductosGeneral.get(i).getClave();
                 String Descripcion = ListaProductosGeneral.get(i).getDescripcion();
                 String Tipo = ListaProductosGeneral.get(i).getTipo();
+                String TipoFotos = ListaProductosGeneral.get(i).getFotoTipo();
+                String LineaFotos = ListaProductosGeneral.get(i).getFotoLinea();
 
-                db.execSQL("INSERT INTO  productos (Clave,Descripcion,Tipo) values ('" + Clave + "','" + Descripcion + "','" + Tipo + "')");
+                db.execSQL("INSERT INTO  productos (Clave,Descripcion,Tipo,FotoTipo,FotoLinea) values ('" + Clave + "','" + Descripcion + "','" + Tipo + "','" + TipoFotos + "','" + LineaFotos + "')");
             }
 
             db.close();
+/*
+1	EAGLE
+2	RODATECH
+3	PARTECH
+4	SHARK
+5	BHP GASKET
+6	TRACKONE
+7	PROMOCIONALES
+8	GSP AMORTIGUADOR
+9	GSP HM
+10	GSP SUSPENSION
+11	GSP RODAMIENTOS
+12	GSP TRACCION
+13	MECHANIC CHOICE
+14	KFF
+15	ZOMS
 
+ */
             for (int i = 0; i < ListaProductosGeneral.size(); i++) {
-                String Clave, Descripcion, Tipo;
+                String Clave, Descripcion, Tipo,TipoFotos,LineaFotos;
                 Clave = ListaProductosGeneral.get(i).getClave();
                 Descripcion = ListaProductosGeneral.get(i).getDescripcion();
                 Tipo = ListaProductosGeneral.get(i).getTipo();
-
+                TipoFotos =ListaProductosGeneral.get(i).getFotoTipo();
+                LineaFotos=ListaProductosGeneral.get(i).getFotoLinea();
                 switch (Tipo) {
                     case "1":
-                        ListaProductosEagle.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo));
+                        ListaProductosEagle.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
                         break;
                     case "2":
-                        ListaProductosRodatech.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo));
+                        ListaProductosRodatech.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
                         break;
                     case "3":
-                        ListaProductosPartech.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo));
+                        ListaProductosPartech.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
                         break;
                     case "4":
-                        ListaProductosShark.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo));
+                        ListaProductosShark.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
                         break;
                     case "6":
-                        ListaProductosTrackone.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo));
+                        ListaProductosTrackone.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                        break;
+                    case "8":
+                    case "9":
+                    case "10":
+                    case "11":
+                    case "12":
+                        ListaProductosGSP.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                        break;
+                    case "13":
+                        ListaProductosMechanic.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                        break;
+                    case "14":
+                        if (!StrServer.equals("jacve.dyndns.org:9085")){
+                            ListaProductosVazlo.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                        }else{
+                            ListaProductoskff.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                        }
+                    case"15":
+                        ListaProductoszoms.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
                         break;
                     default:
                         break;
@@ -828,6 +1140,16 @@ String mensaje =e.getMessage().toString();
             recyclerViewPartech.setAdapter(adapter3);
             AdaptadorProductosShark adapter4 = new AdaptadorProductosShark(ListaProductosShark, context,Empresa);
             recyclerViewShark.setAdapter(adapter4);
+            AdaptadorProductosMechanic adapter5 = new AdaptadorProductosMechanic(ListaProductosMechanic, context,Empresa);
+            recyclerViewMechanic.setAdapter(adapter5);
+            AdaptadorProductosGSP adapter6 = new AdaptadorProductosGSP(ListaProductosGSP, context,Empresa);
+            recyclerViewGSP.setAdapter(adapter6);
+            AdaptadorProductosVazlo adapter7 = new AdaptadorProductosVazlo(ListaProductosVazlo, context,Empresa);
+            recyclerViewVazlo.setAdapter(adapter7);
+            AdaptadorProductosKFF adapter8 = new AdaptadorProductosKFF(ListaProductoskff, context,Empresa);
+            recyclerViewKFF.setAdapter(adapter8);
+            AdaptadorProductosZoms adapter9 = new AdaptadorProductosZoms(ListaProductoszoms, context,Empresa);
+            recyclerViewZoms.setAdapter(adapter9);
 
 
             adapter.setOnClickListener(new View.OnClickListener() {
@@ -942,6 +1264,118 @@ String mensaje =e.getMessage().toString();
                 }
             });
 
+            adapter5.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (preferenceClie.contains("CodeClien")) {
+                        int position = recyclerViewMechanic.getChildAdapterPosition(Objects.requireNonNull(recyclerViewMechanic.findContainingItemView(view)));
+                        Intent ProductosDetallados = new Intent(getActivity(), DetalladoProductosActivity.class);
+                        String Producto = ListaProductosMechanic.get(position).getClave();
+                        ProductosDetallados.putExtra("Producto", Producto);
+                        startActivity(ProductosDetallados);
+                    } else {
+                        int position = recyclerViewMechanic.getChildAdapterPosition(Objects.requireNonNull(recyclerViewMechanic.findContainingItemView(view)));
+                        ProductosNuevos = ListaProductosMechanic.get(position).getClave();
+
+                        Listaclientes();
+                        dato = 2;
+
+                    }
+
+
+                }
+            });
+
+            adapter6.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (preferenceClie.contains("CodeClien")) {
+                        int position = recyclerViewGSP.getChildAdapterPosition(Objects.requireNonNull(recyclerViewGSP.findContainingItemView(view)));
+                        Intent ProductosDetallados = new Intent(getActivity(), DetalladoProductosActivity.class);
+                        String Producto = ListaProductosGSP.get(position).getClave();
+                        ProductosDetallados.putExtra("Producto", Producto);
+                        startActivity(ProductosDetallados);
+                    } else {
+                        int position = recyclerViewGSP.getChildAdapterPosition(Objects.requireNonNull(recyclerViewGSP.findContainingItemView(view)));
+                        ProductosNuevos = ListaProductosGSP.get(position).getClave();
+
+                        Listaclientes();
+                        dato = 2;
+
+                    }
+
+
+                }
+            });
+
+            adapter7.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (preferenceClie.contains("CodeClien")) {
+                        int position = recyclerViewVazlo.getChildAdapterPosition(Objects.requireNonNull(recyclerViewVazlo.findContainingItemView(view)));
+                        Intent ProductosDetallados = new Intent(getActivity(), DetalladoProductosActivity.class);
+                        String Producto = ListaProductosVazlo.get(position).getClave();
+                        ProductosDetallados.putExtra("Producto", Producto);
+                        startActivity(ProductosDetallados);
+                    } else {
+                        int position = recyclerViewVazlo.getChildAdapterPosition(Objects.requireNonNull(recyclerViewVazlo.findContainingItemView(view)));
+                        ProductosNuevos = ListaProductosVazlo.get(position).getClave();
+
+                        Listaclientes();
+                        dato = 2;
+
+                    }
+
+
+                }
+            });
+
+
+            adapter8.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (preferenceClie.contains("CodeClien")) {
+                        int position = recyclerViewKFF.getChildAdapterPosition(Objects.requireNonNull(recyclerViewKFF.findContainingItemView(view)));
+                        Intent ProductosDetallados = new Intent(getActivity(), DetalladoProductosActivity.class);
+                        String Producto = ListaProductoskff.get(position).getClave();
+                        ProductosDetallados.putExtra("Producto", Producto);
+                        startActivity(ProductosDetallados);
+                    } else {
+                        int position = recyclerViewKFF.getChildAdapterPosition(Objects.requireNonNull(recyclerViewKFF.findContainingItemView(view)));
+                        ProductosNuevos = ListaProductoskff.get(position).getClave();
+
+                        Listaclientes();
+                        dato = 2;
+
+                    }
+
+
+                }
+            });
+
+            adapter9.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (preferenceClie.contains("CodeClien")) {
+                        int position = recyclerViewZoms.getChildAdapterPosition(Objects.requireNonNull(recyclerViewZoms.findContainingItemView(view)));
+                        Intent ProductosDetallados = new Intent(getActivity(), DetalladoProductosActivity.class);
+                        String Producto = ListaProductoszoms.get(position).getClave();
+                        ProductosDetallados.putExtra("Producto", Producto);
+                        startActivity(ProductosDetallados);
+                    } else {
+                        int position = recyclerViewZoms.getChildAdapterPosition(Objects.requireNonNull(recyclerViewZoms.findContainingItemView(view)));
+                        ProductosNuevos = ListaProductoszoms.get(position).getClave();
+
+                        Listaclientes();
+                        dato = 2;
+
+                    }
+
+
+                }
+            });
+
+
 
             mDialog.dismiss();
 
@@ -990,7 +1424,7 @@ String mensaje =e.getMessage().toString();
         @Override
         protected void onPostExecute(Void result) {
             if (Resultado==1){
-                if (version.equals("2.8")) {
+                if (version.equals("2.9.6")) {
 
                 }else{
                     AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());

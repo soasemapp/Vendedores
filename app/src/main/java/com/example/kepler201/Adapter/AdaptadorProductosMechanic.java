@@ -11,41 +11,38 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.ProductosNuevosSANDG;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class AdaptadorProductosNuevos extends RecyclerView.Adapter<AdaptadorProductosNuevos.ViewHolderProductosNuevos> implements View.OnClickListener {
+public class AdaptadorProductosMechanic extends RecyclerView.Adapter<AdaptadorProductosMechanic.ViewHolderProductosNuevos> implements View.OnClickListener {
 
     ArrayList<ProductosNuevosSANDG> listaproductos;
     Context context;
     private View.OnClickListener listener;
     String Empresa;
     String EmpresaNuevaa="";
-String EmpresaAd;
 
-    public AdaptadorProductosNuevos(ArrayList<com.example.kepler201.SetterandGetter.ProductosNuevosSANDG> listaProductosEagle, Context context,String empresa) {
-        this.context=context;
-        this.listaproductos=listaProductosEagle;
+    String EmpresaAd;
+    public AdaptadorProductosMechanic(ArrayList<ProductosNuevosSANDG> listaConsulCoti, Context context, String empresa) {
+        this.listaproductos = listaConsulCoti;
+        this.context = context;
         this.Empresa=empresa;
         this.EmpresaNuevaa=empresa;
     }
 
-
     @NonNull
     @Override
     public ViewHolderProductosNuevos onCreateViewHolder(ViewGroup parent, int viewType) {
-        @SuppressLint("InflateParams") View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_productosnuevoseagle, null, false);
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_productosnuevosshark, null, false);
         view.setOnClickListener(this);
         return new ViewHolderProductosNuevos(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolderProductosNuevos holder, int position) {
-
         if(Empresa.equals("https://www.jacve.mx/imagenes/")){
             EmpresaAd = "";
             EmpresaAd=Empresa+listaproductos.get(position).getFotoTipo()+"/"+listaproductos.get(position).getFotoLinea()+"/"+listaproductos.get(position).getClave()+"/2.jpg";
@@ -99,6 +96,6 @@ String EmpresaAd;
             super(itemView);
             imgPro =  itemView.findViewById(R.id.productoImag);
             Parte =  itemView.findViewById(R.id.Parte);
-             }
+        }
     }
 }

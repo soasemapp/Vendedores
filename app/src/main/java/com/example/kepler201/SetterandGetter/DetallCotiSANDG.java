@@ -40,8 +40,9 @@ public class DetallCotiSANDG {
     String Shark;
     String Trackoone;
     String DESCdOCUMENTO;
+    String Linea;
 
-    public DetallCotiSANDG(String sucursal, String folio, String claveC, String nombreC, String claveP, String cant, String precio, String desc, String importe, String RFC, String PLAZO, String DESCUENTOPP, String DESCUENTO1, String CALLE, String COLONIA, String POBLACION, String VIA, String comentario, String disponible, String backOrder, String surtido, String precioNuevo, String fecha, String hora, String montoBack, String saldo, String nombreSucursal, String descripcion, String unidad, String partida, String comentario2, String comentario3, String eagle, String rodatech, String partech, String shark, String trackoone, String DESCdOCUMENTO) {
+    public DetallCotiSANDG(String sucursal, String folio, String claveC, String nombreC, String claveP, String cant, String precio, String desc, String importe, String RFC, String PLAZO, String DESCUENTOPP, String DESCUENTO1, String CALLE, String COLONIA, String POBLACION, String VIA, String comentario, String disponible, String backOrder, String surtido, String precioNuevo, String fecha, String hora, String montoBack, String saldo, String nombreSucursal, String descripcion, String unidad, String partida, String comentario2, String comentario3, String eagle, String rodatech, String partech, String shark, String trackoone, String DESCdOCUMENTO, String linea) {
         Sucursal = sucursal;
         Folio = folio;
         ClaveC = claveC;
@@ -80,6 +81,7 @@ public class DetallCotiSANDG {
         Shark = shark;
         Trackoone = trackoone;
         this.DESCdOCUMENTO = DESCdOCUMENTO;
+        Linea = linea;
     }
 
     public String getSucursal() {
@@ -384,5 +386,13 @@ public class DetallCotiSANDG {
 
     public void setDESCdOCUMENTO(String DESCdOCUMENTO) {
         this.DESCdOCUMENTO = DESCdOCUMENTO;
+    }
+
+    public String getLinea() {
+        return Linea;
+    }
+
+    public void setLinea(String linea) {
+        Linea = linea;
     }
 }

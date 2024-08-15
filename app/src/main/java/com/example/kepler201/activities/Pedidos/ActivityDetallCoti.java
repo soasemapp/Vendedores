@@ -224,7 +224,93 @@ public class ActivityDetallCoti extends AppCompatActivity {
                     ActivityDetallCoti.AsyncCallWS2 task = new ActivityDetallCoti.AsyncCallWS2();
                     task.execute();
 
-                } else {
+                }  else if(StrServer.equals("cedistabasco.ddns.net:9085")) {
+int contadortg=0,contadortodos=0;
+
+                    for (int i = 0; i < listasearch2.size(); i++) {
+                       if(listasearch2.get(i).getLinea().equals("4")){
+                           contadortg++;
+                       }else{
+                           contadortodos++;
+                       }
+                    }
+                    if(contadortg>=1 && contadortodos==0){
+                        strClaveCli = listasearch2.get(0).getClaveC();
+                        strNombreCliente = listasearch2.get(0).getNombreC();
+                        strComentario = listasearch2.get(0).getComentario() + listasearch2.get(0).getComentario2() + listasearch2.get(0).getComentario3();
+                        StrRFC = listasearch2.get(0).getRFC();
+                        StrPlazo = listasearch2.get(0).getPLAZO();
+                        StrDescuentoPP = listasearch2.get(0).getDESCUENTOPP();
+                        StrDescuento1 = listasearch2.get(0).getDESCUENTO1();
+                        StrCalle = listasearch2.get(0).getCALLE();
+                        StrColonia = listasearch2.get(0).getCOLONIA();
+                        StrPoblacion = listasearch2.get(0).getPOBLACION();
+                        Folio1 = Folio.getText().toString();
+                        Eagle = listasearch2.get(0).getEagle();
+                        Rodatech = listasearch2.get(0).getRodatech();
+                        Partech = listasearch2.get(0).getPartech();
+                        Shark = listasearch2.get(0).getShark();
+                        Trackoone = listasearch2.get(0).getTrackoone();
+                        DESCdOCUMENTO = listasearch2.get(0).getDESCdOCUMENTO();
+
+
+                        for (int i = 0; i < listasearch4.size(); i++) {
+                            int posi = spinnerVia.getSelectedItemPosition();
+                            if (posi == i) {
+                                strVia = listasearch4.get(i).getClave();
+                                break;
+                            }
+                        }
+
+
+                        ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                        task.execute();
+                    }else if(contadortg==0 && contadortodos>=1){
+                        strClaveCli = listasearch2.get(0).getClaveC();
+                        strNombreCliente = listasearch2.get(0).getNombreC();
+                        strComentario = listasearch2.get(0).getComentario() + listasearch2.get(0).getComentario2() + listasearch2.get(0).getComentario3();
+                        StrRFC = listasearch2.get(0).getRFC();
+                        StrPlazo = listasearch2.get(0).getPLAZO();
+                        StrDescuentoPP = listasearch2.get(0).getDESCUENTOPP();
+                        StrDescuento1 = listasearch2.get(0).getDESCUENTO1();
+                        StrCalle = listasearch2.get(0).getCALLE();
+                        StrColonia = listasearch2.get(0).getCOLONIA();
+                        StrPoblacion = listasearch2.get(0).getPOBLACION();
+                        Folio1 = Folio.getText().toString();
+                        Eagle = listasearch2.get(0).getEagle();
+                        Rodatech = listasearch2.get(0).getRodatech();
+                        Partech = listasearch2.get(0).getPartech();
+                        Shark = listasearch2.get(0).getShark();
+                        Trackoone = listasearch2.get(0).getTrackoone();
+                        DESCdOCUMENTO = listasearch2.get(0).getDESCdOCUMENTO();
+
+
+                        for (int i = 0; i < listasearch4.size(); i++) {
+                            int posi = spinnerVia.getSelectedItemPosition();
+                            if (posi == i) {
+                                strVia = listasearch4.get(i).getClave();
+                                break;
+                            }
+                        }
+
+
+                        ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                        task.execute();
+                    }else{
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                        alerta1.setMessage("Se estan mezclando productos SHARK con otros").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                                pedidoButton.setEnabled(true);
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+                    }
+
+                }else{
                     strClaveCli = listasearch2.get(0).getClaveC();
                     strNombreCliente = listasearch2.get(0).getNombreC();
                     strComentario = listasearch2.get(0).getComentario() + listasearch2.get(0).getComentario2() + listasearch2.get(0).getComentario3();
@@ -338,7 +424,8 @@ public class ActivityDetallCoti extends AppCompatActivity {
                                         (Numero.getString("k_RodatDesc").equals("") ? "" : Numero.getString("k_RodatDesc")),
                                         (Numero.getString("k_PartechDesc").equals("") ? "" : Numero.getString("k_PartechDesc")),
                                         (Numero.getString("k_SharckDesc").equals("") ? "" : Numero.getString("k_SharckDesc")),
-                                        (Numero.getString("k_Descdoc").equals("") ? "" : Numero.getString("k_Descdoc"))));
+                                        (Numero.getString("k_Descdoc").equals("") ? "" : Numero.getString("k_Descdoc")),
+                                        (StrServer.equals("cedistabasco.ddns.net:9085")?((Numero.getString("k_LInea").equals("") ? "" : Numero.getString("k_LInea"))):"")));
                             }
                         }
                     }

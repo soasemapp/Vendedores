@@ -110,7 +110,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
 
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.jacve.mx/imagenes/";
                 break;
             case "autodis.ath.cx:9085":
                 Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";

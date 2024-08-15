@@ -170,7 +170,7 @@ public class ActivityConverciones extends AppCompatActivity {
 
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.jacve.mx/imagenes/";
                 break;
             case "autodis.ath.cx:9085":
                 Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
@@ -497,7 +497,9 @@ public class ActivityConverciones extends AppCompatActivity {
                                 (Numero.getString("k_Clave").equals("anyType{}") ? " " : Numero.getString("k_Clave")),
                                 (Numero.getString("k_Descr").equals("anyType{}") ? " " : Numero.getString("k_Descr")),
                                 (Numero.getString("k_CodBarra").equals("anyType{}") ? " " : Numero.getString("k_CodBarra")),
-                                (Numero.getString("k_Precio").equals("anyType{}") ? " " : Numero.getString("k_Precio"))));
+                                (Numero.getString("k_Precio").equals("anyType{}") ? " " : Numero.getString("k_Precio")),
+                                (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("FotosTipo").equals("anyType{}") ? " " : Numero.getString("FotosTipo")):""),
+                                (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("FotosLinea").equals("anyType{}") ? " " : Numero.getString("FotosLinea")):"")));
 
 
 
@@ -583,10 +585,23 @@ public class ActivityConverciones extends AppCompatActivity {
                 txtPrecio.setText("$" + formatNumberCurrency(strPrecio));
 
 
-                    Empresa=EmpresaEd+strClave+"/4.webp";
+
+
+                String EmpresaFotos="";
+                if(Empresa.equals("https://www.jacve.mx/imagenes/")){
+                    EmpresaFotos=Empresa+listaExistencia.get(0).getFotosTipo()+"/"+listaExistencia.get(0).getFotosLinea()+"/"+strClave+"/2.jpg";
+                }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
+                    EmpresaFotos=Empresa+strClave+"/4.webp";
+                }else{
+                    EmpresaFotos=Empresa+strClave+".jpg";
+
+                }
+
+
+
 
                 Picasso.with(getApplicationContext()).
-                        load(Empresa)
+                        load(EmpresaFotos)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
                         .centerInside()
@@ -962,7 +977,9 @@ public class ActivityConverciones extends AppCompatActivity {
                                 (Numero.getString("k_descRODATECH").equals("anyType{}") ? "" : Numero.getString("k_descRODATECH")),
                                 (Numero.getString("k_descPARTECH").equals("anyType{}") ? "" : Numero.getString("k_descPARTECH")),
                                 (Numero.getString("k_descSHARK").equals("anyType{}") ? "" : Numero.getString("k_descSHARK")),
-                                (Numero.getString("k_descTRACKONE").equals("anyType{}") ? "" : Numero.getString("k_descTRACKONE"))));
+                                (Numero.getString("k_descTRACKONE").equals("anyType{}") ? "" : Numero.getString("k_descTRACKONE")),
+                                (Numero.getString("TipoFotos").equals("") ? "0" : Numero.getString("TipoFotos")),
+                                (Numero.getString("LineaFotos").equals("") ? "0" : Numero.getString("LineaFotos"))));
 
 
 
@@ -1048,8 +1065,10 @@ public class ActivityConverciones extends AppCompatActivity {
                     String Des3 = listaCarShoping.get(i).getDesc3();
                     String Monto = listaCarShoping.get(i).getMonto();
                     String Des = listaCarShoping.get(i).getDescr();
+                    String FotoTipo = listaCarShoping.get(i).getTipoFotos();
+                    String FotoLinea = listaCarShoping.get(i).getLineaFotos();
 
-                    db.execSQL("INSERT INTO  carrito (Cliente,Parte,Existencia,Cantidad,Unidad,Precio,Desc1,Desc2,Desc3,Monto,Descri) values ('" + Cli + "','" + Par + "','" + Exi + "','" + Can + "','" + Uni + "','" + Pre + "','" + Des1 + "','" + Des2 + "','" + Des3 + "','" + Monto + "','" + Des + "')");
+                    db.execSQL("INSERT INTO  carrito (Cliente,Parte,Existencia,Cantidad,Unidad,Precio,Desc1,Desc2,Desc3,Monto,Descri,FotosTipo,FotosLinea) values ('" + Cli + "','" + Par + "','" + Exi + "','" + Can + "','" + Uni + "','" + Pre + "','" + Des1 + "','" + Des2 + "','" + Des3 + "','" + Monto + "','" + Des + "','"+FotoTipo+"','"+FotoLinea+"')");
 
                 }
                 Intent carrito = new Intent(ActivityConverciones.this, CarritoComprasActivity.class);
@@ -1095,7 +1114,9 @@ public class ActivityConverciones extends AppCompatActivity {
                         fila.getString(8),
                         fila.getString(9),
                         fila.getString(10),
-                        fila.getString(11)));
+                        fila.getString(11),
+                        fila.getString(12),
+                        fila.getString(13)));
             } while (fila.moveToNext());
         }
         db.close();

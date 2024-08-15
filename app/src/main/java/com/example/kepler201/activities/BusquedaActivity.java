@@ -145,7 +145,7 @@ public class BusquedaActivity extends AppCompatActivity {
 
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.jacve.mx/imagenes/";
                 break;
             case "autodis.ath.cx:9085":
                 Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
@@ -1010,6 +1010,9 @@ public class BusquedaActivity extends AppCompatActivity {
                         String Linea;
                         String precio_base;
                         String precio_ajuste;
+                        String TipoFotos="";
+                        String LineaFotos="";
+
                         for (int i = 0; i < jitems.length(); i++) {
 
                             jitems = jsonObject.getJSONObject("Item");
@@ -1018,12 +1021,16 @@ public class BusquedaActivity extends AppCompatActivity {
                             Producto = Numero.getString("Producto");
                             Descripcion = Numero.getString("Descripcion");
                             Linea = Numero.getString("Linea");
+                            if(StrServer.equals("jacve.dyndns.org:9085")) {
+                                TipoFotos = Numero.getString("TipoFotos");
+                                LineaFotos = Numero.getString("LineaFotos");
+                            }
                             Precio = Numero.getJSONObject("precio_base");
                             precio_base = Precio.getString("valor").equals("") ? "0" : Precio.getString("valor");
                             Precio = Numero.getJSONObject("precio_ajuste");
                             precio_ajuste = Precio.getString("valor").equals("") ? "0" : Precio.getString("valor");
 
-                            listProdu1.add(new SetGetListProductos(Producto, Descripcion, Linea, precio_base, precio_ajuste));
+                            listProdu1.add(new SetGetListProductos(Producto, Descripcion, Linea, precio_base, precio_ajuste,TipoFotos,LineaFotos));
 
 
                         }
@@ -1144,6 +1151,8 @@ public class BusquedaActivity extends AppCompatActivity {
                         String Linea;
                         String precio_base;
                         String precio_ajuste;
+                        String TipoFotos="";
+                        String LineaFotos="";
                         for (int i = 0; i < jitems.length(); i++) {
 
                             jitems = jsonObject.getJSONObject("Item");
@@ -1152,12 +1161,18 @@ public class BusquedaActivity extends AppCompatActivity {
                             Producto = Numero.getString("Producto");
                             Descripcion = Numero.getString("Descripcion");
                             Linea = Numero.getString("Linea");
+                            if(StrServer.equals("jacve.dyndns.org:9085")) {
+                                TipoFotos = Numero.getString("TipoFotos");
+                                LineaFotos = Numero.getString("LineaFotos");
+                            }
                             Precio = Numero.getJSONObject("precio_base");
                             precio_base = Precio.getString("valor").equals("") ? "0" : Precio.getString("valor");
                             Precio = Numero.getJSONObject("precio_ajuste");
                             precio_ajuste = Precio.getString("valor").equals("") ? "0" : Precio.getString("valor");
 
-                            listProdu1.add(new SetGetListProductos(Producto, Descripcion, Linea, precio_base, precio_ajuste));
+                            listProdu1.add(new SetGetListProductos(Producto, Descripcion, Linea, precio_base, precio_ajuste,TipoFotos,LineaFotos));
+
+
 
 
                         }

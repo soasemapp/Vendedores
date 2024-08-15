@@ -99,7 +99,8 @@ public class ActivityConsultaProductos extends AppCompatActivity {
     String DescripcionProd ;
     String CodBarras ;
     String Precios;
-
+    String TipoFotos;
+    String LineaFotos;
 
     String MensajePro;
     String ProductoEqui;
@@ -179,7 +180,7 @@ String Empresa;
 
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.jacve.mx/imagenes/";
                 break;
             case "autodis.ath.cx:9085":
                 Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
@@ -797,17 +798,22 @@ String Empresa;
                 txtPrecio.setText("$" + formatNumberCurrency(strPrecio));
 
 
-                if (!EmpresaEd.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
-                    Empresa=EmpresaEd+strClave+"/4.webp";
+                String EmpresaFotos="";
+                if(Empresa.equals("https://www.jacve.mx/imagenes/")){
+                    EmpresaFotos=Empresa+TipoFotos+"/"+LineaFotos+"/"+strClave+"/2.jpg";
+                }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
+                    EmpresaFotos=Empresa+strClave+"/4.webp";
                 }else{
-                    Empresa=EmpresaEd+strClave+".jpg";
+                    EmpresaFotos=Empresa+strClave+".jpg";
 
                 }
 
 
 
+
+
                 Picasso.with(getApplicationContext()).
-                        load(Empresa)
+                        load(EmpresaFotos)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
                         .centerInside()
@@ -894,7 +900,12 @@ String Empresa;
                     ClaveProducto=jitems.getString("k_ClavePr");;
                     DescripcionProd=jitems.getString("k_Descr");;
                     CodBarras=jitems.getString("k_CodBarra");;
-                    Precios=jitems.getString("k_Precio");;
+                    Precios=jitems.getString("k_Precio");
+                   if(StrServer.equals("jacve.dyndns.org:9085")) {
+                       TipoFotos = jitems.getString("TipoFotos");
+                       LineaFotos = jitems.getString("LineaFotos");
+                   }
+
 
 
                 } catch (final JSONException e) {
@@ -1249,8 +1260,9 @@ String Empresa;
                                 (Numero.getString("k_descRODATECH").equals("anyType{}") ? "" : Numero.getString("k_descRODATECH")),
                                 (Numero.getString("k_descPARTECH").equals("anyType{}") ? "" : Numero.getString("k_descPARTECH")),
                                 (Numero.getString("k_descSHARK").equals("anyType{}") ? "" : Numero.getString("k_descSHARK")),
-                                (Numero.getString("k_descTRACKONE").equals("anyType{}") ? "" : Numero.getString("k_descTRACKONE"))));
-
+                                (Numero.getString("k_descTRACKONE").equals("anyType{}") ? "" : Numero.getString("k_descTRACKONE")),
+                                (Numero.getString("TipoFotos").equals("") ? "0" : Numero.getString("TipoFotos")),
+                                (Numero.getString("LineaFotos").equals("") ? "0" : Numero.getString("LineaFotos"))));
 
 
                     }
@@ -1333,8 +1345,10 @@ String Empresa;
                     String Des3 = listaCarShoping.get(i).getDesc3();
                     String Monto = listaCarShoping.get(i).getMonto();
                     String Des = listaCarShoping.get(i).getDescr();
+                    String FotoTipo = listaCarShoping.get(i).getTipoFotos();
+                    String FotoLinea = listaCarShoping.get(i).getLineaFotos();
 
-                    db.execSQL("INSERT INTO  carrito (Cliente,Parte,Existencia,Cantidad,Unidad,Precio,Desc1,Desc2,Desc3,Monto,Descri) values ('" + Cli + "','" + Par + "','" + Exi + "','" + Can + "','" + Uni + "','" + Pre + "','" + Des1 + "','" + Des2 + "','" + Des3 + "','" + Monto + "','" + Des + "')");
+                    db.execSQL("INSERT INTO  carrito (Cliente,Parte,Existencia,Cantidad,Unidad,Precio,Desc1,Desc2,Desc3,Monto,Descri,FotosTipo,FotosLinea) values ('" + Cli + "','" + Par + "','" + Exi + "','" + Can + "','" + Uni + "','" + Pre + "','" + Des1 + "','" + Des2 + "','" + Des3 + "','" + Monto + "','" + Des + "','"+FotoTipo+"','"+FotoLinea+"')");
                 }
                 db.close();
                 Intent carrito = new Intent(ActivityConsultaProductos.this, CarritoComprasActivity.class);
@@ -1369,7 +1383,9 @@ String Empresa;
                         fila.getString(8),
                         fila.getString(9),
                         fila.getString(10),
-                        fila.getString(11)));
+                        fila.getString(11),
+                        fila.getString(12),
+                        fila.getString(13)));
             } while (fila.moveToNext());
         }
         db.close();

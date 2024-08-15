@@ -81,10 +81,12 @@ public class ActivityScreenFirst extends AppCompatActivity {
     @SuppressWarnings("NonAsciiCharacters")
     String StrAño = "";
     String StrMes = "";
+    String StrDia = "";
     String StrFecha = "";
     String StrFecha2 = "";
     String mensaje = "";
     float EaglePor = 0;
+    float VazloPor =0;
     float RodatechPor = 0;
     float PartechPor = 0;
     float SharkPor = 0;
@@ -217,9 +219,11 @@ public class ActivityScreenFirst extends AppCompatActivity {
         //noinspection NonAsciiCharacters
         @SuppressLint("SimpleDateFormat") SimpleDateFormat AÑO = new SimpleDateFormat("yyyy");
         @SuppressLint("SimpleDateFormat") SimpleDateFormat MES = new SimpleDateFormat("MM");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat DIA = new SimpleDateFormat("DD");
         StrAño = AÑO.format(c.getTime());
         StrMes = MES.format(c.getTime());
-        StrFecha = StrAño + "-" + StrMes;
+
+        StrFecha = StrAño + "-" + StrMes+"-01";
         StrAño = StrAño.substring(2, 4);
 
 
@@ -429,24 +433,99 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         barChart.invalidate();
                         break;
                     }
+                    case "jacve.dyndns.org:9085": {
+
+
+                        float RodatechPresu = Float.parseFloat(listaPresupuesto.get(2).getPresopUesto());
+                        float PartechPresu = Float.parseFloat(listaPresupuesto.get(3).getPresopUesto());
+                        float SharkPresu = Float.parseFloat(listaPresupuesto.get(4).getPresopUesto());
+
+
+                        float RodatechVendido = (Float.parseFloat(listaPresupuesto.get(2).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(2).getVendido()) : 0;
+                        float PartechVendido = (Float.parseFloat(listaPresupuesto.get(3).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(3).getVendido()) : 0;
+                        float SharkVendido = (Float.parseFloat(listaPresupuesto.get(4).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(4).getVendido()) : 0;
+
+
+                        RodatechPor = (RodatechVendido * 100) / RodatechPresu;
+                        PartechPor = (PartechVendido * 100) / PartechPresu;
+                        SharkPor = (SharkVendido * 100) / SharkPresu;
+
+                        BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+                        BarDataSet barDataSet1 = new BarDataSet(barEntriesJacveRodatech(), listaPresupuesto.get(0).getLineaName());
+                        BarDataSet barDataSet2 = new BarDataSet(barEntriesJacvePartech(), listaPresupuesto.get(1).getLineaName());
+                        BarDataSet barDataSet3 = new BarDataSet(barEntriesJacveTG(), listaPresupuesto.get(2).getLineaName());
+
+
+                        barDataSet0.setColor(Color.RED);
+                        barDataSet1.setColor(Color.BLUE);
+                        barDataSet2.setColor(Color.MAGENTA);
+                        barDataSet3.setColor(Color.GREEN);
+
+                        BarData barData = new BarData();
+                        barData.addDataSet(barDataSet0);
+                        barData.addDataSet(barDataSet1);
+                        barData.addDataSet(barDataSet2);
+                        barData.addDataSet(barDataSet3);
+
+
+                        barChart.setData(barData);
+                        barChart.animateY(2000);
+                        barChart.invalidate();
+
+                        break;
+                    }   case "autodis.ath.cx:9085": {
+
+                        float EaglePresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
+                        float TrackonePresu = Float.parseFloat(listaPresupuesto.get(5).getPresopUesto());
+
+
+                        float EagleVendido = (Float.parseFloat(listaPresupuesto.get(0).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(0).getVendido()) : 0;
+                        float TrackoneVendido = (Float.parseFloat(listaPresupuesto.get(5).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(5).getVendido()) : 0;
+
+
+                        EaglePor = (EagleVendido * 100) / EaglePresu;
+                        TrackonePor = (TrackoneVendido * 100) / TrackonePresu;
+
+                        BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+                        BarDataSet barDataSet1 = new BarDataSet(barEntriesAutodisEagle(), listaPresupuesto.get(0).getLineaName());
+                        BarDataSet barDataSet6 = new BarDataSet(barEntriesAutodisTrackone(), listaPresupuesto.get(5).getLineaName());
+
+                        barDataSet0.setColor(Color.RED);
+                        barDataSet1.setColor(Color.BLUE);
+                        barDataSet6.setColor(Color.BLACK);
+
+                        BarData barData = new BarData();
+                        barData.addDataSet(barDataSet0);
+                        barData.addDataSet(barDataSet1);
+                        barData.addDataSet(barDataSet6);
+
+                        barChart.setData(barData);
+                        barChart.animateY(2000);
+                        barChart.invalidate();
+
+                        break;
+                    }
                     default: {
 
 
                         float EaglePresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
-                        float RodatechPresu = Float.parseFloat(listaPresupuesto.get(1).getPresopUesto());
-                        float PartechPresu = Float.parseFloat(listaPresupuesto.get(2).getPresopUesto());
-                        float SharkPresu = Float.parseFloat(listaPresupuesto.get(3).getPresopUesto());
-                        float TrackonePresu = Float.parseFloat(listaPresupuesto.get(4).getPresopUesto());
+                        float VazloPresu = Float.parseFloat(listaPresupuesto.get(1).getPresopUesto());
+                        float RodatechPresu = Float.parseFloat(listaPresupuesto.get(2).getPresopUesto());
+                        float PartechPresu = Float.parseFloat(listaPresupuesto.get(3).getPresopUesto());
+                        float SharkPresu = Float.parseFloat(listaPresupuesto.get(4).getPresopUesto());
+                        float TrackonePresu = Float.parseFloat(listaPresupuesto.get(5).getPresopUesto());
 
 
                         float EagleVendido = (Float.parseFloat(listaPresupuesto.get(0).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(0).getVendido()) : 0;
-                        float RodatechVendido = (Float.parseFloat(listaPresupuesto.get(1).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(1).getVendido()) : 0;
-                        float PartechVendido = (Float.parseFloat(listaPresupuesto.get(2).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(2).getVendido()) : 0;
-                        float SharkVendido = (Float.parseFloat(listaPresupuesto.get(3).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(3).getVendido()) : 0;
-                        float TrackoneVendido = (Float.parseFloat(listaPresupuesto.get(4).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(4).getVendido()) : 0;
+                        float VazloVendido = (Float.parseFloat(listaPresupuesto.get(1).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(1).getVendido()) : 0;
+                        float RodatechVendido = (Float.parseFloat(listaPresupuesto.get(2).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(2).getVendido()) : 0;
+                        float PartechVendido = (Float.parseFloat(listaPresupuesto.get(3).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(3).getVendido()) : 0;
+                        float SharkVendido = (Float.parseFloat(listaPresupuesto.get(4).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(4).getVendido()) : 0;
+                        float TrackoneVendido = (Float.parseFloat(listaPresupuesto.get(5).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(5).getVendido()) : 0;
 
 
                         EaglePor = (EagleVendido * 100) / EaglePresu;
+                        VazloPor = (VazloVendido * 100) / VazloPresu;
                         RodatechPor = (RodatechVendido * 100) / RodatechPresu;
                         PartechPor = (PartechVendido * 100) / PartechPresu;
                         SharkPor = (SharkVendido * 100) / SharkPresu;
@@ -458,13 +537,15 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         BarDataSet barDataSet3 = new BarDataSet(barEntries3(), listaPresupuesto.get(2).getLineaName());
                         BarDataSet barDataSet4 = new BarDataSet(barEntries4(), listaPresupuesto.get(3).getLineaName());
                         BarDataSet barDataSet5 = new BarDataSet(barEntries5(), listaPresupuesto.get(4).getLineaName());
+                        BarDataSet barDataSet6 = new BarDataSet(barEntries6(), listaPresupuesto.get(5).getLineaName());
 
                         barDataSet0.setColor(Color.RED);
                         barDataSet1.setColor(Color.BLUE);
-                        barDataSet2.setColor(Color.GREEN);
-                        barDataSet3.setColor(Color.YELLOW);
-                        barDataSet4.setColor(Color.CYAN);
-                        barDataSet5.setColor(Color.BLACK);
+                        barDataSet2.setColor(Color.MAGENTA);
+                        barDataSet3.setColor(Color.GREEN);
+                        barDataSet4.setColor(Color.YELLOW);
+                        barDataSet5.setColor(Color.CYAN);
+                        barDataSet6.setColor(Color.BLACK);
 
                         BarData barData = new BarData();
                         barData.addDataSet(barDataSet0);
@@ -473,6 +554,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         barData.addDataSet(barDataSet3);
                         barData.addDataSet(barDataSet4);
                         barData.addDataSet(barDataSet5);
+                        barData.addDataSet(barDataSet6);
 
                         barChart.setData(barData);
                         barChart.animateY(2000);
@@ -538,28 +620,59 @@ public class ActivityScreenFirst extends AppCompatActivity {
         barEntries.add(new BarEntry(2, EaglePor));
         return barEntries;
     }
-
     private ArrayList<BarEntry> barEntries2() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(3, RodatechPor));
+        barEntries.add(new BarEntry(3, VazloPor));
         return barEntries;
     }
-
     private ArrayList<BarEntry> barEntries3() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(4, PartechPor));
+        barEntries.add(new BarEntry(4, RodatechPor));
         return barEntries;
     }
 
     private ArrayList<BarEntry> barEntries4() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(5, SharkPor));
+        barEntries.add(new BarEntry(5, PartechPor));
         return barEntries;
     }
 
     private ArrayList<BarEntry> barEntries5() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(6, TrackonePor));
+        barEntries.add(new BarEntry(6, SharkPor));
+        return barEntries;
+    }
+
+    private ArrayList<BarEntry> barEntries6() {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barEntries.add(new BarEntry(7, TrackonePor));
+        return barEntries;
+    }
+
+    private ArrayList<BarEntry> barEntriesAutodisEagle() {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barEntries.add(new BarEntry(2, EaglePor));
+        return barEntries;
+    }
+    private ArrayList<BarEntry> barEntriesAutodisTrackone() {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barEntries.add(new BarEntry(3, TrackonePor));
+        return barEntries;
+    }
+
+    private ArrayList<BarEntry> barEntriesJacveRodatech() {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barEntries.add(new BarEntry(2, RodatechPor));
+        return barEntries;
+    }
+    private ArrayList<BarEntry> barEntriesJacvePartech() {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barEntries.add(new BarEntry(3, PartechPor));
+        return barEntries;
+    }
+    private ArrayList<BarEntry> barEntriesJacveTG() {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barEntries.add(new BarEntry(4, SharkPor));
         return barEntries;
     }
 

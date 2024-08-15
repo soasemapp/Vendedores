@@ -233,7 +233,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
 
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.jacve.mx/imagenes/";
                 break;
             case "autodis.ath.cx:9085":
                 Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
@@ -729,6 +729,7 @@ ButtonAdd.setEnabled(false);
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     dialogInterface.cancel();
                                     mDialog.dismiss();
+                                    ButtonAdd.setEnabled(true);
                                 }
                             });
 
@@ -744,6 +745,7 @@ ButtonAdd.setEnabled(false);
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.cancel();
                                 mDialog.dismiss();
+                                ButtonAdd.setEnabled(true);
                             }
                         });
 
@@ -830,6 +832,7 @@ ButtonAdd.setEnabled(false);
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.cancel();
                                 mDialog.dismiss();
+                                ButtonAdd.setEnabled(true);
                             }
                         });
                         AlertDialog titulo1 = alerta1.create();
@@ -849,6 +852,7 @@ ButtonAdd.setEnabled(false);
                         productosEd.setText("");
                         Cantidad123.setText("");
                         mDialog.dismiss();
+                        ButtonAdd.setEnabled(true);
                     }
                 });
                 AlertDialog titulo1 = alerta1.create();
@@ -1011,6 +1015,8 @@ ButtonAdd.setEnabled(false);
                         for (int i = 0; i < jitems.length(); i++) {
                             jitems = jsonObject.getJSONObject("Cotizacion");
                             Numero = jitems.getJSONObject("" + i + "");
+
+
                             listaCarShoping2.add(new CarritoVentasSANDG(
                                     (Numero.getString("k_Cliente").equals("") ? "" : Numero.getString("k_Cliente")),
                                     (Numero.getString("k_parte").equals("") ? "" : Numero.getString("k_parte")),
@@ -1038,8 +1044,11 @@ ButtonAdd.setEnabled(false);
                                     (Numero.getString("k_descRODATECH").equals("") ? "0" : Numero.getString("k_descRODATECH")),
                                     (Numero.getString("k_descPARTECH").equals("") ? "0" : Numero.getString("k_descPARTECH")),
                                     (Numero.getString("k_descSHARK").equals("") ? "0" : Numero.getString("k_descSHARK")),
-                                    (Numero.getString("k_descTRACKONE").equals("") ? "0" : Numero.getString("k_descTRACKONE"))));
-                        }
+                                    (Numero.getString("k_descTRACKONE").equals("") ? "0" : Numero.getString("k_descTRACKONE")),
+                                    (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("TipoFotos").equals("") ? "0" : Numero.getString("TipoFotos")):""),
+                                    (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("LineaFotos").equals("") ? "0" : Numero.getString("LineaFotos")):"")));
+
+                           }
                     }
                 } catch (final JSONException e) {
                     runOnUiThread(new Runnable() {
@@ -1124,8 +1133,10 @@ ButtonAdd.setEnabled(false);
                     String Des3 = listaCarShoping2.get(i).getDesc3();
                     String Monto = listaCarShoping2.get(i).getMonto();
                     String Des = listaCarShoping2.get(i).getDescr();
+                    String FotoTipo = listaCarShoping2.get(i).getTipoFotos();
+                    String FotoLinea = listaCarShoping2.get(i).getLineaFotos();
 
-                    db.execSQL("INSERT INTO  carrito (Cliente,Parte,Existencia,Cantidad,Unidad,Precio,Desc1,Desc2,Desc3,Monto,Descri) values ('" + Cli + "','" + Par + "','" + Exi + "','" + Can + "','" + Uni + "','" + Pre + "','" + Des1 + "','" + Des2 + "','" + Des3 + "','" + Monto + "','" + Des + "')");
+                    db.execSQL("INSERT INTO  carrito (Cliente,Parte,Existencia,Cantidad,Unidad,Precio,Desc1,Desc2,Desc3,Monto,Descri,FotosTipo,FotosLinea) values ('" + Cli + "','" + Par + "','" + Exi + "','" + Can + "','" + Uni + "','" + Pre + "','" + Des1 + "','" + Des2 + "','" + Des3 + "','" + Monto + "','" + Des + "','"+FotoTipo+"','"+FotoLinea+"')");
                 }
                 db.close();
                 mDialog.dismiss();
@@ -2467,7 +2478,9 @@ ButtonAdd.setEnabled(false);
                         fila.getString(8),
                         fila.getString(9),
                         fila.getString(10),
-                        fila.getString(11)));
+                        fila.getString(11),
+                        fila.getString(12),
+                        fila.getString(13)));
             } while (fila.moveToNext());
         }
         AdaptadorCarrito adapter = new AdaptadorCarrito(listaCarShoping, Desc1, StrServer, context, Empresa);

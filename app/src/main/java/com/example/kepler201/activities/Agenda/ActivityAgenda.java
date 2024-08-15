@@ -266,9 +266,6 @@ public class ActivityAgenda extends AppCompatActivity {
                         JSONObject jitems, Numero = null;
                         JSONObject jsonObject = new JSONObject(jsonStr);
                         jitems = jsonObject.getJSONObject("Mensaje");
-
-
-
                         Mensaje = jitems.getString("k_respuesta");
 
                     }
