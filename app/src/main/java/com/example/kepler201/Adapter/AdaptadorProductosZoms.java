@@ -47,7 +47,7 @@ public class AdaptadorProductosZoms extends RecyclerView.Adapter<AdaptadorProduc
 
         if(Empresa.equals("https://www.jacve.mx/imagenes/")){
             EmpresaAd = "";
-            EmpresaAd=Empresa+listaproductos.get(position).getFotoTipo()+"/"+listaproductos.get(position).getFotoLinea()+"/"+listaproductos.get(position).getClave()+"/2.jpg";
+            EmpresaAd=Empresa+listaproductos.get(position).getFotoTipo()+"/"+listaproductos.get(position).getFotoLinea()+"/"+listaproductos.get(position).getClave()+"/1.jpg";
         }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
             EmpresaAd="";
             EmpresaAd=Empresa+listaproductos.get(position).getClave()+"/4.webp";

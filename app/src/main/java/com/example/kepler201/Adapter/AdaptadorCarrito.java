@@ -96,7 +96,7 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.View
 
         if(Empresa.equals("https://www.jacve.mx/imagenes/")){
             EmpresaAd = "";
-            EmpresaAd=Empresa+listaCarrito.get(position).getFotosTipo()+"/"+listaCarrito.get(position).getFotosLinea()+"/"+listaCarrito.get(position).getParte()+"/2.jpg";
+            EmpresaAd=Empresa+listaCarrito.get(position).getFotosTipo()+"/"+listaCarrito.get(position).getFotosLinea()+"/"+listaCarrito.get(position).getParte()+"/1.jpg";
         }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
             EmpresaAd="";
             EmpresaAd=Empresa+listaCarrito.get(position).getParte()+"/4.webp";

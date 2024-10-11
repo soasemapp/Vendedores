@@ -246,6 +246,12 @@ public class xmlCarritoCompras extends SoapSerializationEnvelope {
         writer.text("0");
         writer.endTag(tem, "k_desc");
 
+        writer.startTag(tem, "k_81");
+        writer.text("V");
+        writer.endTag(tem, "k_81");
+
+
+
         writer.startTag(tem, "k_87");
         writer.text(DescuentoPro);
         writer.endTag(tem, "k_87");
@@ -267,7 +273,7 @@ public class xmlCarritoCompras extends SoapSerializationEnvelope {
         writer.endTag(tem, "k_99");
 
         writer.startTag(tem, "k_100");
-        writer.text(descuRodatech);         //Partech
+        writer.text(descuPartec);         //Partech
         writer.endTag(tem, "k_100");
 
         writer.startTag(tem, "k_101");
@@ -287,6 +293,7 @@ public class xmlCarritoCompras extends SoapSerializationEnvelope {
         writer.startTag(tem, "k_monto");
         writer.text(formatNumberCurrency(Montototal));
         writer.endTag(tem, "k_monto");
+
         writer.startTag(tem, "k_25");
         writer.text(Comentario2);
         writer.endTag(tem, "k_25");

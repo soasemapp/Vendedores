@@ -2497,13 +2497,25 @@ ButtonAdd.setEnabled(false);
         txtClaveCliente.setText(Html.fromHtml((Cliente.equals("null") ? "No hay Cliente" : "<font color = #FF0000>" + Cliente + "</font> <br>") + (Nombre.equals("null") ? "" : Nombre)));
 
         if (!Cliente.equals("null")) {
-            Infor.setVisibility(View.VISIBLE);
-            Infor.setText(Html.fromHtml("Calle:" + Calle + "<br>" +
-                    "Colonia:" + Colonia + "<br>" +
-                    "Poblacion:" + Poblacion + "<br>" +
-                    "Descuento:" + Desc1));
+            if(StrServer.equals("vazlocolombia.dyndns.org:9085")){
+                Infor.setVisibility(View.VISIBLE);
+                Infor.setText(Html.fromHtml("Calle:" + Calle + "<br>" +
+                        "RFC:" + rfc + "<br>" +
+                        "Poblacion:" + Poblacion + "<br>" +
+                        "Descuento:" + Desc1));
 
-            comentario.setText(Comentario1 + "\n" + " " + Comentario2 + "\n" + " " + Comentario2 + "\n" + " " + Comentario3);
+                comentario.setText(Comentario1 + "\n" + " " + Comentario2 + "\n" + " " + Comentario3);
+
+            }else{
+                Infor.setVisibility(View.VISIBLE);
+                Infor.setText(Html.fromHtml("Calle:" + Calle + "<br>" +
+                        "Colonia:" + Colonia + "<br>" +
+                        "Poblacion:" + Poblacion + "<br>" +
+                        "Descuento:" + Desc1));
+
+                comentario.setText(Comentario1 + "\n" + " " + Comentario2 + "\n" + " " + Comentario3);
+
+            }
 
         } else {
             Infor.setVisibility(View.GONE);

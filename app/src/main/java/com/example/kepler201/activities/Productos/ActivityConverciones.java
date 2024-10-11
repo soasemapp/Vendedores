@@ -589,7 +589,7 @@ public class ActivityConverciones extends AppCompatActivity {
 
                 String EmpresaFotos="";
                 if(Empresa.equals("https://www.jacve.mx/imagenes/")){
-                    EmpresaFotos=Empresa+listaExistencia.get(0).getFotosTipo()+"/"+listaExistencia.get(0).getFotosLinea()+"/"+strClave+"/2.jpg";
+                    EmpresaFotos=Empresa+listaExistencia.get(0).getFotosTipo()+"/"+listaExistencia.get(0).getFotosLinea()+"/"+strClave+"/1.jpg";
                 }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
                     EmpresaFotos=Empresa+strClave+"/4.webp";
                 }else{

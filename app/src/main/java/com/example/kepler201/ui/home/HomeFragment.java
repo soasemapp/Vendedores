@@ -1121,6 +1121,7 @@ String mensaje =e.getMessage().toString();
                         }else{
                             ListaProductoskff.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
                         }
+                        break;
                     case"15":
                         ListaProductoszoms.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
                         break;

@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -47,6 +48,7 @@ import dmax.dialog.SpotsDialog;
 public class MainActivity extends AppCompatActivity {
 
     Login loginSave = new Login();
+    LinearLayout LinearJacve,LinearTodos;
     private EditText usu;
     private EditText clave;
     private int result1 = 0;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private String version;
     int  Resultado=0;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
         Button btnSERVIDOR = findViewById(R.id.btnSERVIDOR);
         Button btn1 = findViewById(R.id.btnbuscar);
         imgEmpresa = findViewById(R.id.imagEmpresa);
+        LinearTodos=findViewById(R.id.LinearTodos);
+        LinearJacve=findViewById(R.id.LinearJacve);
         preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
         editor = preference.edit();
 
@@ -100,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
                                     .fit()
                                     .centerInside()
                                     .into(imgEmpresa);
+                            LinearJacve.setVisibility(View.VISIBLE);
+                            LinearTodos.setVisibility(View.GONE);
                         } else if (which == 1) {
                             StrServer = "autodis.ath.cx:9085";
                             Picasso.with(getApplicationContext()).
@@ -108,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
                                     .fit()
                                     .centerInside()
                                     .into(imgEmpresa);
+                            LinearJacve.setVisibility(View.GONE);
+                            LinearTodos.setVisibility(View.VISIBLE);
                         } else if (which == 2) {
                             StrServer = "cecra.ath.cx:9085";
                             Picasso.with(getApplicationContext()).
@@ -116,6 +125,9 @@ public class MainActivity extends AppCompatActivity {
                                     .fit()
                                     .centerInside()
                                     .into(imgEmpresa);
+
+                            LinearJacve.setVisibility(View.GONE);
+                            LinearTodos.setVisibility(View.VISIBLE);
                         } else if (which == 3) {
                             StrServer = "guvi.ath.cx:9085";
                             Picasso.with(getApplicationContext()).
@@ -124,6 +136,9 @@ public class MainActivity extends AppCompatActivity {
                                     .fit()
                                     .centerInside()
                                     .into(imgEmpresa);
+
+                            LinearJacve.setVisibility(View.GONE);
+                            LinearTodos.setVisibility(View.VISIBLE);
                         } else if (which == 4) {
 
                             StrServer = "cedistabasco.ddns.net:9085";
@@ -134,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
                                     .centerInside()
                                     .into(imgEmpresa);
 
+                            LinearJacve.setVisibility(View.GONE);
+                            LinearTodos.setVisibility(View.VISIBLE);
                         } else if (which == 5) {
                             StrServer = "sprautomotive.servehttp.com:9085";
                             Picasso.with(getApplicationContext()).
@@ -143,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
                                     .centerInside()
                                     .into(imgEmpresa);
 
+                            LinearJacve.setVisibility(View.GONE);
+                            LinearTodos.setVisibility(View.VISIBLE);
                         } else if (which == 6) {
                             StrServer = "sprautomotive.servehttp.com:9090";
                             Picasso.with(getApplicationContext()).
@@ -151,6 +170,9 @@ public class MainActivity extends AppCompatActivity {
                                     .fit()
                                     .centerInside()
                                     .into(imgEmpresa);
+
+                            LinearJacve.setVisibility(View.GONE);
+                            LinearTodos.setVisibility(View.VISIBLE);
                         } else if (which == 7) {
                             StrServer = "vazlocolombia.dyndns.org:9085";
                             Picasso.with(getApplicationContext()).
@@ -159,6 +181,9 @@ public class MainActivity extends AppCompatActivity {
                                     .fit()
                                     .centerInside()
                                     .into(imgEmpresa);
+
+                            LinearJacve.setVisibility(View.GONE);
+                            LinearTodos.setVisibility(View.VISIBLE);
                         }else if (which == 8) {
 
                             StrServer = "cedistabasco.ddns.net:9080";
@@ -169,6 +194,9 @@ public class MainActivity extends AppCompatActivity {
                                     .centerInside()
                                     .into(imgEmpresa);
 
+
+                            LinearJacve.setVisibility(View.GONE);
+                            LinearTodos.setVisibility(View.VISIBLE);
                         }
 
                     }

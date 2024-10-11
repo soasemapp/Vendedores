@@ -11,8 +11,10 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -28,10 +30,6 @@ import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.AgendaSANDG;
 import com.example.kepler201.SetterandGetter.PresupuestoLineaSANDG;
 import com.example.kepler201.SetterandGetter.ProspectSANDG;
-import com.example.kepler201.XMLS.xmlAgenda;
-import com.example.kepler201.XMLS.xmlPresopuestoLinea;
-import com.example.kepler201.XMLS.xmlPros;
-import com.example.kepler201.activities.Agenda.ActivityAgenda;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 import com.github.mikephil.charting.charts.BarChart;
@@ -41,13 +39,7 @@ import com.github.mikephil.charting.data.BarEntry;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -91,6 +83,15 @@ public class ActivityScreenFirst extends AppCompatActivity {
     float PartechPor = 0;
     float SharkPor = 0;
     float TrackonePor = 0;
+    float Mechanic=0;
+
+    float GSPAMORTIGUADOR=0;
+    float GSPHM=0;
+    float GSPSUSPENSION=0;
+    float GSPRODAMIENTOS=0;
+    float GSPTRACCION=0;
+    float Zoms=0;
+    float Kff=0;
     AlertDialog mDialog;
     String date;
 
@@ -106,6 +107,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
         mDialog = new SpotsDialog.Builder().setContext(ActivityScreenFirst.this).setMessage("Espere un momento...").build();
         mDialog.setCancelable(false);
         barChart = findViewById(R.id.barChart);
+
         Button btnsearch = findViewById(R.id.btnSearch);
         EditText vendedi = findViewById(R.id.ediVend);
         fecha = findViewById(R.id.fecha);
@@ -263,7 +265,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String parametros = "fecha=" + StrFecha + "&vendedor=" + strco + "&mes=" + StrMes + "&ano=" + StrAño;
+            String parametros = "fecha=" + StrFecha + "&vendedor=" + strco + "&mes=" + "7" + "&ano=" + StrAño;
             String url = "http://" + StrServer + "/graficaapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
@@ -436,40 +438,88 @@ public class ActivityScreenFirst extends AppCompatActivity {
                     case "jacve.dyndns.org:9085": {
 
 
-                        float RodatechPresu = Float.parseFloat(listaPresupuesto.get(2).getPresopUesto());
-                        float PartechPresu = Float.parseFloat(listaPresupuesto.get(3).getPresopUesto());
-                        float SharkPresu = Float.parseFloat(listaPresupuesto.get(4).getPresopUesto());
+                        float GSPAMORTIGUADORPRESU = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
+                        float GSPHMPRESU = Float.parseFloat(listaPresupuesto.get(1).getPresopUesto());
+                        float GSPSUSPENSIONPRESU = Float.parseFloat(listaPresupuesto.get(2).getPresopUesto());
+                        float GSPRODAMIENTOSPRESU = Float.parseFloat(listaPresupuesto.get(3).getPresopUesto());
+                        float GSPTRACCIONPRESU = Float.parseFloat(listaPresupuesto.get(4).getPresopUesto());
+                        float MECHANICCHOICEPRESU = Float.parseFloat(listaPresupuesto.get(5).getPresopUesto());
+                        float KFFPRESU = Float.parseFloat(listaPresupuesto.get(6).getPresopUesto());
+                        float ZOMSPRESU = Float.parseFloat(listaPresupuesto.get(7).getPresopUesto());
 
+                        float GSPAMORTIGUADORVendido = (Float.parseFloat(listaPresupuesto.get(0).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(0).getVendido()) : 0;
+                        float GSPHMVendido = (Float.parseFloat(listaPresupuesto.get(1).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(1).getVendido()) : 0;
+                        float GSPSUSPENSIONVendido = (Float.parseFloat(listaPresupuesto.get(2).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(2).getVendido()) : 0;
+                        float GSPRODAMIENTOSVendido = (Float.parseFloat(listaPresupuesto.get(3).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(3).getVendido()) : 0;
+                        float GSPTRACCIONVendido = (Float.parseFloat(listaPresupuesto.get(4).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(4).getVendido()) : 0;
+                        float MECHANICCHOICEVendido = (Float.parseFloat(listaPresupuesto.get(5).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(5).getVendido()) : 0;
+                        float KFFVendido = (Float.parseFloat(listaPresupuesto.get(6).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(6).getVendido()) : 0;
+                        float ZOMSVendido = (Float.parseFloat(listaPresupuesto.get(7).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(7).getVendido()) : 0;
 
-                        float RodatechVendido = (Float.parseFloat(listaPresupuesto.get(2).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(2).getVendido()) : 0;
-                        float PartechVendido = (Float.parseFloat(listaPresupuesto.get(3).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(3).getVendido()) : 0;
-                        float SharkVendido = (Float.parseFloat(listaPresupuesto.get(4).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(4).getVendido()) : 0;
-
-
-                        RodatechPor = (RodatechVendido * 100) / RodatechPresu;
-                        PartechPor = (PartechVendido * 100) / PartechPresu;
-                        SharkPor = (SharkVendido * 100) / SharkPresu;
+                        GSPAMORTIGUADOR= (GSPAMORTIGUADORVendido * 100) / GSPAMORTIGUADORPRESU;
+                        GSPHM= (GSPHMVendido * 100) / GSPHMPRESU;
+                        GSPSUSPENSION= (GSPSUSPENSIONVendido * 100) / GSPSUSPENSIONPRESU;
+                        GSPRODAMIENTOS= (GSPRODAMIENTOSVendido * 100) / GSPRODAMIENTOSPRESU;
+                        GSPTRACCION= (GSPTRACCIONVendido * 100) / GSPTRACCIONPRESU;
+                        Mechanic = (MECHANICCHOICEVendido * 100) / MECHANICCHOICEPRESU;
+                        Kff = (KFFVendido * 100) / KFFPRESU;
+                        Zoms = (ZOMSVendido * 100) / ZOMSPRESU;
 
                         BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
-                        BarDataSet barDataSet1 = new BarDataSet(barEntriesJacveRodatech(), listaPresupuesto.get(0).getLineaName());
-                        BarDataSet barDataSet2 = new BarDataSet(barEntriesJacvePartech(), listaPresupuesto.get(1).getLineaName());
-                        BarDataSet barDataSet3 = new BarDataSet(barEntriesJacveTG(), listaPresupuesto.get(2).getLineaName());
+                        BarDataSet barDataSet1 = new BarDataSet(barEntriesJacveGSPAMORTIGUADOR(), listaPresupuesto.get(0).getLineaName());
+                        BarDataSet barDataSet2 = new BarDataSet(barEntriesJacveGSPHM(), listaPresupuesto.get(1).getLineaName());
+                        BarDataSet barDataSet3 = new BarDataSet(barEntriesJacveGSPSUSPENSION(), listaPresupuesto.get(2).getLineaName());
+                        BarDataSet barDataSet4 = new BarDataSet(barEntriesJacveGSPRODAMIENTOS(), listaPresupuesto.get(3).getLineaName());
+                        BarDataSet barDataSet5 = new BarDataSet(barEntriesJacveGSPTRACCION(), listaPresupuesto.get(4).getLineaName());
+                        BarDataSet barDataSet6 = new BarDataSet(barEntriesJacveMeca(), listaPresupuesto.get(5).getLineaName());
+                        BarDataSet barDataSet7 = new BarDataSet(barEntriesJacveKFF(), listaPresupuesto.get(6).getLineaName());
+                        BarDataSet barDataSet8 = new BarDataSet(barEntriesJacveZoms(), listaPresupuesto.get(7).getLineaName());
 
 
-                        barDataSet0.setColor(Color.RED);
-                        barDataSet1.setColor(Color.BLUE);
-                        barDataSet2.setColor(Color.MAGENTA);
-                        barDataSet3.setColor(Color.GREEN);
+                        barDataSet0.setColor(Color.rgb(255, 0, 0));
+                        barDataSet1.setColor(Color.rgb(255, 100, 0));
+                        barDataSet2.setColor(Color.rgb(255, 243, 0));
+                        barDataSet3.setColor(Color.rgb(205, 255, 0 ));
+                        barDataSet4.setColor(Color.rgb(50, 255, 0 ));
+                        barDataSet5.setColor(Color.rgb(0, 255, 85  ));
+                        barDataSet6.setColor(Color.rgb(0, 255, 162  ));
+                        barDataSet7.setColor(Color.rgb(0, 255, 228  ));
+                        barDataSet8.setColor(Color.rgb(0, 174, 255  ));
+
+                        barDataSet1.setValueTextSize(1);
+                        barDataSet2.setValueTextSize(1);
+                        barDataSet3.setValueTextSize(1);
+                        barDataSet4.setValueTextSize(1);
+                        barDataSet5.setValueTextSize(1);
+                        barDataSet6.setValueTextSize(1);
+                        barDataSet7.setValueTextSize(1);
+                        barDataSet8.setValueTextSize(1);
+
 
                         BarData barData = new BarData();
                         barData.addDataSet(barDataSet0);
                         barData.addDataSet(barDataSet1);
                         barData.addDataSet(barDataSet2);
                         barData.addDataSet(barDataSet3);
+                        barData.addDataSet(barDataSet4);
+                        barData.addDataSet(barDataSet5);
+                        barData.addDataSet(barDataSet6);
+                        barData.addDataSet(barDataSet7);
+                        barData.addDataSet(barDataSet8);
 
+                        Display display = getWindowManager().getDefaultDisplay();
+                        int width = display.getWidth();  // obsoleto (deprecated)
+                        int height = display.getHeight();  // obsoleto (deprecated)
+                        ViewGroup.LayoutParams params = barChart.getLayoutParams();
+                        params.height =800 ;
+                        params.width = width;
 
+                        barChart.setLayoutParams(params);
                         barChart.setData(barData);
+                        barChart.setDrawGridBackground(false);
+                        barChart.setDrawBarShadow(true);
                         barChart.animateY(2000);
+
                         barChart.invalidate();
 
                         break;
@@ -568,38 +618,173 @@ public class ActivityScreenFirst extends AppCompatActivity {
 
             } else {
 
+switch (StrServer){
+    case"jacve.dyndns.org:9085":
 
-                EaglePor = 0;
-                RodatechPor = 0;
-                PartechPor = 0;
-                SharkPor = 0;
-                TrackonePor = 0;
 
-                BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
-                BarDataSet barDataSet1 = new BarDataSet(barEntries1(), "Eagle");
-                BarDataSet barDataSet2 = new BarDataSet(barEntries2(), "Rodatech");
-                BarDataSet barDataSet3 = new BarDataSet(barEntries3(), "Partech");
-                BarDataSet barDataSet4 = new BarDataSet(barEntries4(), "Shark");
-                BarDataSet barDataSet5 = new BarDataSet(barEntries5(), "TrackOne");
 
-                barDataSet0.setColor(Color.RED);
-                barDataSet1.setColor(Color.BLUE);
-                barDataSet2.setColor(Color.GREEN);
-                barDataSet3.setColor(Color.YELLOW);
-                barDataSet4.setColor(Color.CYAN);
-                barDataSet5.setColor(Color.BLACK);
+        BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+        BarDataSet barDataSet1 = new BarDataSet(barEntriesJacveGSPAMORTIGUADOR(), "GSP AMORTIGUADOR");
+        BarDataSet barDataSet2 = new BarDataSet(barEntriesJacveGSPHM(), "GSP HM");
+        BarDataSet barDataSet3 = new BarDataSet(barEntriesJacveGSPSUSPENSION(), "GSP SUSPENSION");
+        BarDataSet barDataSet4 = new BarDataSet(barEntriesJacveGSPRODAMIENTOS(), "GSP RODAMIENTOS");
+        BarDataSet barDataSet5 = new BarDataSet(barEntriesJacveGSPTRACCION(), "GSP TRACCION");
+        BarDataSet barDataSet6 = new BarDataSet(barEntriesJacveMeca(), "Mechanic Choice");
+        BarDataSet barDataSet7 = new BarDataSet(barEntriesJacveKFF(), "KFF");
+        BarDataSet barDataSet8 = new BarDataSet(barEntriesJacveZoms(), "Zoms");
 
-                BarData barData = new BarData();
-                barData.addDataSet(barDataSet0);
-                barData.addDataSet(barDataSet1);
-                barData.addDataSet(barDataSet2);
-                barData.addDataSet(barDataSet3);
-                barData.addDataSet(barDataSet4);
-                barData.addDataSet(barDataSet5);
 
-                barChart.setData(barData);
-                barChart.animateY(2000);
-                barChart.invalidate();
+        barDataSet0.setColor(Color.rgb(255, 0, 0));
+        barDataSet1.setColor(Color.rgb(255, 100, 0));
+        barDataSet2.setColor(Color.rgb(255, 243, 0));
+        barDataSet3.setColor(Color.rgb(205, 255, 0 ));
+        barDataSet4.setColor(Color.rgb(50, 255, 0 ));
+        barDataSet5.setColor(Color.rgb(0, 255, 85  ));
+        barDataSet6.setColor(Color.rgb(0, 255, 162  ));
+        barDataSet7.setColor(Color.rgb(0, 255, 228  ));
+        barDataSet8.setColor(Color.rgb(0, 174, 255  ));
+
+        BarData barData = new BarData();
+        barData.addDataSet(barDataSet0);
+        barData.addDataSet(barDataSet1);
+        barData.addDataSet(barDataSet2);
+        barData.addDataSet(barDataSet3);
+        barData.addDataSet(barDataSet4);
+        barData.addDataSet(barDataSet5);
+        barData.addDataSet(barDataSet6);
+        barData.addDataSet(barDataSet7);
+        barData.addDataSet(barDataSet8);
+
+
+        barChart.setData(barData);
+        barChart.animateY(2000);
+        barChart.invalidate();
+        break;
+    case"autodis.ath.cx:9085":
+
+
+        barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+        barDataSet1 = new BarDataSet(barEntriesAutodisEagle(),"Eagle");
+        barDataSet6 = new BarDataSet(barEntriesAutodisTrackone(), "TrackOne");
+
+        barDataSet0.setColor(Color.RED);
+        barDataSet1.setColor(Color.BLUE);
+        barDataSet6.setColor(Color.BLACK);
+
+        barData = new BarData();
+        barData.addDataSet(barDataSet0);
+        barData.addDataSet(barDataSet1);
+        barData.addDataSet(barDataSet6);
+
+        barChart.setData(barData);
+        barChart.animateY(2000);
+        barChart.invalidate();
+        break;
+    case"vazlocolombia.dyndns.org:9085":
+
+
+      barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+      barDataSet1 = new BarDataSet(RodaGr(), "Venta");
+
+        barDataSet0.setColor(Color.RED);
+        barDataSet1.setColor(Color.BLUE);
+
+        barData = new BarData();
+        barData.addDataSet(barDataSet0);
+        barData.addDataSet(barDataSet1);
+
+        barChart.setData(barData);
+        barChart.animateY(2000);
+        barChart.invalidate();
+        break;
+        case"sprautomotive.servehttp.com:9080":
+
+
+             barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+             barDataSet1 = new BarDataSet(SharkGr(), "SHARK");
+
+            barDataSet0.setColor(Color.RED);
+            barDataSet1.setColor(Color.CYAN);
+
+             barData = new BarData();
+            barData.addDataSet(barDataSet0);
+            barData.addDataSet(barDataSet1);
+
+            barChart.setData(barData);
+            barChart.animateY(2000);
+            barChart.invalidate();
+            break;
+        case"sprautomotive.servehttp.com:9095":
+
+
+             barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+             barDataSet1 = new BarDataSet(ParteGr(), "Partech");
+
+            barDataSet0.setColor(Color.RED);
+            barDataSet1.setColor(Color.YELLOW);
+
+
+             barData = new BarData();
+            barData.addDataSet(barDataSet0);
+            barData.addDataSet(barDataSet1);
+
+            barChart.setData(barData);
+            barChart.animateY(2000);
+            barChart.invalidate();
+            break;
+        case "sprautomotive.servehttp.com:9090":
+
+             barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+             barDataSet1 = new BarDataSet(RodaGr(), "Rodatech");
+
+            barDataSet0.setColor(Color.RED);
+            barDataSet1.setColor(Color.GREEN);
+
+            barData = new BarData();
+            barData.addDataSet(barDataSet0);
+            barData.addDataSet(barDataSet1);
+
+            barChart.setData(barData);
+            barChart.animateY(2000);
+            barChart.invalidate();
+
+            break;
+    default:
+
+        EaglePor = 0;
+        RodatechPor = 0;
+        PartechPor = 0;
+        SharkPor = 0;
+        TrackonePor = 0;
+
+        barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+        barDataSet1 = new BarDataSet(barEntries1(), "Eagle");
+        barDataSet2 = new BarDataSet(barEntries2(), "Rodatech");
+        barDataSet3 = new BarDataSet(barEntries3(), "Partech");
+        barDataSet4 = new BarDataSet(barEntries4(), "Shark");
+        barDataSet5 = new BarDataSet(barEntries5(), "TrackOne");
+
+        barDataSet0.setColor(Color.RED);
+        barDataSet1.setColor(Color.BLUE);
+        barDataSet2.setColor(Color.GREEN);
+        barDataSet3.setColor(Color.YELLOW);
+        barDataSet4.setColor(Color.CYAN);
+        barDataSet5.setColor(Color.BLACK);
+
+        barData = new BarData();
+        barData.addDataSet(barDataSet0);
+        barData.addDataSet(barDataSet1);
+        barData.addDataSet(barDataSet2);
+        barData.addDataSet(barDataSet3);
+        barData.addDataSet(barDataSet4);
+        barData.addDataSet(barDataSet5);
+
+        barChart.setData(barData);
+        barChart.animateY(2000);
+        barChart.invalidate();
+        break;
+}
+
 
             }
             mDialog.dismiss();
@@ -659,23 +844,50 @@ public class ActivityScreenFirst extends AppCompatActivity {
         barEntries.add(new BarEntry(3, TrackonePor));
         return barEntries;
     }
+    private ArrayList<BarEntry> barEntriesJacveGSPAMORTIGUADOR() {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barEntries.add(new BarEntry(2, GSPAMORTIGUADOR));
+        return barEntries;
+    }
+    private ArrayList<BarEntry> barEntriesJacveGSPHM() {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
 
-    private ArrayList<BarEntry> barEntriesJacveRodatech() {
-        ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(2, RodatechPor));
+        barEntries.add(new BarEntry(3, GSPHM));
         return barEntries;
     }
-    private ArrayList<BarEntry> barEntriesJacvePartech() {
+    private ArrayList<BarEntry> barEntriesJacveGSPSUSPENSION() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(3, PartechPor));
+        barEntries.add(new BarEntry(4, GSPSUSPENSION));
         return barEntries;
     }
-    private ArrayList<BarEntry> barEntriesJacveTG() {
+    private ArrayList<BarEntry> barEntriesJacveGSPRODAMIENTOS() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(4, SharkPor));
+        barEntries.add(new BarEntry(5, GSPRODAMIENTOS));
         return barEntries;
     }
 
+    private ArrayList<BarEntry> barEntriesJacveGSPTRACCION() {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barEntries.add(new BarEntry(6, GSPTRACCION));
+        return barEntries;
+    }
+    private ArrayList<BarEntry> barEntriesJacveMeca() {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barEntries.add(new BarEntry(7, Mechanic));
+        return barEntries;
+    }
+
+
+    private ArrayList<BarEntry> barEntriesJacveKFF() {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barEntries.add(new BarEntry(8, Kff));
+        return barEntries;
+    }
+    private ArrayList<BarEntry> barEntriesJacveZoms() {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barEntries.add(new BarEntry(9, Zoms));
+        return barEntries;
+    }
     private ArrayList<BarEntry> RodaGr() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
         barEntries.add(new BarEntry(2, RodatechPor));
@@ -688,11 +900,14 @@ public class ActivityScreenFirst extends AppCompatActivity {
         return barEntries;
     }
 
+
     private ArrayList<BarEntry> SharkGr() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
         barEntries.add(new BarEntry(2, SharkPor));
         return barEntries;
     }
+
+
 
 
     @SuppressWarnings("deprecation")

@@ -59,11 +59,12 @@ public class ActivityAgendaRegister extends AppCompatActivity {
     String strusr, strpass, strname, strlname, strtype, strbran, strma, StrServer, strcodBra, strcode, Strdate = "", Strdatetoday = "";
     String mensaje, stractividad = "", strcomentario = "";
     RadioButton Todoyes, Todono,Eagleyes, Eagleno, TrackOneyes, TrackOneno, Rodatechyes, Rodatechno, Partechyes, Partechno, TGyes, TGno,Vazsi,Vazno;
+    RadioButton Todoyesj, Todonoj,Mecasi, Mecano, GSPsi, GSPno, KFFSI, KFFNO, ZOMSSI, ZOMSNO;
     String Eagle = "N", Trackone = "N", Rodatech = "N", Partech = "N", TG = "N",Vazlo = "N";
     TextView etiqueta;
     ArrayList<SearachClientSANDG> listaclientG = new ArrayList<>();
     ArrayList<SearachClientSANDG> listaActividades = new ArrayList<>();
-    LinearLayout partechlay;
+    LinearLayout partechlay,OcultarCedis,OcultarJacve;
     String date;
 
     @Override
@@ -90,10 +91,23 @@ public class ActivityAgendaRegister extends AppCompatActivity {
         TGno = findViewById(R.id.tgno);
         Vazsi=findViewById(R.id.vazsi);
         Vazno=findViewById(R.id.vazno);
+        Todoyesj=findViewById(R.id.TodosyesJ);
+        Todonoj=findViewById(R.id.TodosnoJ);
+        Mecasi=findViewById(R.id.MECAyes);
+        Mecano=findViewById(R.id.MECAno);
+        GSPsi=findViewById(R.id.GSPyes);
+        GSPno=findViewById(R.id.GSPno);
+        KFFSI=findViewById(R.id.KFFyes);
+        KFFNO=findViewById(R.id.KFFno);
+        ZOMSSI=findViewById(R.id.ZOMSyes);
+        ZOMSNO=findViewById(R.id.ZOMSno);
+
         fecha = findViewById(R.id.fecha);
         edcomentario = findViewById(R.id.idcomentario);
         etiqueta = findViewById(R.id.txtetiqueta);
         partechlay = findViewById(R.id.partechlay);
+        OcultarCedis=findViewById(R.id.CedisOcultar);
+        OcultarJacve=findViewById(R.id.JacveOcultar);
 
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 
@@ -119,6 +133,58 @@ public class ActivityAgendaRegister extends AppCompatActivity {
             Partech = "N";
             partechlay.setVisibility(View.GONE);
         }
+
+        if (StrServer.equals("jacve.dyndns.org:9085")){
+            OcultarJacve.setVisibility(View.VISIBLE);
+            OcultarJacve.setEnabled(false);
+            OcultarCedis.setVisibility(View.GONE);
+            Mecasi.setEnabled(false);
+            GSPsi.setEnabled(false);
+            KFFSI.setEnabled(false);
+            ZOMSSI.setEnabled(false);
+
+            Mecano.setEnabled(false);
+            GSPno.setEnabled(false);
+            KFFNO.setEnabled(false);
+            ZOMSNO.setEnabled(false);
+            Todoyesj.setEnabled(false);
+            Todonoj.setEnabled(false);
+
+        }else{
+            OcultarJacve.setVisibility(View.GONE);
+            OcultarCedis.setVisibility(View.VISIBLE);
+        }
+
+
+        Todoyesj.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Mecasi.setChecked(true);
+                GSPsi.setChecked(true);
+                KFFSI.setChecked(true);
+                ZOMSSI.setChecked(true);
+
+                Mecano.setChecked(false);
+                GSPno.setChecked(false);
+                KFFNO.setChecked(false);
+                ZOMSNO.setChecked(false);
+
+            }
+        });
+        Todonoj.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Mecasi.setChecked(false);
+                GSPsi.setChecked(false);
+                KFFSI.setChecked(false);
+                ZOMSSI.setChecked(false);
+
+                Mecano.setChecked(true);
+                GSPno.setChecked(true);
+                KFFNO.setChecked(true);
+                ZOMSNO.setChecked(true);
+            }
+        });
 
 
         Todoyes.setOnClickListener(new View.OnClickListener() {

@@ -800,7 +800,7 @@ String Empresa;
 
                 String EmpresaFotos="";
                 if(Empresa.equals("https://www.jacve.mx/imagenes/")){
-                    EmpresaFotos=Empresa+TipoFotos+"/"+LineaFotos+"/"+strClave+"/2.jpg";
+                    EmpresaFotos=Empresa+TipoFotos+"/"+LineaFotos+"/"+strClave+"/1.jpg";
                 }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
                     EmpresaFotos=Empresa+strClave+"/4.webp";
                 }else{
