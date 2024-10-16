@@ -70,10 +70,10 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                         <com.github.mikephil.charting.charts.BarChart
+                            <com.github.mikephil.charting.charts.BarChart
                                 android:id="@+id/barChart"
                                 android:layout_width="523dp"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="300dp" />
 
 
 

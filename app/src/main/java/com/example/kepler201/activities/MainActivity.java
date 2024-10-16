@@ -423,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             if (Resultado==1){
-                if (version.equals("2.9.6")) {
+                if (version.equals("2.9.7")) {
 
                 }else{
                     AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
