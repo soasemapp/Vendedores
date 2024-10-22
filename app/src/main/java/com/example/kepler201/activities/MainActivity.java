@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String[] opciones1 = {"JACVE", "AUTODIS", "CECRA", "GUVI", "PRESSA", "Vipla", "SPR", "COLOMBIA","MIGRACION"};
+                String[] opciones1 = {"JACVE", "AUTODIS", "CECRA", "GUVI", "PRESSA", "VIPLA", "SPR", "COLOMBIA"};
 
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -423,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             if (Resultado==1){
-                if (version.equals("2.9.7")) {
+                if (version.equals("2.9.8")) {
 
                 }else{
                     AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);

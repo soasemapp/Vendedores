@@ -72,7 +72,7 @@
 
                             <com.github.mikephil.charting.charts.BarChart
                                 android:id="@+id/barChart"
-                                android:layout_width="523dp"
+                                android:layout_width="600dp"
                                 android:layout_height="300dp" />
 
 

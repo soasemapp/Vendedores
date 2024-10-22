@@ -265,7 +265,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String parametros = "fecha=" + StrFecha + "&vendedor=" + strco + "&mes=" + "7" + "&ano=" + StrAño;
+            String parametros = "fecha=" + StrFecha + "&vendedor=" + strco + "&mes=" +  StrMes + "&ano=" + StrAño;
             String url = "http://" + StrServer + "/graficaapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
@@ -358,6 +358,12 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         barData.addDataSet(barDataSet0);
                         barData.addDataSet(barDataSet1);
 
+
+                        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                                /*width*/ 1000,
+                                /*height*/ 1000
+                        );
+                        barChart.setLayoutParams(param);
                         barChart.setData(barData);
                         barChart.animateY(2000);
                         barChart.invalidate();
@@ -383,6 +389,11 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         barData.addDataSet(barDataSet0);
                         barData.addDataSet(barDataSet1);
 
+                        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                                /*width*/ 1000,
+                                /*height*/ 1000
+                        );
+                        barChart.setLayoutParams(param);
                         barChart.setData(barData);
                         barChart.animateY(2000);
                         barChart.invalidate();
@@ -407,6 +418,11 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         barData.addDataSet(barDataSet0);
                         barData.addDataSet(barDataSet1);
 
+                        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                                /*width*/ 1000,
+                                /*height*/ 1000
+                        );
+                        barChart.setLayoutParams(param);
                         barChart.setData(barData);
                         barChart.animateY(2000);
                         barChart.invalidate();
@@ -430,7 +446,13 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         barData.addDataSet(barDataSet0);
                         barData.addDataSet(barDataSet1);
 
+                        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                                /*width*/ 1000,
+                                /*height*/ 1000
+                        );
+                        barChart.setLayoutParams(param);
                         barChart.setData(barData);
+
                         barChart.animateY(2000);
                         barChart.invalidate();
                         break;
@@ -507,17 +529,15 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         barData.addDataSet(barDataSet7);
                         barData.addDataSet(barDataSet8);
 
-                        Display display = getWindowManager().getDefaultDisplay();
-                        int width = display.getWidth();  // obsoleto (deprecated)
-                        int height = display.getHeight();  // obsoleto (deprecated)
-                        ViewGroup.LayoutParams params = barChart.getLayoutParams();
-                        params.height =800 ;
-                        params.width = width;
 
-                        barChart.setLayoutParams(params);
+                        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                                /*width*/ 2500,
+                                /*height*/ 1000
+                        );
+                        barChart.setLayoutParams(param);
                         barChart.setData(barData);
                         barChart.setDrawGridBackground(false);
-                        barChart.setDrawBarShadow(true);
+                        barChart.setDrawBarShadow(false);
                         barChart.animateY(2000);
 
                         barChart.invalidate();
@@ -526,29 +546,41 @@ public class ActivityScreenFirst extends AppCompatActivity {
                     }   case "autodis.ath.cx:9085": {
 
                         float EaglePresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
-                        float TrackonePresu = Float.parseFloat(listaPresupuesto.get(5).getPresopUesto());
-
+                        float TrackonePresu = Float.parseFloat(listaPresupuesto.get(1).getPresopUesto());
+                        float VazloPresu = Float.parseFloat(listaPresupuesto.get(2).getPresopUesto());
 
                         float EagleVendido = (Float.parseFloat(listaPresupuesto.get(0).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(0).getVendido()) : 0;
-                        float TrackoneVendido = (Float.parseFloat(listaPresupuesto.get(5).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(5).getVendido()) : 0;
+                        float TrackoneVendido = (Float.parseFloat(listaPresupuesto.get(1).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(1).getVendido()) : 0;
+                        float VazloVendido = (Float.parseFloat(listaPresupuesto.get(2).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(2).getVendido()) : 0;
 
 
                         EaglePor = (EagleVendido * 100) / EaglePresu;
                         TrackonePor = (TrackoneVendido * 100) / TrackonePresu;
+                        VazloPor = (VazloVendido * 100) / VazloPresu;
 
                         BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
                         BarDataSet barDataSet1 = new BarDataSet(barEntriesAutodisEagle(), listaPresupuesto.get(0).getLineaName());
-                        BarDataSet barDataSet6 = new BarDataSet(barEntriesAutodisTrackone(), listaPresupuesto.get(5).getLineaName());
+                        BarDataSet barDataSet2 = new BarDataSet(barEntriesAutodisTrackone(), listaPresupuesto.get(1).getLineaName());
+                        BarDataSet barDataSet3 = new BarDataSet(barEntriesAutodisVazlo(), listaPresupuesto.get(2).getLineaName());
 
                         barDataSet0.setColor(Color.RED);
                         barDataSet1.setColor(Color.BLUE);
-                        barDataSet6.setColor(Color.BLACK);
+                        barDataSet2.setColor(Color.MAGENTA);
+                        barDataSet3.setColor(Color.GREEN);
+
 
                         BarData barData = new BarData();
                         barData.addDataSet(barDataSet0);
                         barData.addDataSet(barDataSet1);
-                        barData.addDataSet(barDataSet6);
+                        barData.addDataSet(barDataSet2);
+                        barData.addDataSet(barDataSet3);
 
+
+                        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                                /*width*/ 1000,
+                                /*height*/ 1000
+                        );
+                        barChart.setLayoutParams(param);
                         barChart.setData(barData);
                         barChart.animateY(2000);
                         barChart.invalidate();
@@ -559,27 +591,26 @@ public class ActivityScreenFirst extends AppCompatActivity {
 
 
                         float EaglePresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
-                        float VazloPresu = Float.parseFloat(listaPresupuesto.get(1).getPresopUesto());
-                        float RodatechPresu = Float.parseFloat(listaPresupuesto.get(2).getPresopUesto());
-                        float PartechPresu = Float.parseFloat(listaPresupuesto.get(3).getPresopUesto());
-                        float SharkPresu = Float.parseFloat(listaPresupuesto.get(4).getPresopUesto());
-                        float TrackonePresu = Float.parseFloat(listaPresupuesto.get(5).getPresopUesto());
-
+                        float RodatechPresu = Float.parseFloat(listaPresupuesto.get(1).getPresopUesto());
+                        float PartechPresu = Float.parseFloat(listaPresupuesto.get(2).getPresopUesto());
+                        float SharkPresu = Float.parseFloat(listaPresupuesto.get(3).getPresopUesto());
+                        float TrackonePresu = Float.parseFloat(listaPresupuesto.get(4).getPresopUesto());
+                        float VazloPresu = Float.parseFloat(listaPresupuesto.get(5).getPresopUesto());
 
                         float EagleVendido = (Float.parseFloat(listaPresupuesto.get(0).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(0).getVendido()) : 0;
-                        float VazloVendido = (Float.parseFloat(listaPresupuesto.get(1).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(1).getVendido()) : 0;
-                        float RodatechVendido = (Float.parseFloat(listaPresupuesto.get(2).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(2).getVendido()) : 0;
-                        float PartechVendido = (Float.parseFloat(listaPresupuesto.get(3).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(3).getVendido()) : 0;
-                        float SharkVendido = (Float.parseFloat(listaPresupuesto.get(4).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(4).getVendido()) : 0;
-                        float TrackoneVendido = (Float.parseFloat(listaPresupuesto.get(5).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(5).getVendido()) : 0;
+                        float RodatechVendido = (Float.parseFloat(listaPresupuesto.get(1).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(1).getVendido()) : 0;
+                        float PartechVendido = (Float.parseFloat(listaPresupuesto.get(2).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(2).getVendido()) : 0;
+                        float SharkVendido = (Float.parseFloat(listaPresupuesto.get(3).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(3).getVendido()) : 0;
+                        float TrackoneVendido = (Float.parseFloat(listaPresupuesto.get(4).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(4).getVendido()) : 0;
+                        float VazloVendido = (Float.parseFloat(listaPresupuesto.get(5).getVendido()) > 0) ? Float.parseFloat(listaPresupuesto.get(5).getVendido()) : 0;
 
 
                         EaglePor = (EagleVendido * 100) / EaglePresu;
-                        VazloPor = (VazloVendido * 100) / VazloPresu;
                         RodatechPor = (RodatechVendido * 100) / RodatechPresu;
                         PartechPor = (PartechVendido * 100) / PartechPresu;
                         SharkPor = (SharkVendido * 100) / SharkPresu;
                         TrackonePor = (TrackoneVendido * 100) / TrackonePresu;
+                        VazloPor = (VazloVendido * 100) / VazloPresu;
 
                         BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
                         BarDataSet barDataSet1 = new BarDataSet(barEntries1(), listaPresupuesto.get(0).getLineaName());
@@ -606,6 +637,13 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         barData.addDataSet(barDataSet5);
                         barData.addDataSet(barDataSet6);
 
+
+                        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                                /*width*/ 17*100,
+                                /*height*/ 10*100,
+                                /*weight*/ 1.0f
+                        );
+                        barChart.setLayoutParams(param);
                         barChart.setData(barData);
                         barChart.animateY(2000);
                         barChart.invalidate();
@@ -807,30 +845,32 @@ switch (StrServer){
     }
     private ArrayList<BarEntry> barEntries2() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(3, VazloPor));
+        barEntries.add(new BarEntry(3, RodatechPor));
         return barEntries;
     }
+
     private ArrayList<BarEntry> barEntries3() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(4, RodatechPor));
+        barEntries.add(new BarEntry(4, PartechPor));
         return barEntries;
     }
 
     private ArrayList<BarEntry> barEntries4() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(5, PartechPor));
+        barEntries.add(new BarEntry(5, SharkPor));
         return barEntries;
     }
 
     private ArrayList<BarEntry> barEntries5() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(6, SharkPor));
+        barEntries.add(new BarEntry(6, TrackonePor));
         return barEntries;
     }
 
+
     private ArrayList<BarEntry> barEntries6() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(7, TrackonePor));
+        barEntries.add(new BarEntry(7, VazloPor));
         return barEntries;
     }
 
@@ -842,6 +882,11 @@ switch (StrServer){
     private ArrayList<BarEntry> barEntriesAutodisTrackone() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
         barEntries.add(new BarEntry(3, TrackonePor));
+        return barEntries;
+    }
+    private ArrayList<BarEntry> barEntriesAutodisVazlo() {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barEntries.add(new BarEntry(4, VazloPor));
         return barEntries;
     }
     private ArrayList<BarEntry> barEntriesJacveGSPAMORTIGUADOR() {
