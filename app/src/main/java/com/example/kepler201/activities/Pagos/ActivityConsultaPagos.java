@@ -31,6 +31,7 @@ import com.example.kepler201.SetterandGetter.SearachClientSANDG;
 import com.example.kepler201.XMLS.xmlConsultaPagos2;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.activities.Consultas.ActivityFactuDetall;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
@@ -84,7 +85,7 @@ public class ActivityConsultaPagos extends AppCompatActivity {
 
         MyToolbar.show(this, "Pagos-Consulta de Pagos", true);
 
-        mDialog = new SpotsDialog.Builder().setContext(ActivityConsultaPagos.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityConsultaPagos.this);
         mDialog.setCancelable(false);
         confirmarprob = findViewById(R.id.checkconfirmar);
         vendedor = findViewById(R.id.cVendedor);

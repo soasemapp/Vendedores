@@ -30,6 +30,7 @@ import com.example.kepler201.SetterandGetter.BusquedaCliente0VentasSANDG;
 import com.example.kepler201.XMLS.xmlClient0VeEspe;
 import com.example.kepler201.XMLS.xmlClient0Ventas;
 import com.example.kepler201.activities.Agenda.ActivityAgenda;
+import com.example.kepler201.activities.MainActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
@@ -67,7 +68,7 @@ public class ActivityClientes0Ventas extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clientes0_ventas);
-        mDialog = new SpotsDialog.Builder().setContext(ActivityClientes0Ventas.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityClientes0Ventas.this);
         mDialog.setCancelable(false);
         recyclerClientes =  findViewById(R.id.lisClient);
         eddias =  findViewById(R.id.edidias);

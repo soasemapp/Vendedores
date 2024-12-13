@@ -30,6 +30,7 @@ import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.AgendaSANDG;
 import com.example.kepler201.SetterandGetter.PresupuestoLineaSANDG;
 import com.example.kepler201.SetterandGetter.ProspectSANDG;
+import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 import com.github.mikephil.charting.charts.BarChart;
@@ -104,7 +105,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 
 
-        mDialog = new SpotsDialog.Builder().setContext(ActivityScreenFirst.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityScreenFirst.this);
         mDialog.setCancelable(false);
         barChart = findViewById(R.id.barChart);
 

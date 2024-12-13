@@ -47,6 +47,7 @@ import com.example.kepler201.XMLS.xmlListMarca;
 import com.example.kepler201.XMLS.xmlListModelo;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -120,8 +121,7 @@ public class BusquedaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_busqueda);
 
-
-        mDialog = new SpotsDialog.Builder().setContext(BusquedaActivity.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(BusquedaActivity.this);
         mDialog.setCancelable(false);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
         MyToolbar.show(this, "Busqueda", true);

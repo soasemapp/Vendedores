@@ -24,6 +24,7 @@ import com.example.kepler201.SetterandGetter.ConsulCotiSANDG;
 import com.example.kepler201.SetterandGetter.SetGetListModelo2;
 import com.example.kepler201.XMLS.xmlConsulCoti;
 import com.example.kepler201.activities.BusquedaActivity;
+import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
@@ -55,7 +56,7 @@ public class ActivityConsulCoti extends AppCompatActivity {
         setContentView(R.layout.activity_consul_coti);
 
         MyToolbar.show(this, "Cotizaciones", true);
-        mDialog = new SpotsDialog.Builder().setContext(ActivityConsulCoti.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityConsulCoti.this);
         mDialog.setCancelable(false);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 

@@ -37,6 +37,7 @@ import com.example.kepler201.XMLS.xmlValidaPedColombia;
 import com.example.kepler201.XMLS.xmlValidaPedMexico;
 import com.example.kepler201.XMLS.xmlViaE;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
@@ -142,7 +143,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
         tableLayout = findViewById(R.id.table);
 
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
-        mDialog = new SpotsDialog.Builder().setContext(ActivityDetallCoti.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityDetallCoti.this);
         mDialog.setCancelable(false);
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");

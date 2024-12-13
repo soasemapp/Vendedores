@@ -32,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.kepler201.ActivityBackOrdersAdd;
 import com.example.kepler201.ConexionSQLiteHelper;
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.CarritoBD;
@@ -145,8 +146,7 @@ String Empresa;
         btnEscaner.setOnClickListener(mOnClickListener);
         TableProd =  findViewById(R.id.ProTable);
 
-        mDialog = new SpotsDialog.Builder().setContext(ActivityConsultaProductos.this).setMessage("Espere un momento...").build();
-
+        mDialog = new SpotsDialog(ActivityConsultaProductos.this);
         MyToolbar.show(this, "Productos-Consultas", true);
         imageIv =  findViewById(R.id.productoImag);
         btnSearch =  findViewById(R.id.btnSearch);

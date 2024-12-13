@@ -94,7 +94,10 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
         recyclerConsulta = findViewById(R.id.lisFacturas);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 
-        mDialog = new SpotsDialog.Builder().setContext(ActivityConsultaFaturas.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityConsultaFaturas.this);
+
+
+
         mDialog.setCancelable(false);
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");

@@ -27,6 +27,7 @@ import com.example.kepler201.XMLS.xmlAgendaActivitidad;
 import com.example.kepler201.XMLS.xmlAgendaRegister;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
 import com.example.kepler201.activities.Consultas.ActivityConsultaFaturas;
+import com.example.kepler201.activities.MainActivity;
 import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
@@ -71,8 +72,7 @@ public class ActivityAgendaRegister extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agenda_register);
-
-        mDialog = new SpotsDialog.Builder().setContext(ActivityAgendaRegister.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityAgendaRegister.this);
         mDialog.setCancelable(false);
         MyToolbar.show(this, "Agendar", true);
         ButtonCliente = findViewById(R.id.btnclientes);

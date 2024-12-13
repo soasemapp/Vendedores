@@ -29,6 +29,7 @@ import com.example.kepler201.XMLS.xmlDirEnvio;
 import com.example.kepler201.XMLS.xmlDirEnvioMapas;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.activities.Consultas.ActivityFactuDetall;
 import com.example.kepler201.activities.Pagos.ActivityConsultaPagos;
 import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
@@ -79,7 +80,7 @@ public class locateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_locate);
         MyToolbar.show(this, "", true);
 
-        mDialog = new SpotsDialog.Builder().setContext(locateActivity.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(locateActivity.this);
         mDialog.setCancelable(false);
         preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
         editor = preference.edit();

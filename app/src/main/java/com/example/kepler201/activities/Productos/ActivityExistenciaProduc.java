@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.kepler201.ActivityBackOrdersAdd;
 import com.example.kepler201.Adapter.AdaptadorExisClaPro;
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.ExistClasifiSANDG;
@@ -84,8 +85,7 @@ public class ActivityExistenciaProduc extends AppCompatActivity {
         MyToolbar.show(this, "Productos-Existencia", true);
 
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
-         new SpotsDialog.Builder().setContext(ActivityExistenciaProduc.this).setMessage("Espere un momento...").build();
-
+        mDialog = new SpotsDialog(ActivityExistenciaProduc.this);
 
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");

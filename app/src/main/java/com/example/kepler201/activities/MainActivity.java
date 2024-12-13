@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDialog = new SpotsDialog.Builder().setContext(MainActivity.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(MainActivity.this);
         mDialog.setCancelable(false);
         usu = findViewById(R.id.txtinUsu);
         clave = findViewById(R.id.txtinCla);

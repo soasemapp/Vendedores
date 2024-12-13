@@ -33,6 +33,7 @@ import com.example.kepler201.SetterandGetter.SeguimientoPedidosSANDG;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
 import com.example.kepler201.XMLS.xmlSegumientoPedidos;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
@@ -84,7 +85,7 @@ public class ActivitySegumientoPedidos extends AppCompatActivity {
 
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 
-        mDialog = new SpotsDialog.Builder().setContext(ActivitySegumientoPedidos.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivitySegumientoPedidos.this);
         mDialog.setCancelable(false);
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");

@@ -30,6 +30,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.kepler201.ActivityBackOrdersAdd;
 import com.example.kepler201.ConexionSQLiteHelper;
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.CarritoBD;
@@ -129,8 +130,7 @@ public class ActivityConverciones extends AppCompatActivity {
         btnEscaner =  findViewById(R.id.Escaner);
         btnEscaner.setOnClickListener(mOnClickListener);
 
-        mDialog = new SpotsDialog.Builder().setContext(ActivityConverciones.this).setMessage("Espere un momento...").build();
-
+        mDialog = new SpotsDialog(ActivityConverciones.this);
         MyToolbar.show(this, "Productos-Converciónes", true);
         imageIv =  findViewById(R.id.productoImag);
         btnSearch =  findViewById(R.id.btnSearch);

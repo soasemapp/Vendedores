@@ -34,6 +34,7 @@ import com.example.kepler201.*;
 import com.example.kepler201.SetterandGetter.SearachClientSANDG;
 import com.example.kepler201.XMLS.xmlAsignaCordenadas;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.activities.Consultas.ActivityFactuDetall;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -137,8 +138,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        mDialog = new SpotsDialog.Builder().setContext(MapsActivity.this).setMessage("Espere un momento...").build();
-
+        mDialog = new SpotsDialog(MapsActivity.this);
 
     }
 

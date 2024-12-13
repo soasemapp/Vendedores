@@ -34,6 +34,7 @@ import com.example.kepler201.SetterandGetter.BackOrdersSANDG;
 import com.example.kepler201.SetterandGetter.SearachClientSANDG;
 import com.example.kepler201.XMLS.xmlBackOrders;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
+import com.example.kepler201.activities.MainActivity;
 import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
@@ -89,7 +90,7 @@ public class ActivityBackOrders extends AppCompatActivity {
         MyToolbar.show(this, "Consulta-BackOrders", true);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 
-        mDialog = new SpotsDialog.Builder().setContext(ActivityBackOrders.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityBackOrders.this);
         mDialog.setCancelable(false);
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");

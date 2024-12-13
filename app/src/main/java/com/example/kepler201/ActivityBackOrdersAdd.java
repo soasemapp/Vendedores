@@ -24,6 +24,7 @@ import com.example.kepler201.SetterandGetter.BackordersADDSANDG;
 import com.example.kepler201.SetterandGetter.SearachClientSANDG;
 import com.example.kepler201.XMLS.xmlBackOrders;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
+import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
@@ -67,7 +68,7 @@ public class ActivityBackOrdersAdd extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
-        mDialog = new SpotsDialog.Builder().setContext(ActivityBackOrdersAdd.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityBackOrdersAdd.this);
         recyclerDialog2 = findViewById(R.id.BackOrderAdd);
         ButtonCliente = findViewById(R.id.Clientesbtn);
         fechaEn = findViewById(R.id.fechaendtrada);

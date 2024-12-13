@@ -27,6 +27,7 @@ import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.ConsulCotiSANDG;
 import com.example.kepler201.SetterandGetter.ConsulPediSANDG;
 import com.example.kepler201.XMLS.xmlConsulPedi;
+import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
@@ -66,8 +67,8 @@ public class ActivityConsulPedi extends AppCompatActivity {
         setContentView(R.layout.activity_consul_pedi);
 
         MyToolbar.show(this, "Pedidos", true);
-        mDialog = new SpotsDialog.Builder().setContext(ActivityConsulPedi.this).setMessage("Espere un momento...").build();
-        mDialog.setCancelable(false);
+        mDialog = new SpotsDialog(ActivityConsulPedi.this);
+         mDialog.setCancelable(false);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 
         strusr = preference.getString("user", "null");

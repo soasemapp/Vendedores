@@ -38,6 +38,7 @@ import com.example.kepler201.XMLS.xmlListType;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
 import com.example.kepler201.activities.Agenda.ActivityAgenda;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.activities.Productos.ListaPreciosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
@@ -96,7 +97,7 @@ public class ActivityHistorial extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial);
         MyToolbar.show(this, "Historial", true);
-        mDialog = new SpotsDialog.Builder().setContext(ActivityHistorial.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityHistorial.this);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
         tableLayout =  findViewById(R.id.table);
         spinerClie =  findViewById(R.id.spinnerClie);

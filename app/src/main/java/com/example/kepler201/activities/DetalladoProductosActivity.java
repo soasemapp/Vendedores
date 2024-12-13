@@ -43,6 +43,7 @@ import com.example.kepler201.XMLS.xmlCarritoVentas;
 import com.example.kepler201.XMLS.xmlConverProdu;
 import com.example.kepler201.XMLS.xmlEquiva;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 import com.squareup.picasso.Picasso;
@@ -129,7 +130,7 @@ public class DetalladoProductosActivity extends AppCompatActivity {
         editor = preference.edit();
         preferenceClie = getSharedPreferences("clienteCompra", Context.MODE_PRIVATE);
         editor = preferenceClie.edit();
-        mDialog = new SpotsDialog.Builder().setContext(DetalladoProductosActivity.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(DetalladoProductosActivity.this);
         mDialog.setCancelable(false);
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");

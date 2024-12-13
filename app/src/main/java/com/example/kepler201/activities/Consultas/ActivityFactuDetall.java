@@ -61,7 +61,8 @@ public class ActivityFactuDetall extends AppCompatActivity {
         tableLayout =  findViewById(id.table);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 
-        mDialog = new SpotsDialog.Builder().setContext(ActivityFactuDetall.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityFactuDetall.this);
+
         mDialog.setCancelable(false);
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");

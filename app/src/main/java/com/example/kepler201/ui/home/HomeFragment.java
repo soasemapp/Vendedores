@@ -42,6 +42,7 @@ import com.example.kepler201.SetterandGetter.ProductosNuevosSANDG;
 import com.example.kepler201.SetterandGetter.SearachClientSANDG;
 import com.example.kepler201.activities.BusquedaActivity;
 import com.example.kepler201.activities.DetalladoProductosActivity;
+import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 
 import org.json.JSONException;
@@ -115,8 +116,7 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        mDialog = new SpotsDialog.Builder().setContext(getActivity()).setMessage("Espere un momento...").build();
-
+        mDialog = new SpotsDialog(getActivity());
 
         //FindView
         recyclerViewEagle = view.findViewById(R.id.listProductosEagle);

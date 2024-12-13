@@ -7,36 +7,23 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.kepler201.Adapter.AdapterAgenda;
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.AgendaSANDG;
-import com.example.kepler201.SetterandGetter.FacturasnoregistradasNewSANDG;
-import com.example.kepler201.XMLS.xmlAgenda;
-import com.example.kepler201.XMLS.xmlStatusAgen;
-import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
-import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
-import com.example.kepler201.activities.Productos.ActivityConsultaProductos;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,7 +54,7 @@ public class ActivityAgenda extends AppCompatActivity {
         setContentView(R.layout.activity_agenda);
         MyToolbar.show(this, "Agenda", true);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
-        mDialog = new SpotsDialog.Builder().setContext(ActivityAgenda.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityAgenda.this);
         mDialog.setCancelable(false);
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");
@@ -168,9 +155,12 @@ public class ActivityAgenda extends AppCompatActivity {
                     JSONObject json = new JSONObject(jsonStr);
 
                     if (json.length()!=0) {
+                        JSONArray jsonArray;
                         JSONObject jitems, Numero;
                         JSONObject jsonObject = new JSONObject(jsonStr);
                         jitems = jsonObject.getJSONObject("Item");
+
+                        jsonArray=jsonObject.getJSONArray("k_id");
 
                         for (int i = 0; i < jitems.length(); i++) {
                             jitems = jsonObject.getJSONObject("Item");

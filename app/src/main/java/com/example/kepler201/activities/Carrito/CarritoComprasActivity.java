@@ -40,6 +40,7 @@ import com.example.kepler201.SetterandGetter.listExistenciaSANG;
 import com.example.kepler201.XMLS.xmlCarritoCompras;
 import com.example.kepler201.XMLS.xmlCarritoCompras2;
 import com.example.kepler201.activities.DetalladoProductosActivity;
+import com.example.kepler201.activities.MainActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
@@ -173,7 +174,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carrito_compras);
-        mDialog = new SpotsDialog.Builder().setContext(CarritoComprasActivity.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(CarritoComprasActivity.this);
         mDialog.setCancelable(false);
         MyToolbar.show(this, "Carrito", true);
         recyclerCarrtio = findViewById(R.id.lisCarrito);

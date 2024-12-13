@@ -38,6 +38,7 @@ import com.example.kepler201.XMLS.xmlDeletePagos;
 import com.example.kepler201.XMLS.xmlRegistroPagos;
 import com.example.kepler201.XMLS.xmlSearchClientesG;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
+import com.example.kepler201.activities.Consultas.ActivityFactuDetall;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
@@ -102,7 +103,7 @@ public class ActivityABCpagos extends AppCompatActivity {
 
         MyToolbar.show(this, "Pagos-Registro/Eliminacion", true);
 
-        mDialog = new SpotsDialog.Builder().setContext(ActivityABCpagos.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityABCpagos.this);
         mDialog.setCancelable(false);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 

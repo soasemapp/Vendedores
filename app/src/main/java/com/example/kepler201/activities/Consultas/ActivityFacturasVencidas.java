@@ -74,7 +74,7 @@ public class ActivityFacturasVencidas extends AppCompatActivity {
         MyToolbar.show(this, "Consulta-Facturas Vencidas", true);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 
-        mDialog = new SpotsDialog.Builder().setContext(ActivityFacturasVencidas.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityFacturasVencidas.this);
         mDialog.setCancelable(false);
         spinerClie = findViewById(R.id.spinnerClie);
         tableLayout = findViewById(R.id.table);

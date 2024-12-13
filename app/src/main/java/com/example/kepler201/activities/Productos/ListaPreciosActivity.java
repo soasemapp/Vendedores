@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.kepler201.ActivityBackOrdersAdd;
 import com.example.kepler201.Adapter.AdapterListPrecio;
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.ListLineaSANDG;
@@ -88,7 +89,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
         MyToolbar.show(this, "Productos-Lista de Precios", true);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 
-        mDialog = new SpotsDialog.Builder().setContext(ListaPreciosActivity.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ListaPreciosActivity.this);
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");
         strname = preference.getString("name", "null");

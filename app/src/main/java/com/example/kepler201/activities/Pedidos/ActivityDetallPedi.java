@@ -21,6 +21,7 @@ import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.ConsulCotiSANDG;
 import com.example.kepler201.SetterandGetter.DetallPediSANDG;
 import com.example.kepler201.XMLS.xmlDetallPe;
+import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
@@ -74,7 +75,7 @@ public class ActivityDetallPedi extends AppCompatActivity {
         tableLayout = findViewById(R.id.table);
 
 
-        mDialog = new SpotsDialog.Builder().setContext(ActivityDetallPedi.this).setMessage("Espere un momento...").build();
+        mDialog = new SpotsDialog(ActivityDetallPedi.this);
         mDialog.setCancelable(false);
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
 
