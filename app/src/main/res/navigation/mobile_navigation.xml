@@ -71,6 +71,11 @@
         android:id="@+id/regitrodepagosActivity"
         android:name="com.example.kepler201.activities.Pagos.RegitrodepagosActivity"
         android:label="RegitrodepagosActivity" />
+    <activity
+        android:id="@+id/activity_ventas_linea"
+        android:name="com.example.kepler201.activities.ActivityVentasXlinea"
+        android:label="ActivityVentasXlinea"
+        tools:layout="@layout/activity_ventas_linea"/>
 
 
 </navigation>

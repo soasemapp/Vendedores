@@ -161,6 +161,12 @@
             android:configChanges="screenSize|orientation"
             android:parentActivityName=".activities.inicioActivity"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".activities.ActivityVentasXlinea" />
+
+
+
+
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="screenSize|orientation"

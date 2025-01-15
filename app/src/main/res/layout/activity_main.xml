@@ -86,9 +86,9 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:padding="5dp"
                 android:hint="PASSWORD"
                 android:maxLines="1"
+                android:padding="5dp"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusTopStart="10dp"
@@ -130,144 +130,146 @@
                 android:textColor="#FFFFFF" />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/PrimaryColor">
-
-
             <LinearLayout
-
-                android:id="@+id/LinearTodos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:layout_margin="10dp">
+                android:background="@color/PrimaryColor"
+                android:orientation="vertical">
+
 
                 <LinearLayout
+
+                    android:id="@+id/LinearTodos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="5dp">
+                    android:layout_margin="10dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-                    <ImageView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@color/PrimaryColor"
+                            android:src="@drawable/eagle"></ImageView>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/PrimaryColor"
+                            android:src="@drawable/trackone"></ImageView>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/rodatech"></ImageView>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/partech"></ImageView>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/shark"></ImageView>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/vazlo"></ImageView>
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/LinearJacve"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@color/TextIcons"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         android:background="@color/PrimaryColor"
-                        android:src="@drawable/eagle"></ImageView>
+                        android:orientation="horizontal">
 
-                    <ImageView
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:layout_weight="1"
+                            android:background="@color/TextIcons"
+                            android:src="@drawable/gsplogo"></ImageView>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:layout_weight="1"
+                            android:background="@color/TextIcons"
+                            android:src="@drawable/mnchlogo"></ImageView>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         android:background="@color/PrimaryColor"
-                        android:src="@drawable/trackone"></ImageView>
+                        android:orientation="horizontal">
 
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:layout_weight="1"
+                            android:background="@color/TextIcons"
+                            android:src="@drawable/kff"></ImageView>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:layout_weight="1"
+                            android:background="@color/TextIcons"
+                            android:src="@drawable/zoms"></ImageView>
+
+
+                    </LinearLayout>
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="5dp">
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/rodatech"></ImageView>
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/partech"></ImageView>
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="5dp">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/shark"></ImageView>
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/vazlo"></ImageView>
-
-
-                </LinearLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/LinearJacve"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:background="@color/TextIcons"
-                android:layout_margin="10dp">
-
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="@color/PrimaryColor"
-                    android:layout_margin="5dp">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:layout_weight="1"
-                        android:background="@color/TextIcons"
-                        android:src="@drawable/gsplogo"></ImageView>
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:layout_weight="1"
-                        android:background="@color/TextIcons"
-                        android:src="@drawable/mnchlogo"></ImageView>
-
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="@color/PrimaryColor"
-                    android:layout_margin="5dp">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:layout_weight="1"
-                        android:background="@color/TextIcons"
-                        android:src="@drawable/kff"></ImageView>
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:layout_weight="1"
-                        android:background="@color/TextIcons"
-                        android:src="@drawable/zoms"></ImageView>
-
-
-                </LinearLayout>
-            </LinearLayout>
-
-        </LinearLayout>
 
 
         </LinearLayout>

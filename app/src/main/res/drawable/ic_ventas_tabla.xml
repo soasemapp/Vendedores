@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="?attr/colorControlNormal"
+    android:rotation="-180"> <!-- Rotación de 90 grados hacia la izquierda -->
+    <path
+        android:fillColor="@android:color/black"
+        android:pathData="M3,3h18v2H3zM3,7h18v2H3zM3,11h18v2H3zM3,15h18v2H3zM3,19h18v2H3zM18,6l3,-3l3,3l-3,3l-3,-3z"/>
+</vector>

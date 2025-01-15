@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -272,6 +273,8 @@ public class ActivityScreenFirst extends AppCompatActivity {
             if (jsonStr != null) {
                 try {
                     JSONObject json = new JSONObject(jsonStr);
+                    Log.d("JSON Response", jsonStr);
+
 
                     if (json.length() != 0) {
                         JSONObject jitems, Numero;
@@ -297,7 +300,8 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         public void run() {
                             mDialog.dismiss();
                             AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityScreenFirst.this);
-                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            alerta1.setMessage("El Json tiene un problema lol q mal").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     dialogInterface.cancel();

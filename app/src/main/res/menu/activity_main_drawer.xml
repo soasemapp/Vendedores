@@ -38,6 +38,12 @@
             android:icon="@drawable/ic_baseline_auto_graph_24"
             android:title="Grafica de Ventas" />
 
+        <item
+            android:id="@+id/activity_ventas_linea"
+            android:icon="@drawable/ic_ventas_tabla"
+            android:title="Ventas por Linea"
+            />
+
 
         <item
             android:id="@+id/activityAgenda"
