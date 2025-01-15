@@ -43,9 +43,9 @@ public class AdaptadorProductosRodatech extends RecyclerView.Adapter<AdaptadorPr
 
     @Override
     public void onBindViewHolder(ViewHolderProductosNuevos holder, int position) {
-        if(Empresa.equals("https://www.jacve.mx/imagenes/")){
+        if(Empresa.equals("https://www.jacve.mx/tools/pictures-urlProductos?ids=") || Empresa.equals("https://www.guvi.mx/tools/pictures-urlProductos?ids=") ){
             EmpresaAd = "";
-            EmpresaAd=Empresa+listaproductos.get(position).getFotoTipo()+"/"+listaproductos.get(position).getFotoLinea()+"/"+listaproductos.get(position).getClave()+"/1.jpg";
+            EmpresaAd=listaproductos.get(position).getUrl();
         }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
             EmpresaAd="";
             EmpresaAd=Empresa+listaproductos.get(position).getClave()+"/4.webp";
@@ -54,6 +54,7 @@ public class AdaptadorProductosRodatech extends RecyclerView.Adapter<AdaptadorPr
             EmpresaAd = "";
             EmpresaAd = Empresa + listaproductos.get(position).getClave() + ".jpg";
         }
+
 
 
         holder.Parte.setText(listaproductos.get(position).getClave());

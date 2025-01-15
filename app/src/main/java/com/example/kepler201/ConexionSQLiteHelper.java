@@ -20,15 +20,13 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             "Desc3 VARCHAR (10), " +
             "Monto VARCHAR (20)," +
             "Descri VARCHAR (50)," +
-            "FotosTipo VARCHAR (50),"+
-            "FotosLinea VARCHAR (50))";
+            "URL VARCHAR (100))";
 
     final String CREAR_TABLA_PRODUCTOS = "CREATE TABLE productos (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
             "Clave VARCHAR (20)," +
             "Descripcion VARCHAR (50)," +
             "Tipo VARCHAR (20)," +
-            "FotoTipo VARCHAR (20)," +
-            "FotoLinea VARCHAR (20))";
+            "URL VARCHAR (100))" ;
 
     public ConexionSQLiteHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);

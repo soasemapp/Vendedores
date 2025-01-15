@@ -170,7 +170,7 @@
                         android:layout_height="253dp"
                         android:layout_margin="10dp"
                         android:padding="16dp"
-                        android:src="@drawable/aboutlogo" />
+                       />
 
                     <TextView
                         android:id="@+id/txtPrecio"

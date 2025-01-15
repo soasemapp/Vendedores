@@ -13,10 +13,9 @@ public class CarritoBD {
     String desc3;
     String monto;
     String descr;
-    String FotosTipo;
-    String FotosLinea;
+    String url;
 
-    public CarritoBD(int ID, String cliente, String parte, String existencia, String cantidad, String unidad, String precio, String desc1, String desc2, String desc3, String monto, String descr, String fotosTipo, String fotosLinea) {
+    public CarritoBD(int ID, String cliente, String parte, String existencia, String cantidad, String unidad, String precio, String desc1, String desc2, String desc3, String monto, String descr, String url) {
         this.ID = ID;
         this.cliente = cliente;
         this.parte = parte;
@@ -29,8 +28,7 @@ public class CarritoBD {
         this.desc3 = desc3;
         this.monto = monto;
         this.descr = descr;
-        FotosTipo = fotosTipo;
-        FotosLinea = fotosLinea;
+        this.url = url;
     }
 
     public int getID() {
@@ -129,19 +127,11 @@ public class CarritoBD {
         this.descr = descr;
     }
 
-    public String getFotosTipo() {
-        return FotosTipo;
+    public String getUrl() {
+        return url;
     }
 
-    public void setFotosTipo(String fotosTipo) {
-        FotosTipo = fotosTipo;
-    }
-
-    public String getFotosLinea() {
-        return FotosLinea;
-    }
-
-    public void setFotosLinea(String fotosLinea) {
-        FotosLinea = fotosLinea;
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

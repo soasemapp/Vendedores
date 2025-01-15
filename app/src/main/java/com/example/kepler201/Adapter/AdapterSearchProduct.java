@@ -53,9 +53,9 @@ public class AdapterSearchProduct extends RecyclerView.Adapter<AdapterSearchProd
 
 
 
-        if(EmpresaNuevaa.equals("https://www.jacve.mx/imagenes/")){
+        if(EmpresaNuevaa.equals("https://www.jacve.mx/tools/pictures-urlProductos?ids=")||EmpresaNuevaa.equals("https://www.guvi.mx/tools/pictures-urlProductos?ids=")){
             Empresa="";
-            Empresa=EmpresaNuevaa+listProductos.get(position).getTipoFotos()+"/"+listProductos.get(position).getLineaFotos()+"/"+listProductos.get(position).getProductos()+"/1.jpg";
+            Empresa=listProductos.get(position).getUrl();
         }else  if (!EmpresaNuevaa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
             Empresa="";
             Empresa=EmpresaNuevaa+listProductos.get(position).getProductos()+"/4.webp";

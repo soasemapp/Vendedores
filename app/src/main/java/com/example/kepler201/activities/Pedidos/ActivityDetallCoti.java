@@ -24,20 +24,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kepler201.R;
-import com.example.kepler201.SetterandGetter.ConsulCotiSANDG;
 import com.example.kepler201.SetterandGetter.DetallCotiSANDG;
 import com.example.kepler201.SetterandGetter.EnvioSANDG;
 import com.example.kepler201.SetterandGetter.ListaViaSANDG;
-import com.example.kepler201.SetterandGetter.SearachClientSANDG;
-import com.example.kepler201.XMLS.xmlDetallCoti;
-import com.example.kepler201.XMLS.xmlDirEnvio;
 import com.example.kepler201.XMLS.xmlNewDoc42;
 import com.example.kepler201.XMLS.xmlPedido;
-import com.example.kepler201.XMLS.xmlValidaPedColombia;
-import com.example.kepler201.XMLS.xmlValidaPedMexico;
-import com.example.kepler201.XMLS.xmlViaE;
-import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
-import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 

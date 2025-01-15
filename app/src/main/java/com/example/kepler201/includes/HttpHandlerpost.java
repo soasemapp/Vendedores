@@ -27,6 +27,7 @@ public class HttpHandlerpost {
             conn.setRequestProperty("user", user);
             conn.setRequestProperty("pass", pass);
 
+
             // read the response
             InputStream in = new BufferedInputStream(conn.getInputStream());
             response = convertStreamToString(in);

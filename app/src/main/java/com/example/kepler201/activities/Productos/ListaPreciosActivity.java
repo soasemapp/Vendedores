@@ -22,30 +22,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.kepler201.ActivityBackOrdersAdd;
 import com.example.kepler201.Adapter.AdapterListPrecio;
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.ListLineaSANDG;
 import com.example.kepler201.SetterandGetter.ListPrecSANDG;
 import com.example.kepler201.SetterandGetter.ListTypeSANDG;
 import com.example.kepler201.SetterandGetter.listDipoSucuSANDG;
-import com.example.kepler201.XMLS.xmlDispoSuc;
-import com.example.kepler201.XMLS.xmlListLine;
-import com.example.kepler201.XMLS.xmlListPrecio;
-import com.example.kepler201.XMLS.xmlListType;
 import com.example.kepler201.activities.DetalladoProductosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -111,7 +100,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
 
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/imagenes/";
+                Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
                 Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
@@ -120,7 +109,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
                 Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
                 break;
             case "guvi.ath.cx:9085":
-                Empresa = "https://www.guvi.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "cedistabasco.ddns.net:9085":
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
@@ -139,6 +128,9 @@ public class ListaPreciosActivity extends AppCompatActivity {
                 break;
             case "vazlocolombia.dyndns.org:9085":
                 Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
+                break;
+            default:
+                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
         }
 
