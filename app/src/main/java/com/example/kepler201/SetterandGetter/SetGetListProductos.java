@@ -9,17 +9,15 @@ public class SetGetListProductos {
     String linea;
     String PrecioBase;
     String PrecioAjuste;
-    String TipoFotos;
-    String LineaFotos;
+    String Url;
 
-    public SetGetListProductos(String productos, String descripcion, String linea, String precioBase, String precioAjuste, String tipoFotos, String lineaFotos) {
+    public SetGetListProductos(String productos, String descripcion, String linea, String precioBase, String precioAjuste, String url) {
         Productos = productos;
         Descripcion = descripcion;
         this.linea = linea;
         PrecioBase = precioBase;
         PrecioAjuste = precioAjuste;
-        TipoFotos = tipoFotos;
-        LineaFotos = lineaFotos;
+        Url = url;
     }
 
     public String getProductos() {
@@ -62,19 +60,11 @@ public class SetGetListProductos {
         PrecioAjuste = precioAjuste;
     }
 
-    public String getTipoFotos() {
-        return TipoFotos;
+    public String getUrl() {
+        return Url;
     }
 
-    public void setTipoFotos(String tipoFotos) {
-        TipoFotos = tipoFotos;
-    }
-
-    public String getLineaFotos() {
-        return LineaFotos;
-    }
-
-    public void setLineaFotos(String lineaFotos) {
-        LineaFotos = lineaFotos;
+    public void setUrl(String url) {
+        Url = url;
     }
 }

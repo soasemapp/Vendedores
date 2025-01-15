@@ -94,9 +94,10 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.View
 
 
 
-        if(Empresa.equals("https://www.jacve.mx/imagenes/")){
+
+        if(Empresa.equals("https://www.jacve.mx/tools/pictures-urlProductos?ids=") || Empresa.equals("https://www.guvi.mx/tools/pictures-urlProductos?ids=") ){
             EmpresaAd = "";
-            EmpresaAd=Empresa+listaCarrito.get(position).getFotosTipo()+"/"+listaCarrito.get(position).getFotosLinea()+"/"+listaCarrito.get(position).getParte()+"/1.jpg";
+            EmpresaAd=listaCarrito.get(position).getUrl();
         }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
             EmpresaAd="";
             EmpresaAd=Empresa+listaCarrito.get(position).getParte()+"/4.webp";
@@ -106,14 +107,16 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.View
             EmpresaAd = Empresa + listaCarrito.get(position).getParte() + ".jpg";
         }
 
-            holder.Diponiblidad.setText(Html.fromHtml((Existencia<Cantidad)?"(<font color = #FF0000>NO HAY DISPONIBILIDAD)</font>)":"(<font color = #4CAF50>HAY DISPONIBLES)</font>)"));
+
+        holder.Diponiblidad.setText(Html.fromHtml((Existencia<Cantidad)?"(<font color = #FF0000>NO HAY DISPONIBILIDAD)</font>)":"(<font color = #4CAF50>HAY DISPONIBLES)</font>)"));
         Picasso.with(context).
                 load(EmpresaAd)
+                .error(R.drawable.noimage)
                 .placeholder(R.drawable.loadingpro)
-                .error(R.drawable.ic_baseline_error_24)
                 .fit()
                 .centerInside()
                 .into(holder.imgPro);
+
 
     }
 

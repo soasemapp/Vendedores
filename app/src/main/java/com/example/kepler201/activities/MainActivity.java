@@ -15,32 +15,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kepler201.R;
-import com.example.kepler201.SetterandGetter.AgendaSANDG;
 import com.example.kepler201.SetterandGetter.Login;
-import com.example.kepler201.XMLS.xmlLog;
-import com.example.kepler201.XMLS.xmlLogin;
-import com.example.kepler201.XMLS.xmlVerificacionPrecios;
-import com.example.kepler201.XMLS.xmlVersiones;
-import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.util.Vector;
 
 import dmax.dialog.SpotsDialog;
 

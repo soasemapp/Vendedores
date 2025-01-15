@@ -168,7 +168,7 @@
                         android:layout_margin="10dp"
                         android:contentDescription="@string/todo"
                         android:padding="16dp"
-                        android:src="@drawable/aboutlogo" />
+                       />
 
                     <TextView
                         android:id="@+id/txtPrecio"

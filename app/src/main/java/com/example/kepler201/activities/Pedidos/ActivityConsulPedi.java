@@ -24,22 +24,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kepler201.Adapter.AdaptadorConsulPedi;
 import com.example.kepler201.R;
-import com.example.kepler201.SetterandGetter.ConsulCotiSANDG;
 import com.example.kepler201.SetterandGetter.ConsulPediSANDG;
-import com.example.kepler201.XMLS.xmlConsulPedi;
-import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,24 +27,13 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.kepler201.ConexionSQLiteHelper;
 import com.example.kepler201.R;
-import com.example.kepler201.SetterandGetter.SearachClientSANDG;
-import com.example.kepler201.XMLS.xmlVersiones;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
-import com.example.kepler201.activities.Pagos.ActivityABCpagos;
-import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 
 import dmax.dialog.SpotsDialog;
 

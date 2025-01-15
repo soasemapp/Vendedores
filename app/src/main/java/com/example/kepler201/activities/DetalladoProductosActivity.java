@@ -9,11 +9,14 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -24,11 +27,16 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.kepler201.Adapter.AdapterDetalleExistencia;
 import com.example.kepler201.ConexionSQLiteHelper;
 import com.example.kepler201.R;
@@ -37,28 +45,20 @@ import com.example.kepler201.SetterandGetter.CarritoBD;
 import com.example.kepler201.SetterandGetter.CarritoVentasSANDG;
 import com.example.kepler201.SetterandGetter.ConversionesSANDG;
 import com.example.kepler201.SetterandGetter.DisponibilidadSANDG;
-import com.example.kepler201.SetterandGetter.ValTipousSANDG;
-import com.example.kepler201.XMLS.xmlAplicaciones;
-import com.example.kepler201.XMLS.xmlCarritoVentas;
-import com.example.kepler201.XMLS.xmlConverProdu;
-import com.example.kepler201.XMLS.xmlEquiva;
+import com.example.kepler201.SetterandGetter.ImagenesSandG;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
-import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
+import com.smarteist.autoimageslider.SliderView;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import dmax.dialog.SpotsDialog;
 
@@ -117,7 +117,16 @@ public class DetalladoProductosActivity extends AppCompatActivity {
     String DescPro;
     String Desc1;
     String Empresa;
-
+    String EmpresaFotos="";
+    SliderView sliderView;
+    ArrayList<ImagenesSandG> ListaImagenes  =new ArrayList<>();
+    private List<String> imageUrls  = new ArrayList<>();
+    private int currentIndex = 0;
+    private Handler handler = new Handler();
+    private boolean isPlaying = true;
+    private AnimationDrawable Producto360;
+    private AnimationDrawable animationDrawable;
+    Boolean animation=true;
 
     @Override
 
@@ -146,9 +155,10 @@ public class DetalladoProductosActivity extends AppCompatActivity {
 
 
 
+
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/imagenes/";
+                Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
                 Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
@@ -157,7 +167,7 @@ public class DetalladoProductosActivity extends AppCompatActivity {
                 Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
                 break;
             case "guvi.ath.cx:9085":
-                Empresa = "https://www.guvi.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "cedistabasco.ddns.net:9085":
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
@@ -216,6 +226,27 @@ public class DetalladoProductosActivity extends AppCompatActivity {
         btnCarShoping =  findViewById(R.id.Add);
         tableLayout =  findViewById(R.id.table);
         tableLayout2 =  findViewById(R.id.table2);
+        Producto360 = new AnimationDrawable();
+        imageproducto.setBackgroundDrawable(Producto360);
+
+        imageproducto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(animation) {
+                    animation=false;
+                }else {
+                    animation=true;
+                }
+
+
+
+                if(animation) {
+                    Producto360.stop();
+                }else {
+                    Producto360.start();
+                }
+            }
+        });
 
         preferenceClie = getSharedPreferences("clienteCompra", Context.MODE_PRIVATE);
         editor = preferenceClie.edit();
@@ -357,6 +388,12 @@ public class DetalladoProductosActivity extends AppCompatActivity {
 
 
         Consulta();
+
+        //FOTOS360
+        Imagenes task1 = new Imagenes();
+        task1.execute();
+
+
 
     }
 
@@ -702,6 +739,9 @@ public class DetalladoProductosActivity extends AppCompatActivity {
 
     }
 
+
+
+
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
     private class ListProductosPrecios extends AsyncTask<Void, Void, Void> {
@@ -812,25 +852,6 @@ public class DetalladoProductosActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
 
-String EmpresaFotos="";
-            if(Empresa.equals("https://www.jacve.mx/imagenes/")){
-                EmpresaFotos=Empresa+TipoFotos+"/"+LineaFotos+"/"+Producto+"/1.jpg";
-            }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
-                EmpresaFotos=Empresa+Producto+"/4.webp";
-            }else{
-                EmpresaFotos=Empresa+Producto+".jpg";
-
-            }
-
-
-
-
-            Picasso.with(context).
-                    load(EmpresaFotos)
-                    .error(R.drawable.ic_baseline_error_24)
-                    .fit()
-                    .centerInside()
-                    .into(imageproducto);
 
             Descripciontxt.setText(Descripcion);
             Lineatxt.setText(Linea);
@@ -960,6 +981,166 @@ String EmpresaFotos="";
         return formatter.format(Double.parseDouble(number));
     }
 
+    private void loadImagesAndStartAnimation() {
+
+        for (String url : imageUrls) {
+            Glide.with(this)
+                    .asDrawable()
+                    .load(url)
+                    .into(new CustomTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(@NonNull Drawable resource, Transition<? super Drawable> transition) {
+                            Producto360.addFrame(resource, 200); // Duración de cada frame en ms
+                            if (Producto360.getNumberOfFrames() == imageUrls.size()) {
+                                Producto360.setOneShot(false); // Repetir la animación
+                                Producto360.start();
+                            }
+                        }
+
+                        @Override
+                        public void onLoadCleared(Drawable placeholder) {
+                            // No es necesario manejar esto en este caso
+                        }
+                    });
+        }
+    }
+
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Detener la animación si la actividad se destruye
+        isPlaying = false;
+        handler.removeCallbacksAndMessages(null);
+    }
+
+
+
+    @SuppressWarnings("deprecation")
+    @SuppressLint("StaticFieldLeak")
+    private class Imagenes extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            HttpHandler sh = new HttpHandler();
+
+            String url = Empresa+Producto;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            jsonStr=jsonStr.replace("\\","");
+            if (jsonStr != null) {
+                try {
+                    // Convertir el JSON a un array
+                    JSONArray jsonArray = new JSONArray(jsonStr);
+
+                    // Iterar el array principal
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject objeto = jsonArray.getJSONObject(i);
+                        objeto.getString("principal");
+                        String url1 = objeto.getString("principal");
+                        EmpresaFotos=url1;
+
+                        // Obtener el array "PicturesUrl"
+                        JSONArray picturesArray = objeto.getJSONArray("PicturesUrl");
+
+                        // Iterar el array de imágenes
+
+                        for (int j = 0; j < picturesArray.length(); j++) {
+                            JSONObject picture = picturesArray.getJSONObject(j);
+
+                            // Extraer la URL de "sm"
+                            String urls = picture.getString("sm");
+                            urls=urls.replace("\\","");
+                            imageUrls.add(urls);
+                        }
+                    }
+
+
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(DetalladoProductosActivity.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                    btnCarShoping.setEnabled(true);
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(DetalladoProductosActivity.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                                btnCarShoping.setEnabled(true);
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
+            return null;
+
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.P)
+        @Override
+        protected void onPostExecute(Void result) {
+           //Muestra 360
+
+            if (imageUrls.size()>23){
+                loadImagesAndStartAnimation();
+
+            }else{
+
+//Muestra Imagen Principal
+
+                if(Empresa.equals("https://www.jacve.mx/tools/pictures-urlProductos?ids=") || Empresa.equals("https://www.guvi.mx/tools/pictures-urlProductos?ids=") ){
+
+
+                }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
+                    EmpresaFotos=Empresa+Producto+"/4.webp";
+                }else{
+                    EmpresaFotos=Empresa+Producto+".jpg";
+
+                }
+
+                Picasso.with(context).
+                        load(EmpresaFotos)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imageproducto);
+            }
+
+
+        }
+
+
+    }
+
+
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
@@ -1015,9 +1196,7 @@ String EmpresaFotos="";
                                 (Numero.getString("k_descRODATECH").equals("")?"0":Numero.getString("k_descRODATECH")),
                                 (Numero.getString("k_descPARTECH").equals("")?"0":Numero.getString("k_descPARTECH")),
                                 (Numero.getString("k_descSHARK").equals("")?"0":Numero.getString("k_descSHARK")),
-                                (Numero.getString("k_descTRACKONE").equals("")?"0":Numero.getString("k_descTRACKONE")),
-                                (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("TipoFotos").equals("") ? "0" : Numero.getString("TipoFotos")):""),
-                                (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("LineaFotos").equals("") ? "0" : Numero.getString("LineaFotos")):"")));
+                                (Numero.getString("k_descTRACKONE").equals("")?"0":Numero.getString("k_descTRACKONE")),""));
                     }
                 } catch (final JSONException e) {
                     runOnUiThread(new Runnable() {
@@ -1098,10 +1277,10 @@ String EmpresaFotos="";
                     String Des3 = listaCarShoping.get(i).getDesc3();
                     String Monto = listaCarShoping.get(i).getMonto();
                     String Des = listaCarShoping.get(i).getDescr();
-                    String FotoTipo = listaCarShoping.get(i).getTipoFotos();
-                    String FotoLinea = listaCarShoping.get(i).getLineaFotos();
+                    String URL = EmpresaFotos;
 
-                    db.execSQL("INSERT INTO  carrito (Cliente,Parte,Existencia,Cantidad,Unidad,Precio,Desc1,Desc2,Desc3,Monto,Descri,FotosTipo,FotosLinea) values ('" + Cli + "','" + Par + "','" + Exi + "','" + Can + "','" + Uni + "','" + Pre + "','" + Des1 + "','" + Des2 + "','" + Des3 + "','" + Monto + "','" + Des + "','"+FotoTipo+"','"+FotoLinea+"')");
+
+                    db.execSQL("INSERT INTO  carrito (Cliente,Parte,Existencia,Cantidad,Unidad,Precio,Desc1,Desc2,Desc3,Monto,Descri,URL) values ('" + Cli + "','" + Par + "','" + Exi + "','" + Can + "','" + Uni + "','" + Pre + "','" + Des1 + "','" + Des2 + "','" + Des3 + "','" + Monto + "','" + Des + "','" + URL + "')");
                 }
                 db.close();
                 Intent carrito = new Intent(DetalladoProductosActivity.this, CarritoComprasActivity.class);
@@ -1156,13 +1335,14 @@ String EmpresaFotos="";
                         fila.getString(9),
                         fila.getString(10),
                         fila.getString(11),
-                        fila.getString(12),
-                        fila.getString(13)));
+                        fila.getString(12)));
             } while (fila.moveToNext());
         }
         db.close();
 
     }
+
+
 
     @Override
     public void onBackPressed() {

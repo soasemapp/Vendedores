@@ -26,8 +26,11 @@
                 android:id="@+id/imageproducto"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@color/AccentColor"
-                android:src="@drawable/aboutlogo" />
+                android:background="@color/AccentColor" />
+
+
+
+
 
             <TextView
                 android:id="@+id/Clave"
