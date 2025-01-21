@@ -92,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
                                     .into(imgEmpresa);
                             LinearJacve.setVisibility(View.VISIBLE);
                             LinearTodos.setVisibility(View.GONE);
+                            Versiones task1 = new Versiones();
+                            task1.execute();
+
                         } else if (which == 1) {
                             StrServer = "autodis.ath.cx:9085";
                             Picasso.with(getApplicationContext()).
@@ -100,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
                                     .fit()
                                     .centerInside()
                                     .into(imgEmpresa);
+                            Versiones task1 = new Versiones();
+                            task1.execute();
                             LinearJacve.setVisibility(View.GONE);
                             LinearTodos.setVisibility(View.VISIBLE);
                         } else if (which == 2) {
@@ -110,7 +115,8 @@ public class MainActivity extends AppCompatActivity {
                                     .fit()
                                     .centerInside()
                                     .into(imgEmpresa);
-
+                            Versiones task1 = new Versiones();
+                            task1.execute();
                             LinearJacve.setVisibility(View.GONE);
                             LinearTodos.setVisibility(View.VISIBLE);
                         } else if (which == 3) {
@@ -122,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
                                     .centerInside()
                                     .into(imgEmpresa);
 
+                            Versiones task1 = new Versiones();
+                            task1.execute();
                             LinearJacve.setVisibility(View.GONE);
                             LinearTodos.setVisibility(View.VISIBLE);
                         } else if (which == 4) {
@@ -133,7 +141,8 @@ public class MainActivity extends AppCompatActivity {
                                     .fit()
                                     .centerInside()
                                     .into(imgEmpresa);
-
+                            Versiones task1 = new Versiones();
+                            task1.execute();
                             LinearJacve.setVisibility(View.GONE);
                             LinearTodos.setVisibility(View.VISIBLE);
                         } else if (which == 5) {
@@ -155,7 +164,8 @@ public class MainActivity extends AppCompatActivity {
                                     .fit()
                                     .centerInside()
                                     .into(imgEmpresa);
-
+                            Versiones task1 = new Versiones();
+                            task1.execute();
                             LinearJacve.setVisibility(View.GONE);
                             LinearTodos.setVisibility(View.VISIBLE);
                         } else if (which == 7) {
@@ -166,11 +176,13 @@ public class MainActivity extends AppCompatActivity {
                                     .fit()
                                     .centerInside()
                                     .into(imgEmpresa);
-
+                            Versiones task1 = new Versiones();
+                            task1.execute();
                             LinearJacve.setVisibility(View.GONE);
                             LinearTodos.setVisibility(View.VISIBLE);
                         }else if (which == 8) {
-
+                            Versiones task1 = new Versiones();
+                            task1.execute();
                             StrServer = "cedistabasco.ddns.net:9080";
                             Picasso.with(getApplicationContext()).
                                     load(R.drawable.pressa)
@@ -236,10 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        if (!preference.contains("user") && !preference.contains("pass")) {
-        Versiones task1 = new Versiones();
-        task1.execute();
-        }
+
 
     }
 
@@ -386,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://jacve.dyndns.org:9085/versionesapp?Clave=1";
+            String url = "http://"+StrServer+"/versionesapp?Clave=1";
             String jsonStr = sh.makeServiceCall(url, "WEBPETI", "W3B3P3T1");
             if (jsonStr != null) {
                 try {

@@ -167,10 +167,10 @@ public class HomeFragment extends Fragment {
 
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
-                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+                Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
-                Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
                 break;
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
@@ -1079,23 +1079,23 @@ String mensaje =e.getMessage().toString();
 
         @Override
         protected Void doInBackground(Void... params) {
-            String Productos="";
-            for (int i = 0; i < ListaProductosGeneral.size(); i++) {
+            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085")) {
+                String Productos = "";
+                for (int i = 0; i < ListaProductosGeneral.size(); i++) {
 
-                if (i==0){
-                    Productos = ListaProductosGeneral.get(i).getClave();
-                }else{
-                    Productos =Productos+","+ ListaProductosGeneral.get(i).getClave();
-                 }
+                    if (i == 0) {
+                        Productos = ListaProductosGeneral.get(i).getClave();
+                    } else {
+                        Productos = Productos + "," + ListaProductosGeneral.get(i).getClave();
+                    }
 
 
-
-            }
+                }
 
                 HttpHandler sh = new HttpHandler();
-                String url = Empresa+Productos;
+                String url = Empresa + Productos;
                 String jsonStr = sh.makeServiceCall(url, "", "");
-                jsonStr=jsonStr.replace("\\","");
+                jsonStr = jsonStr.replace("\\", "");
                 if (jsonStr != null) {
                     try {
                         // Convertir el JSON a un array
@@ -1104,13 +1104,9 @@ String mensaje =e.getMessage().toString();
                             JSONObject objeto = jsonArray.getJSONObject(i);
                             objeto.getString("principal");
                             String url1 = objeto.getString("principal");
-                            url1.replace("\\","");
+                            url1.replace("\\", "");
                             ListaProductosGeneral.get(i).setUrl(url1);
                         }
-
-
-
-
 
 
                     } catch (final JSONException e) {
@@ -1121,7 +1117,7 @@ String mensaje =e.getMessage().toString();
                 }//else
 
 
-
+            }
 
 
             return null;
@@ -1471,7 +1467,7 @@ String mensaje =e.getMessage().toString();
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://jacve.dyndns.org:9085/versionesapp?Clave=1";
+            String url = "http://"+StrServer+"/versionesapp?Clave=1";
             String jsonStr = sh.makeServiceCall(url, "WEBPETI", "W3B3P3T1");
             if (jsonStr != null) {
                 try {

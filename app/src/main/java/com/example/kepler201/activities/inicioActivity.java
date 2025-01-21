@@ -49,6 +49,7 @@ public class inicioActivity extends AppCompatActivity {
 
 
     String CONFIGURACION;
+    String CONFIGURACION2;
 
     ConexionSQLiteHelper conn;
 
@@ -148,6 +149,7 @@ String mensaje;
                         for (int i = 0; i < jItem.length(); i++) {
                             jitems = jItem.getJSONObject("" + i);
                             CONFIGURACION = jitems.getString("RegistroPagos");
+                            CONFIGURACION2= jitems.getString("GraficaPresupuesto");
                         }
                     }
                 } catch (final JSONException e) {
@@ -195,18 +197,25 @@ String mensaje;
         @RequiresApi(api = Build.VERSION_CODES.P)
         @Override
         protected void onPostExecute(Void result) {
+            navigationView = findViewById(R.id.nav_view);
+            Menu nav_Menu = navigationView.getMenu();
+
             if(CONFIGURACION.equals("0")){
 
-                navigationView = findViewById(R.id.nav_view);
-                Menu nav_Menu = navigationView.getMenu();
                 nav_Menu.findItem(R.id.activityAltasPagos).setVisible(true);
                 nav_Menu.findItem(R.id.regitrodepagosActivity).setVisible(false);
             }else{
-                navigationView = findViewById(R.id.nav_view);
-                Menu nav_Menu = navigationView.getMenu();
 
                 nav_Menu.findItem(R.id.activityAltasPagos).setVisible(false);
                 nav_Menu.findItem(R.id.regitrodepagosActivity).setVisible(true);
+            }
+
+            if(CONFIGURACION2.equals("0")){
+                nav_Menu.findItem(R.id.activity_ventas_linea).setVisible(true);
+                nav_Menu.findItem(R.id.activityScreenFirst).setVisible(false);
+            }else{
+                nav_Menu.findItem(R.id.activity_ventas_linea).setVisible(true);
+                nav_Menu.findItem(R.id.activityScreenFirst).setVisible(false);
             }
 
         }

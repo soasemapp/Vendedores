@@ -96,12 +96,13 @@
             android:icon="@drawable/icons8_conferencia_52"
             />
 
-        <item
+        <!--<item
             android:id="@+id/activityDevol"
             android:title="Devoluciones"
             android:icon="@drawable/icons8_conferencia_52"
-            />
 
+            />
+-->
 
 
 

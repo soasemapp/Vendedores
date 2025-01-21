@@ -60,13 +60,24 @@ public class AdaptadorProductosKFF extends RecyclerView.Adapter<AdaptadorProduct
 
 
         holder.Parte.setText(listaproductos.get(position).getClave());
-        Picasso.with(context).
-                load(EmpresaAd)
-                .error(R.drawable.noimage)
-                .placeholder(R.drawable.loadingpro)
-                .fit()
-                .centerInside()
-                .into(holder.imgPro);
+        if (!EmpresaAd.equals("")) {
+
+            Picasso.with(context).
+                    load(EmpresaAd)
+                    .error(R.drawable.noimage)
+                    .placeholder(R.drawable.loadingpro)
+                    .fit()
+                    .centerInside()
+                    .into(holder.imgPro);
+        }else{
+            Picasso.with(context).
+                    load(R.drawable.noimage)
+                    .error(R.drawable.noimage)
+                    .placeholder(R.drawable.loadingpro)
+                    .fit()
+                    .centerInside()
+                    .into(holder.imgPro);
+        }
 
     }
 

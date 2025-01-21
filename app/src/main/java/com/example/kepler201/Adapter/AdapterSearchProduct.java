@@ -25,7 +25,7 @@ public class AdapterSearchProduct extends RecyclerView.Adapter<AdapterSearchProd
     ArrayList<SetGetListProductos> listProductos;
     private View.OnClickListener listener;
     Context context;
-    String Empresa;
+    String Empresa="";
     String EmpresaNuevaa="";
     public AdapterSearchProduct(ArrayList<SetGetListProductos> listProductos, Context context,String empresa) {
         this.listProductos = listProductos;
@@ -65,13 +65,24 @@ public class AdapterSearchProduct extends RecyclerView.Adapter<AdapterSearchProd
 
         }
 
-        Picasso.with(context).
-                load(Empresa)
-                .error(R.drawable.noimage)
-                .placeholder(R.drawable.loadingpro)
-                .fit()
-                .centerInside()
-                .into(holder.prodocuImag);
+        if (!Empresa.equals("")) {
+
+            Picasso.with(context).
+                    load(Empresa)
+                    .error(R.drawable.noimage)
+                    .placeholder(R.drawable.loadingpro)
+                    .fit()
+                    .centerInside()
+                    .into(holder.prodocuImag);
+        }else{
+            Picasso.with(context).
+                    load(R.drawable.noimage)
+                    .error(R.drawable.noimage)
+                    .placeholder(R.drawable.loadingpro)
+                    .fit()
+                    .centerInside()
+                    .into(holder.prodocuImag);
+        }
 
     }
 

@@ -650,7 +650,7 @@
                             android:layout_height="wrap_content"
                             android:autoSizeMinTextSize="10sp"
                             android:autoSizeMaxTextSize="13sp"
-                            android:text="Quimiecos"
+                            android:text="Quimicos"
                             android:textColor="@color/white"
                             />
 

@@ -1,6 +1,8 @@
 package com.example.kepler201.activities.Consultas;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +14,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -30,7 +34,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import dmax.dialog.SpotsDialog;
 
@@ -49,11 +55,11 @@ public class ActivityFacturasVencidas extends AppCompatActivity {
     ArrayList<SearachClientSANDG> listaclientG = new ArrayList<>();
     int n = 2000;
     String[] search2 = new String[n];
-
+    private EditText fechaEn;
     private Spinner spinerClie;
     String strusr = "", strpass = "", strname = "", strlname = "", strtype = "", strbran = "", strma = "", strco = "", strclien = "", strcodBra, StrServer = "";
     AlertDialog mDialog;
-
+    String date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +77,7 @@ public class ActivityFacturasVencidas extends AppCompatActivity {
         BackOreders =  findViewById(R.id.BackOrders);
         FacturasVencidas =  findViewById(R.id.FacturasVencidas);
         Cliente0Ventas =  findViewById(R.id.Cliente0Ventas);
+        fechaEn = findViewById(R.id.fecha);
 
 
 
@@ -85,6 +92,32 @@ public class ActivityFacturasVencidas extends AppCompatActivity {
         strco = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
 
+        Calendar calendar = Calendar.getInstance();
+        final int year = calendar.get(Calendar.YEAR);
+        final int month = calendar.get(Calendar.MONTH);
+        final int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        fechaEn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ActivityFacturasVencidas.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int day) {
+                        month = month + 1;
+                        date = year + "-" + month + "-" + day;
+                        fechaEn.setText(date);
+                    }
+                }, year, month, day);
+                datePickerDialog.show();
+            }
+        });
+        Calendar c = Calendar.getInstance();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateformatActually1 = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaasalll = dateformatActually1.format(c.getTime());
+        date=fechaasalll;
+
+
+        fechaEn.setText(fechaasalll);
 
         ConsultaFacturas.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,7 +231,7 @@ public class ActivityFacturasVencidas extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
-            String parametros = "vendedor=" + strco + "&cliente=" + strclien ;
+            String parametros = "vendedor=" + strco + "&cliente=" + strclien  + "&fecha=" + date ;
             String url = "http://" + StrServer + "/facturasvencidasapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {

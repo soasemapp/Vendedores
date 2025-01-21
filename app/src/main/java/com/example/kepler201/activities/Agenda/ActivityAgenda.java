@@ -155,12 +155,11 @@ public class ActivityAgenda extends AppCompatActivity {
                     JSONObject json = new JSONObject(jsonStr);
 
                     if (json.length()!=0) {
-                        JSONArray jsonArray;
                         JSONObject jitems, Numero;
                         JSONObject jsonObject = new JSONObject(jsonStr);
                         jitems = jsonObject.getJSONObject("Item");
 
-                        jsonArray=jsonObject.getJSONArray("k_id");
+
 
                         for (int i = 0; i < jitems.length(); i++) {
                             jitems = jsonObject.getJSONObject("Item");

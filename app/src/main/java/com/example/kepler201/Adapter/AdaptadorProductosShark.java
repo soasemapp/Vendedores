@@ -59,13 +59,24 @@ public class AdaptadorProductosShark extends RecyclerView.Adapter<AdaptadorProdu
 
 
         holder.Parte.setText(listaproductos.get(position).getClave());
-        Picasso.with(context).
-                load(EmpresaAd)
-                .error(R.drawable.noimage)
-                .placeholder(R.drawable.loadingpro)
-                .fit()
-                .centerInside()
-                .into(holder.imgPro);
+        if (!EmpresaAd.equals("")) {
+
+            Picasso.with(context).
+                    load(EmpresaAd)
+                    .error(R.drawable.noimage)
+                    .placeholder(R.drawable.loadingpro)
+                    .fit()
+                    .centerInside()
+                    .into(holder.imgPro);
+        }else{
+            Picasso.with(context).
+                    load(R.drawable.noimage)
+                    .error(R.drawable.noimage)
+                    .placeholder(R.drawable.loadingpro)
+                    .fit()
+                    .centerInside()
+                    .into(holder.imgPro);
+        }
 
     }
 

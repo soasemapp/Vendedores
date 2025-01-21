@@ -82,7 +82,7 @@ public class BusquedaActivity extends AppCompatActivity {
     EditText yearInicial, yearFinal;
     MaterialCheckBox yearCheck;
     RecyclerView RecyclerProductos;
-    Context context;
+    Context context=this;
     Button btnBuscar, btnfiltro;
     String fechainicio = "", fechafinal = "", marca = "", modelo = "", linea = "", check = "";
     LinearLayout linearFiltro;
@@ -139,7 +139,7 @@ public class BusquedaActivity extends AppCompatActivity {
                 Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
-                Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
                 break;
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
@@ -1101,38 +1101,37 @@ public class BusquedaActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            String Productos="";
-            for (int i = 0; i < listProdu1.size(); i++) {
+            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085")) {
+                String Productos = "";
+                for (int i = 0; i < listProdu1.size(); i++) {
 
-                if (i==0){
-                    Productos = listProdu1.get(i).getProductos();
-                }else{
-                    Productos =Productos+","+ listProdu1.get(i).getProductos();
-                }
-
-
-
-            }
-
-            HttpHandler sh = new HttpHandler();
-            String url = Empresa+Productos;
-            String jsonStr = sh.makeServiceCall(url, "", "");
-            jsonStr=jsonStr.replace("\\","");
-            if (jsonStr != null) {
-                try {
-                    // Convertir el JSON a un array
-                    JSONArray jsonArray = new JSONArray(jsonStr);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject objeto = jsonArray.getJSONObject(i);
-                        objeto.getString("principal");
-                        String url1 = objeto.getString("principal");
-                        url1.replace("\\","");
-                        listProdu1.get(i).setUrl(url1);
+                    if (i == 0) {
+                        Productos = listProdu1.get(i).getProductos();
+                    } else {
+                        Productos = Productos + "," + listProdu1.get(i).getProductos();
                     }
 
 
+                }
 
-                } catch (final JSONException e) {
+                HttpHandler sh = new HttpHandler();
+                String url = Empresa + Productos;
+                String jsonStr = sh.makeServiceCall(url, "", "");
+                jsonStr = jsonStr.replace("\\", "");
+                if (jsonStr != null) {
+                    try {
+                        // Convertir el JSON a un array
+                        JSONArray jsonArray = new JSONArray(jsonStr);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject objeto = jsonArray.getJSONObject(i);
+                            objeto.getString("principal");
+                            String url1 = objeto.getString("principal");
+                            url1.replace("\\", "");
+                            listProdu1.get(i).setUrl(url1);
+                        }
+
+
+                    } catch (final JSONException e) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1170,7 +1169,7 @@ public class BusquedaActivity extends AppCompatActivity {
                     });//runUniTthread
                 }//else
 
-
+            }
 
 
 

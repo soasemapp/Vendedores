@@ -108,14 +108,29 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.View
         }
 
 
+
+
+
         holder.Diponiblidad.setText(Html.fromHtml((Existencia<Cantidad)?"(<font color = #FF0000>NO HAY DISPONIBILIDAD)</font>)":"(<font color = #4CAF50>HAY DISPONIBLES)</font>)"));
-        Picasso.with(context).
-                load(EmpresaAd)
-                .error(R.drawable.noimage)
-                .placeholder(R.drawable.loadingpro)
-                .fit()
-                .centerInside()
-                .into(holder.imgPro);
+
+        if (!EmpresaAd.equals("")) {
+
+            Picasso.with(context).
+                    load(EmpresaAd)
+                    .error(R.drawable.noimage)
+                    .placeholder(R.drawable.loadingpro)
+                    .fit()
+                    .centerInside()
+                    .into(holder.imgPro);
+        }else{
+            Picasso.with(context).
+                    load(R.drawable.noimage)
+                    .error(R.drawable.noimage)
+                    .placeholder(R.drawable.loadingpro)
+                    .fit()
+                    .centerInside()
+                    .into(holder.imgPro);
+        }
 
 
     }

@@ -201,7 +201,7 @@ String Empresa;
                 Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
-                Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
                 break;
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
@@ -847,12 +847,25 @@ String Empresa;
                     Empresa=EmpresaEd+strClave+".jpg";
 
                 }
-                Picasso.with(getApplicationContext()).
-                        load(Empresa)
-                        .error(R.drawable.ic_baseline_error_24)
-                        .fit()
-                        .centerInside()
-                        .into(imageIv);
+
+                if (!Empresa.equals("")){
+                    Picasso.with(context).
+                            load(Empresa)
+                            .error(R.drawable.noimage)
+                            .placeholder(R.drawable.loadingpro)
+                            .fit()
+                            .centerInside()
+                            .into(imageIv);
+                }else{
+                    Picasso.with(context).
+                            load(R.drawable.noimage)
+                            .error(R.drawable.noimage)
+                            .placeholder(R.drawable.loadingpro)
+                            .fit()
+                            .centerInside()
+                            .into(imageIv);
+                }
+
                 productosEd.setText("");
                 mDialog.dismiss();
                 AlertDialog.Builder alerta = new AlertDialog.Builder(ActivityConsultaProductos.this);
@@ -1375,45 +1388,65 @@ String Empresa;
 
         @Override
         protected Void doInBackground(Void... params) {
-            HttpHandler sh = new HttpHandler();
+            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085")){
+                HttpHandler sh = new HttpHandler();
 
-            String url = Empresa+productoStr;
-            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
-            jsonStr=jsonStr.replace("\\","");
-            if (jsonStr != null) {
-                try {
-                    // Convertir el JSON a un array
-                    JSONArray jsonArray = new JSONArray(jsonStr);
+                String url = Empresa+productoStr;
+                String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+                jsonStr=jsonStr.replace("\\","");
+                if (jsonStr != null) {
+                    try {
+                        // Convertir el JSON a un array
+                        JSONArray jsonArray = new JSONArray(jsonStr);
 
-                    // Iterar el array principal
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject objeto = jsonArray.getJSONObject(i);
-                        objeto.getString("principal");
-                        String url1 = objeto.getString("principal");
-                        EmpresaFotos=url1;
+                        // Iterar el array principal
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject objeto = jsonArray.getJSONObject(i);
+                            objeto.getString("principal");
+                            String url1 = objeto.getString("principal");
+                            EmpresaFotos=url1;
 
-                        // Obtener el array "PicturesUrl"
-                        JSONArray picturesArray = objeto.getJSONArray("PicturesUrl");
+                            // Obtener el array "PicturesUrl"
+                            JSONArray picturesArray = objeto.getJSONArray("PicturesUrl");
 
-                        // Iterar el array de imágenes
+                            // Iterar el array de imágenes
 
-                        for (int j = 0; j < picturesArray.length(); j++) {
-                            JSONObject picture = picturesArray.getJSONObject(j);
+                            for (int j = 0; j < picturesArray.length(); j++) {
+                                JSONObject picture = picturesArray.getJSONObject(j);
 
-                            // Extraer la URL de "sm"
-                            String urls = picture.getString("sm");
-                            urls=urls.replace("\\","");
-                            imageUrls.add(urls);
+                                // Extraer la URL de "sm"
+                                String urls = picture.getString("sm");
+                                urls=urls.replace("\\","");
+                                imageUrls.add(urls);
+                            }
                         }
-                    }
 
 
-                } catch (final JSONException e) {
+                    } catch (final JSONException e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConsultaProductos.this);
+                                alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+                                        btnCarShoping.setEnabled(true);
+                                    }
+                                });
+                                AlertDialog titulo1 = alerta1.create();
+                                titulo1.setTitle("Hubo un problema");
+                                titulo1.show();
+
+                            }//run
+                        });
+                    }//catch JSON EXCEPTION
+                } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConsultaProductos.this);
-                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     dialogInterface.cancel();
@@ -1425,27 +1458,10 @@ String Empresa;
                             titulo1.show();
 
                         }//run
-                    });
-                }//catch JSON EXCEPTION
-            } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConsultaProductos.this);
-                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                                btnCarShoping.setEnabled(true);
-                            }
-                        });
-                        AlertDialog titulo1 = alerta1.create();
-                        titulo1.setTitle("Hubo un problema");
-                        titulo1.show();
+                    });//runUniTthread
+                }//else
 
-                    }//run
-                });//runUniTthread
-            }//else
+            }
             return null;
 
         }
@@ -1472,12 +1488,26 @@ String Empresa;
 
                 }
 
-                Picasso.with(context).
-                        load(EmpresaFotos)
-                        .error(R.drawable.ic_baseline_error_24)
-                        .fit()
-                        .centerInside()
-                        .into(imageIv);
+                if (!EmpresaFotos.equals("")) {
+
+                    Picasso.with(context).
+                            load(EmpresaFotos)
+                            .error(R.drawable.noimage)
+                            .placeholder(R.drawable.loadingpro)
+                            .fit()
+                            .centerInside()
+                            .into(imageIv);
+                }else{
+                    Picasso.with(context).
+                            load(R.drawable.noimage)
+                            .error(R.drawable.noimage)
+                            .placeholder(R.drawable.loadingpro)
+                            .fit()
+                            .centerInside()
+                            .into(imageIv);
+                }
+
+
 
             }
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

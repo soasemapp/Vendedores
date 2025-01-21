@@ -402,7 +402,7 @@ ButtonAdd.setEnabled(false);
             @Override
             public void onClick(View view) {
                 ButtonCot.setEnabled(false);
-                mDialog.setMessage("Realizando Cotizacion");
+
                 mDialog.show();
 
                 if (StrServer.equals("vazlocolombia.dyndns.org:9085")) {
@@ -1515,7 +1515,7 @@ ButtonAdd.setEnabled(false);
                 public void onClick(DialogInterface dialogInterface, int i) {
 
 
-                    mDialog.setMessage("Generando su Folio");
+
                     mDialog.show();
 
                     if (StrServer.equals("vazlocolombia.dyndns.org:9085")) {
@@ -1617,7 +1617,7 @@ ButtonAdd.setEnabled(false);
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
 
-                    mDialog.setMessage("Generando su Folio");
+
                     mDialog.show();
 
                     if (StrServer.equals("vazlocolombia.dyndns.org:9085")) {

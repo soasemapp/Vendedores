@@ -103,7 +103,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
                 Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
-                Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
                 break;
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
