@@ -17,13 +17,12 @@ import com.example.kepler201.Adapter.VentaLineaAdapter;
 import com.example.kepler201.R;
 import com.example.kepler201.activities.models.FechaUtils;
 import com.example.kepler201.activities.models.VentaLinea;
+import com.example.kepler201.includes.HttpHandler;
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,16 +63,14 @@ public class ActivityVentasXlinea extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
         DividerItemDecoration divider = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(divider);
 
-        //String server= StrServer;
         String vendedor = strcode;
         String fecha = FechaUtils.obtenerPrimerDiaDelMesActualFormatoWebService();
         String ano = FechaUtils.obtenerAnoActualFormatoWebService();
 
-        new ObtenerVentasTask().execute(vendedor, fecha, ano,StrServer);
+        new ObtenerVentasTask().execute(vendedor, fecha, ano, StrServer);
     }
 
     private class ObtenerVentasTask extends AsyncTask<String, Void, List<VentaLinea>> {
@@ -85,42 +82,30 @@ public class ActivityVentasXlinea extends AppCompatActivity {
             String ano = params[2];
             String server = params[3];
             List<VentaLinea> ventas = new ArrayList<>();
+            String urlString = "http://" + server + "/presupuestoapp?vendedor=" + vendedor + "&fecha=" + fecha + "&ano=" + ano;
+
+            HttpHandler httpHandler = new HttpHandler();
+            String jsonResponse = httpHandler.makeServiceCall(urlString, strusr, strpass);
 
             try {
-                String urlString = "http://"+server+"/presupuestoapp?vendedor=" + vendedor + "&fecha=" + fecha + "&ano=" + ano;
-                //String urlString = "http://jacve.dyndns.org:9085/presupuestoapp?vendedor=084&fecha=2025-01-01&ano=21";
-                URL url = new URL(urlString);
+                if (jsonResponse != null) {
+                    JSONObject jsonObject = new JSONObject(jsonResponse);
+                    JSONArray jsonArray = jsonObject.getJSONArray("Item");
 
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setConnectTimeout(5000);
-                urlConnection.setReadTimeout(5000);
-
-                InputStreamReader in = new InputStreamReader(urlConnection.getInputStream());
-                StringBuilder response = new StringBuilder();
-                int data = in.read();
-                while (data != -1) {
-                    response.append((char) data);
-                    data = in.read();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject ventaObject = jsonArray.getJSONObject(i);
+                        VentaLinea venta = new VentaLinea();
+                        venta.setLinea(ventaObject.getString("Linea"));
+                        venta.setPresupuesto(ventaObject.getDouble("Presupuesto"));
+                        venta.setFaltante(ventaObject.getDouble("Faltante"));
+                        venta.setVendido(ventaObject.getDouble("Vendido"));
+                        venta.setPorcentaje(ventaObject.getDouble("Porcentaje"));
+                        ventas.add(venta);
+                    }
                 }
-
-                JSONObject jsonResponse = new JSONObject(response.toString());
-                JSONArray jsonArray = jsonResponse.getJSONArray("Item");
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject ventaObject = jsonArray.getJSONObject(i);
-                    VentaLinea venta = new VentaLinea();
-                    venta.setLinea(ventaObject.getString("Linea"));
-                    venta.setPresupuesto(ventaObject.getDouble("Presupuesto"));
-                    venta.setFaltante(ventaObject.getDouble("Faltante"));
-                    venta.setVendido(ventaObject.getDouble("Vendido"));
-                    venta.setPorcentaje(ventaObject.getDouble("Porcentaje"));
-                    ventas.add(venta);
-                }
-
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e(TAG, "Error al obtener las ventas: ", e);
+                Log.e(TAG, "Error al procesar las ventas: ", e);
             }
 
             return ventas;
@@ -129,7 +114,6 @@ public class ActivityVentasXlinea extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<VentaLinea> ventas) {
             if (ventas != null && !ventas.isEmpty()) {
-
                 if (adapter == null) {
                     adapter = new VentaLineaAdapter(ventas);
                     recyclerView.setAdapter(adapter);
@@ -137,7 +121,6 @@ public class ActivityVentasXlinea extends AppCompatActivity {
                     adapter.setVentas(ventas);
                 }
             } else {
-
                 Toast.makeText(ActivityVentasXlinea.this, "No se encontraron datos", Toast.LENGTH_SHORT).show();
             }
         }
