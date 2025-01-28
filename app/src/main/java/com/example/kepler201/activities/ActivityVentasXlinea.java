@@ -17,6 +17,7 @@ import com.example.kepler201.Adapter.VentaLineaAdapter;
 import com.example.kepler201.R;
 import com.example.kepler201.activities.models.FechaUtils;
 import com.example.kepler201.activities.models.VentaLinea;
+import com.example.kepler201.includes.HttpHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -85,42 +86,30 @@ public class ActivityVentasXlinea extends AppCompatActivity {
             String ano = params[2];
             String server = params[3];
             List<VentaLinea> ventas = new ArrayList<>();
+            String urlString = "http://" + server + "/presupuestoapp?vendedor=" + vendedor + "&fecha=" + fecha + "&ano=" + ano;
+
+            HttpHandler httpHandler = new HttpHandler();
+            String jsonResponse = httpHandler.makeServiceCall(urlString, strusr, strpass);
 
             try {
-                String urlString = "http://"+server+"/presupuestoapp?vendedor=" + vendedor + "&fecha=" + fecha + "&ano=" + ano;
-                //String urlString = "http://jacve.dyndns.org:9085/presupuestoapp?vendedor=084&fecha=2025-01-01&ano=21";
-                URL url = new URL(urlString);
+                if (jsonResponse != null) {
+                    JSONObject jsonObject = new JSONObject(jsonResponse);
+                    JSONArray jsonArray = jsonObject.getJSONArray("Item");
 
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setConnectTimeout(5000);
-                urlConnection.setReadTimeout(5000);
-
-                InputStreamReader in = new InputStreamReader(urlConnection.getInputStream());
-                StringBuilder response = new StringBuilder();
-                int data = in.read();
-                while (data != -1) {
-                    response.append((char) data);
-                    data = in.read();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject ventaObject = jsonArray.getJSONObject(i);
+                        VentaLinea venta = new VentaLinea();
+                        venta.setLinea(ventaObject.getString("Linea"));
+                        venta.setPresupuesto(ventaObject.getDouble("Presupuesto"));
+                        venta.setFaltante(ventaObject.getDouble("Faltante"));
+                        venta.setVendido(ventaObject.getDouble("Vendido"));
+                        venta.setPorcentaje(ventaObject.getDouble("Porcentaje"));
+                        ventas.add(venta);
+                    }
                 }
-
-                JSONObject jsonResponse = new JSONObject(response.toString());
-                JSONArray jsonArray = jsonResponse.getJSONArray("Item");
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject ventaObject = jsonArray.getJSONObject(i);
-                    VentaLinea venta = new VentaLinea();
-                    venta.setLinea(ventaObject.getString("Linea"));
-                    venta.setPresupuesto(ventaObject.getDouble("Presupuesto"));
-                    venta.setFaltante(ventaObject.getDouble("Faltante"));
-                    venta.setVendido(ventaObject.getDouble("Vendido"));
-                    venta.setPorcentaje(ventaObject.getDouble("Porcentaje"));
-                    ventas.add(venta);
-                }
-
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e(TAG, "Error al obtener las ventas: ", e);
+                Log.e(TAG, "Error al procesar las ventas: ", e);
             }
 
             return ventas;
