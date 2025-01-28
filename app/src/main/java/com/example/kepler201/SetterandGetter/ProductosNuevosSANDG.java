@@ -4,15 +4,13 @@ public class ProductosNuevosSANDG {
     String clave;
     String Descripcion;
     String Tipo;
-    String FotoTipo;
-    String FotoLinea;
+    String Url;
 
-    public ProductosNuevosSANDG(String clave, String descripcion, String tipo, String fotoTipo, String fotoLinea) {
+    public ProductosNuevosSANDG(String clave, String descripcion, String tipo, String url) {
         this.clave = clave;
         Descripcion = descripcion;
         Tipo = tipo;
-        FotoTipo = fotoTipo;
-        FotoLinea = fotoLinea;
+        Url = url;
     }
 
     public String getClave() {
@@ -39,19 +37,11 @@ public class ProductosNuevosSANDG {
         Tipo = tipo;
     }
 
-    public String getFotoTipo() {
-        return FotoTipo;
+    public String getUrl() {
+        return Url;
     }
 
-    public void setFotoTipo(String fotoTipo) {
-        FotoTipo = fotoTipo;
-    }
-
-    public String getFotoLinea() {
-        return FotoLinea;
-    }
-
-    public void setFotoLinea(String fotoLinea) {
-        FotoLinea = fotoLinea;
+    public void setUrl(String url) {
+        Url = url;
     }
 }

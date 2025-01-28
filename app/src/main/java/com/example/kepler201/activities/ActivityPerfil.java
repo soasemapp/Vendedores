@@ -14,11 +14,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.kepler201.Adapter.AdapterFacturasnoregistradas;
 import com.example.kepler201.R;
-import com.example.kepler201.SetterandGetter.FacturasnoregistradasNewSANDG;
 import com.example.kepler201.SetterandGetter.SucursalSANDG;
-import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 import com.squareup.picasso.Picasso;

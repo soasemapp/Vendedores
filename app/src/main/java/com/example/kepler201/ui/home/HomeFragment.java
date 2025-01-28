@@ -42,9 +42,9 @@ import com.example.kepler201.SetterandGetter.ProductosNuevosSANDG;
 import com.example.kepler201.SetterandGetter.SearachClientSANDG;
 import com.example.kepler201.activities.BusquedaActivity;
 import com.example.kepler201.activities.DetalladoProductosActivity;
-import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -165,19 +165,18 @@ public class HomeFragment extends Fragment {
         ProductosNuevosStr= preference.getString("Productosnuevos", "0");
 
 
-
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/imagenes/";
+                Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
-                Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
                 break;
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
                 break;
             case "guvi.ath.cx:9085":
-                Empresa = "https://www.guvi.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "cedistabasco.ddns.net:9085":
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
@@ -463,43 +462,37 @@ public class HomeFragment extends Fragment {
                 ListaProductosGeneral.add(new ProductosNuevosSANDG(fila.getString(1),
                         fila.getString(2),
                         fila.getString(3),
-                        fila.getString(4),
-                        fila.getString(5)));
+                        fila.getString(4)));
 
                 switch (fila.getString(3)) {
                     case "1":
                         ListaProductosEagle.add(new ProductosNuevosSANDG(fila.getString(1),
                                 fila.getString(2),
                                 fila.getString(3),
-                                fila.getString(4),
-                                fila.getString(5)));
+                                fila.getString(4)));
                         break;
                     case "2":
                         ListaProductosRodatech.add(new ProductosNuevosSANDG(fila.getString(1),
                                 fila.getString(2),
                                 fila.getString(3),
-                                fila.getString(4),
-                                fila.getString(5)));
+                                fila.getString(4)));
                     case "3":
                         ListaProductosPartech.add(new ProductosNuevosSANDG(fila.getString(1),
                                 fila.getString(2),
                                 fila.getString(3),
-                                fila.getString(4),
-                                fila.getString(5)));
+                                fila.getString(4)));
                         break;
                     case "4":
                         ListaProductosShark.add(new ProductosNuevosSANDG(fila.getString(1),
                                 fila.getString(2),
                                 fila.getString(3),
-                                fila.getString(4),
-                                fila.getString(5)));
+                                fila.getString(4)));
                         break;
                     case "6":
                         ListaProductosTrackone.add(new ProductosNuevosSANDG(fila.getString(1),
                                 fila.getString(2),
                                 fila.getString(3),
-                                fila.getString(4),
-                                fila.getString(5)));
+                                fila.getString(4)));
                         break;
 
                     case "8":
@@ -510,29 +503,25 @@ public class HomeFragment extends Fragment {
                         ListaProductosGSP.add(new ProductosNuevosSANDG(fila.getString(1),
                                 fila.getString(2),
                                 fila.getString(3),
-                                fila.getString(4),
-                                fila.getString(5)));
+                                fila.getString(4)));
                         break;
                     case "13":
                         ListaProductosMechanic.add(new ProductosNuevosSANDG(fila.getString(1),
                                 fila.getString(2),
                                 fila.getString(3),
-                                fila.getString(4),
-                                fila.getString(5)));
+                                fila.getString(4)));
                         break;
                     case "14":
                        if (!StrServer.equals("jacve.dyndns.org:9085")){
                            ListaProductosVazlo.add(new ProductosNuevosSANDG(fila.getString(1),
                                    fila.getString(2),
                                    fila.getString(3),
-                                   fila.getString(4),
-                                   fila.getString(5)));
+                                   fila.getString(4)));
                        }else {
                            ListaProductoskff.add(new ProductosNuevosSANDG(fila.getString(1),
                                    fila.getString(2),
                                    fila.getString(3),
-                                   fila.getString(4),
-                                   fila.getString(5)));
+                                   fila.getString(4)));
 
                        }
                         break;
@@ -540,8 +529,7 @@ public class HomeFragment extends Fragment {
                         ListaProductoszoms.add(new ProductosNuevosSANDG(fila.getString(1),
                                 fila.getString(2),
                                 fila.getString(3),
-                                fila.getString(4),
-                                fila.getString(5)));
+                                fila.getString(4)));
                         break;
                     default:
                         break;
@@ -1031,9 +1019,7 @@ public class HomeFragment extends Fragment {
 
                             ListaProductosGeneral.add(new ProductosNuevosSANDG((Numero.getString("k_Producto").equals("") ? "" : Numero.getString("k_Producto")),
                                     (Numero.getString("k_Descripcion").equals("") ? "" : Numero.getString("k_Descripcion")),
-                                    (Numero.getString("k_Tipo").equals("") ? "" : Numero.getString("k_Tipo")),
-                                    (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("k_FotosTipo").equals("") ? "0" : Numero.getString("k_FotosTipo")):""),
-                                    (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("k_FotosLinea").equals("") ? "0" : Numero.getString("k_FotosLinea")):"")));
+                                    (Numero.getString("k_Tipo").equals("") ? "" : Numero.getString("k_Tipo")),""));
                         }
                     }
                 } catch (final JSONException e) {
@@ -1050,6 +1036,98 @@ String mensaje =e.getMessage().toString();
         protected void onPostExecute(Void result) {
             BorrarCarrito();
 
+ /*           String Productos="";
+            for (int i = 0; i < ListaProductosGeneral.size(); i++) {
+
+                if (i==0){
+                    Productos = "{ \"ids\":\""+ListaProductosGeneral.get(i).getClave();
+                }else if(i==ListaProductosGeneral.size()-1){
+                    Productos =Productos+","+ ListaProductosGeneral.get(i).getClave()+"\"}";
+                    }
+                else{
+                    Productos =Productos+","+ ListaProductosGeneral.get(i).getClave();
+                }
+
+
+                if (i==0){
+                    Productos = ListaProductosGeneral.get(i).getClave();}
+                else{
+                    Productos =Productos+","+ ListaProductosGeneral.get(i).getClave();
+                }
+
+
+            }*/
+
+         Imagenes task1 = new Imagenes();
+            task1.execute();
+
+
+        }
+
+
+    }
+
+
+
+
+    private class Imagenes extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085")) {
+                String Productos = "";
+                for (int i = 0; i < ListaProductosGeneral.size(); i++) {
+
+                    if (i == 0) {
+                        Productos = ListaProductosGeneral.get(i).getClave();
+                    } else {
+                        Productos = Productos + "," + ListaProductosGeneral.get(i).getClave();
+                    }
+
+
+                }
+
+                HttpHandler sh = new HttpHandler();
+                String url = Empresa + Productos;
+                String jsonStr = sh.makeServiceCall(url, "", "");
+                jsonStr = jsonStr.replace("\\", "");
+                if (jsonStr != null) {
+                    try {
+                        // Convertir el JSON a un array
+                        JSONArray jsonArray = new JSONArray(jsonStr);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject objeto = jsonArray.getJSONObject(i);
+                            objeto.getString("principal");
+                            String url1 = objeto.getString("principal");
+                            url1.replace("\\", "");
+                            ListaProductosGeneral.get(i).setUrl(url1);
+                        }
+
+
+                    } catch (final JSONException e) {
+
+                    }//catch JSON EXCEPTION
+                } else {
+
+                }//else
+
+
+            }
+
+
+            return null;
+
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.P)
+        @Override
+        protected void onPostExecute(Void result) {
+
             ConexionSQLiteHelper conn = new ConexionSQLiteHelper(getActivity(), "bd_Carrito", null, 1);
             SQLiteDatabase db = conn.getWritableDatabase();
             for (int i = 0; i < ListaProductosGeneral.size(); i++) {
@@ -1057,78 +1135,63 @@ String mensaje =e.getMessage().toString();
                 String Clave = ListaProductosGeneral.get(i).getClave();
                 String Descripcion = ListaProductosGeneral.get(i).getDescripcion();
                 String Tipo = ListaProductosGeneral.get(i).getTipo();
-                String TipoFotos = ListaProductosGeneral.get(i).getFotoTipo();
-                String LineaFotos = ListaProductosGeneral.get(i).getFotoLinea();
+                String Url = ListaProductosGeneral.get(i).getUrl();
 
-                db.execSQL("INSERT INTO  productos (Clave,Descripcion,Tipo,FotoTipo,FotoLinea) values ('" + Clave + "','" + Descripcion + "','" + Tipo + "','" + TipoFotos + "','" + LineaFotos + "')");
+                db.execSQL("INSERT INTO  productos (Clave,Descripcion,Tipo,URL) values ('" + Clave + "','" + Descripcion + "','" + Tipo + "','" + Url + "')");
             }
 
             db.close();
-/*
-1	EAGLE
-2	RODATECH
-3	PARTECH
-4	SHARK
-5	BHP GASKET
-6	TRACKONE
-7	PROMOCIONALES
-8	GSP AMORTIGUADOR
-9	GSP HM
-10	GSP SUSPENSION
-11	GSP RODAMIENTOS
-12	GSP TRACCION
-13	MECHANIC CHOICE
-14	KFF
-15	ZOMS
 
- */
+
             for (int i = 0; i < ListaProductosGeneral.size(); i++) {
-                String Clave, Descripcion, Tipo,TipoFotos,LineaFotos;
+                String Clave, Descripcion, Tipo,Url;
                 Clave = ListaProductosGeneral.get(i).getClave();
                 Descripcion = ListaProductosGeneral.get(i).getDescripcion();
                 Tipo = ListaProductosGeneral.get(i).getTipo();
-                TipoFotos =ListaProductosGeneral.get(i).getFotoTipo();
-                LineaFotos=ListaProductosGeneral.get(i).getFotoLinea();
+                Url=ListaProductosGeneral.get(i).getUrl();
+
                 switch (Tipo) {
                     case "1":
-                        ListaProductosEagle.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                        ListaProductosEagle.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
                         break;
                     case "2":
-                        ListaProductosRodatech.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                        ListaProductosRodatech.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
                         break;
                     case "3":
-                        ListaProductosPartech.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                        ListaProductosPartech.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
                         break;
                     case "4":
-                        ListaProductosShark.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                        ListaProductosShark.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
                         break;
                     case "6":
-                        ListaProductosTrackone.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                        ListaProductosTrackone.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
                         break;
                     case "8":
                     case "9":
                     case "10":
                     case "11":
                     case "12":
-                        ListaProductosGSP.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                        ListaProductosGSP.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
                         break;
                     case "13":
-                        ListaProductosMechanic.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                        ListaProductosMechanic.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
                         break;
                     case "14":
                         if (!StrServer.equals("jacve.dyndns.org:9085")){
-                            ListaProductosVazlo.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                            ListaProductosVazlo.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
                         }else{
-                            ListaProductoskff.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                            ListaProductoskff.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
                         }
                         break;
                     case"15":
-                        ListaProductoszoms.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,TipoFotos,LineaFotos));
+                        ListaProductoszoms.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
                         break;
                     default:
                         break;
                 }
             }
+
+
 
 
             AdaptadorProductosNuevos adapter = new AdaptadorProductosNuevos(ListaProductosEagle, context,Empresa);
@@ -1380,10 +1443,12 @@ String mensaje =e.getMessage().toString();
 
             mDialog.dismiss();
 
+
         }
 
 
     }
+
 
 
 
@@ -1402,7 +1467,7 @@ String mensaje =e.getMessage().toString();
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://jacve.dyndns.org:9085/versionesapp?Clave=1";
+            String url = "http://"+StrServer+"/versionesapp?Clave=1";
             String jsonStr = sh.makeServiceCall(url, "WEBPETI", "W3B3P3T1");
             if (jsonStr != null) {
                 try {

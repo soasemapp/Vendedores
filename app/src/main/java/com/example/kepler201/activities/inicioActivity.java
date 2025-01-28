@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,24 +27,13 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.kepler201.ConexionSQLiteHelper;
 import com.example.kepler201.R;
-import com.example.kepler201.SetterandGetter.SearachClientSANDG;
-import com.example.kepler201.XMLS.xmlVersiones;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
-import com.example.kepler201.activities.Pagos.ActivityABCpagos;
-import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 
 import dmax.dialog.SpotsDialog;
 
@@ -61,6 +49,7 @@ public class inicioActivity extends AppCompatActivity {
 
 
     String CONFIGURACION;
+    String CONFIGURACION2;
 
     ConexionSQLiteHelper conn;
 
@@ -160,6 +149,7 @@ String mensaje;
                         for (int i = 0; i < jItem.length(); i++) {
                             jitems = jItem.getJSONObject("" + i);
                             CONFIGURACION = jitems.getString("RegistroPagos");
+                            CONFIGURACION2= jitems.getString("GraficaPresupuesto");
                         }
                     }
                 } catch (final JSONException e) {
@@ -207,18 +197,25 @@ String mensaje;
         @RequiresApi(api = Build.VERSION_CODES.P)
         @Override
         protected void onPostExecute(Void result) {
+            navigationView = findViewById(R.id.nav_view);
+            Menu nav_Menu = navigationView.getMenu();
+
             if(CONFIGURACION.equals("0")){
 
-                navigationView = findViewById(R.id.nav_view);
-                Menu nav_Menu = navigationView.getMenu();
                 nav_Menu.findItem(R.id.activityAltasPagos).setVisible(true);
                 nav_Menu.findItem(R.id.regitrodepagosActivity).setVisible(false);
             }else{
-                navigationView = findViewById(R.id.nav_view);
-                Menu nav_Menu = navigationView.getMenu();
 
                 nav_Menu.findItem(R.id.activityAltasPagos).setVisible(false);
                 nav_Menu.findItem(R.id.regitrodepagosActivity).setVisible(true);
+            }
+
+            if(CONFIGURACION2.equals("0")){
+                nav_Menu.findItem(R.id.activity_ventas_linea).setVisible(true);
+                nav_Menu.findItem(R.id.activityScreenFirst).setVisible(false);
+            }else{
+                nav_Menu.findItem(R.id.activity_ventas_linea).setVisible(true);
+                nav_Menu.findItem(R.id.activityScreenFirst).setVisible(false);
             }
 
         }

@@ -27,40 +27,33 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.kepler201.Adapter.AdaptadorProductosGSP;
+import com.example.kepler201.Adapter.AdaptadorProductosKFF;
+import com.example.kepler201.Adapter.AdaptadorProductosMechanic;
+import com.example.kepler201.Adapter.AdaptadorProductosNuevos;
+import com.example.kepler201.Adapter.AdaptadorProductosPartech;
+import com.example.kepler201.Adapter.AdaptadorProductosRodatech;
+import com.example.kepler201.Adapter.AdaptadorProductosShark;
+import com.example.kepler201.Adapter.AdaptadorProductosVazlo;
+import com.example.kepler201.Adapter.AdaptadorProductosZoms;
+import com.example.kepler201.Adapter.AdaptadorProductostrackone;
 import com.example.kepler201.Adapter.AdapterSearchProduct;
 import com.example.kepler201.ConexionSQLiteHelper;
 import com.example.kepler201.R;
-import com.example.kepler201.SetterandGetter.CarritoVentasSANDG;
-import com.example.kepler201.SetterandGetter.ListLineaSANDG;
 import com.example.kepler201.SetterandGetter.ListLineaSANDG2;
+import com.example.kepler201.SetterandGetter.ProductosNuevosSANDG;
 import com.example.kepler201.SetterandGetter.SearachClientSANDG;
-import com.example.kepler201.SetterandGetter.SetGetListMarca;
 import com.example.kepler201.SetterandGetter.SetGetListMarca2;
-import com.example.kepler201.SetterandGetter.SetGetListModelo;
 import com.example.kepler201.SetterandGetter.SetGetListModelo2;
 import com.example.kepler201.SetterandGetter.SetGetListProductos;
-import com.example.kepler201.XMLS.xmlBusqueGeneral;
-import com.example.kepler201.XMLS.xmlBusqueProductos;
-import com.example.kepler201.XMLS.xmlCarritoVentas;
-import com.example.kepler201.XMLS.xmlListLine2;
-import com.example.kepler201.XMLS.xmlListMarca;
-import com.example.kepler201.XMLS.xmlListModelo;
-import com.example.kepler201.XMLS.xmlSearchClientesG;
-import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
-import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -89,7 +82,7 @@ public class BusquedaActivity extends AppCompatActivity {
     EditText yearInicial, yearFinal;
     MaterialCheckBox yearCheck;
     RecyclerView RecyclerProductos;
-    Context context;
+    Context context=this;
     Button btnBuscar, btnfiltro;
     String fechainicio = "", fechafinal = "", marca = "", modelo = "", linea = "", check = "";
     LinearLayout linearFiltro;
@@ -141,20 +134,18 @@ public class BusquedaActivity extends AppCompatActivity {
         strco = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
         BusquedaProducto = getIntent().getStringExtra("Producto");
-
-
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/imagenes/";
+                Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
-                Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
                 break;
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
                 break;
             case "guvi.ath.cx:9085":
-                Empresa = "https://www.guvi.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "cedistabasco.ddns.net:9085":
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
@@ -1030,7 +1021,7 @@ public class BusquedaActivity extends AppCompatActivity {
                             Precio = Numero.getJSONObject("precio_ajuste");
                             precio_ajuste = Precio.getString("valor").equals("") ? "0" : Precio.getString("valor");
 
-                            listProdu1.add(new SetGetListProductos(Producto, Descripcion, Linea, precio_base, precio_ajuste,TipoFotos,LineaFotos));
+                            listProdu1.add(new SetGetListProductos(Producto, Descripcion, Linea, precio_base, precio_ajuste,""));
 
 
                         }
@@ -1093,6 +1084,103 @@ public class BusquedaActivity extends AppCompatActivity {
                 titulo.show();
             }
 
+            BusquedaActivity.Imagenes task1 = new BusquedaActivity.Imagenes();
+            task1.execute();
+
+        }
+
+    }
+
+
+    private class Imagenes extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085")) {
+                String Productos = "";
+                for (int i = 0; i < listProdu1.size(); i++) {
+
+                    if (i == 0) {
+                        Productos = listProdu1.get(i).getProductos();
+                    } else {
+                        Productos = Productos + "," + listProdu1.get(i).getProductos();
+                    }
+
+
+                }
+
+                HttpHandler sh = new HttpHandler();
+                String url = Empresa + Productos;
+                String jsonStr = sh.makeServiceCall(url, "", "");
+                jsonStr = jsonStr.replace("\\", "");
+                if (jsonStr != null) {
+                    try {
+                        // Convertir el JSON a un array
+                        JSONArray jsonArray = new JSONArray(jsonStr);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject objeto = jsonArray.getJSONObject(i);
+                            objeto.getString("principal");
+                            String url1 = objeto.getString("principal");
+                            url1.replace("\\", "");
+                            listProdu1.get(i).setUrl(url1);
+                        }
+
+
+                    } catch (final JSONException e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                                alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+                                    }
+                                });
+                                AlertDialog titulo1 = alerta1.create();
+                                titulo1.setTitle("Hubo un problema");
+                                titulo1.show();
+
+                            }//run
+                        });
+                    }//catch JSON EXCEPTION
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                            alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });//runUniTthread
+                }//else
+
+            }
+
+
+
+            return null;
+
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.P)
+        @Override
+        protected void onPostExecute(Void result) {
+
 
             AdapterSearchProduct adapter = new AdapterSearchProduct(listProdu1, context, Empresa);
             adapter.setOnClickListener(new View.OnClickListener() {
@@ -1117,9 +1205,12 @@ public class BusquedaActivity extends AppCompatActivity {
             RecyclerProductos.setAdapter(adapter);
             mDialog.dismiss();
 
+
         }
 
+
     }
+
 
 
     @SuppressLint("StaticFieldLeak")
@@ -1151,8 +1242,7 @@ public class BusquedaActivity extends AppCompatActivity {
                         String Linea;
                         String precio_base;
                         String precio_ajuste;
-                        String TipoFotos="";
-                        String LineaFotos="";
+
                         for (int i = 0; i < jitems.length(); i++) {
 
                             jitems = jsonObject.getJSONObject("Item");
@@ -1161,16 +1251,12 @@ public class BusquedaActivity extends AppCompatActivity {
                             Producto = Numero.getString("Producto");
                             Descripcion = Numero.getString("Descripcion");
                             Linea = Numero.getString("Linea");
-                            if(StrServer.equals("jacve.dyndns.org:9085")) {
-                                TipoFotos = Numero.getString("TipoFotos");
-                                LineaFotos = Numero.getString("LineaFotos");
-                            }
                             Precio = Numero.getJSONObject("precio_base");
                             precio_base = Precio.getString("valor").equals("") ? "0" : Precio.getString("valor");
                             Precio = Numero.getJSONObject("precio_ajuste");
                             precio_ajuste = Precio.getString("valor").equals("") ? "0" : Precio.getString("valor");
 
-                            listProdu1.add(new SetGetListProductos(Producto, Descripcion, Linea, precio_base, precio_ajuste,TipoFotos,LineaFotos));
+                            listProdu1.add(new SetGetListProductos(Producto, Descripcion, Linea, precio_base, precio_ajuste,""));
 
 
 
@@ -1237,28 +1323,13 @@ public class BusquedaActivity extends AppCompatActivity {
                 titulo.setTitle("");
                 titulo.show();
             }
-            AdapterSearchProduct adapter = new AdapterSearchProduct(listProdu1, context, Empresa);
-            adapter.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            BusquedaActivity.Imagenes task1 = new BusquedaActivity.Imagenes();
+            task1.execute();
 
-                    int position = RecyclerProductos.getChildAdapterPosition(Objects.requireNonNull(RecyclerProductos.findContainingItemView(view)));
-                    Intent ProductosDetallados = new Intent(BusquedaActivity.this, DetalladoProductosActivity.class);
-                    String Producto = listProdu1.get(position).getProductos();
-                    String Descripcion = listProdu1.get(position).getDescripcion();
-                    String PrecioAjuste = listProdu1.get(position).getPrecioAjuste();
-                    String PrecioBase = listProdu1.get(position).getPrecioBase();
-                    ProductosDetallados.putExtra("Producto", Producto);
-                    ProductosDetallados.putExtra("Descripcion", Descripcion);
-                    ProductosDetallados.putExtra("PrecioAjuste", PrecioAjuste);
-                    ProductosDetallados.putExtra("PrecioBase", PrecioBase);
-                    ProductosDetallados.putExtra("claveVentana", "1");
 
-                    startActivity(ProductosDetallados);
-                }
-            });
-            RecyclerProductos.setAdapter(adapter);
-            mDialog.dismiss();
+
+
+
 
 
         }
@@ -1267,7 +1338,12 @@ public class BusquedaActivity extends AppCompatActivity {
     }
 
 
-    @Override
+
+
+
+
+
+            @Override
     public void onBackPressed() {
 
         int count = getFragmentManager().getBackStackEntryCount();

@@ -29,12 +29,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.kepler201.ParserTask.DownloadTask;
 import com.example.kepler201.*;
-import com.example.kepler201.SetterandGetter.SearachClientSANDG;
-import com.example.kepler201.XMLS.xmlAsignaCordenadas;
-import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
-import com.example.kepler201.activities.Consultas.ActivityFactuDetall;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -53,14 +48,7 @@ import com.google.maps.android.PolyUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 

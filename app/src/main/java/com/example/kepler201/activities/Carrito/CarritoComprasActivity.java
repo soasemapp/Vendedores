@@ -40,10 +40,11 @@ import com.example.kepler201.SetterandGetter.listExistenciaSANG;
 import com.example.kepler201.XMLS.xmlCarritoCompras;
 import com.example.kepler201.XMLS.xmlCarritoCompras2;
 import com.example.kepler201.activities.DetalladoProductosActivity;
-import com.example.kepler201.activities.MainActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
@@ -232,9 +233,10 @@ public class CarritoComprasActivity extends AppCompatActivity {
         descuTrackone = preferenceClie.getString("Trackone", "");
 
 
+
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/imagenes/";
+                Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
                 Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
@@ -243,14 +245,20 @@ public class CarritoComprasActivity extends AppCompatActivity {
                 Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
                 break;
             case "guvi.ath.cx:9085":
-                Empresa = "https://www.guvi.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "cedistabasco.ddns.net:9085":
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
             case "sprautomotive.servehttp.com:9090":
+                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
+                break;
             case "sprautomotive.servehttp.com:9095":
+                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
+                break;
             case "sprautomotive.servehttp.com:9080":
+                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
+                break;
             case "sprautomotive.servehttp.com:9085":
                 Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
                 break;
@@ -394,7 +402,7 @@ ButtonAdd.setEnabled(false);
             @Override
             public void onClick(View view) {
                 ButtonCot.setEnabled(false);
-                mDialog.setMessage("Realizando Cotizacion");
+
                 mDialog.show();
 
                 if (StrServer.equals("vazlocolombia.dyndns.org:9085")) {
@@ -1045,9 +1053,7 @@ ButtonAdd.setEnabled(false);
                                     (Numero.getString("k_descRODATECH").equals("") ? "0" : Numero.getString("k_descRODATECH")),
                                     (Numero.getString("k_descPARTECH").equals("") ? "0" : Numero.getString("k_descPARTECH")),
                                     (Numero.getString("k_descSHARK").equals("") ? "0" : Numero.getString("k_descSHARK")),
-                                    (Numero.getString("k_descTRACKONE").equals("") ? "0" : Numero.getString("k_descTRACKONE")),
-                                    (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("TipoFotos").equals("") ? "0" : Numero.getString("TipoFotos")):""),
-                                    (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("LineaFotos").equals("") ? "0" : Numero.getString("LineaFotos")):"")));
+                                    (Numero.getString("k_descTRACKONE").equals("") ? "0" : Numero.getString("k_descTRACKONE")),""));
 
                            }
                     }
@@ -1095,61 +1101,11 @@ ButtonAdd.setEnabled(false);
         @Override
         protected void onPostExecute(Void aBoolean) {
             super.onPostExecute(aBoolean);
+            CarritoComprasActivity.Imagenes2 task1 = new CarritoComprasActivity.Imagenes2();
+            task1.execute();
 
-            if (preferenceClie.contains("RFC") && preferenceClie.contains("PLAZO")) {
 
-            } else {
-                rfc = listaCarShoping2.get(0).getRfc();
-                plazo = listaCarShoping2.get(0).getPlazo();
-                Calle = listaCarShoping2.get(0).getCalle();
-                Colonia = listaCarShoping2.get(0).getColonia();
-                Poblacion = listaCarShoping2.get(0).getPoblacion();
-                Via = listaCarShoping2.get(0).getVia();
-                K87 = listaCarShoping2.get(0).getDescPro();
-                Desc1fa = listaCarShoping2.get(0).getDesc1Fac();
-                Comentario1 = listaCarShoping2.get(0).getComentario1();
-                Comentario2 = listaCarShoping2.get(0).getComentario2();
-                Comentario3 = listaCarShoping2.get(0).getComentario3();
 
-                descuEagle = listaCarShoping2.get(0).getEagle();
-                descuRodatech = listaCarShoping2.get(0).getRodatech();
-                descuPartec = listaCarShoping2.get(0).getPartech();
-                descuShark = listaCarShoping2.get(0).getShark();
-                descuTrackone = listaCarShoping2.get(0).getTrackoone();
-                guardarDatos2();
-            }
-            try {
-                ConexionSQLiteHelper conn = new ConexionSQLiteHelper(CarritoComprasActivity.this, "bd_Carrito", null, 1);
-                SQLiteDatabase db = conn.getWritableDatabase();
-                for (int i = 0; i < listaCarShoping2.size(); i++) {
-
-                    String Cli = listaCarShoping2.get(i).getCliente();
-                    String Par = listaCarShoping2.get(i).getParte();
-                    String Exi = listaCarShoping2.get(i).getExistencia();
-                    String Can = listaCarShoping2.get(i).getCantidad();
-                    String Uni = listaCarShoping2.get(i).getUnidad();
-                    String Pre = listaCarShoping2.get(i).getPrecio();
-                    String Des1 = listaCarShoping2.get(i).getDesc1();
-                    String Des2 = listaCarShoping2.get(i).getDesc2();
-                    String Des3 = listaCarShoping2.get(i).getDesc3();
-                    String Monto = listaCarShoping2.get(i).getMonto();
-                    String Des = listaCarShoping2.get(i).getDescr();
-                    String FotoTipo = listaCarShoping2.get(i).getTipoFotos();
-                    String FotoLinea = listaCarShoping2.get(i).getLineaFotos();
-
-                    db.execSQL("INSERT INTO  carrito (Cliente,Parte,Existencia,Cantidad,Unidad,Precio,Desc1,Desc2,Desc3,Monto,Descri,FotosTipo,FotosLinea) values ('" + Cli + "','" + Par + "','" + Exi + "','" + Can + "','" + Uni + "','" + Pre + "','" + Des1 + "','" + Des2 + "','" + Des3 + "','" + Monto + "','" + Des + "','"+FotoTipo+"','"+FotoLinea+"')");
-                }
-                db.close();
-                mDialog.dismiss();
-                Intent carrito = new Intent(CarritoComprasActivity.this, CarritoComprasActivity.class);
-                carrito.putExtra("val", 2);
-                overridePendingTransition(0, 0);
-                startActivity(carrito);
-                overridePendingTransition(0, 0);
-                finish();
-            } catch (Exception ignored) {
-                ignored.printStackTrace();
-            }
         }//onPost
     }
 
@@ -1559,7 +1515,7 @@ ButtonAdd.setEnabled(false);
                 public void onClick(DialogInterface dialogInterface, int i) {
 
 
-                    mDialog.setMessage("Generando su Folio");
+
                     mDialog.show();
 
                     if (StrServer.equals("vazlocolombia.dyndns.org:9085")) {
@@ -1661,7 +1617,7 @@ ButtonAdd.setEnabled(false);
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
 
-                    mDialog.setMessage("Generando su Folio");
+
                     mDialog.show();
 
                     if (StrServer.equals("vazlocolombia.dyndns.org:9085")) {
@@ -2480,15 +2436,163 @@ ButtonAdd.setEnabled(false);
                         fila.getString(9),
                         fila.getString(10),
                         fila.getString(11),
-                        fila.getString(12),
-                        fila.getString(13)));
+                        fila.getString(12)));
             } while (fila.moveToNext());
         }
         AdaptadorCarrito adapter = new AdaptadorCarrito(listaCarShoping, Desc1, StrServer, context, Empresa);
         recyclerCarrtio.setAdapter(adapter);
-        db.close();
         mDialog.dismiss();
+
+
+        db.close();
+
     }
+
+    private class Imagenes2 extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            for (int i = 0; i < listaCarShoping2.size(); i++) {
+
+                String Producto =listaCarShoping2.get(i).getParte();
+
+
+                HttpHandler sh = new HttpHandler();
+                String url = Empresa+Producto;
+                String jsonStr = sh.makeServiceCall(url, "", "");
+                jsonStr=jsonStr.replace("\\","");
+                if (jsonStr != null) {
+                    try {
+                        // Convertir el JSON a un array
+                        JSONArray jsonArray = new JSONArray(jsonStr);
+
+                        JSONObject objeto = jsonArray.getJSONObject(0);
+                        objeto.getString("principal");
+                        String url1 = objeto.getString("principal");
+                        listaCarShoping2.get(i).setUrl(url1);
+
+
+
+
+                    } catch (final JSONException e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                                alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+                                    }
+                                });
+                                AlertDialog titulo1 = alerta1.create();
+                                titulo1.setTitle("Hubo un problema");
+                                titulo1.show();
+
+                            }//run
+                        });
+                    }//catch JSON EXCEPTION
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(CarritoComprasActivity.this);
+                            alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });//runUniTthread
+                }//else
+
+
+
+
+            }
+            return null;
+
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.P)
+        @Override
+        protected void onPostExecute(Void result) {
+
+
+
+            if (preferenceClie.contains("RFC") && preferenceClie.contains("PLAZO")) {
+
+            } else {
+                rfc = listaCarShoping2.get(0).getRfc();
+                plazo = listaCarShoping2.get(0).getPlazo();
+                Calle = listaCarShoping2.get(0).getCalle();
+                Colonia = listaCarShoping2.get(0).getColonia();
+                Poblacion = listaCarShoping2.get(0).getPoblacion();
+                Via = listaCarShoping2.get(0).getVia();
+                K87 = listaCarShoping2.get(0).getDescPro();
+                Desc1fa = listaCarShoping2.get(0).getDesc1Fac();
+                Comentario1 = listaCarShoping2.get(0).getComentario1();
+                Comentario2 = listaCarShoping2.get(0).getComentario2();
+                Comentario3 = listaCarShoping2.get(0).getComentario3();
+
+                descuEagle = listaCarShoping2.get(0).getEagle();
+                descuRodatech = listaCarShoping2.get(0).getRodatech();
+                descuPartec = listaCarShoping2.get(0).getPartech();
+                descuShark = listaCarShoping2.get(0).getShark();
+                descuTrackone = listaCarShoping2.get(0).getTrackoone();
+                guardarDatos2();
+            }
+            try {
+                ConexionSQLiteHelper conn = new ConexionSQLiteHelper(CarritoComprasActivity.this, "bd_Carrito", null, 1);
+                SQLiteDatabase db = conn.getWritableDatabase();
+                for (int i = 0; i < listaCarShoping2.size(); i++) {
+
+                    String Cli = listaCarShoping2.get(i).getCliente();
+                    String Par = listaCarShoping2.get(i).getParte();
+                    String Exi = listaCarShoping2.get(i).getExistencia();
+                    String Can = listaCarShoping2.get(i).getCantidad();
+                    String Uni = listaCarShoping2.get(i).getUnidad();
+                    String Pre = listaCarShoping2.get(i).getPrecio();
+                    String Des1 = listaCarShoping2.get(i).getDesc1();
+                    String Des2 = listaCarShoping2.get(i).getDesc2();
+                    String Des3 = listaCarShoping2.get(i).getDesc3();
+                    String Monto = listaCarShoping2.get(i).getMonto();
+                    String Des = listaCarShoping2.get(i).getDescr();
+                    String URL = listaCarShoping2.get(i).getUrl();
+
+                    db.execSQL("INSERT INTO  carrito (Cliente,Parte,Existencia,Cantidad,Unidad,Precio,Desc1,Desc2,Desc3,Monto,Descri,URL) values ('" + Cli + "','" + Par + "','" + Exi + "','" + Can + "','" + Uni + "','" + Pre + "','" + Des1 + "','" + Des2 + "','" + Des3 + "','" + Monto + "','" + Des + "','"+URL+"')");
+                }
+                db.close();
+                mDialog.dismiss();
+                Intent carrito = new Intent(CarritoComprasActivity.this, CarritoComprasActivity.class);
+                carrito.putExtra("val", 2);
+                overridePendingTransition(0, 0);
+                startActivity(carrito);
+                overridePendingTransition(0, 0);
+                finish();
+            } catch (Exception ignored) {
+                ignored.printStackTrace();
+            }
+
+
+        }
+
+
+    }
+
+
+
 
 
     @SuppressLint("SetTextI18n")

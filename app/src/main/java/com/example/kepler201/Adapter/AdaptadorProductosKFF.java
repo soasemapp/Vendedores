@@ -45,9 +45,9 @@ public class AdaptadorProductosKFF extends RecyclerView.Adapter<AdaptadorProduct
     @Override
     public void onBindViewHolder(ViewHolderProductosNuevos holder, int position) {
 
-        if(Empresa.equals("https://www.jacve.mx/imagenes/")){
+        if(Empresa.equals("https://www.jacve.mx/tools/pictures-urlProductos?ids=") || Empresa.equals("https://www.guvi.mx/tools/pictures-urlProductos?ids=") ){
             EmpresaAd = "";
-            EmpresaAd=Empresa+listaproductos.get(position).getFotoTipo()+"/"+listaproductos.get(position).getFotoLinea()+"/"+listaproductos.get(position).getClave()+"/1.jpg";
+            EmpresaAd=listaproductos.get(position).getUrl();
         }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
             EmpresaAd="";
             EmpresaAd=Empresa+listaproductos.get(position).getClave()+"/4.webp";
@@ -60,13 +60,24 @@ public class AdaptadorProductosKFF extends RecyclerView.Adapter<AdaptadorProduct
 
 
         holder.Parte.setText(listaproductos.get(position).getClave());
-        Picasso.with(context).
-                load(EmpresaAd)
-                .error(R.drawable.noimage)
-                .placeholder(R.drawable.loadingpro)
-                .fit()
-                .centerInside()
-                .into(holder.imgPro);
+        if (!EmpresaAd.equals("")) {
+
+            Picasso.with(context).
+                    load(EmpresaAd)
+                    .error(R.drawable.noimage)
+                    .placeholder(R.drawable.loadingpro)
+                    .fit()
+                    .centerInside()
+                    .into(holder.imgPro);
+        }else{
+            Picasso.with(context).
+                    load(R.drawable.noimage)
+                    .error(R.drawable.noimage)
+                    .placeholder(R.drawable.loadingpro)
+                    .fit()
+                    .centerInside()
+                    .into(holder.imgPro);
+        }
 
     }
 

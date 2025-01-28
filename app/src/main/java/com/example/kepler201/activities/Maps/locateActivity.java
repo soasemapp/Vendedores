@@ -23,28 +23,14 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.Envio2SANDG;
-import com.example.kepler201.SetterandGetter.RegistroPagosSANDG;
 import com.example.kepler201.SetterandGetter.SearachClientSANDG;
-import com.example.kepler201.XMLS.xmlDirEnvio;
-import com.example.kepler201.XMLS.xmlDirEnvioMapas;
-import com.example.kepler201.XMLS.xmlSearchClientesG;
-import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
-import com.example.kepler201.activities.Consultas.ActivityFactuDetall;
-import com.example.kepler201.activities.Pagos.ActivityConsultaPagos;
-import com.example.kepler201.activities.Pagos.RegitrodepagosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import dmax.dialog.SpotsDialog;

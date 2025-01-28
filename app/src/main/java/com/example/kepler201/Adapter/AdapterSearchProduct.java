@@ -25,7 +25,7 @@ public class AdapterSearchProduct extends RecyclerView.Adapter<AdapterSearchProd
     ArrayList<SetGetListProductos> listProductos;
     private View.OnClickListener listener;
     Context context;
-    String Empresa;
+    String Empresa="";
     String EmpresaNuevaa="";
     public AdapterSearchProduct(ArrayList<SetGetListProductos> listProductos, Context context,String empresa) {
         this.listProductos = listProductos;
@@ -53,9 +53,9 @@ public class AdapterSearchProduct extends RecyclerView.Adapter<AdapterSearchProd
 
 
 
-        if(EmpresaNuevaa.equals("https://www.jacve.mx/imagenes/")){
+        if(EmpresaNuevaa.equals("https://www.jacve.mx/tools/pictures-urlProductos?ids=")||EmpresaNuevaa.equals("https://www.guvi.mx/tools/pictures-urlProductos?ids=")){
             Empresa="";
-            Empresa=EmpresaNuevaa+listProductos.get(position).getTipoFotos()+"/"+listProductos.get(position).getLineaFotos()+"/"+listProductos.get(position).getProductos()+"/1.jpg";
+            Empresa=listProductos.get(position).getUrl();
         }else  if (!EmpresaNuevaa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
             Empresa="";
             Empresa=EmpresaNuevaa+listProductos.get(position).getProductos()+"/4.webp";
@@ -65,13 +65,24 @@ public class AdapterSearchProduct extends RecyclerView.Adapter<AdapterSearchProd
 
         }
 
-        Picasso.with(context).
-                load(Empresa)
-                .error(R.drawable.noimage)
-                .placeholder(R.drawable.loadingpro)
-                .fit()
-                .centerInside()
-                .into(holder.prodocuImag);
+        if (!Empresa.equals("")) {
+
+            Picasso.with(context).
+                    load(Empresa)
+                    .error(R.drawable.noimage)
+                    .placeholder(R.drawable.loadingpro)
+                    .fit()
+                    .centerInside()
+                    .into(holder.prodocuImag);
+        }else{
+            Picasso.with(context).
+                    load(R.drawable.noimage)
+                    .error(R.drawable.noimage)
+                    .placeholder(R.drawable.loadingpro)
+                    .fit()
+                    .centerInside()
+                    .into(holder.prodocuImag);
+        }
 
     }
 
