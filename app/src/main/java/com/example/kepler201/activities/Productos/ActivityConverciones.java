@@ -197,10 +197,10 @@ public class ActivityConverciones extends AppCompatActivity {
                 Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
                 break;
             case "cecra.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "guvi.ath.cx:9085":
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
@@ -209,16 +209,10 @@ public class ActivityConverciones extends AppCompatActivity {
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
             case "sprautomotive.servehttp.com:9090":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9095":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9080":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9085":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "vazlocolombia.dyndns.org:9085":
                 Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
@@ -710,7 +704,7 @@ public class ActivityConverciones extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085")) {
+            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("sprautomotive.servehttp.com:9085")){
                 HttpHandler sh = new HttpHandler();
 
                 String url = Empresa + productoStr;
@@ -800,7 +794,8 @@ public class ActivityConverciones extends AppCompatActivity {
 
 //Muestra Imagen Principal
 
-                if(Empresa.equals("https://www.jacve.mx/tools/pictures-urlProductos?ids=") || Empresa.equals("https://www.guvi.mx/tools/pictures-urlProductos?ids=") ){
+
+                if(Empresa.equals("https://www.jacve.mx/tools/pictures-urlProductos?ids=") || Empresa.equals("https://www.guvi.mx/tools/pictures-urlProductos?ids=")||    Empresa .equals("https://www.cecra.mx/tools/pictures-urlProductos?ids=")|| Empresa .equals("https://www.vipla.mx/tools/pictures-urlProductos?ids=")){
 
 
                 }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){

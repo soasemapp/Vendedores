@@ -56,12 +56,12 @@ import dmax.dialog.SpotsDialog;
 
 public class HomeFragment extends Fragment {
 
-    RecyclerView recyclerViewEagle, recyclerViewTrackone, recyclerViewRodatech, recyclerViewPartech, recyclerViewShark,recyclerViewMechanic,recyclerViewGSP,recyclerViewVazlo,recyclerViewZoms,recyclerViewKFF;
+    RecyclerView recyclerViewEagle, recyclerViewTrackone, recyclerViewRodatech, recyclerViewPartech, recyclerViewShark, recyclerViewMechanic, recyclerViewGSP, recyclerViewVazlo, recyclerViewZoms, recyclerViewKFF;
 
     String strusr, strpass, strname, strlname, strtype, strbran, strma, strco, strcodBra, StrServer;
 
     String ProductosNuevos;
-    String  strscliente = "",  strscliente3 = "";
+    String strscliente = "", strscliente3 = "";
     String K87;
     String Desc1fa;
     String mensaje = "";
@@ -83,7 +83,7 @@ public class HomeFragment extends Fragment {
     int datos;
 
     private String version;
-    int  Resultado=0;
+    int Resultado = 0;
 
     ArrayList<SearachClientSANDG> listaclientG = new ArrayList<>();
 
@@ -108,8 +108,8 @@ public class HomeFragment extends Fragment {
 
 
     EditText BusquedaProducto;
-    String ProductosNuevosStr,Empresa;
-    LinearLayout EagleOcultar, TrackOneOcultar, RodatechOcultar, PartechOcultar, SharkOcultar,MechanicOcultar,GspOcultar,VazloOcultar,ZoomsOcultar,KFFOcultar;
+    String ProductosNuevosStr, Empresa;
+    LinearLayout EagleOcultar, TrackOneOcultar, RodatechOcultar, PartechOcultar, SharkOcultar, MechanicOcultar, GspOcultar, VazloOcultar, ZoomsOcultar, KFFOcultar;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -131,7 +131,6 @@ public class HomeFragment extends Fragment {
         recyclerViewKFF = view.findViewById(R.id.listProductoskff);
 
 
-
         BusquedaProducto = view.findViewById(R.id.idBusqueda);
         EagleOcultar = view.findViewById(R.id.EagleOcultar);
         TrackOneOcultar = view.findViewById(R.id.TrackoneOcultar);
@@ -142,7 +141,7 @@ public class HomeFragment extends Fragment {
         GspOcultar = view.findViewById(R.id.GSPOcultar);
         VazloOcultar = view.findViewById(R.id.VazloOcultar);
         ZoomsOcultar = view.findViewById(R.id.ZoomsOcultar);
-        KFFOcultar= view.findViewById(R.id.KFFOcultar);
+        KFFOcultar = view.findViewById(R.id.KFFOcultar);
 
         //Preference
         SharedPreferences preference = requireActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
@@ -162,7 +161,7 @@ public class HomeFragment extends Fragment {
         strcodBra = preference.getString("codBra", "null");
         strco = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
-        ProductosNuevosStr= preference.getString("Productosnuevos", "0");
+        ProductosNuevosStr = preference.getString("Productosnuevos", "0");
 
 
         switch (StrServer) {
@@ -170,10 +169,10 @@ public class HomeFragment extends Fragment {
                 Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
                 break;
             case "cecra.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "guvi.ath.cx:9085":
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
@@ -182,19 +181,13 @@ public class HomeFragment extends Fragment {
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
             case "sprautomotive.servehttp.com:9090":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9095":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9080":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9085":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "vazlocolombia.dyndns.org:9085":
-                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
+                Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
                 break;
             default:
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
@@ -214,7 +207,6 @@ public class HomeFragment extends Fragment {
         Comentario1 = preferenceClie.getString("Comentario1", "");
         Comentario2 = preferenceClie.getString("Comentario2", "");
         Comentario3 = preferenceClie.getString("Comentario3", "");
-
 
 
         ListaProductosEagle = new ArrayList<>();
@@ -259,8 +251,6 @@ public class HomeFragment extends Fragment {
         recyclerViewZoms.setLayoutManager(horizontalLayoutManagaer9);
 
 
-
-
         Calendar calendar = Calendar.getInstance();
         final int day = calendar.get(Calendar.DAY_OF_MONTH);
         ConsultaComprobacion();
@@ -268,8 +258,8 @@ public class HomeFragment extends Fragment {
         Versiones task1 = new Versiones();
         task1.execute();
 
-        if(datos>0){
-            if( day==15 || day==1){
+        if (datos > 0) {
+            if (day == 15 || day == 1) {
                 if (ProductosNuevosStr.equals("0")) {
                     editor.putString("Productosnuevos", "1");
                     editor.apply();
@@ -278,7 +268,7 @@ public class HomeFragment extends Fragment {
                     Consulta();
                 }
 
-            }else{
+            } else {
 
                 editor.putString("Productosnuevos", "0");
                 editor.apply();
@@ -287,11 +277,10 @@ public class HomeFragment extends Fragment {
             }
 
 
-        }else{
+        } else {
             ProductosNuevosAscy();
 
         }
-
 
 
         BusquedaProducto.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -395,7 +384,6 @@ public class HomeFragment extends Fragment {
                 KFFOcultar.setVisibility(View.VISIBLE);
 
 
-
                 break;
             default:
                 EagleOcultar.setVisibility(View.VISIBLE);
@@ -424,12 +412,13 @@ public class HomeFragment extends Fragment {
         @SuppressLint("Recycle") Cursor fila = db.rawQuery("SELECT COUNT(*) FROM productos", null);
         if (fila != null && fila.moveToFirst()) {
             do {
-                datos=fila.getInt(0);
+                datos = fila.getInt(0);
             } while (fila.moveToNext());
         }
         db.close();
 
     }
+
     private void BorrarCarrito() {
         conn = new ConexionSQLiteHelper(getActivity(), "bd_Carrito", null, 1);
         SQLiteDatabase db = conn.getReadableDatabase();
@@ -438,8 +427,6 @@ public class HomeFragment extends Fragment {
         db.execSQL("DELETE FROM sqlite_sequence WHERE name='productos'");
         db.close();
     }
-
-
 
 
     private void Consulta() {
@@ -476,6 +463,7 @@ public class HomeFragment extends Fragment {
                                 fila.getString(2),
                                 fila.getString(3),
                                 fila.getString(4)));
+                        break;
                     case "3":
                         ListaProductosPartech.add(new ProductosNuevosSANDG(fila.getString(1),
                                 fila.getString(2),
@@ -512,18 +500,18 @@ public class HomeFragment extends Fragment {
                                 fila.getString(4)));
                         break;
                     case "14":
-                       if (!StrServer.equals("jacve.dyndns.org:9085")){
-                           ListaProductosVazlo.add(new ProductosNuevosSANDG(fila.getString(1),
-                                   fila.getString(2),
-                                   fila.getString(3),
-                                   fila.getString(4)));
-                       }else {
-                           ListaProductoskff.add(new ProductosNuevosSANDG(fila.getString(1),
-                                   fila.getString(2),
-                                   fila.getString(3),
-                                   fila.getString(4)));
+                        if (!StrServer.equals("jacve.dyndns.org:9085")) {
+                            ListaProductosVazlo.add(new ProductosNuevosSANDG(fila.getString(1),
+                                    fila.getString(2),
+                                    fila.getString(3),
+                                    fila.getString(4)));
+                        } else {
+                            ListaProductoskff.add(new ProductosNuevosSANDG(fila.getString(1),
+                                    fila.getString(2),
+                                    fila.getString(3),
+                                    fila.getString(4)));
 
-                       }
+                        }
                         break;
                     case "15":
                         ListaProductoszoms.add(new ProductosNuevosSANDG(fila.getString(1),
@@ -539,28 +527,26 @@ public class HomeFragment extends Fragment {
 
             if (ListaProductosGeneral.size() > 0) {
 
-                AdaptadorProductosNuevos adapter = new AdaptadorProductosNuevos(ListaProductosEagle, context,Empresa);
+                AdaptadorProductosNuevos adapter = new AdaptadorProductosNuevos(ListaProductosEagle, context, Empresa);
                 recyclerViewEagle.setAdapter(adapter);
-                AdaptadorProductostrackone adapter1 = new AdaptadorProductostrackone(ListaProductosTrackone, context,Empresa);
+                AdaptadorProductostrackone adapter1 = new AdaptadorProductostrackone(ListaProductosTrackone, context, Empresa);
                 recyclerViewTrackone.setAdapter(adapter1);
-                AdaptadorProductosRodatech adapter2 = new AdaptadorProductosRodatech(ListaProductosRodatech, context,Empresa);
+                AdaptadorProductosRodatech adapter2 = new AdaptadorProductosRodatech(ListaProductosRodatech, context, Empresa);
                 recyclerViewRodatech.setAdapter(adapter2);
-                AdaptadorProductosPartech adapter3 = new AdaptadorProductosPartech(ListaProductosPartech, context,Empresa);
+                AdaptadorProductosPartech adapter3 = new AdaptadorProductosPartech(ListaProductosPartech, context, Empresa);
                 recyclerViewPartech.setAdapter(adapter3);
-                AdaptadorProductosShark adapter4 = new AdaptadorProductosShark(ListaProductosShark, context,Empresa);
+                AdaptadorProductosShark adapter4 = new AdaptadorProductosShark(ListaProductosShark, context, Empresa);
                 recyclerViewShark.setAdapter(adapter4);
-                AdaptadorProductosMechanic adapter5 = new AdaptadorProductosMechanic(ListaProductosMechanic, context,Empresa);
+                AdaptadorProductosMechanic adapter5 = new AdaptadorProductosMechanic(ListaProductosMechanic, context, Empresa);
                 recyclerViewMechanic.setAdapter(adapter5);
-                AdaptadorProductosGSP adapter6 = new AdaptadorProductosGSP(ListaProductosGSP, context,Empresa);
+                AdaptadorProductosGSP adapter6 = new AdaptadorProductosGSP(ListaProductosGSP, context, Empresa);
                 recyclerViewGSP.setAdapter(adapter6);
-                AdaptadorProductosVazlo adapter7 = new AdaptadorProductosVazlo(ListaProductosVazlo, context,Empresa);
+                AdaptadorProductosVazlo adapter7 = new AdaptadorProductosVazlo(ListaProductosVazlo, context, Empresa);
                 recyclerViewVazlo.setAdapter(adapter7);
-                AdaptadorProductosKFF adapter8= new AdaptadorProductosKFF(ListaProductoskff, context,Empresa);
+                AdaptadorProductosKFF adapter8 = new AdaptadorProductosKFF(ListaProductoskff, context, Empresa);
                 recyclerViewKFF.setAdapter(adapter8);
-                AdaptadorProductosZoms adapter9 = new AdaptadorProductosZoms(ListaProductoszoms, context,Empresa);
+                AdaptadorProductosZoms adapter9 = new AdaptadorProductosZoms(ListaProductoszoms, context, Empresa);
                 recyclerViewZoms.setAdapter(adapter9);
-
-
 
 
                 adapter.setOnClickListener(new View.OnClickListener() {
@@ -821,7 +807,7 @@ public class HomeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
-            String parametros = "cliente=" + strscliente+"&producto=1000R&cantidad=1&existencia=0&sucursal="+strcodBra;
+            String parametros = "cliente=" + strscliente + "&producto=1000R&cantidad=1&existencia=0&sucursal=" + strcodBra;
             String url = "http://" + StrServer + "/carritoapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
@@ -849,7 +835,6 @@ public class HomeFragment extends Fragment {
                         Comentario3 = (Numero.getString("k_comentario3").equals("anyType{}") ? "" : Numero.getString("k_comentario3"));
 
 
-
                     }
                 } catch (final JSONException e) {
 
@@ -860,6 +845,7 @@ public class HomeFragment extends Fragment {
             return null;
 
         }//doInBackground
+
         @Override
         protected void onPostExecute(Void aBoolean) {
             super.onPostExecute(aBoolean);
@@ -983,7 +969,6 @@ public class HomeFragment extends Fragment {
     }
 
 
-
     public void ProductosNuevosAscy() {
         new HomeFragment.ProductosNuevosa().execute();
     }
@@ -1007,10 +992,9 @@ public class HomeFragment extends Fragment {
                 try {
 
 
-
                     JSONObject jitems, Numero;
                     JSONObject jsonObject = new JSONObject(jsonStr);
-                    if(jsonObject.length()!=0) {
+                    if (jsonObject.length() != 0) {
                         jitems = jsonObject.getJSONObject("Item");
 
                         for (int i = 0; i < jitems.length(); i++) {
@@ -1019,11 +1003,11 @@ public class HomeFragment extends Fragment {
 
                             ListaProductosGeneral.add(new ProductosNuevosSANDG((Numero.getString("k_Producto").equals("") ? "" : Numero.getString("k_Producto")),
                                     (Numero.getString("k_Descripcion").equals("") ? "" : Numero.getString("k_Descripcion")),
-                                    (Numero.getString("k_Tipo").equals("") ? "" : Numero.getString("k_Tipo")),""));
+                                    (Numero.getString("k_Tipo").equals("") ? "" : Numero.getString("k_Tipo")), ""));
                         }
                     }
                 } catch (final JSONException e) {
-String mensaje =e.getMessage().toString();
+                    String mensaje = e.getMessage().toString();
                 }//catch JSON EXCEPTION
             } else {
 
@@ -1058,7 +1042,7 @@ String mensaje =e.getMessage().toString();
 
             }*/
 
-         Imagenes task1 = new Imagenes();
+            Imagenes task1 = new Imagenes();
             task1.execute();
 
 
@@ -1066,8 +1050,6 @@ String mensaje =e.getMessage().toString();
 
 
     }
-
-
 
 
     private class Imagenes extends AsyncTask<Void, Void, Void> {
@@ -1079,7 +1061,7 @@ String mensaje =e.getMessage().toString();
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085")) {
+            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("sprautomotive.servehttp.com:9085")){
                 String Productos = "";
                 for (int i = 0; i < ListaProductosGeneral.size(); i++) {
 
@@ -1092,6 +1074,7 @@ String mensaje =e.getMessage().toString();
 
                 }
 
+
                 HttpHandler sh = new HttpHandler();
                 String url = Empresa + Productos;
                 String jsonStr = sh.makeServiceCall(url, "", "");
@@ -1100,12 +1083,19 @@ String mensaje =e.getMessage().toString();
                     try {
                         // Convertir el JSON a un array
                         JSONArray jsonArray = new JSONArray(jsonStr);
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject objeto = jsonArray.getJSONObject(i);
-                            objeto.getString("principal");
-                            String url1 = objeto.getString("principal");
-                            url1.replace("\\", "");
-                            ListaProductosGeneral.get(i).setUrl(url1);
+                        for (int i = 0; i < ListaProductosGeneral.size(); i++) {
+                            for (int j = 0; j < jsonArray.length(); j++) {
+                                JSONObject objeto = jsonArray.getJSONObject(j);
+                                String producto = objeto.getString("k_parte");
+
+                                if (producto.equals(ListaProductosGeneral.get(i).getClave())) {
+                                    objeto.getString("principal");
+                                    String url1 = objeto.getString("principal");
+                                    url1.replace("\\", "");
+                                    ListaProductosGeneral.get(i).setUrl(url1);
+                                }
+
+                            }
                         }
 
 
@@ -1144,47 +1134,47 @@ String mensaje =e.getMessage().toString();
 
 
             for (int i = 0; i < ListaProductosGeneral.size(); i++) {
-                String Clave, Descripcion, Tipo,Url;
+                String Clave, Descripcion, Tipo, Url;
                 Clave = ListaProductosGeneral.get(i).getClave();
                 Descripcion = ListaProductosGeneral.get(i).getDescripcion();
                 Tipo = ListaProductosGeneral.get(i).getTipo();
-                Url=ListaProductosGeneral.get(i).getUrl();
+                Url = ListaProductosGeneral.get(i).getUrl();
 
                 switch (Tipo) {
                     case "1":
-                        ListaProductosEagle.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
+                        ListaProductosEagle.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
                         break;
                     case "2":
-                        ListaProductosRodatech.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
+                        ListaProductosRodatech.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
                         break;
                     case "3":
-                        ListaProductosPartech.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
+                        ListaProductosPartech.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
                         break;
                     case "4":
-                        ListaProductosShark.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
+                        ListaProductosShark.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
                         break;
                     case "6":
-                        ListaProductosTrackone.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
+                        ListaProductosTrackone.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
                         break;
                     case "8":
                     case "9":
                     case "10":
                     case "11":
                     case "12":
-                        ListaProductosGSP.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
+                        ListaProductosGSP.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
                         break;
                     case "13":
-                        ListaProductosMechanic.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
+                        ListaProductosMechanic.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
                         break;
                     case "14":
-                        if (!StrServer.equals("jacve.dyndns.org:9085")){
-                            ListaProductosVazlo.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
-                        }else{
-                            ListaProductoskff.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
+                        if (!StrServer.equals("jacve.dyndns.org:9085")) {
+                            ListaProductosVazlo.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
+                        } else {
+                            ListaProductoskff.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
                         }
                         break;
-                    case"15":
-                        ListaProductoszoms.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo,Url));
+                    case "15":
+                        ListaProductoszoms.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
                         break;
                     default:
                         break;
@@ -1192,27 +1182,25 @@ String mensaje =e.getMessage().toString();
             }
 
 
-
-
-            AdaptadorProductosNuevos adapter = new AdaptadorProductosNuevos(ListaProductosEagle, context,Empresa);
+            AdaptadorProductosNuevos adapter = new AdaptadorProductosNuevos(ListaProductosEagle, context, Empresa);
             recyclerViewEagle.setAdapter(adapter);
-            AdaptadorProductostrackone adapter1 = new AdaptadorProductostrackone(ListaProductosTrackone, context,Empresa);
+            AdaptadorProductostrackone adapter1 = new AdaptadorProductostrackone(ListaProductosTrackone, context, Empresa);
             recyclerViewTrackone.setAdapter(adapter1);
-            AdaptadorProductosRodatech adapter2 = new AdaptadorProductosRodatech(ListaProductosRodatech, context,Empresa);
+            AdaptadorProductosRodatech adapter2 = new AdaptadorProductosRodatech(ListaProductosRodatech, context, Empresa);
             recyclerViewRodatech.setAdapter(adapter2);
-            AdaptadorProductosPartech adapter3 = new AdaptadorProductosPartech(ListaProductosPartech, context,Empresa);
+            AdaptadorProductosPartech adapter3 = new AdaptadorProductosPartech(ListaProductosPartech, context, Empresa);
             recyclerViewPartech.setAdapter(adapter3);
-            AdaptadorProductosShark adapter4 = new AdaptadorProductosShark(ListaProductosShark, context,Empresa);
+            AdaptadorProductosShark adapter4 = new AdaptadorProductosShark(ListaProductosShark, context, Empresa);
             recyclerViewShark.setAdapter(adapter4);
-            AdaptadorProductosMechanic adapter5 = new AdaptadorProductosMechanic(ListaProductosMechanic, context,Empresa);
+            AdaptadorProductosMechanic adapter5 = new AdaptadorProductosMechanic(ListaProductosMechanic, context, Empresa);
             recyclerViewMechanic.setAdapter(adapter5);
-            AdaptadorProductosGSP adapter6 = new AdaptadorProductosGSP(ListaProductosGSP, context,Empresa);
+            AdaptadorProductosGSP adapter6 = new AdaptadorProductosGSP(ListaProductosGSP, context, Empresa);
             recyclerViewGSP.setAdapter(adapter6);
-            AdaptadorProductosVazlo adapter7 = new AdaptadorProductosVazlo(ListaProductosVazlo, context,Empresa);
+            AdaptadorProductosVazlo adapter7 = new AdaptadorProductosVazlo(ListaProductosVazlo, context, Empresa);
             recyclerViewVazlo.setAdapter(adapter7);
-            AdaptadorProductosKFF adapter8 = new AdaptadorProductosKFF(ListaProductoskff, context,Empresa);
+            AdaptadorProductosKFF adapter8 = new AdaptadorProductosKFF(ListaProductoskff, context, Empresa);
             recyclerViewKFF.setAdapter(adapter8);
-            AdaptadorProductosZoms adapter9 = new AdaptadorProductosZoms(ListaProductoszoms, context,Empresa);
+            AdaptadorProductosZoms adapter9 = new AdaptadorProductosZoms(ListaProductoszoms, context, Empresa);
             recyclerViewZoms.setAdapter(adapter9);
 
 
@@ -1440,7 +1428,6 @@ String mensaje =e.getMessage().toString();
             });
 
 
-
             mDialog.dismiss();
 
 
@@ -1448,10 +1435,6 @@ String mensaje =e.getMessage().toString();
 
 
     }
-
-
-
-
 
 
     @SuppressWarnings("deprecation")
@@ -1467,12 +1450,12 @@ String mensaje =e.getMessage().toString();
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://"+StrServer+"/versionesapp?Clave=1";
+            String url = "http://" + StrServer + "/versionesapp?Clave=1";
             String jsonStr = sh.makeServiceCall(url, "WEBPETI", "W3B3P3T1");
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObject = new JSONObject(jsonStr);
-                    if(jsonObject.length()!=0) {
+                    if (jsonObject.length() != 0) {
                         version = jsonObject.getString("Version");
 
 
@@ -1489,10 +1472,10 @@ String mensaje =e.getMessage().toString();
 
         @Override
         protected void onPostExecute(Void result) {
-            if (Resultado==1){
+            if (Resultado == 1) {
                 if (version.equals("2.9.8")) {
 
-                }else{
+                } else {
                     AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());
                     alerta.setMessage("La versión instalada no está actualizada por favor comuníquese con su proveedor para actualizar.").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
@@ -1507,7 +1490,7 @@ String mensaje =e.getMessage().toString();
                     titulo.setTitle("Version desactualizada");
                     titulo.show();
                 }
-            }else{
+            } else {
 
             }
 

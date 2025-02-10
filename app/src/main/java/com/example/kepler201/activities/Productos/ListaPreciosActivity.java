@@ -103,10 +103,10 @@ public class ListaPreciosActivity extends AppCompatActivity {
                 Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
                 break;
             case "cecra.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "guvi.ath.cx:9085":
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
@@ -115,16 +115,10 @@ public class ListaPreciosActivity extends AppCompatActivity {
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
             case "sprautomotive.servehttp.com:9090":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9095":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9080":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9085":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "vazlocolombia.dyndns.org:9085":
                 Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";

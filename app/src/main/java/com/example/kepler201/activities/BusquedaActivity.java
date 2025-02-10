@@ -134,15 +134,16 @@ public class BusquedaActivity extends AppCompatActivity {
         strco = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
         BusquedaProducto = getIntent().getStringExtra("Producto");
+
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
                 Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
                 break;
             case "cecra.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "guvi.ath.cx:9085":
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
@@ -151,16 +152,10 @@ public class BusquedaActivity extends AppCompatActivity {
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
             case "sprautomotive.servehttp.com:9090":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9095":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9080":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9085":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "vazlocolombia.dyndns.org:9085":
                 Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
@@ -169,6 +164,7 @@ public class BusquedaActivity extends AppCompatActivity {
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
         }
+
         strscliente = preferenceClie.getString("CodeClien", "null");
         Nombre = preferenceClie.getString("NomClien", "null");
         rfc = preferenceClie.getString("RFC", "null");
@@ -1101,7 +1097,7 @@ public class BusquedaActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085")) {
+            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("sprautomotive.servehttp.com:9085")){
                 String Productos = "";
                 for (int i = 0; i < listProdu1.size(); i++) {
 
@@ -1122,13 +1118,21 @@ public class BusquedaActivity extends AppCompatActivity {
                     try {
                         // Convertir el JSON a un array
                         JSONArray jsonArray = new JSONArray(jsonStr);
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject objeto = jsonArray.getJSONObject(i);
-                            objeto.getString("principal");
-                            String url1 = objeto.getString("principal");
-                            url1.replace("\\", "");
-                            listProdu1.get(i).setUrl(url1);
+                        for (int i = 0; i < listProdu1.size(); i++) {
+                            for (int j = 0; j < jsonArray.length(); j++) {
+                                JSONObject objeto = jsonArray.getJSONObject(j);
+                                String producto=objeto.getString("k_parte");
+
+                                if(producto.equals(listProdu1.get(i).getProductos())){
+                                    objeto.getString("principal");
+                                    String url1 = objeto.getString("principal");
+                                    url1.replace("\\", "");
+                                    listProdu1.get(i).setUrl(url1);
+                                }
+
+                            }
                         }
+
 
 
                     } catch (final JSONException e) {
@@ -1268,7 +1272,7 @@ public class BusquedaActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
+                           /* AlertDialog.Builder alerta1 = new AlertDialog.Builder(BusquedaActivity.this);
                             alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -1278,7 +1282,7 @@ public class BusquedaActivity extends AppCompatActivity {
                             });
                             AlertDialog titulo1 = alerta1.create();
                             titulo1.setTitle("Hubo un problema");
-                            titulo1.show();
+                            titulo1.show();*/
 
                         }//run
                     });

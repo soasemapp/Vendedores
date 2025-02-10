@@ -18,6 +18,7 @@ import com.example.kepler201.R;
 import com.example.kepler201.activities.models.FechaUtils;
 import com.example.kepler201.activities.models.VentaLinea;
 import com.example.kepler201.includes.HttpHandler;
+import com.example.kepler201.includes.MyToolbar;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,7 +44,7 @@ public class ActivityVentasXlinea extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ventas_linea);
-
+        MyToolbar.show(this, "Ventas por Linea", true);
         preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
         editor = preference.edit();
 

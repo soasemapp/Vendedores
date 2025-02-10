@@ -242,7 +242,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
                 Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
                 break;
             case "cecra.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "guvi.ath.cx:9085":
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
@@ -251,16 +251,10 @@ public class CarritoComprasActivity extends AppCompatActivity {
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
             case "sprautomotive.servehttp.com:9090":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9095":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9080":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
-                break;
             case "sprautomotive.servehttp.com:9085":
-                Empresa = "https://www.vipla.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "vazlocolombia.dyndns.org:9085":
                 Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
@@ -2457,15 +2451,16 @@ ButtonAdd.setEnabled(false);
 
         @Override
         protected Void doInBackground(Void... params) {
+            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("sprautomotive.servehttp.com:9085")){
             for (int i = 0; i < listaCarShoping2.size(); i++) {
 
-                String Producto =listaCarShoping2.get(i).getParte();
+                String Producto = listaCarShoping2.get(i).getParte();
 
 
                 HttpHandler sh = new HttpHandler();
-                String url = Empresa+Producto;
+                String url = Empresa + Producto;
                 String jsonStr = sh.makeServiceCall(url, "", "");
-                jsonStr=jsonStr.replace("\\","");
+                jsonStr = jsonStr.replace("\\", "");
                 if (jsonStr != null) {
                     try {
                         // Convertir el JSON a un array
@@ -2475,8 +2470,6 @@ ButtonAdd.setEnabled(false);
                         objeto.getString("principal");
                         String url1 = objeto.getString("principal");
                         listaCarShoping2.get(i).setUrl(url1);
-
-
 
 
                     } catch (final JSONException e) {
@@ -2518,8 +2511,7 @@ ButtonAdd.setEnabled(false);
                 }//else
 
 
-
-
+            }
             }
             return null;
 

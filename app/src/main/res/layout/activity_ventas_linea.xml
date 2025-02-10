@@ -70,67 +70,79 @@
                     android:textStyle="bold"
                     android:textColor="@color/black" />
 
+<HorizontalScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="@android:color/darker_gray"
-                    android:padding="8dp"
-                    android:divider="?android:attr/dividerHorizontal"
-                    android:showDividers="middle">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/darker_gray"
+            android:divider="?android:attr/dividerHorizontal"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:showDividers="middle">
 
-                    <TextView
-                        android:id="@+id/textLinea"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="Línea"
-                        android:textStyle="bold"
-                        android:ellipsize="end"
-                        android:maxLines="1" />
+            <TextView
+                android:id="@+id/textLinea"
+                android:layout_width="124dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Línea"
+                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textPresupuesto"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.4"
-                        android:gravity="center"
-                        android:text="Presupuesto"
-                        android:textStyle="bold"
+            <TextView
+                android:id="@+id/textPresupuesto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.4"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Presupuesto"
 
-                        android:maxLines="1" />
+                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textVenta"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="Venta"
-                        android:textStyle="bold"
-                        android:ellipsize="end"
-                        android:maxLines="1" />
+            <TextView
+                android:id="@+id/textVenta"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Venta"
+                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textPorcentaje"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="%"
-                        android:textStyle="bold"
-                        android:ellipsize="end"
-                        android:maxLines="1" />
-                </LinearLayout>
+            <TextView
+                android:id="@+id/textPorcentaje"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="%"
+                android:textStyle="bold" />
+        </LinearLayout>
 
-                <!-- RecyclerView para mostrar las filas -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp" />
+        <!-- RecyclerView para mostrar las filas -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="448dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+</HorizontalScrollView>
+
+
             </LinearLayout>
 
         </LinearLayout>
