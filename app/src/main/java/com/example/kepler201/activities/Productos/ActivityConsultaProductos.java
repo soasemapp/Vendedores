@@ -99,7 +99,7 @@ public class ActivityConsultaProductos extends AppCompatActivity {
     String MensajePro;
     String ProductoEqui;
     String ValidaEqui;
-    String EmpresaFotos;
+    String EmpresaFotos="";
 
     String strClave = " ", strDesc = " ", strCodeBar = " ", strPrecio = " ";
     String strCantidad = "1", strscliente, strscliente2, strscliente3;
@@ -911,7 +911,13 @@ String Empresa;
                     ClaveProducto=jitems.getString("k_ClavePr");;
                     DescripcionProd=jitems.getString("k_Descr");;
                     CodBarras=jitems.getString("k_CodBarra");;
-                    Precios=jitems.getString("k_Precio");
+
+                    if(StrServer.equals("vipla.ath.cx:9085") || StrServer.equals("sprautomotive.servehttp.com:9085")){
+                        Precios=jitems.getString("k_Precio2");
+                    }else{
+                        Precios=jitems.getString("k_Precio1");
+                    }
+
 
 
 

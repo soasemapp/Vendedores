@@ -386,7 +386,7 @@ String mensaje;
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
                 Empresa = strbran;
-                Picasso.with(getApplicationContext()).load(R.drawable.jacve)
+                Picasso.with(getApplicationContext()).load(R.drawable.jacvelogo)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
                         .centerInside()
