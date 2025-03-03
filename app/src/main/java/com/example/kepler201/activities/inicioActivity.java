@@ -48,7 +48,7 @@ public class inicioActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor2;
 
 
-    String CONFIGURACION;
+    String CONFIGURACION="";
     String CONFIGURACION2;
 
     ConexionSQLiteHelper conn;
@@ -199,6 +199,7 @@ String mensaje;
         protected void onPostExecute(Void result) {
             navigationView = findViewById(R.id.nav_view);
             Menu nav_Menu = navigationView.getMenu();
+
 
             if(CONFIGURACION.equals("0")){
 
@@ -419,7 +420,7 @@ String mensaje;
                         .centerInside()
                         .into(imageViewdrawer);
                 break;
-            case "sprautomotive.servehttp.com:9085":
+            case "vipla.ath.cx:9085":
                 Empresa = strbran;
                 Picasso.with(getApplicationContext()).load(R.drawable.vipla)
                         .error(R.drawable.ic_baseline_error_24)

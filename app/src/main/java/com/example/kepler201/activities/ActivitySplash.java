@@ -78,7 +78,7 @@ public class ActivitySplash extends AppCompatActivity {
                         .into(imgVi);
 
                 break;
-            case "sprautomotive.servehttp.com:9085":
+            case "vipla.ath.cx:9085":
 
                 Picasso.with(getApplicationContext()).
                         load(R.drawable.vipla)

@@ -40,6 +40,8 @@ import com.example.kepler201.ConexionSQLiteHelper;
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.ProductosNuevosSANDG;
 import com.example.kepler201.SetterandGetter.SearachClientSANDG;
+import com.example.kepler201.SetterandGetter.SucursalSANDG;
+import com.example.kepler201.activities.ActivityPerfil;
 import com.example.kepler201.activities.BusquedaActivity;
 import com.example.kepler201.activities.DetalladoProductosActivity;
 import com.example.kepler201.includes.HttpHandler;
@@ -88,6 +90,7 @@ public class HomeFragment extends Fragment {
     ArrayList<SearachClientSANDG> listaclientG = new ArrayList<>();
 
     private SharedPreferences preferenceClie;
+    private SharedPreferences.Editor editor;
     private SharedPreferences.Editor editor2;
     View view;
 
@@ -106,7 +109,7 @@ public class HomeFragment extends Fragment {
     ArrayList<ProductosNuevosSANDG> ListaProductoszoms = new ArrayList<>();
     ArrayList<ProductosNuevosSANDG> ListaProductoskff = new ArrayList<>();
 
-
+    ArrayList<SucursalSANDG> listasucursal = new ArrayList<>();
     EditText BusquedaProducto;
     String ProductosNuevosStr, Empresa;
     LinearLayout EagleOcultar, TrackOneOcultar, RodatechOcultar, PartechOcultar, SharkOcultar, MechanicOcultar, GspOcultar, VazloOcultar, ZoomsOcultar, KFFOcultar;
@@ -145,7 +148,7 @@ public class HomeFragment extends Fragment {
 
         //Preference
         SharedPreferences preference = requireActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preference.edit();
+        editor=preference.edit();
 
         preferenceClie = requireActivity().getSharedPreferences("clienteCompra", Context.MODE_PRIVATE);
         editor2 = preferenceClie.edit();
@@ -183,7 +186,7 @@ public class HomeFragment extends Fragment {
             case "sprautomotive.servehttp.com:9090":
             case "sprautomotive.servehttp.com:9095":
             case "sprautomotive.servehttp.com:9080":
-            case "sprautomotive.servehttp.com:9085":
+            case "vipla.ath.cx:9085":
                 Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "vazlocolombia.dyndns.org:9085":
@@ -258,6 +261,12 @@ public class HomeFragment extends Fragment {
         Versiones task1 = new Versiones();
         task1.execute();
 
+        if(strcodBra.equals("")) {
+
+            new SucursalesLista().execute();
+        }
+
+
         if (datos > 0) {
             if (day == 15 || day == 1) {
                 if (ProductosNuevosStr.equals("0")) {
@@ -281,6 +290,9 @@ public class HomeFragment extends Fragment {
             ProductosNuevosAscy();
 
         }
+
+
+
 
 
         BusquedaProducto.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -863,6 +875,82 @@ public class HomeFragment extends Fragment {
     }
 
 
+    private class SucursalesLista extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }//onPreExecute
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String url = "http://" + StrServer + "/listasucursalapp";
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+                    if(json.length()!=0) {
+                        if (json.length() != 0) {
+                            JSONObject jitems, Numero;
+                            JSONObject jsonObject = new JSONObject(jsonStr);
+                            jitems = jsonObject.getJSONObject("Listado");
+
+                            for (int i = 0; i < jitems.length(); i++) {
+                                jitems = jsonObject.getJSONObject("Listado");
+                                Numero = jitems.getJSONObject("" + i + "");
+                                listasucursal.add(new SucursalSANDG(
+                                        Numero.getString("clave"),
+                                        Numero.getString("nombre")));
+                            }
+                        }
+                    }
+                } catch (final JSONException e) {
+
+                }//catch JSON EXCEPTION
+            } else {
+
+            }//else
+            return null;
+
+        }//doInBackground
+
+        @Override
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
+
+            String[] opciones = new String[listasucursal.size()];
+
+            for (int i = 0; i < listasucursal.size(); i++) {
+                opciones[i] = listasucursal.get(i).getNombre();
+            }
+
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Seleccione una Sucursal").setIcon(R.drawable.icons_banco);
+
+
+            builder.setItems(opciones, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    strbran = listasucursal.get(which).getNombre();
+                    strcodBra= listasucursal.get(which).getClave();
+                    editor.putString("branch", strbran);
+                    editor.putString("codBra",strcodBra);
+                    editor.commit();
+                    editor.apply();
+
+                }
+            });
+// create and show the alert dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        }//onPost
+
+    }
+
+
     private class Cliente extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
@@ -1061,7 +1149,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("sprautomotive.servehttp.com:9085")){
+            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("vipla.ath.cx:9085")){
                 String Productos = "";
                 for (int i = 0; i < ListaProductosGeneral.size(); i++) {
 
@@ -1473,7 +1561,7 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
             if (Resultado == 1) {
-                if (version.equals("2.9.8")) {
+                if (version.equals("2.10.4")) {
 
                 } else {
                     AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());

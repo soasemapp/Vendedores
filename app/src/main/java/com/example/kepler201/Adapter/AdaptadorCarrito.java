@@ -67,7 +67,22 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.View
         holder.Cantidad.setText(listaCarrito.get(position).getCantidad());
         holder.Unidad.setText(listaCarrito.get(position).getUnidad());
 
-        if(!StrServer.equals("vazlocolombia.dyndns.org:9085")){
+        if(StrServer.equals("vipla.ath.cx:9085")){
+
+            Precio = listaCarrito.get(position).getPrecio();
+            Descuento=listaCarrito.get(position).getDesc1();
+            precio= Double.parseDouble(Precio);
+            descuento=Double.parseDouble(Descuento);
+            descuento1=Double.parseDouble(Desc1);
+            cantidad = Double.parseDouble(listaCarrito.get(position).getCantidad());
+            precio = (precio-((precio*descuento)/100));
+            precio = (precio-((precio*descuento1)/100));
+            monto= precio* cantidad;
+            holder.Precio.setText(Html.fromHtml("Precio C/U:$<font color ='#4CAF50'>" +formatNumberCurrency(String.valueOf(precio))+"</font>"));
+            holder.Descuento.setVisibility(View.GONE);
+            holder.Monto.setText(Html.fromHtml("Total: $<font color ='#FF0000'>" +formatNumberCurrency(String.valueOf(monto))+"</font>"));
+
+        }else if(!StrServer.equals("vazlocolombia.dyndns.org:9085")){
 
             Precio = listaCarrito.get(position).getPrecio();
             Descuento=listaCarrito.get(position).getDesc1();

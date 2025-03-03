@@ -28,6 +28,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -211,7 +212,7 @@ public class ActivityConverciones extends AppCompatActivity {
             case "sprautomotive.servehttp.com:9090":
             case "sprautomotive.servehttp.com:9095":
             case "sprautomotive.servehttp.com:9080":
-            case "sprautomotive.servehttp.com:9085":
+            case "vipla.ath.cx:9085":
                 Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "vazlocolombia.dyndns.org:9085":
@@ -336,6 +337,11 @@ public class ActivityConverciones extends AppCompatActivity {
                         spinnerExistenias.setAdapter(null);
                         tableLayout.removeAllViews();
                         listaconversiones.clear();
+                        Producto360.stop();
+                        Producto360 = new AnimationDrawable();
+                        imageIv.setBackgroundDrawable(Producto360);
+                        imageUrls.clear();
+                        imageIv.setImageDrawable(null);
                         ActivityConverciones.AsyncCallWS task = new ActivityConverciones.AsyncCallWS();
                         task.execute();
                     } else {
@@ -497,31 +503,34 @@ public class ActivityConverciones extends AppCompatActivity {
             if (jsonStr != null) {
                 try {
                     JSONObject json = new JSONObject(jsonStr);
+int jsonarray=json.length();
+
+if (jsonarray>0){
+    JSONObject jitems, Numero, Clave, Nombre;
+    JSONObject jsonObject = new JSONObject(jsonStr);
+    jitems = jsonObject.getJSONObject("Item");
+
+    for (int i = 0; i < jitems.length(); i++) {
+        jitems = jsonObject.getJSONObject("Item");
+        Numero = jitems.getJSONObject("" + i + "");
+
+        listaExistencia.add(new listExistencia2SANG(
+                (Numero.getString("k_ClaveSu").equals("anyType{}") ? " " : Numero.getString("k_ClaveSu")),
+                (Numero.getString("k_NomSuc").equals("anyType{}") ? " " : Numero.getString("k_NomSuc")),
+                (Numero.getString("k_Exis").equals("anyType{}") ? "0" : Numero.getString("k_Exis")),
+                (Numero.getString("k_ClavePr").equals("anyType{}") ? " " : Numero.getString("k_ClavePr")),
+                (Numero.getString("k_Clave").equals("anyType{}") ? " " : Numero.getString("k_Clave")),
+                (Numero.getString("k_Descr").equals("anyType{}") ? " " : Numero.getString("k_Descr")),
+                (Numero.getString("k_CodBarra").equals("anyType{}") ? " " : Numero.getString("k_CodBarra")),
+                (Numero.getString("k_Precio").equals("anyType{}") ? " " : Numero.getString("k_Precio")),
+                (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("FotosTipo").equals("anyType{}") ? " " : Numero.getString("FotosTipo")):""),
+                (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("FotosLinea").equals("anyType{}") ? " " : Numero.getString("FotosLinea")):"")));
 
 
-                    JSONObject jitems, Numero, Clave, Nombre;
-                    JSONObject jsonObject = new JSONObject(jsonStr);
-                    jitems = jsonObject.getJSONObject("Item");
 
-                    for (int i = 0; i < jitems.length(); i++) {
-                        jitems = jsonObject.getJSONObject("Item");
-                        Numero = jitems.getJSONObject("" + i + "");
+    }
+}
 
-                        listaExistencia.add(new listExistencia2SANG(
-                                (Numero.getString("k_ClaveSu").equals("anyType{}") ? " " : Numero.getString("k_ClaveSu")),
-                                (Numero.getString("k_NomSuc").equals("anyType{}") ? " " : Numero.getString("k_NomSuc")),
-                                (Numero.getString("k_Exis").equals("anyType{}") ? "0" : Numero.getString("k_Exis")),
-                                (Numero.getString("k_ClavePr").equals("anyType{}") ? " " : Numero.getString("k_ClavePr")),
-                                (Numero.getString("k_Clave").equals("anyType{}") ? " " : Numero.getString("k_Clave")),
-                                (Numero.getString("k_Descr").equals("anyType{}") ? " " : Numero.getString("k_Descr")),
-                                (Numero.getString("k_CodBarra").equals("anyType{}") ? " " : Numero.getString("k_CodBarra")),
-                                (Numero.getString("k_Precio").equals("anyType{}") ? " " : Numero.getString("k_Precio")),
-                                (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("FotosTipo").equals("anyType{}") ? " " : Numero.getString("FotosTipo")):""),
-                                (StrServer.equals("jacve.dyndns.org:9085")?(Numero.getString("FotosLinea").equals("anyType{}") ? " " : Numero.getString("FotosLinea")):"")));
-
-
-
-                    }
                 } catch (final JSONException e) {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -624,25 +633,10 @@ public class ActivityConverciones extends AppCompatActivity {
                 strPrecio = "";
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, opciones);
                 spinnerExistenias.setAdapter(adapter);
+                Producto360 = new AnimationDrawable();
+                imageIv.setBackgroundDrawable(Producto360);
+                Producto360.stop();
 
-                if (!EmpresaEd.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
-                    Empresa="";
-                    Empresa=EmpresaEd+strClave+"/4.webp";
-                }else{
-                    Empresa="";
-                    Empresa=EmpresaEd+strClave+".jpg";
-
-                }
-
-                if (!Empresa.equals("")){
-                    Picasso.with(context).
-                            load(Empresa)
-                            .error(R.drawable.noimage)
-                            .placeholder(R.drawable.loadingpro)
-                            .fit()
-                            .centerInside()
-                            .into(imageIv);
-                }else{
                     Picasso.with(context).
                             load(R.drawable.noimage)
                             .error(R.drawable.noimage)
@@ -650,11 +644,11 @@ public class ActivityConverciones extends AppCompatActivity {
                             .fit()
                             .centerInside()
                             .into(imageIv);
-                }
+
                 mDialog.dismiss();
 
                 AlertDialog.Builder alerta = new AlertDialog.Builder(ActivityConverciones.this);
-                alerta.setMessage(mensaje).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                alerta.setMessage("No se encontro el producto").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
@@ -704,10 +698,10 @@ public class ActivityConverciones extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("sprautomotive.servehttp.com:9085")){
+            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("vipla.ath.cx:9085")){
                 HttpHandler sh = new HttpHandler();
 
-                String url = Empresa + productoStr;
+                String url = Empresa + strClave;
                 String jsonStr = sh.makeServiceCall(url, strusr, strpass);
                 jsonStr = jsonStr.replace("\\", "");
                 if (jsonStr != null) {
@@ -805,12 +799,24 @@ public class ActivityConverciones extends AppCompatActivity {
 
                 }
 
-                Picasso.with(context).
-                        load(EmpresaFotos)
-                        .error(R.drawable.ic_baseline_error_24)
-                        .fit()
-                        .centerInside()
-                        .into(imageIv);
+                if (!EmpresaFotos.equals("")) {
+
+                    Picasso.with(context).
+                            load(EmpresaFotos)
+                            .error(R.drawable.noimage)
+                            .placeholder(R.drawable.loadingpro)
+                            .fit()
+                            .centerInside()
+                            .into(imageIv);
+                }else{
+                    Picasso.with(context).
+                            load(R.drawable.noimage)
+                            .error(R.drawable.noimage)
+                            .placeholder(R.drawable.loadingpro)
+                            .fit()
+                            .centerInside()
+                            .into(imageIv);
+                }
 
             }
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

@@ -253,7 +253,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
             case "sprautomotive.servehttp.com:9090":
             case "sprautomotive.servehttp.com:9095":
             case "sprautomotive.servehttp.com:9080":
-            case "sprautomotive.servehttp.com:9085":
+            case "vipla.ath.cx:9085":
                 Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "vazlocolombia.dyndns.org:9085":
@@ -2451,7 +2451,7 @@ ButtonAdd.setEnabled(false);
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("sprautomotive.servehttp.com:9085")){
+            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("vipla.ath.cx:9085")){
             for (int i = 0; i < listaCarShoping2.size(); i++) {
 
                 String Producto = listaCarShoping2.get(i).getParte();
@@ -2600,6 +2600,14 @@ ButtonAdd.setEnabled(false);
                         "RFC:" + rfc + "<br>" +
                         "Poblacion:" + Poblacion + "<br>" +
                         "Descuento:" + Desc1));
+
+                comentario.setText(Comentario1 + "\n" + " " + Comentario2 + "\n" + " " + Comentario3);
+
+            }else if(StrServer.equals("vipla.ath.cx:9085")){
+                Infor.setVisibility(View.VISIBLE);
+                Infor.setText(Html.fromHtml("Calle:" + Calle + "<br>" +
+                        "RFC:" + rfc + "<br>" +
+                        "Poblacion:" + Poblacion ));
 
                 comentario.setText(Comentario1 + "\n" + " " + Comentario2 + "\n" + " " + Comentario3);
 

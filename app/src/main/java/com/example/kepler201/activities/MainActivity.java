@@ -149,14 +149,15 @@ public class MainActivity extends AppCompatActivity {
                             LinearJacve.setVisibility(View.GONE);
                             LinearTodos.setVisibility(View.VISIBLE);
                         } else if (which == 4) {
-                            StrServer = "sprautomotive.servehttp.com:9085";
+                            StrServer = "vipla.ath.cx:9085";
                             Picasso.with(getApplicationContext()).
                                     load(R.drawable.vipla)
                                     .error(R.drawable.ic_baseline_error_24)
                                     .fit()
                                     .centerInside()
                                     .into(imgEmpresa);
-
+                            Versiones task1 = new Versiones();
+                            task1.execute();
                             LinearJacve.setVisibility(View.GONE);
                             LinearTodos.setVisibility(View.VISIBLE);
                         } else if (which == 5) {
@@ -422,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             if (Resultado==1){
-                if (version.equals("2.9.8")) {
+                if (version.equals("2.10.4")) {
 
                 }else{
                     AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);

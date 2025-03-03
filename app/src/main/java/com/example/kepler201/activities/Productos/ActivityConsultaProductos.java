@@ -215,7 +215,7 @@ String Empresa;
             case "sprautomotive.servehttp.com:9090":
             case "sprautomotive.servehttp.com:9095":
             case "sprautomotive.servehttp.com:9080":
-            case "sprautomotive.servehttp.com:9085":
+            case "vipla.ath.cx:9085":
                 Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "vazlocolombia.dyndns.org:9085":
@@ -863,7 +863,7 @@ String Empresa;
                 productosEd.setText("");
                 mDialog.dismiss();
                 AlertDialog.Builder alerta = new AlertDialog.Builder(ActivityConsultaProductos.this);
-                alerta.setMessage(mensaje).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                alerta.setMessage("No se encontro el producto").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
@@ -911,12 +911,7 @@ String Empresa;
                     ClaveProducto=jitems.getString("k_ClavePr");;
                     DescripcionProd=jitems.getString("k_Descr");;
                     CodBarras=jitems.getString("k_CodBarra");;
-
-                    if(StrServer.equals("vipla.ath.cx:9085") || StrServer.equals("sprautomotive.servehttp.com:9085")){
-                        Precios=jitems.getString("k_Precio2");
-                    }else{
-                        Precios=jitems.getString("k_Precio1");
-                    }
+                    Precios=jitems.getString("k_Precio");
 
 
 
@@ -1388,7 +1383,7 @@ String Empresa;
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("sprautomotive.servehttp.com:9085")){
+            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("vipla.ath.cx:9085")){
                 HttpHandler sh = new HttpHandler();
 
                 String url = Empresa+productoStr;

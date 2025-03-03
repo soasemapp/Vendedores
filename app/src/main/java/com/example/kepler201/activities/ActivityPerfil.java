@@ -82,6 +82,8 @@ public class ActivityPerfil extends AppCompatActivity {
         sucursal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 String[] opciones = new String[listasucursal.size()];
 
                 for (int i = 0; i < listasucursal.size(); i++) {
@@ -144,7 +146,7 @@ public class ActivityPerfil extends AppCompatActivity {
                         .centerInside()
                         .into(imgEmpresa);
                 break;
-            case "sprautomotive.servehttp.com:9085":
+            case "vipla.ath.cx:9085":
                 Picasso.with(getApplicationContext()).load(R.drawable.vipla)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
