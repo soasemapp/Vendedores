@@ -36,7 +36,7 @@ public class ActivityPerfil extends AppCompatActivity {
     //TextView
     ArrayList<SucursalSANDG> listasucursal = new ArrayList<>();
     String strusr="", strpass="", strname="", strlname="", strtype="", strtype2="", strma="", strco="", strcodBra="",strbran="",strcodBra2="",strbran2="", StrServer="";
-
+String cambiarsucursal;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +69,8 @@ public class ActivityPerfil extends AppCompatActivity {
         strco = preference.getString("code", "");
         StrServer = preference.getString("Server", "");
         strtype2 = preference.getString("type2", null);
+        cambiarsucursal = preference.getString("cambiarsucursal", "0");
+
 
         usr.setText("                                          " + strusr);
         password.setText("                                          " + strpass);
@@ -92,7 +94,7 @@ public class ActivityPerfil extends AppCompatActivity {
 
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(ActivityPerfil.this);
-                builder.setTitle("Seleccione una Sucursal").setIcon(R.drawable.icons_banco);
+                builder.setTitle("Seleccione una Sucursal").setIcon(R.drawable.icons_edificio12);
 
 
                 builder.setItems(opciones, new DialogInterface.OnClickListener() {
@@ -190,7 +192,7 @@ public class ActivityPerfil extends AppCompatActivity {
 
                 break;
         }
-if(strbran2.equals("")) {
+if(cambiarsucursal.equals("1")) {
     sucursal.setEnabled(true);
     new ActivityPerfil.SucursalesLista().execute();
 }

@@ -37,12 +37,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.kepler201.Adapter.AdapterDetalleCompras;
 import com.example.kepler201.Adapter.AdapterDetalleExistencia;
 import com.example.kepler201.ConexionSQLiteHelper;
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.AplicacionesSANDG;
 import com.example.kepler201.SetterandGetter.CarritoBD;
 import com.example.kepler201.SetterandGetter.CarritoVentasSANDG;
+import com.example.kepler201.SetterandGetter.CompraasSANDG;
 import com.example.kepler201.SetterandGetter.ConversionesSANDG;
 import com.example.kepler201.SetterandGetter.DisponibilidadSANDG;
 import com.example.kepler201.SetterandGetter.ImagenesSandG;
@@ -82,11 +84,13 @@ public class DetalladoProductosActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     ArrayList<AplicacionesSANDG> Aplicaciones = new ArrayList<>();
     ArrayList<DisponibilidadSANDG> Existencias = new ArrayList<>();
+    ArrayList<CompraasSANDG> Compras = new ArrayList<>();
+
     TextView Descripciontxt, ClaveProdcutotxt, Preciotxt,Lineatxt;
     String strClave = null;
     String strCantidad = "1";
     EditText Cantidad;
-    RecyclerView RecyclerProductos;
+    RecyclerView RecyclerProductos,RecyclerCompras;
     Context context = this;
     ImageView imageproducto;
     Button btnCarShoping;
@@ -130,7 +134,7 @@ public class DetalladoProductosActivity extends AppCompatActivity {
     String facturacompras;
     String fechacompras;
     String cantidadcompras;
-
+TextView txtcompras;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +168,7 @@ public class DetalladoProductosActivity extends AppCompatActivity {
                 Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
-                Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
@@ -178,6 +182,8 @@ public class DetalladoProductosActivity extends AppCompatActivity {
             case "sprautomotive.servehttp.com:9090":
             case "sprautomotive.servehttp.com:9095":
             case "sprautomotive.servehttp.com:9080":
+                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
+                break;
             case "vipla.ath.cx:9085":
                 Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
@@ -213,7 +219,9 @@ public class DetalladoProductosActivity extends AppCompatActivity {
         if (claveVentana == null) {
             strClave = Producto;
         }
+        txtcompras =findViewById(R.id.txtCompras);
         RecyclerProductos = findViewById(R.id.listExistencias);
+        RecyclerCompras =findViewById(R.id.listCompras);
         Descripciontxt = findViewById(R.id.Descr);
         Lineatxt = findViewById(R.id.Linea);
         ClaveProdcutotxt = findViewById(R.id.Clave);
@@ -250,6 +258,7 @@ public class DetalladoProductosActivity extends AppCompatActivity {
 
         Aplicaciones = new ArrayList<>();
         RecyclerProductos.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        RecyclerCompras.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         if (strClave == null && strCantidad == null) {
             ListProductosPrecios task = new ListProductosPrecios();
@@ -649,103 +658,7 @@ public class DetalladoProductosActivity extends AppCompatActivity {
                 tableLayout2.addView(fila);
             }
             mDialog.dismiss();
-            ComprasApp task1 = new ComprasApp();
-            task1.execute();
 
-        }
-    }
-    private class ComprasApp extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            HttpHandler sh = new HttpHandler();
-            String parametros = "producto="+Producto+"&sucursal="+strcodBra+"";
-            String url = "http://"+StrServer+"/comprasapp?" + parametros;
-            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
-            if (jsonStr != null) {
-                try {
-
-                    JSONObject jsonObject = new JSONObject(jsonStr);
-
-                    JSONArray Item1=jsonObject.getJSONArray("Item");
-                    JSONObject item2 = Item1.getJSONObject(0);
-                     facturacompras=item2.getString("folio");
-                     fechacompras=item2.getString("fecha");
-                     cantidadcompras=item2.getString("cantidad");
-
-
-                } catch (final JSONException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(DetalladoProductosActivity.this);
-                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.cancel();
-
-                                }
-                            });
-                            AlertDialog titulo1 = alerta1.create();
-                            titulo1.setTitle("Hubo un problema");
-                            titulo1.show();
-
-                        }//run
-                    });
-                }//catch JSON EXCEPTION
-            } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(DetalladoProductosActivity.this);
-                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-
-                            }
-                        });
-                        AlertDialog titulo1 = alerta1.create();
-                        titulo1.setTitle("Hubo un problema");
-                        titulo1.show();
-
-                    }//run
-                });//runUniTthread
-            }//else
-            return null;
-        }
-
-        @SuppressLint("SetTextI18n")
-        @RequiresApi(api = Build.VERSION_CODES.P)
-        @Override
-        protected void onPostExecute(Void result) {
-            int sucursaltiene=0;
-            /*Existencias.get(0).setDisponibilidad("0");*/
-            for(int i = 0; i < Existencias.size(); i++){
-                if(Integer.parseInt(Existencias.get(i).getDisponibilidad())==0 && strcodBra.equals(Existencias.get(i).getClave())){
-                    sucursaltiene=1;
-                }
-            }
-            if(sucursaltiene==1){
-                AlertDialog.Builder alerta1 = new AlertDialog.Builder(DetalladoProductosActivity.this);
-                alerta1.setMessage("El producto esta por llegar el dia "+fechacompras+" puedes realizar tu compra apartir de este dia.").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-
-                    }
-                });
-                AlertDialog titulo1 = alerta1.create();
-                titulo1.setTitle("Aviso");
-                titulo1.show();
-
-            }
-        mDialog.dismiss();
         }
     }
 
@@ -856,13 +769,20 @@ public class DetalladoProductosActivity extends AppCompatActivity {
             String existencia;
             String nomsucursal;
 
+            String Folio;
+            String Fecha;
+            String Cantidad;
+            String Sucursal;
+            String SucursalNom;
+
+
             HttpHandler sh = new HttpHandler();
             String parametros = "producto="+Producto+"&cliente="+Cliente;
             String url = "http://" + StrServer + "/aplicacionesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
-                    JSONObject itemjson, Aplicacionesjson,Disponibilidadjson,Precios,Numerojson,Numero2json;
+                    JSONObject itemjson, Aplicacionesjson,Disponibilidadjson,Comprasjson,Precios,Numerojson,Numero2json;
                     JSONObject jsonObject = new JSONObject(jsonStr);
                     itemjson = jsonObject.getJSONObject("Item");
 
@@ -887,6 +807,25 @@ public class DetalladoProductosActivity extends AppCompatActivity {
                         nomsucursal=(Numero2json.getString("nomSucursal").equals("") ? " " : Numero2json.getString("nomSucursal"));
                         Existencias.add(new DisponibilidadSANDG(clavesuc, existencia, nomsucursal));
                     }
+
+
+                    if(itemjson.has("Compras")){
+                        Comprasjson= itemjson .getJSONObject("Compras");
+                        for (int i = 0; i < Comprasjson.length(); i++) {
+                            Numero2json = Comprasjson.getJSONObject("" + i + "");
+
+                            Folio=(Numero2json.getString("Folio").equals("") ? " " : Numero2json.getString("Folio"));
+                            Fecha=(Numero2json.getString("Fecha").equals("") ? " " : Numero2json.getString("Fecha"));
+                            Cantidad=(Numero2json.getString("Cantidad").equals("") ? " " : Numero2json.getString("Cantidad"));
+                            Sucursal=(Numero2json.getString("Sucursal").equals("") ? " " : Numero2json.getString("Sucursal"));
+                            SucursalNom=(Numero2json.getString("Nombre").equals("") ? " " : Numero2json.getString("Nombre"));
+
+                            Compras.add(new CompraasSANDG(Folio, Fecha, Cantidad, Sucursal, SucursalNom));
+                        }
+                    }
+
+
+
                     Precios= itemjson .getJSONObject("Precios");
                     PrecioAjustado=(Precios.getString("precio_ajuste").equals("") ? " " : Precios.getString("precio_ajuste"));
                     PrecioBase=(Precios.getString("precio_base").equals("") ? " " : Precios.getString("precio_base"));
@@ -953,6 +892,14 @@ public class DetalladoProductosActivity extends AppCompatActivity {
 
             AdapterDetalleExistencia adapter = new AdapterDetalleExistencia(Existencias);
             RecyclerProductos.setAdapter(adapter);
+
+            if (Compras.size()>0){
+                AdapterDetalleCompras adapter1 = new AdapterDetalleCompras(Compras);
+                RecyclerCompras.setAdapter(adapter1);
+            }else {
+                RecyclerCompras.setVisibility(View.GONE);
+                txtcompras .setVisibility(View.GONE);
+            }
 
             TableRow.LayoutParams layaoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
             TableRow.LayoutParams layaoutDes = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
@@ -1122,7 +1069,7 @@ public class DetalladoProductosActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("vipla.ath.cx:9085")){
+            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")){
                 HttpHandler sh = new HttpHandler();
 
                 String url = Empresa + Producto;

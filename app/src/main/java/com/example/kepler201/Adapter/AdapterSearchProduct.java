@@ -54,21 +54,21 @@ public class AdapterSearchProduct extends RecyclerView.Adapter<AdapterSearchProd
 
 
         if(Empresa.equals("https://www.jacve.mx/tools/pictures-urlProductos?ids=") || Empresa.equals("https://www.guvi.mx/tools/pictures-urlProductos?ids=")||    Empresa .equals("https://www.cecra.mx/tools/pictures-urlProductos?ids=") || Empresa .equals("https://www.vipla.mx/tools/pictures-urlProductos?ids=")){
-            Empresa="";
-            Empresa=listProductos.get(position).getUrl();
+            EmpresaNuevaa="";
+            EmpresaNuevaa=listProductos.get(position).getUrl();
         }else  if (!EmpresaNuevaa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
-            Empresa="";
-            Empresa=EmpresaNuevaa+listProductos.get(position).getProductos()+"/4.webp";
+            EmpresaNuevaa="";
+            EmpresaNuevaa=Empresa+listProductos.get(position).getProductos()+"/4.webp";
         }else{
-            Empresa="";
-            Empresa=EmpresaNuevaa+listProductos.get(position).getProductos()+".jpg";
+            EmpresaNuevaa="";
+            EmpresaNuevaa=Empresa+listProductos.get(position).getProductos()+".jpg";
 
         }
 
-        if (!Empresa.equals("")) {
+        if (!EmpresaNuevaa.equals("")) {
 
             Picasso.with(context).
-                    load(Empresa)
+                    load(EmpresaNuevaa)
                     .error(R.drawable.noimage)
                     .placeholder(R.drawable.loadingpro)
                     .fit()

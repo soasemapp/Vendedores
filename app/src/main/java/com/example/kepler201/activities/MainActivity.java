@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String[] opciones1 = { "AUTODIS", "CECRA", "GUVI", "PRESSA", "VIPLA", "SPR", "COLOMBIA"};
+               String[] opciones1 = { "AUTODIS", "CECRA", "GUVI", "PRESSA", "VIPLA", "SPR", "COLOMBIA"};
 
                 //String[] opciones1 = {"JACVE"};
 
@@ -83,20 +83,20 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
 
 
-                      /*if (which == 0) {
-                            StrServer = "jacve.dyndns.org:9085";
-                            Picasso.with(getApplicationContext()).
-                                    load(R.drawable.jacvelogo)
-                                    .error(R.drawable.ic_baseline_error_24)
-                                    .fit()
-                                    .centerInside()
-                                    .into(imgEmpresa);
-                            LinearJacve.setVisibility(View.VISIBLE);
-                            LinearTodos.setVisibility(View.GONE);
-                            Versiones task1 = new Versiones();
-                            task1.execute();
-
-                        }*/
+//                      if (which == 0) {
+//                            StrServer = "jacve.dyndns.org:9085";
+//                            Picasso.with(getApplicationContext()).
+//                                    load(R.drawable.jacvelogo)
+//                                    .error(R.drawable.ic_baseline_error_24)
+//                                    .fit()
+//                                    .centerInside()
+//                                    .into(imgEmpresa);
+//                            LinearJacve.setVisibility(View.VISIBLE);
+//                            LinearTodos.setVisibility(View.GONE);
+//                            Versiones task1 = new Versiones();
+//                            task1.execute();
+//
+//                        }
 
                         if (which == 0) {
                             StrServer = "autodis.ath.cx:9085";
@@ -411,10 +411,10 @@ public class MainActivity extends AppCompatActivity {
 
                     Resultado=1;
                 } catch (final JSONException e) {
-
+                    Resultado=0;
                 }//catch JSON EXCEPTION
             } else {
-
+                Resultado=0;
             }//else
 
             return null;
@@ -423,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             if (Resultado==1){
-                if (version.equals("2.10.4")) {
+                if (version.equals("2.10.5")) {
 
                 }else{
                     AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
@@ -442,7 +442,19 @@ public class MainActivity extends AppCompatActivity {
                     titulo.show();
                 }
             }else{
+                AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
+                alerta.setMessage("Hay un problema con el servicio").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        System.exit(0);
+                        finish();
+                    }
+                });
 
+                AlertDialog titulo = alerta.create();
+                titulo.setTitle("Problemas !!");
+                titulo.show();
             }
           mDialog.dismiss();
         }

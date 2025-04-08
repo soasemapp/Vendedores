@@ -27,8 +27,6 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kepler201.Adapter.AdaptadorCarrito;
 import com.example.kepler201.ConexionSQLiteHelper;
@@ -42,7 +40,6 @@ import com.example.kepler201.XMLS.xmlCarritoCompras2;
 import com.example.kepler201.activities.DetalladoProductosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -239,7 +236,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
                 Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
-                Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
@@ -253,6 +250,8 @@ public class CarritoComprasActivity extends AppCompatActivity {
             case "sprautomotive.servehttp.com:9090":
             case "sprautomotive.servehttp.com:9095":
             case "sprautomotive.servehttp.com:9080":
+                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
+                break;
             case "vipla.ath.cx:9085":
                 Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
@@ -2451,8 +2450,8 @@ ButtonAdd.setEnabled(false);
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("vipla.ath.cx:9085")){
-            for (int i = 0; i < listaCarShoping2.size(); i++) {
+            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")){
+                for (int i = 0; i < listaCarShoping2.size(); i++) {
 
                 String Producto = listaCarShoping2.get(i).getParte();
 

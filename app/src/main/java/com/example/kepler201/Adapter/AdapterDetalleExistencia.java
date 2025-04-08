@@ -38,8 +38,6 @@ public class AdapterDetalleExistencia extends RecyclerView.Adapter<AdapterDetall
         holder.SUCURSAL.setText(Existencias.get(position).getNombre());
         int Existencia = Integer.parseInt(Existencias.get(position).getDisponibilidad());
         holder.Existencia.setText(Html.fromHtml("Disponibilidad : "+((Existencia==0)?"<font color = #FF0000>No hay disponibles </font>":"<font color = #4CAF50>"+Existencias.get(position).getDisponibilidad()+" PZA </font>")));
-
-
     }
 
 

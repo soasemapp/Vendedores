@@ -140,7 +140,7 @@ public class BusquedaActivity extends AppCompatActivity {
                 Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
-                Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
@@ -154,6 +154,8 @@ public class BusquedaActivity extends AppCompatActivity {
             case "sprautomotive.servehttp.com:9090":
             case "sprautomotive.servehttp.com:9095":
             case "sprautomotive.servehttp.com:9080":
+                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
+                break;
             case "vipla.ath.cx:9085":
                 Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
@@ -1097,7 +1099,8 @@ public class BusquedaActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("vipla.ath.cx:9085")){
+            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")){
+
                 String Productos = "";
                 for (int i = 0; i < listProdu1.size(); i++) {
 

@@ -1,5 +1,7 @@
 package com.example.kepler201.ui.home;
 
+import static android.content.Intent.getIntent;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -84,6 +86,7 @@ public class HomeFragment extends Fragment {
     ConexionSQLiteHelper conn;
     int datos;
 
+
     private String version;
     int Resultado = 0;
 
@@ -167,12 +170,13 @@ public class HomeFragment extends Fragment {
         ProductosNuevosStr = preference.getString("Productosnuevos", "0");
 
 
+
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
                 Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "autodis.ath.cx:9085":
-                Empresa = "https://www.autodis.mx/es-mx/img/products/xl/";
+                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
@@ -186,6 +190,8 @@ public class HomeFragment extends Fragment {
             case "sprautomotive.servehttp.com:9090":
             case "sprautomotive.servehttp.com:9095":
             case "sprautomotive.servehttp.com:9080":
+                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
+                break;
             case "vipla.ath.cx:9085":
                 Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
@@ -261,10 +267,6 @@ public class HomeFragment extends Fragment {
         Versiones task1 = new Versiones();
         task1.execute();
 
-        if(strcodBra.equals("")) {
-
-            new SucursalesLista().execute();
-        }
 
 
         if (datos > 0) {
@@ -926,7 +928,7 @@ public class HomeFragment extends Fragment {
 
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Seleccione una Sucursal").setIcon(R.drawable.icons_banco);
+            builder.setTitle("Seleccione una Sucursal").setIcon(R.drawable.icons_edificio12);
 
 
             builder.setItems(opciones, new DialogInterface.OnClickListener() {
@@ -937,15 +939,24 @@ public class HomeFragment extends Fragment {
                     strcodBra= listasucursal.get(which).getClave();
                     editor.putString("branch", strbran);
                     editor.putString("codBra",strcodBra);
+                    editor.putString("cambiarsucursal","1");
                     editor.commit();
                     editor.apply();
+
+                    getActivity().overridePendingTransition(0, 0);
+                    getActivity().startActivity(getActivity().getIntent());
+                    getActivity().overridePendingTransition(0, 0);
+                    getActivity().finish();
+
+
 
                 }
             });
 // create and show the alert dialog
             AlertDialog dialog = builder.create();
             dialog.show();
-
+            dialog.setCancelable(false);
+            mDialog.dismiss();
         }//onPost
 
     }
@@ -1149,7 +1160,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (StrServer.equals("jacve.dyndns.org:9085") || StrServer.equals("guvi.ath.cx:9085") || StrServer.equals("cecra.ath.cx:9085") || StrServer.equals("vipla.ath.cx:9085")){
+            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")){
                 String Productos = "";
                 for (int i = 0; i < ListaProductosGeneral.size(); i++) {
 
@@ -1516,7 +1527,15 @@ public class HomeFragment extends Fragment {
             });
 
 
-            mDialog.dismiss();
+            if(strcodBra.equals("")) {
+
+                new SucursalesLista().execute();
+            }else{
+                mDialog.dismiss();
+            }
+
+
+
 
 
         }
@@ -1550,10 +1569,10 @@ public class HomeFragment extends Fragment {
                         Resultado = 1;
                     }
                 } catch (final JSONException e) {
-
+                    Resultado = 0;
                 }//catch JSON EXCEPTION
             } else {
-
+                Resultado = 0;
             }//else
             return null;
         }
@@ -1561,7 +1580,7 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
             if (Resultado == 1) {
-                if (version.equals("2.10.4")) {
+                if (version.equals("2.10.5")) {
 
                 } else {
                     AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());
@@ -1579,7 +1598,19 @@ public class HomeFragment extends Fragment {
                     titulo.show();
                 }
             } else {
+                AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());
+                alerta.setMessage("Hay un problema con el servicio").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        System.exit(0);
+                        getActivity().finish();
+                    }
+                });
 
+                AlertDialog titulo = alerta.create();
+                titulo.setTitle("Problemas !!");
+                titulo.show();
             }
 
         }
