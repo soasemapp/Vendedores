@@ -61,6 +61,10 @@
             android:label="@string/title_activity_maps"
             android:parentActivityName=".activities.Maps.locateActivity" />
         <activity
+            android:name=".activities.Maps.MapsActivityAgenda"
+            android:label="@string/title_activity_maps"
+            android:parentActivityName=".activities.Agenda.ActivityAgenda" />
+        <activity
             android:name=".activities.Maps.locateActivity"
             android:parentActivityName=".activities.inicioActivity" />
         <activity android:name=".activities.ActivityValdatipo" />

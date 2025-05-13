@@ -109,22 +109,21 @@
             </LinearLayout>
 
 
-
             <com.google.android.material.button.MaterialButton
 
                 android:id="@+id/btnSearch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_gravity="right"
                 android:layout_margin="10dp"
                 android:background="@drawable/roundbutton"
                 android:backgroundTint="@color/cardview_dark_background"
-                android:text="@string/cambiar_status"
-                android:padding="5dp"
-                android:textSize="14sp"
-                android:layout_gravity="right"
                 android:onClick="statusAgenda"
-                android:textColor="#FFFFFF" />
+                android:padding="5dp"
+                android:text="Abrir mapa"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
 
             <View
                 android:layout_width="match_parent"

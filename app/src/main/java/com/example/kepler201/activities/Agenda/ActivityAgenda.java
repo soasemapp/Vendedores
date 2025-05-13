@@ -7,17 +7,23 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.kepler201.Adapter.AdapterAgenda;
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.AgendaSANDG;
+import com.example.kepler201.SetterandGetter.Envio2SANDG;
+import com.example.kepler201.activities.Maps.MapsActivityAgenda;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
 
@@ -47,6 +53,7 @@ public class ActivityAgenda extends AppCompatActivity {
     String Mensaje="";
     int cont ;
     AlertDialog mDialog;
+    ArrayList<Envio2SANDG> listasearch5 = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +88,70 @@ public class ActivityAgenda extends AppCompatActivity {
 
     }
 
+    public void statusAgenda(View view) {
+        final int position = recyclerAgenda.getChildAdapterPosition(Objects.requireNonNull(recyclerAgenda.findContainingItemView(view)));
 
+        // Verificar qué botón se presionó
+        if (view.getId() == R.id.btnSearch) {
+            // Botón "Abrir mapa" fue presionado
+            abrirMapaCliente(position);
+        } else {
+            // Código existente para cambiar el status
+            final String[] status = getResources().getStringArray(R.array.status);
+            AlertDialog.Builder alerta = new AlertDialog.Builder(ActivityAgenda.this);
+            alerta.setTitle("Seleccione un Status").setItems(R.array.status, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    cont=i;
+                    AlertDialog.Builder alerta = new AlertDialog.Builder(ActivityAgenda.this);
+                    alerta.setMessage("¿Deseas Cambiar este status de  "+listaAgenda.get(position).getEstatus()+ " a " + status[i] + "?"
+                    ).setCancelable(false).setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Fecha2 = listaAgenda.get(position).getFecha();
+                            ClaveCliente = listaAgenda.get(position).getCliente();
+                            Nombre = listaAgenda.get(position).getClienNom();
+                            Actividad = listaAgenda.get(position).getActividad();
+                            Status= listaAgenda.get(position).getEstatus();
+                            Status2=status[cont];
+                            StatusAgenda();
+                        }
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    });
+                    AlertDialog titulo = alerta.create();
+                    titulo.setTitle("Aviso");
+                    titulo.show();
+                }
+            });
+            AlertDialog titulo = alerta.create();
+            titulo.show();
+        }
+    }
+
+
+    public void saveLoca(View view) {
+        Toast.makeText(this, "Guardar ubicación presionado", Toast.LENGTH_SHORT).show();
+    }
+
+    public void accionExtra(View view) {
+        Toast.makeText(this, "Acción extra presionada", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void abrirMapaCliente(int position) {
+        // Obtener datos del cliente seleccionado
+         ClaveCliente = listaAgenda.get(position).getCliente();
+         Nombre = listaAgenda.get(position).getClienNom();
+
+        new ActivityAgenda.Direcciones().execute();
+
+
+    }
+
+    /*
 
     public void statusAgenda(View view) {
         final int position = recyclerAgenda.getChildAdapterPosition(Objects.requireNonNull(recyclerAgenda.findContainingItemView(view)));
@@ -124,7 +194,7 @@ public class ActivityAgenda extends AppCompatActivity {
         titulo.show();
 
 
-    }
+    } */
 
 
 
@@ -147,7 +217,7 @@ public class ActivityAgenda extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
-            String parametros = "vendedor="+strcode+"&fecha="+StrFecha;
+            String parametros = "vendedor="+strcode+"&fecha=2025-05-10";
             String url = "http://" + StrServer + "/agendaapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
@@ -226,6 +296,113 @@ public class ActivityAgenda extends AppCompatActivity {
             mDialog.dismiss();
         }//onPost
     }
+
+    private class Direcciones extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            mDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + ClaveCliente;
+            String url = "http://" + StrServer + "/enviomapaapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+                    if(json.length()!=0) {
+                        JSONObject jitems, Numero;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        jitems = jsonObject.getJSONObject("Dir");
+
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Dir");
+                            Numero = jitems.getJSONObject("" + i + "");
+                            listasearch5.add(new Envio2SANDG((Numero.getString("k_id").equals("") ? "" : Numero.getString("k_id")),
+                                    (Numero.getString("k_direcciones").equals("") ? "" : Numero.getString("k_direcciones")),
+                                    (Numero.getString("k_latitud").equals("") ? "0" : Numero.getString("k_latitud")),
+                                    (Numero.getString("k_longitud").equals("") ? "0" : Numero.getString("k_longitud"))));
+
+
+                        }
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityAgenda.this);
+                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+
+                                }
+                            });
+                            AlertDialog titulo1 = alerta1.create();
+                            titulo1.setTitle("Hubo un problema");
+                            titulo1.show();
+
+                        }//run
+                    });
+                }//catch JSON EXCEPTION
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityAgenda.this);
+                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+
+                            }
+                        });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
+
+                    }//run
+                });//runUniTthread
+            }//else
+
+
+            return null;
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.P)
+        @Override
+        protected void onPostExecute(Void result) {
+            if (!listasearch5.isEmpty()) {
+                Envio2SANDG direccion = listasearch5.get(0);
+
+                Intent intent = new Intent(ActivityAgenda.this, MapsActivityAgenda.class);
+                intent.putExtra("val", 2);
+                intent.putExtra("NomCliente", Nombre);
+                intent.putExtra("ClaveCliente", ClaveCliente);
+                intent.putExtra("idDireccion", direccion.getId());
+                intent.putExtra("Direccion", direccion.getDireccion());
+                intent.putExtra("DirLatitud", direccion.getLatitud());
+                intent.putExtra("DirLongitud", direccion.getLongitud());
+                startActivity(intent);
+            } else {
+                AlertDialog.Builder alerta = new AlertDialog.Builder(ActivityAgenda.this);
+                alerta.setMessage("No se encontró dirección para este cliente").setCancelable(false)
+                        .setNegativeButton("Ok", (dialogInterface, i) -> dialogInterface.cancel());
+                AlertDialog titulo = alerta.create();
+                titulo.setTitle("Error");
+                titulo.show();
+            }
+
+            mDialog.dismiss();
+        }
+
+
+    }
+
 
 
     public void StatusAgenda() {
