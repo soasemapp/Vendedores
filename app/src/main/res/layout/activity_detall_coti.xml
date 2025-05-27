@@ -147,6 +147,8 @@
                 android:layout_marginEnd="10dp"
                 android:hint="Comentario"
                 android:maxLines="1"
+                app:counterEnabled="true"
+                app:counterMaxLength="180"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusTopStart="10dp">
@@ -155,7 +157,9 @@
                     android:id="@+id/txtComentario"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false"
+                    android:imeOptions="actionDone"
+                    android:maxLength="180"
+                    android:inputType="text"
                     android:textSize="15sp" />
             </com.google.android.material.textfield.TextInputLayout>
 

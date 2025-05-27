@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -155,6 +157,17 @@ public class ActivityDetallCoti extends AppCompatActivity {
         NomClient = findViewById(R.id.txtNom);
         txtComentario = findViewById(R.id.txtComentario);
 
+        txtComentario.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                strComentario=txtComentario.getText().toString();
+                Toast.makeText(ActivityDetallCoti.this, "Cambio el comentario", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+        });
+
+
 
         txtSubtotal = findViewById(R.id.SubTotal);
         txtDescuento = findViewById(R.id.Descuento);
@@ -188,7 +201,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
 
                     strClaveCli = listasearch2.get(0).getClaveC();
                     strNombreCliente = listasearch2.get(0).getNombreC();
-                    strComentario = listasearch2.get(0).getComentario() + listasearch2.get(0).getComentario2() + listasearch2.get(0).getComentario3();
+                    strComentario = txtComentario.getText().toString();
                     StrRFC = listasearch2.get(0).getRFC();
                     StrPlazo = listasearch2.get(0).getPLAZO();
                     StrDescuentoPP = listasearch2.get(0).getDESCUENTOPP();
@@ -229,7 +242,7 @@ int contadortg=0,contadortodos=0;
                     if(contadortg>=1 && contadortodos==0){
                         strClaveCli = listasearch2.get(0).getClaveC();
                         strNombreCliente = listasearch2.get(0).getNombreC();
-                        strComentario = listasearch2.get(0).getComentario() + listasearch2.get(0).getComentario2() + listasearch2.get(0).getComentario3();
+                        strComentario = txtComentario.getText().toString();
                         StrRFC = listasearch2.get(0).getRFC();
                         StrPlazo = listasearch2.get(0).getPLAZO();
                         StrDescuentoPP = listasearch2.get(0).getDESCUENTOPP();
@@ -260,7 +273,7 @@ int contadortg=0,contadortodos=0;
                     }else if(contadortg==0 && contadortodos>=1){
                         strClaveCli = listasearch2.get(0).getClaveC();
                         strNombreCliente = listasearch2.get(0).getNombreC();
-                        strComentario = listasearch2.get(0).getComentario() + listasearch2.get(0).getComentario2() + listasearch2.get(0).getComentario3();
+                        strComentario = txtComentario.getText().toString();
                         StrRFC = listasearch2.get(0).getRFC();
                         StrPlazo = listasearch2.get(0).getPLAZO();
                         StrDescuentoPP = listasearch2.get(0).getDESCUENTOPP();
@@ -305,7 +318,7 @@ int contadortg=0,contadortodos=0;
                 }else{
                     strClaveCli = listasearch2.get(0).getClaveC();
                     strNombreCliente = listasearch2.get(0).getNombreC();
-                    strComentario = listasearch2.get(0).getComentario() + listasearch2.get(0).getComentario2() + listasearch2.get(0).getComentario3();
+                    strComentario = txtComentario.getText().toString();
                     StrRFC = listasearch2.get(0).getRFC();
                     StrPlazo = listasearch2.get(0).getPLAZO();
                     StrDescuentoPP = listasearch2.get(0).getDESCUENTOPP();
