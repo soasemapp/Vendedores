@@ -112,6 +112,24 @@ public class ActivitySplash extends AppCompatActivity {
                         .into(imgVi);
 
                 break;
+            case "bpr.ath.cx:9095":
+                Picasso.with(getApplicationContext()).
+                        load(R.drawable.logobpr)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgVi);
+
+                break;
+            case "vazquin.ath.cx:9085":
+                Picasso.with(getApplicationContext()).
+                        load(R.drawable.vazquinlogo)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgVi);
+
+                break;
 
             default:
                 Picasso.with(getApplicationContext()).

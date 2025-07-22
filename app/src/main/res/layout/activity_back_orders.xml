@@ -123,6 +123,20 @@
                                 android:inputType="text"
                                 android:focusable="false"/>
                         </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.checkbox.MaterialCheckBox
+                            android:id="@+id/CheckExistencia"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:checked="false"
+
+                            android:text="EXISTENCIA"
+                            android:textColorHighlight="@color/PrimaryColor"
+                            android:textColorLink="@color/PrimaryColor"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout

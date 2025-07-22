@@ -223,6 +223,9 @@ String Empresa;
             case "vazlocolombia.dyndns.org:9085":
                 Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
                 break;
+            case "bpr.ath.cx:9095":
+                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+                break;
             default:
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
@@ -1385,7 +1388,8 @@ String Empresa;
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")){
+            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080") ){
+
                 HttpHandler sh = new HttpHandler();
 
                 String url = Empresa+productoStr;
@@ -1420,42 +1424,30 @@ String Empresa;
 
 
                     } catch (final JSONException e) {
-                        runOnUiThread(new Runnable() {
+                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConsultaProductos.this);
+                        alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
-                            public void run() {
-                                AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConsultaProductos.this);
-                                alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.cancel();
-                                        btnCarShoping.setEnabled(true);
-                                    }
-                                });
-                                AlertDialog titulo1 = alerta1.create();
-                                titulo1.setTitle("Hubo un problema");
-                                titulo1.show();
-
-                            }//run
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                                btnCarShoping.setEnabled(true);
+                            }
                         });
+                        AlertDialog titulo1 = alerta1.create();
+                        titulo1.setTitle("Hubo un problema");
+                        titulo1.show();
                     }//catch JSON EXCEPTION
                 } else {
-                    runOnUiThread(new Runnable() {
+                    AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConsultaProductos.this);
+                    alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
-                        public void run() {
-                            AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityConsultaProductos.this);
-                            alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.cancel();
-                                    btnCarShoping.setEnabled(true);
-                                }
-                            });
-                            AlertDialog titulo1 = alerta1.create();
-                            titulo1.setTitle("Hubo un problema");
-                            titulo1.show();
-
-                        }//run
-                    });//runUniTthread
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                            btnCarShoping.setEnabled(true);
+                        }
+                    });
+                    AlertDialog titulo1 = alerta1.create();
+                    titulo1.setTitle("Hubo un problema");
+                    titulo1.show();
                 }//else
 
             }

@@ -198,6 +198,13 @@ public class HomeFragment extends Fragment {
             case "vazlocolombia.dyndns.org:9085":
                 Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
                 break;
+            case "bpr.ath.cx:9095":
+                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+                break;
+            case "vazquin.ath.cx:9085":
+                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+
+                break;
             default:
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
@@ -379,7 +386,7 @@ public class HomeFragment extends Fragment {
                 RodatechOcultar.setVisibility(View.GONE);
                 PartechOcultar.setVisibility(View.GONE);
                 SharkOcultar.setVisibility(View.GONE);
-                VazloOcultar.setVisibility(View.GONE);
+                VazloOcultar.setVisibility(View.VISIBLE);
                 MechanicOcultar.setVisibility(View.GONE);
                 GspOcultar.setVisibility(View.GONE);
                 ZoomsOcultar.setVisibility(View.GONE);
@@ -396,8 +403,18 @@ public class HomeFragment extends Fragment {
                 GspOcultar.setVisibility(View.VISIBLE);
                 ZoomsOcultar.setVisibility(View.VISIBLE);
                 KFFOcultar.setVisibility(View.VISIBLE);
-
-
+                break;
+            case "bpr.ath.cx:9095":
+                EagleOcultar.setVisibility(View.VISIBLE);
+                TrackOneOcultar.setVisibility(View.VISIBLE);
+                RodatechOcultar.setVisibility(View.GONE);
+                PartechOcultar.setVisibility(View.GONE);
+                SharkOcultar.setVisibility(View.GONE);
+                VazloOcultar.setVisibility(View.VISIBLE);
+                MechanicOcultar.setVisibility(View.GONE);
+                GspOcultar.setVisibility(View.GONE);
+                ZoomsOcultar.setVisibility(View.GONE);
+                KFFOcultar.setVisibility(View.GONE);
                 break;
             default:
                 EagleOcultar.setVisibility(View.VISIBLE);
@@ -1160,7 +1177,8 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")){
+            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080") ){
+
                 String Productos = "";
                 for (int i = 0; i < ListaProductosGeneral.size(); i++) {
 
@@ -1580,7 +1598,7 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
             if (Resultado == 1) {
-                if (version.equals("2.10.5")) {
+                if (version.equals("2.10.8")) {
 
                 } else {
                     AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());

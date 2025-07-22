@@ -28,6 +28,7 @@ import com.example.kepler201.SetterandGetter.ListLineaSANDG;
 import com.example.kepler201.SetterandGetter.ListPrecSANDG;
 import com.example.kepler201.SetterandGetter.ListTypeSANDG;
 import com.example.kepler201.SetterandGetter.listDipoSucuSANDG;
+import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
 import com.example.kepler201.activities.DetalladoProductosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
@@ -125,11 +126,13 @@ public class ListaPreciosActivity extends AppCompatActivity {
             case "vazlocolombia.dyndns.org:9085":
                 Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
                 break;
+            case "bpr.ath.cx:9095":
+                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+                break;
             default:
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
         }
-
 
         SearchProducto =  findViewById(R.id.SearchProducto);
         Existencia =  findViewById(R.id.Existencia);
@@ -377,6 +380,9 @@ public class ListaPreciosActivity extends AppCompatActivity {
         @RequiresApi(api = Build.VERSION_CODES.P)
         @Override
         protected void onPostExecute(Void result) {
+
+
+
 
             String[] opciones = new String[listaLinea.size() + 1];
             opciones[0] = "--Todas las Lineas--";

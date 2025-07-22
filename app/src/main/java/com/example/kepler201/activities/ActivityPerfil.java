@@ -191,6 +191,22 @@ String cambiarsucursal;
                         .into(imgEmpresa);
 
                 break;
+            case "bpr.ath.cx:9095":
+                Picasso.with(getApplicationContext()).load(R.drawable.logobpr)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+
+                break;
+            case "vazquin.ath.cx:9085":
+                Picasso.with(getApplicationContext()).load(R.drawable.vazquinlogo)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+
+                break;
         }
 if(cambiarsucursal.equals("1")) {
     sucursal.setEnabled(true);

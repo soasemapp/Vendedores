@@ -260,6 +260,13 @@ public class CarritoComprasActivity extends AppCompatActivity {
             case "vazlocolombia.dyndns.org:9085":
                 Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
                 break;
+            case "bpr.ath.cx:9095":
+                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+                break;
+            case "http://vazquin.ath.cx:9085":
+                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+                break;
+
             default:
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
@@ -2452,7 +2459,7 @@ ButtonAdd.setEnabled(false);
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")){
+            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080") ){
                 for (int i = 0; i < listaCarShoping2.size(); i++) {
 
                 String Producto = listaCarShoping2.get(i).getParte();

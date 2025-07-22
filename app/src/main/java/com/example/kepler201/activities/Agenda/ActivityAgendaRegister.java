@@ -340,7 +340,7 @@ public class ActivityAgendaRegister extends AppCompatActivity {
 
         Listaclientes();
         Listaactividades();
-       }
+    }
 
     public void Listaclientes() {
         new ActivityAgendaRegister.Cliente().execute();
@@ -368,24 +368,24 @@ public class ActivityAgendaRegister extends AppCompatActivity {
                     JSONObject json = new JSONObject(jsonStr);
 
                     if(json.length()!=0){
-                    JSONObject jitems, Numero, Clave, Nombre;
-                    JSONObject jsonObject = new JSONObject(jsonStr);
-                    jitems = jsonObject.getJSONObject("Clientes");
-
-                    for (int i = 0; i < jitems.length(); i++) {
+                        JSONObject jitems, Numero, Clave, Nombre;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
                         jitems = jsonObject.getJSONObject("Clientes");
-                        Numero = jitems.getJSONObject("" + i + "");
 
-                        String Clavestr,Nombrestr;
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Clientes");
+                            Numero = jitems.getJSONObject("" + i + "");
 
-                        Clavestr=Numero.getString("Clave");
-                        Nombrestr=Numero.getString("Nombre");
+                            String Clavestr,Nombrestr;
+
+                            Clavestr=Numero.getString("Clave");
+                            Nombrestr=Numero.getString("Nombre");
 
 
-                        listaclientG.add(new SearachClientSANDG(
-                                Clavestr,
-                                Nombrestr));
-                    }
+                            listaclientG.add(new SearachClientSANDG(
+                                    Clavestr,
+                                    Nombrestr));
+                        }
                     }
                 } catch (final JSONException e) {
                     runOnUiThread(new Runnable() {
@@ -514,7 +514,7 @@ public class ActivityAgendaRegister extends AppCompatActivity {
 
 
 
-        public void AgendaRe(View view) {
+    public void AgendaRe(View view) {
 
         Calendar c = Calendar.getInstance();
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateformatActually = new SimpleDateFormat("yyyy-MM-dd");

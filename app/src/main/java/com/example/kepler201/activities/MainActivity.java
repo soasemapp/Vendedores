@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-               String[] opciones1 = { "AUTODIS", "CECRA", "GUVI", "PRESSA", "VIPLA", "SPR", "COLOMBIA"};
+               String[] opciones1 = { "AUTODIS", "CECRA", "GUVI", "PRESSA", "VIPLA", "SPR", "COLOMBIA","BPR","VAZQUIN"};
 
                 //String[] opciones1 = {"JACVE"};
 
@@ -187,9 +187,23 @@ public class MainActivity extends AppCompatActivity {
                         }else if (which == 7) {
                             Versiones task1 = new Versiones();
                             task1.execute();
-                            StrServer = "cedistabasco.ddns.net:9080";
+                            StrServer = "bpr.ath.cx:9095";
                             Picasso.with(getApplicationContext()).
-                                    load(R.drawable.pressa)
+                                    load(R.drawable.logobpr)
+                                    .error(R.drawable.ic_baseline_error_24)
+                                    .fit()
+                                    .centerInside()
+                                    .into(imgEmpresa);
+
+
+                            LinearJacve.setVisibility(View.GONE);
+                            LinearTodos.setVisibility(View.VISIBLE);
+                        }else if (which == 8) {
+                            Versiones task1 = new Versiones();
+                            task1.execute();
+                            StrServer = "vazquin.ath.cx:9085";
+                            Picasso.with(getApplicationContext()).
+                                    load(R.drawable.vazquinlogo)
                                     .error(R.drawable.ic_baseline_error_24)
                                     .fit()
                                     .centerInside()
@@ -423,7 +437,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             if (Resultado==1){
-                if (version.equals("2.10.5")) {
+                if (version.equals("2.10.8")) {
 
                 }else{
                     AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);

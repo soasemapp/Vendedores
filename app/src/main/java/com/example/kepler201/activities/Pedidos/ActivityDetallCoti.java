@@ -127,6 +127,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
     String Shark;
     String Trackoone;
     String DESCdOCUMENTO;
+    String monto_porcentaje="", monto_enviogratis="", confEnvio="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,13 +161,12 @@ public class ActivityDetallCoti extends AppCompatActivity {
         txtComentario.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                strComentario=txtComentario.getText().toString();
+                strComentario = txtComentario.getText().toString();
                 Toast.makeText(ActivityDetallCoti.this, "Cambio el comentario", Toast.LENGTH_SHORT).show();
 
                 return false;
             }
         });
-
 
 
         txtSubtotal = findViewById(R.id.SubTotal);
@@ -229,17 +229,138 @@ public class ActivityDetallCoti extends AppCompatActivity {
                     ActivityDetallCoti.AsyncCallWS2 task = new ActivityDetallCoti.AsyncCallWS2();
                     task.execute();
 
-                }  else if(StrServer.equals("cedistabasco.ddns.net:9085")) {
-int contadortg=0,contadortodos=0;
+                } else if (StrServer.equals("cedistabasco.ddns.net:9085")) {
+                    int contadortg = 0, contadortodos = 0;
 
                     for (int i = 0; i < listasearch2.size(); i++) {
-                       if(listasearch2.get(i).getLinea().equals("4")){
-                           contadortg++;
-                       }else{
-                           contadortodos++;
-                       }
+                        if (listasearch2.get(i).getLinea().equals("4")) {
+                            contadortg++;
+                        } else {
+                            contadortodos++;
+                        }
                     }
-                    if(contadortg>=1 && contadortodos==0){
+                    if (contadortg >= 1 && contadortodos == 0) {
+                        strClaveCli = listasearch2.get(0).getClaveC();
+                        strNombreCliente = listasearch2.get(0).getNombreC();
+                        strComentario = txtComentario.getText().toString();
+                        StrRFC = listasearch2.get(0).getRFC();
+                        StrPlazo = listasearch2.get(0).getPLAZO();
+                        StrDescuentoPP = listasearch2.get(0).getDESCUENTOPP();
+                        StrDescuento1 = listasearch2.get(0).getDESCUENTO1();
+                        StrCalle = listasearch2.get(0).getCALLE();
+                        StrColonia = listasearch2.get(0).getCOLONIA();
+                        StrPoblacion = listasearch2.get(0).getPOBLACION();
+                        Folio1 = Folio.getText().toString();
+                        Eagle = listasearch2.get(0).getEagle();
+                        Rodatech = listasearch2.get(0).getRodatech();
+                        Partech = listasearch2.get(0).getPartech();
+                        Shark = listasearch2.get(0).getShark();
+                        Trackoone = listasearch2.get(0).getTrackoone();
+                        DESCdOCUMENTO = listasearch2.get(0).getDESCdOCUMENTO();
+
+
+                        for (int i = 0; i < listasearch4.size(); i++) {
+                            int posi = spinnerVia.getSelectedItemPosition();
+                            if (posi == i) {
+                                strVia = listasearch4.get(i).getClave();
+                                break;
+                            }
+                        }
+                        if (!confEnvio.equals("") && !monto_porcentaje.equals("") && !monto_enviogratis.equals("")) {
+                            if (confEnvio.equals("1")) {
+                                int posi = spinnerVia.getSelectedItemPosition();
+                                if (listasearch4.get(posi).getEntregadirecta().equals("1")) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+
+
+                                } else if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_porcentaje) && Integer.parseInt(listasearch4.get(posi).getMonto()) > 10 && listasearch4.get(posi).getEntregadirecta().equals("0") && listasearch4.get(posi).getPorcentaje().equals("0")) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+
+                                } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_porcentaje) && Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis) && listasearch4.get(posi).getEntregadirecta().equals("0") && listasearch4.get(posi).getPorcentaje().equals("1")) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+
+                                } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_enviogratis) && Integer.parseInt(listasearch4.get(posi).getMonto()) == 0 && listasearch4.get(posi).getPorcentaje().equals("0") && listasearch4.get(posi).getEntregadirecta().equals("0")) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+
+
+                                } else {
+                                    if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_porcentaje)) {
+                                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                                        alerta1.setMessage("Deberias seleccionar una via de embarque con cobro de flete ").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.cancel();
+
+                                            }
+                                        });
+                                        AlertDialog titulo1 = alerta1.create();
+                                        titulo1.setTitle("Selecciona otra via de embarque");
+                                        titulo1.show();
+                                    } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_porcentaje) && Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis)) {
+                                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                                        alerta1.setMessage("Deberias seleccionar una via de embarque con porcentaje ").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.cancel();
+
+                                            }
+                                        });
+                                        AlertDialog titulo1 = alerta1.create();
+                                        titulo1.setTitle("Selecciona otra via de embarque");
+                                        titulo1.show();
+                                    } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_enviogratis)) {
+                                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                                        alerta1.setMessage("Deberias seleccionar una via de embarque con envio gratis o sin cobro ").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.cancel();
+
+                                            }
+                                        });
+                                        AlertDialog titulo1 = alerta1.create();
+                                        titulo1.setTitle("Selecciona otra via de embarque");
+                                        titulo1.show();
+                                    }
+                                    pedidoButton.setEnabled(true);
+                                }
+                            } else {
+                                int posi = spinnerVia.getSelectedItemPosition();
+                                if (listasearch4.get(posi).getEntregadirecta().equals("1")) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+                                } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_enviogratis) && Integer.parseInt(listasearch4.get(posi).getMonto()) == 0 && listasearch4.get(posi).getPorcentaje().equals("0") && listasearch4.get(posi).getEntregadirecta().equals("0")) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+                                } else if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis)) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+                                } else {
+                                    if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis) && Integer.parseInt(listasearch4.get(posi).getMonto()) == 0) {
+                                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                                        alerta1.setMessage("Deberias seleccionar  otra via de embarque diferente a esta").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.cancel();
+
+                                            }
+                                        });
+                                        AlertDialog titulo1 = alerta1.create();
+                                        titulo1.setTitle("Selecciona otra via de embarque");
+                                        titulo1.show();
+                                    }
+                                }
+                            }
+                        } else {
+                            ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                            task.execute();
+                        }
+
+
+                    } else if (contadortg == 0 && contadortodos >= 1) {
                         strClaveCli = listasearch2.get(0).getClaveC();
                         strNombreCliente = listasearch2.get(0).getNombreC();
                         strComentario = txtComentario.getText().toString();
@@ -267,41 +388,102 @@ int contadortg=0,contadortodos=0;
                             }
                         }
 
+                        if (!confEnvio.equals("") && !monto_porcentaje.equals("") && !monto_enviogratis.equals("")) {
 
-                        ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
-                        task.execute();
-                    }else if(contadortg==0 && contadortodos>=1){
-                        strClaveCli = listasearch2.get(0).getClaveC();
-                        strNombreCliente = listasearch2.get(0).getNombreC();
-                        strComentario = txtComentario.getText().toString();
-                        StrRFC = listasearch2.get(0).getRFC();
-                        StrPlazo = listasearch2.get(0).getPLAZO();
-                        StrDescuentoPP = listasearch2.get(0).getDESCUENTOPP();
-                        StrDescuento1 = listasearch2.get(0).getDESCUENTO1();
-                        StrCalle = listasearch2.get(0).getCALLE();
-                        StrColonia = listasearch2.get(0).getCOLONIA();
-                        StrPoblacion = listasearch2.get(0).getPOBLACION();
-                        Folio1 = Folio.getText().toString();
-                        Eagle = listasearch2.get(0).getEagle();
-                        Rodatech = listasearch2.get(0).getRodatech();
-                        Partech = listasearch2.get(0).getPartech();
-                        Shark = listasearch2.get(0).getShark();
-                        Trackoone = listasearch2.get(0).getTrackoone();
-                        DESCdOCUMENTO = listasearch2.get(0).getDESCdOCUMENTO();
+                            if (confEnvio.equals("1")) {
+                                int posi = spinnerVia.getSelectedItemPosition();
+                                if (listasearch4.get(posi).getEntregadirecta().equals("1")) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
 
 
-                        for (int i = 0; i < listasearch4.size(); i++) {
-                            int posi = spinnerVia.getSelectedItemPosition();
-                            if (posi == i) {
-                                strVia = listasearch4.get(i).getClave();
-                                break;
+                                } else if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_porcentaje) && Integer.parseInt(listasearch4.get(posi).getMonto()) > 10 && listasearch4.get(posi).getEntregadirecta().equals("0") && listasearch4.get(posi).getPorcentaje().equals("0")) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+
+                                } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_porcentaje) && Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis) && listasearch4.get(posi).getEntregadirecta().equals("0") && listasearch4.get(posi).getPorcentaje().equals("1")) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+
+                                } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_enviogratis) && Integer.parseInt(listasearch4.get(posi).getMonto()) == 0 && listasearch4.get(posi).getPorcentaje().equals("0") && listasearch4.get(posi).getEntregadirecta().equals("0")) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+
+
+                                } else {
+                                    if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_porcentaje)) {
+                                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                                        alerta1.setMessage("Deberias seleccionar una via de embarque con cobro de flete ").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.cancel();
+
+                                            }
+                                        });
+                                        AlertDialog titulo1 = alerta1.create();
+                                        titulo1.setTitle("Selecciona otra via de embarque");
+                                        titulo1.show();
+                                    } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_porcentaje) && Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis)) {
+                                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                                        alerta1.setMessage("Deberias seleccionar una via de embarque con porcentaje ").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.cancel();
+
+                                            }
+                                        });
+                                        AlertDialog titulo1 = alerta1.create();
+                                        titulo1.setTitle("Selecciona otra via de embarque");
+                                        titulo1.show();
+                                    } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_enviogratis)) {
+                                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                                        alerta1.setMessage("Deberias seleccionar una via de embarque con envio gratis o sin cobro ").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.cancel();
+
+                                            }
+                                        });
+                                        AlertDialog titulo1 = alerta1.create();
+                                        titulo1.setTitle("Selecciona otra via de embarque");
+                                        titulo1.show();
+                                    }
+                                    pedidoButton.setEnabled(true);
+                                }
+                            } else {
+                                int posi = spinnerVia.getSelectedItemPosition();
+                                if (listasearch4.get(posi).getEntregadirecta().equals("1")) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+                                } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_enviogratis) && Integer.parseInt(listasearch4.get(posi).getMonto()) == 0 && listasearch4.get(posi).getPorcentaje().equals("0") && listasearch4.get(posi).getEntregadirecta().equals("0")) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+                                } else if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis)) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+                                } else {
+                                    if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis) && Integer.parseInt(listasearch4.get(posi).getMonto()) == 0) {
+                                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                                        alerta1.setMessage("Deberias seleccionar  otra via de embarque diferente a esta").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.cancel();
+
+                                            }
+                                        });
+                                        AlertDialog titulo1 = alerta1.create();
+                                        titulo1.setTitle("Selecciona otra via de embarque");
+                                        titulo1.show();
+                                        pedidoButton.setEnabled(true);
+                                    }
+                                }
                             }
+                        } else {
+                            ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                            task.execute();
                         }
 
-
-                        ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
-                        task.execute();
-                    }else{
+                    } else {
                         AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
                         alerta1.setMessage("Se estan mezclando productos SHARK con otros").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
@@ -315,7 +497,7 @@ int contadortg=0,contadortodos=0;
                         titulo1.show();
                     }
 
-                }else{
+                } else {
                     strClaveCli = listasearch2.get(0).getClaveC();
                     strNombreCliente = listasearch2.get(0).getNombreC();
                     strComentario = txtComentario.getText().toString();
@@ -343,9 +525,100 @@ int contadortg=0,contadortodos=0;
                         }
                     }
 
+                    if (!confEnvio.equals("") && !monto_porcentaje.equals("") && !monto_enviogratis.equals("")) {
+                        if (confEnvio.equals("1")) {
+                            int posi = spinnerVia.getSelectedItemPosition();
+                            if (listasearch4.get(posi).getEntregadirecta().equals("1")) {
+                                ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                task.execute();
 
-                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
-                    task.execute();
+
+                            } else if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_porcentaje) && Integer.parseInt(listasearch4.get(posi).getMonto()) > 10 && listasearch4.get(posi).getEntregadirecta().equals("0") && listasearch4.get(posi).getPorcentaje().equals("0")) {
+                                ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                task.execute();
+
+                            } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_porcentaje) && Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis) && listasearch4.get(posi).getEntregadirecta().equals("0") && listasearch4.get(posi).getPorcentaje().equals("1")) {
+                                ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                task.execute();
+
+                            } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_enviogratis) && Integer.parseInt(listasearch4.get(posi).getMonto()) == 0 && listasearch4.get(posi).getPorcentaje().equals("0") && listasearch4.get(posi).getEntregadirecta().equals("0")) {
+                                ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                task.execute();
+
+
+                            } else {
+                                if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_porcentaje)) {
+                                    AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                                    alerta1.setMessage("Deberias seleccionar una via de embarque con cobro de flete ").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.cancel();
+
+                                        }
+                                    });
+                                    AlertDialog titulo1 = alerta1.create();
+                                    titulo1.setTitle("Selecciona otra via de embarque");
+                                    titulo1.show();
+                                } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_porcentaje) && Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis)) {
+                                    AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                                    alerta1.setMessage("Deberias seleccionar una via de embarque con porcentaje ").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.cancel();
+
+                                        }
+                                    });
+                                    AlertDialog titulo1 = alerta1.create();
+                                    titulo1.setTitle("Selecciona otra via de embarque");
+                                    titulo1.show();
+                                } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_enviogratis)) {
+                                    AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                                    alerta1.setMessage("Deberias seleccionar una via de embarque con envio gratis o sin cobro ").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.cancel();
+
+                                        }
+                                    });
+                                    AlertDialog titulo1 = alerta1.create();
+                                    titulo1.setTitle("Selecciona otra via de embarque");
+                                    titulo1.show();
+                                }
+                                pedidoButton.setEnabled(true);
+                            }
+                        } else {
+                            int posi = spinnerVia.getSelectedItemPosition();
+                            if (listasearch4.get(posi).getEntregadirecta().equals("1")) {
+                                ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                task.execute();
+                            } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_enviogratis) && Integer.parseInt(listasearch4.get(posi).getMonto()) == 0 && listasearch4.get(posi).getPorcentaje().equals("0") && listasearch4.get(posi).getEntregadirecta().equals("0")) {
+                                ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                task.execute();
+                            } else if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis)) {
+                                ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                task.execute();
+                            } else {
+                                if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis) && Integer.parseInt(listasearch4.get(posi).getMonto()) == 0) {
+                                    AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                                    alerta1.setMessage("Deberias seleccionar  otra via de embarque diferente a esta").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.cancel();
+
+                                        }
+                                    });
+                                    AlertDialog titulo1 = alerta1.create();
+                                    titulo1.setTitle("Selecciona otra via de embarque");
+                                    titulo1.show();
+                                    pedidoButton.setEnabled(true);
+                                }
+                            }
+                        }
+                    } else {
+                        ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                        task.execute();
+                    }
+
                 }
             }
         });
@@ -381,7 +654,7 @@ int contadortg=0,contadortodos=0;
 
                     JSONObject jitems, Numero;
                     JSONObject jsonObject = new JSONObject(jsonStr);
-                    if(jsonObject.length()!=0) {
+                    if (jsonObject.length() != 0) {
                         jitems = jsonObject.getJSONObject("Item");
 
                         for (int i = 0; i < jitems.length(); i++) {
@@ -430,7 +703,7 @@ int contadortg=0,contadortodos=0;
                                         (Numero.getString("k_PartechDesc").equals("") ? "" : Numero.getString("k_PartechDesc")),
                                         (Numero.getString("k_SharckDesc").equals("") ? "" : Numero.getString("k_SharckDesc")),
                                         (Numero.getString("k_Descdoc").equals("") ? "" : Numero.getString("k_Descdoc")),
-                                        (StrServer.equals("cedistabasco.ddns.net:9085")?((Numero.getString("k_LInea").equals("") ? "" : Numero.getString("k_LInea"))):"")));
+                                        (StrServer.equals("cedistabasco.ddns.net:9085") ? ((Numero.getString("k_LInea").equals("") ? "" : Numero.getString("k_LInea"))) : "")));
                             }
                         }
                     }
@@ -640,7 +913,7 @@ int contadortg=0,contadortodos=0;
 
                     JSONObject jitems;
                     JSONObject jsonObject = new JSONObject(jsonStr);
-                    if(jsonObject.length()!=0) {
+                    if (jsonObject.length() != 0) {
                         jitems = jsonObject.getJSONObject("MENSAJE");
 
                         MenValPedi = jitems.getString("k_messenge");
@@ -703,12 +976,7 @@ int contadortg=0,contadortodos=0;
 
 
                 AlertDialog.Builder alerta = new AlertDialog.Builder(ActivityDetallCoti.this);
-                alerta.setMessage("El descuento sera modificado ¿Deseas realizar el pedido? \n" +
-                        "Descuento=%" + Desc1Valida + "\n" +
-                        "Descuento Total=$" + formatNumberCurrency(String.valueOf(DescuentoValida)) + "\n" +
-                        "Subtotal = $" + formatNumberCurrency(String.valueOf(SubtotalValida)) + "\n" +
-                        "Iva = $" + formatNumberCurrency(String.valueOf(ivasr)) + "\n" +
-                        "Monto = $" + formatNumberCurrency(String.valueOf(monto))).setCancelable(false).setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                alerta.setMessage("El descuento sera modificado ¿Deseas realizar el pedido? \n" + "Descuento=%" + Desc1Valida + "\n" + "Descuento Total=$" + formatNumberCurrency(String.valueOf(DescuentoValida)) + "\n" + "Subtotal = $" + formatNumberCurrency(String.valueOf(SubtotalValida)) + "\n" + "Iva = $" + formatNumberCurrency(String.valueOf(ivasr)) + "\n" + "Monto = $" + formatNumberCurrency(String.valueOf(monto))).setCancelable(false).setPositiveButton("Si", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -887,7 +1155,7 @@ int contadortg=0,contadortodos=0;
 
                     JSONObject jitems;
                     JSONObject jsonObject = new JSONObject(jsonStr);
-                    if(jsonObject.length()!=0) {
+                    if (jsonObject.length() != 0) {
                         jitems = jsonObject.getJSONObject("MENSAJE");
 
                         MenValPedi = jitems.getString("k_messenge");
@@ -1074,8 +1342,7 @@ int contadortg=0,contadortodos=0;
 
             SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
             xmlPedido soapEnvelope = new xmlPedido(SoapEnvelope.VER11);
-            soapEnvelope.xmlPedido(strComentario, strcode, strNombreCliente, strClaveCli, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass,
-                    StrRFC, StrPlazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, StrCalle, StrColonia, StrPoblacion, Folio1, strVia, stridEnvio, listasearch2, StrServer, Eagle, Rodatech, Partech, Shark, Trackoone, DESCdOCUMENTO);
+            soapEnvelope.xmlPedido(strComentario, strcode, strNombreCliente, strClaveCli, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass, StrRFC, StrPlazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, StrCalle, StrColonia, StrPoblacion, Folio1, strVia, stridEnvio, listasearch2, StrServer, Eagle, Rodatech, Partech, Shark, Trackoone, DESCdOCUMENTO);
             soapEnvelope.dotNet = true;
             soapEnvelope.implicitTypes = true;
             soapEnvelope.setOutputSoapObject(Request);
@@ -1115,6 +1382,8 @@ int contadortg=0,contadortodos=0;
 
         @Override
         protected Void doInBackground(Void... params) {
+
+            String clavevia="",nombrevia="",monto="",procentaje="",entregadir="";
             HttpHandler sh = new HttpHandler();
 
             String url = "http://" + StrServer + "/listaviaapp";
@@ -1122,19 +1391,48 @@ int contadortg=0,contadortodos=0;
             if (jsonStr != null) {
                 try {
                     JSONObject json = new JSONObject(jsonStr);
-                    if(json.length()!=0) {
+                    if (json.length() != 0) {
 
-                        JSONObject jitems, Numero, Clave, Nombre;
+                        JSONObject jitems, Numero, jitems2, configuracion;
                         JSONObject jsonObject = new JSONObject(jsonStr);
                         jitems = jsonObject.getJSONObject("Via");
 
                         for (int i = 0; i < jitems.length(); i++) {
                             jitems = jsonObject.getJSONObject("Via");
                             Numero = jitems.getJSONObject("" + i + "");
-                            listasearch4.add(new ListaViaSANDG((Numero.getString("k_claveVia").equals("") ? " " : Numero.getString("k_claveVia")),
-                                    (Numero.getString("k_nombreVia").equals("") ? " " : Numero.getString("k_nombreVia"))));
+
+                            if(Numero.has("k_claveVia")){
+                                clavevia=(Numero.getString("k_claveVia").equals("") ? " " : Numero.getString("k_claveVia"));
+                            }
+                            if(Numero.has("k_nombreVia")){
+                                nombrevia=(Numero.getString("k_nombreVia").equals("") ? " " : Numero.getString("k_nombreVia"));
+                            }
+                            if(Numero.has("k_monto")){
+                                monto=(Numero.getString("k_monto").equals("") ? " " : Numero.getString("k_monto"));
+                            }
+                            if(Numero.has("k_procentaje")){
+                                procentaje=(Numero.getString("k_procentaje").equals("") ? " " : Numero.getString("k_procentaje"));
+                            }
+                            if(Numero.has("k_entregaDir")){
+                                entregadir=(Numero.getString("k_entregaDir").equals("") ? " " : Numero.getString("k_entregaDir"));
+                            }
+
+
+                            listasearch4.add(new ListaViaSANDG(clavevia,nombrevia,monto,procentaje,entregadir));
 
                         }
+
+                        if(jsonObject.has("Vias")){
+                            jitems2 = jsonObject.getJSONObject("Vias");
+                            configuracion = jitems2.getJSONObject("configuracion");
+                            monto_porcentaje = configuracion.getString("monto_porcentaje");
+                            monto_enviogratis = configuracion.getString("monto_entregagratis");
+                            confEnvio = configuracion.getString("valorar");
+                        }
+
+
+
+
                     }
                 } catch (final JSONException e) {
                     runOnUiThread(new Runnable() {
@@ -1232,11 +1530,7 @@ int contadortg=0,contadortodos=0;
                             jitems = jsonObject.getJSONObject("Dir");
                             Numero = jitems.getJSONObject("" + i + "");
 
-                            listasearch5.add(new EnvioSANDG((Numero.getString("k_id").equals("") ? " " : Numero.getString("k_id")),
-                                    (Numero.getString("k_CalleyNumero").equals("") ? " " : Numero.getString("k_CalleyNumero")),
-                                    (Numero.getString("k_ColoClinte").equals("") ? " " : Numero.getString("k_ColoClinte")),
-                                    (Numero.getString("k_Poblacion").equals("") ? " " : Numero.getString("k_Poblacion")),
-                                    (Numero.getString("k_Numero").equals("") ? " " : Numero.getString("k_Numero"))));
+                            listasearch5.add(new EnvioSANDG((Numero.getString("k_id").equals("") ? " " : Numero.getString("k_id")), (Numero.getString("k_CalleyNumero").equals("") ? " " : Numero.getString("k_CalleyNumero")), (Numero.getString("k_ColoClinte").equals("") ? " " : Numero.getString("k_ColoClinte")), (Numero.getString("k_Poblacion").equals("") ? " " : Numero.getString("k_Poblacion")), (Numero.getString("k_Numero").equals("") ? " " : Numero.getString("k_Numero"))));
 
 
                         }
@@ -1294,7 +1588,6 @@ int contadortg=0,contadortodos=0;
     }
 
 
-
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
     private class AsyncCallWS7 extends AsyncTask<Void, Void, Void> {
@@ -1338,8 +1631,7 @@ int contadortg=0,contadortodos=0;
 
             SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
             xmlNewDoc42 soapEnvelope = new xmlNewDoc42(SoapEnvelope.VER11);
-            soapEnvelope.xmlNewDoc42(strComentario, strcode, strNombreCliente, strClaveCli, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass,
-                    StrRFC, StrPlazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, StrCalle, StrColonia, StrPoblacion, Folio1, strVia, stridEnvio, listasearch2, StrServer);
+            soapEnvelope.xmlNewDoc42(strComentario, strcode, strNombreCliente, strClaveCli, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass, StrRFC, StrPlazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, StrCalle, StrColonia, StrPoblacion, Folio1, strVia, stridEnvio, listasearch2, StrServer);
             soapEnvelope.dotNet = true;
             soapEnvelope.implicitTypes = true;
             soapEnvelope.setOutputSoapObject(Request);
@@ -1431,11 +1723,7 @@ int contadortg=0,contadortodos=0;
                     }
 
                     AlertDialog.Builder alerta = new AlertDialog.Builder(ActivityDetallCoti.this);
-                    alerta.setMessage("ID:" + id + "\n" +
-                            "C:" + CalleSec + "\n" +
-                            "COLONIA:" + ColoniaSec + "\n" +
-                            "POBLACION:" + PoblacionSec + "\n" +
-                            "NUMERO:" + NumeroTel + "\n").setCancelable(false).setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                    alerta.setMessage("ID:" + id + "\n" + "C:" + CalleSec + "\n" + "COLONIA:" + ColoniaSec + "\n" + "POBLACION:" + PoblacionSec + "\n" + "NUMERO:" + NumeroTel + "\n").setCancelable(false).setPositiveButton("SI", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             stridEnvio = id;

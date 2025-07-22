@@ -16,6 +16,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Checkable;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -67,6 +69,8 @@ public class ActivityBackOrders extends AppCompatActivity {
     String date;
     String date2;
     AlertDialog mDialog;
+    CheckBox CheckExistencia;
+    String checkexis="0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +103,9 @@ public class ActivityBackOrders extends AppCompatActivity {
         BackOreders = findViewById(R.id.BackOrders);
         FacturasVencidas = findViewById(R.id.FacturasVencidas);
         Cliente0Ventas = findViewById(R.id.Cliente0Ventas);
+        CheckExistencia =findViewById(R.id.CheckExistencia);
+
+
 
 
         ConsultaFacturas.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +218,11 @@ public class ActivityBackOrders extends AppCompatActivity {
                             break;
                         }
                     }
-
+                if (CheckExistencia.isChecked()){
+                    checkexis="1";
+                }else {
+                    checkexis="0";
+                }
                     if (!FechaIncial.isEmpty() && !FechaFinal.isEmpty() && spinerClie.getSelectedItemPosition() != 0) {
 
                         BackorderLista();
@@ -370,7 +381,7 @@ public class ActivityBackOrders extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... voids) {
                 HttpHandler sh = new HttpHandler();
-                String parametros = "cliente="+strscliente+"&fechae="+FechaIncial+"&fechas="+FechaFinal+"&sucursal="+strcodBra;
+                String parametros = "cliente="+strscliente+"&fechae="+FechaIncial+"&fechas="+FechaFinal+"&sucursal="+strcodBra+"&existencia="+checkexis;
                 String url = "http://" + StrServer + "/backorderscliapp?" + parametros;
                 String jsonStr = sh.makeServiceCall(url, strusr, strpass);
                 if (jsonStr != null) {

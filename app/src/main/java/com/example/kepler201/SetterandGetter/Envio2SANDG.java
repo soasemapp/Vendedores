@@ -1,11 +1,16 @@
 package com.example.kepler201.SetterandGetter;
 
-public class Envio2SANDG {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Envio2SANDG implements Serializable {
 
     String id;
     String Direccion;
     String latitud;
     String longitud;
+
+    private boolean visitado = false;
 
     public Envio2SANDG(String id, String direccion, String latitud, String longitud) {
         this.id = id;
@@ -13,6 +18,7 @@ public class Envio2SANDG {
         this.latitud = latitud;
         this.longitud = longitud;
     }
+
 
     public String getId() {
         return id;
@@ -45,4 +51,23 @@ public class Envio2SANDG {
     public void setLongitud(String longitud) {
         this.longitud = longitud;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Envio2SANDG that = (Envio2SANDG) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(latitud, that.latitud) &&
+                Objects.equals(longitud, that.longitud);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, latitud, longitud);
+    }
+
+
+
+
 }

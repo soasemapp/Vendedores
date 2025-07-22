@@ -220,6 +220,9 @@ public class ActivityConverciones extends AppCompatActivity {
             case "vazlocolombia.dyndns.org:9085":
                 Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
                 break;
+            case "bpr.ath.cx:9095":
+                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+                break;
             default:
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;
@@ -700,7 +703,8 @@ if (jsonarray>0){
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")){
+            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080") ){
+
                 HttpHandler sh = new HttpHandler();
 
                 String url = Empresa + strClave;
@@ -844,7 +848,7 @@ if (jsonarray>0){
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String parametros = "producto=" + productoStr;
+            String parametros = "producto=" + strClave;
             String url = "http://" + StrServer + "/conversionesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {

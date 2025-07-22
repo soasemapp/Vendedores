@@ -13,7 +13,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-              android:orientation="vertical">
+            android:orientation="vertical">
             <View
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
@@ -99,6 +99,15 @@
                         android:text="Comentario"
                         android:textColor="#787777"
                         android:textSize="13sp" />
+                    <TextView
+                        android:id="@+id/txtEstado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#4CAF50"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        tools:text="VISITA COMPLETADA"/>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
@@ -108,9 +117,55 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/llVisitaButtons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+
+                <Button
+                    android:id="@+id/btnEmpezar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Empezar Visita"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btnTerminar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Terminar Visita"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btnCargarUbicaciones"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cargar Ubicaciones"
+                    android:visibility="gone" />
 
 
-            <com.google.android.material.button.MaterialButton
+            </LinearLayout>
+
+           <!-- <com.google.android.material.button.MaterialButton
+
+                android:id="@+id/btnSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="right"
+                android:layout_margin="10dp"
+                android:background="@drawable/roundbutton"
+                android:backgroundTint="@color/cardview_dark_background"
+                android:padding="5dp"
+                android:onClick="statusAgenda"
+                android:text="Abrir mapa"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" /> -->
+
+           <!-- <com.google.android.material.button.MaterialButton
 
                 android:id="@+id/btnSearch"
                 android:layout_width="wrap_content"
@@ -124,7 +179,7 @@
                 android:textSize="14sp"
                 android:layout_gravity="right"
                 android:onClick="statusAgenda"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF" />  !-->
 
             <View
                 android:layout_width="match_parent"

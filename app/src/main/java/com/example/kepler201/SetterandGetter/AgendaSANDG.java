@@ -1,5 +1,7 @@
 package com.example.kepler201.SetterandGetter;
 
+import java.util.List;
+
 public class AgendaSANDG {
     String
             Fecha;
@@ -8,6 +10,7 @@ public class AgendaSANDG {
     String Actividad;
     String Estatus;
     String Comentario;
+
 
     public AgendaSANDG(String fecha, String cliente, String clienNom, String actividad, String estatus, String comentario) {
         Fecha = fecha;
@@ -63,6 +66,7 @@ public class AgendaSANDG {
     }
 
     public void setComentario(String comentario) {
-        Comentario = comentario;
+        this.Comentario = comentario;
+        //Comentario = comentario;
     }
 }
