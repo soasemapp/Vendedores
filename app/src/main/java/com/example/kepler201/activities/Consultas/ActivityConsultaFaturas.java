@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -32,10 +33,19 @@ import com.example.kepler201.includes.MyToolbar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
+
+
+import java.io.File;
+import java.io.FileOutputStream;
+import android.util.Base64;
+import android.net.Uri;
+import androidx.core.content.FileProvider;
 
 import dmax.dialog.SpotsDialog;
 
@@ -43,9 +53,9 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
 
     String FechaIncial, FechaFinal;
     private Spinner spinerClie;
-    ImageView ConsultaFacturas, BackOreders, FacturasVencidas, Cliente0Ventas;
+    ImageView ConsultaFacturas, BackOreders,DocEletronicos, FacturasVencidas, Cliente0Ventas;
     private EditText fechaEn, fechaSa;
-
+Context context=this;
 
     ArrayList<ConsulFacfturasSANDG> listasearch = new ArrayList<>();
     RecyclerView recyclerConsulta;
@@ -61,7 +71,7 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
     String strusr, strpass, strname, strlname, strtype, strbran, strma, strcodBra, strcode, StrServer;
     String strscliente = "";
     String mensaje = "";
-
+    String base64="";
     ArrayList<SearachClientSANDG> listaclientG = new ArrayList<>();
 
     int n = 2000;
@@ -106,6 +116,9 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
         BackOreders = findViewById(R.id.BackOrders);
         FacturasVencidas = findViewById(R.id.FacturasVencidas);
         Cliente0Ventas = findViewById(R.id.Cliente0Ventas);
+
+
+
 
 
         ConsultaFacturas.setOnClickListener(new View.OnClickListener() {
@@ -396,7 +409,7 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
                                     Numero.getString("saldo"),
                                     Numero.getString("monto"),
                                     Numero.getString("numSu"),
-                                    Numero.getString("nomSu")));
+                                    Numero.getString("nomSu"),""));
 
                         }
                     }else{
@@ -434,6 +447,82 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
                 titulo.show();
             }//onPost
         }
+    }
+
+
+    private class PDFFACTURA extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mDialog.show();
+        }//onPreExecute
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String parametros = "cliente=" + Cliente + "&sucursal=" + ClaveNumDialog + "&folio=" + ClaveFolDialog+ "&tipo=1"  ;
+            String url = "http://" + StrServer + "/pdffacturaapp?" + parametros;
+            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+            if (jsonStr != null) {
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+
+
+                    JSONObject jitems, Numero;
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+
+                     base64 = jsonObject.getJSONObject("Item")
+                            .getJSONObject("PDF")
+                            .getString("base64");
+                } catch (final JSONException e) {
+                }//catch JSON EXCEPTION
+            } else {
+            }//else
+            return null;
+
+        }//doInBackground
+
+        @Override
+        protected void onPostExecute(Void aBoolean) {
+            super.onPostExecute(aBoolean);
+
+            // Decodifica y guarda
+            byte[] decoded = Base64.decode(base64, Base64.DEFAULT);
+            File file = new File(context.getExternalFilesDir(null), "archivo.pdf");
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(file);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                fos.write(decoded);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                fos.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            // Abre el PDF
+            Uri uri = FileProvider.getUriForFile(context, "com.example.kepler201.fileprovider", file);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, "application/pdf");
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.startActivity(intent);
+            mDialog.dismiss();
+        }
+    }
+
+    public void verfactura(View view){
+
+        int position = recyclerConsulta.getChildAdapterPosition(Objects.requireNonNull(recyclerConsulta.findContainingItemView(view)));
+        ClaveFolDialog = listasearch.get(position).getFoliodelDocumento();
+        ClaveNumDialog = listasearch.get(position).getNumSuc();
+        Cliente = listasearch.get(position).getCliente();
+        new ActivityConsultaFaturas.PDFFACTURA().execute();
     }
 
     public void detalleFactura(View view) {

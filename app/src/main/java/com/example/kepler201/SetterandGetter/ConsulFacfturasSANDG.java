@@ -11,8 +11,9 @@ public class ConsulFacfturasSANDG {
     String monto;
     String numSuc;
     String nomSuc;
+    String UUID;
 
-    public ConsulFacfturasSANDG(String cliente, String nombreCliente, String foliodelDocumento, String fechadeDocumento, String plazo, String fechadepago, String saldo, String monto, String numSuc, String nomSuc) {
+    public ConsulFacfturasSANDG(String cliente, String nombreCliente, String foliodelDocumento, String fechadeDocumento, String plazo, String fechadepago, String saldo, String monto, String numSuc, String nomSuc, String UUID) {
         Cliente = cliente;
         this.nombreCliente = nombreCliente;
         this.foliodelDocumento = foliodelDocumento;
@@ -23,6 +24,7 @@ public class ConsulFacfturasSANDG {
         this.monto = monto;
         this.numSuc = numSuc;
         this.nomSuc = nomSuc;
+        this.UUID = UUID;
     }
 
     public String getCliente() {
@@ -103,5 +105,13 @@ public class ConsulFacfturasSANDG {
 
     public void setNomSuc(String nomSuc) {
         this.nomSuc = nomSuc;
+    }
+
+    public String getUUID() {
+        return UUID;
+    }
+
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
     }
 }

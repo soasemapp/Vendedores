@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,6 +47,7 @@ import com.example.kepler201.SetterandGetter.SucursalSANDG;
 import com.example.kepler201.activities.ActivityPerfil;
 import com.example.kepler201.activities.BusquedaActivity;
 import com.example.kepler201.activities.DetalladoProductosActivity;
+import com.example.kepler201.activities.MainActivity;
 import com.example.kepler201.includes.HttpHandler;
 
 import org.json.JSONArray;
@@ -86,7 +88,7 @@ public class HomeFragment extends Fragment {
     ConexionSQLiteHelper conn;
     int datos;
 
-
+    private String urlactualizar;
     private String version;
     int Resultado = 0;
 
@@ -123,6 +125,7 @@ public class HomeFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
         mDialog = new SpotsDialog(getActivity());
+        mDialog.setCancelable(false);
 
         //FindView
         recyclerViewEagle = view.findViewById(R.id.listProductosEagle);
@@ -151,7 +154,7 @@ public class HomeFragment extends Fragment {
 
         //Preference
         SharedPreferences preference = requireActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
-        editor=preference.edit();
+        editor = preference.edit();
 
         preferenceClie = requireActivity().getSharedPreferences("clienteCompra", Context.MODE_PRIVATE);
         editor2 = preferenceClie.edit();
@@ -170,7 +173,6 @@ public class HomeFragment extends Fragment {
         ProductosNuevosStr = preference.getString("Productosnuevos", "0");
 
 
-
         switch (StrServer) {
             case "jacve.dyndns.org:9085":
                 Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
@@ -181,7 +183,7 @@ public class HomeFragment extends Fragment {
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
                 break;
-            case "guvi.ath.cx:9085":
+            case "guvi.ath.cx:9080":
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "cedistabasco.ddns.net:9085":
@@ -202,8 +204,7 @@ public class HomeFragment extends Fragment {
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "vazquin.ath.cx:9085":
-                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
-
+                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
             default:
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
@@ -273,35 +274,6 @@ public class HomeFragment extends Fragment {
 
         Versiones task1 = new Versiones();
         task1.execute();
-
-
-
-        if (datos > 0) {
-            if (day == 15 || day == 1) {
-                if (ProductosNuevosStr.equals("0")) {
-                    editor.putString("Productosnuevos", "1");
-                    editor.apply();
-                    ProductosNuevosAscy();
-                } else {
-                    Consulta();
-                }
-
-            } else {
-
-                editor.putString("Productosnuevos", "0");
-                editor.apply();
-                Consulta();
-
-            }
-
-
-        } else {
-            ProductosNuevosAscy();
-
-        }
-
-
-
 
 
         BusquedaProducto.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -416,6 +388,18 @@ public class HomeFragment extends Fragment {
                 ZoomsOcultar.setVisibility(View.GONE);
                 KFFOcultar.setVisibility(View.GONE);
                 break;
+            case "vazquin.ath.cx:9085":
+                EagleOcultar.setVisibility(View.VISIBLE);
+                TrackOneOcultar.setVisibility(View.VISIBLE);
+                RodatechOcultar.setVisibility(View.GONE);
+                PartechOcultar.setVisibility(View.GONE);
+                SharkOcultar.setVisibility(View.GONE);
+                VazloOcultar.setVisibility(View.VISIBLE);
+                MechanicOcultar.setVisibility(View.GONE);
+                GspOcultar.setVisibility(View.GONE);
+                ZoomsOcultar.setVisibility(View.GONE);
+                KFFOcultar.setVisibility(View.GONE);
+                break;
             default:
                 EagleOcultar.setVisibility(View.VISIBLE);
                 TrackOneOcultar.setVisibility(View.VISIBLE);
@@ -461,6 +445,8 @@ public class HomeFragment extends Fragment {
 
 
     private void Consulta() {
+
+        mDialog.show();
         ListaProductosEagle = new ArrayList<>();
         ListaProductosRodatech = new ArrayList<>();
         ListaProductosPartech = new ArrayList<>();
@@ -816,8 +802,10 @@ public class HomeFragment extends Fragment {
                 });
 
             }
+            mDialog.dismiss();
 
         }
+
 
         db.close();
 
@@ -832,7 +820,7 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mDialog.show();
+
         }//onPreExecute
 
         @Override
@@ -898,6 +886,8 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+
         }//onPreExecute
 
         @Override
@@ -908,7 +898,7 @@ public class HomeFragment extends Fragment {
             if (jsonStr != null) {
                 try {
                     JSONObject json = new JSONObject(jsonStr);
-                    if(json.length()!=0) {
+                    if (json.length() != 0) {
                         if (json.length() != 0) {
                             JSONObject jitems, Numero;
                             JSONObject jsonObject = new JSONObject(jsonStr);
@@ -953,10 +943,10 @@ public class HomeFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
 
                     strbran = listasucursal.get(which).getNombre();
-                    strcodBra= listasucursal.get(which).getClave();
+                    strcodBra = listasucursal.get(which).getClave();
                     editor.putString("branch", strbran);
-                    editor.putString("codBra",strcodBra);
-                    editor.putString("cambiarsucursal","1");
+                    editor.putString("codBra", strcodBra);
+                    editor.putString("cambiarsucursal", "1");
                     editor.commit();
                     editor.apply();
 
@@ -966,7 +956,6 @@ public class HomeFragment extends Fragment {
                     getActivity().finish();
 
 
-
                 }
             });
 // create and show the alert dialog
@@ -974,6 +963,7 @@ public class HomeFragment extends Fragment {
             dialog.show();
             dialog.setCancelable(false);
             mDialog.dismiss();
+
         }//onPost
 
     }
@@ -983,7 +973,7 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mDialog.show();
+
         }//onPreExecute
 
         @Override
@@ -1043,7 +1033,7 @@ public class HomeFragment extends Fragment {
 // create and show the alert dialog
             AlertDialog dialog = builder.create();
             dialog.show();
-            mDialog.dismiss();
+
         }//onPost
     }
 
@@ -1071,14 +1061,14 @@ public class HomeFragment extends Fragment {
             Intent BusquedaProdcuto = new Intent(getActivity(), BusquedaActivity.class);
             BusquedaProdcuto.putExtra("Producto", BusquedaProductoString);
             startActivity(BusquedaProdcuto);
-            mDialog.dismiss();
+
 
         } else if (dato == 2) {
             Intent ProductosDetallados = new Intent(getActivity(), DetalladoProductosActivity.class);
             ProductosDetallados.putExtra("Producto", ProductosNuevos);
             ProductosDetallados.putExtra("claveVentana", "1");
             startActivity(ProductosDetallados);
-            mDialog.dismiss();
+
         }
 
 
@@ -1096,7 +1086,8 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            mDialog.show();
+
+
         }
 
         @Override
@@ -1177,7 +1168,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080") ){
+            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")) {
 
                 String Productos = "";
                 for (int i = 0; i < ListaProductosGeneral.size(); i++) {
@@ -1545,15 +1536,13 @@ public class HomeFragment extends Fragment {
             });
 
 
-            if(strcodBra.equals("")) {
 
+
+            if (strcodBra.equals("")) {
                 new SucursalesLista().execute();
-            }else{
+            } else {
                 mDialog.dismiss();
             }
-
-
-
 
 
         }
@@ -1568,7 +1557,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-
+            mDialog.show();
 
         }
 
@@ -1580,49 +1569,78 @@ public class HomeFragment extends Fragment {
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObject = new JSONObject(jsonStr);
-                    if (jsonObject.length() != 0) {
-                        version = jsonObject.getString("Version");
+                    version = jsonObject.getString("Version");
+                    urlactualizar = jsonObject.getString("URL");
 
-
-                        Resultado = 1;
-                    }
+                    Resultado = 1;
                 } catch (final JSONException e) {
                     Resultado = 0;
                 }//catch JSON EXCEPTION
             } else {
                 Resultado = 0;
             }//else
+
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             if (Resultado == 1) {
-                if (version.equals("2.10.8")) {
+                String versionapp = getString(R.string.version);
+                if (version.equals(versionapp)) {
+
+                    Calendar calendar = Calendar.getInstance();
+                    final int day = calendar.get(Calendar.DAY_OF_MONTH);
+                    ConsultaComprobacion();
+
+                    if (datos > 0) {
+                        if (day == 15 || day == 1) {
+                            if (ProductosNuevosStr.equals("0")) {
+                                editor.putString("Productosnuevos", "1");
+                                editor.apply();
+                                ProductosNuevosAscy();
+                            } else {
+                                Consulta();
+                            }
+
+                        } else {
+
+                            editor.putString("Productosnuevos", "0");
+                            editor.apply();
+                            Consulta();
+
+                        }
+
+
+                    } else {
+                        ProductosNuevosAscy();
+
+                    }
 
                 } else {
-                    AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());
-                    alerta.setMessage("La versión instalada no está actualizada por favor comuníquese con su proveedor para actualizar.").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    mDialog.dismiss();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("AVISO");
+                    builder.setMessage("Hay una nueva actualización\n¿Ir a actualizar app?");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("ACTUALIZAR", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.cancel();
-                            System.exit(0);
-                            getActivity().finish();
+                            openLink();
                         }
                     });
-
-                    AlertDialog titulo = alerta.create();
-                    titulo.setTitle("Version desactualizada");
-                    titulo.show();
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    dialog.setCancelable(false);
                 }
             } else {
+                mDialog.dismiss();
                 AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());
                 alerta.setMessage("Hay un problema con el servicio").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
-                        System.exit(0);
-                        getActivity().finish();
+
                     }
                 });
 
@@ -1634,5 +1652,11 @@ public class HomeFragment extends Fragment {
         }
 
     }
+
+    private void openLink() {
+        Uri uri = Uri.parse(urlactualizar);
+        startActivityForResult(new Intent(Intent.ACTION_VIEW, uri), 1);
+        //startActivity(new Intent(Intent.ACTION_VIEW,uri));
+    }//openLink
 
 }

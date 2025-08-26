@@ -109,7 +109,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
                 break;
-            case "guvi.ath.cx:9085":
+            case "guvi.ath.cx:9080":
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "cedistabasco.ddns.net:9085":
@@ -128,6 +128,9 @@ public class ListaPreciosActivity extends AppCompatActivity {
                 break;
             case "bpr.ath.cx:9095":
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+                break;
+            case "vazquin.ath.cx:9085":
+                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
             default:
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";

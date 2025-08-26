@@ -2,10 +2,12 @@ package com.example.kepler201.activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private String StrServer = "";
     private String id;
     private String version;
+    private String urlactualizar;
     int  Resultado=0;
 
     @SuppressLint("MissingInflatedId")
@@ -70,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-               String[] opciones1 = { "AUTODIS", "CECRA", "GUVI", "PRESSA", "VIPLA", "SPR", "COLOMBIA","BPR","VAZQUIN"};
+              // String[] opciones1 = { "AUTODIS", "CECRA", "GUVI", "PRESSA", "VIPLA", "SPR", "COLOMBIA","BPR","VAZQUIN"};
 
-                //String[] opciones1 = {"JACVE"};
+                String[] opciones1 = {"HAZAK"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("SELECCIONE UNA EMPRESA").setIcon(R.drawable.icons_servidor);
@@ -83,136 +86,136 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
 
 
-//                      if (which == 0) {
-//                            StrServer = "jacve.dyndns.org:9085";
+                      if (which == 0) {
+                            StrServer = "jacve.dyndns.org:9085";
+                            Picasso.with(getApplicationContext()).
+                                    load(R.drawable.jacve)
+                                    .error(R.drawable.ic_baseline_error_24)
+                                    .fit()
+                                    .centerInside()
+                                    .into(imgEmpresa);
+                            LinearJacve.setVisibility(View.VISIBLE);
+                            LinearTodos.setVisibility(View.GONE);
+                            Versiones task1 = new Versiones();
+                            task1.execute();
+
+                        }
+
+//                        if (which == 0) {
+//                            StrServer = "autodis.ath.cx:9085";
 //                            Picasso.with(getApplicationContext()).
-//                                    load(R.drawable.jacvelogo)
+//                                    load(R.drawable.autodis)
 //                                    .error(R.drawable.ic_baseline_error_24)
 //                                    .fit()
 //                                    .centerInside()
 //                                    .into(imgEmpresa);
-//                            LinearJacve.setVisibility(View.VISIBLE);
-//                            LinearTodos.setVisibility(View.GONE);
 //                            Versiones task1 = new Versiones();
 //                            task1.execute();
+//                            LinearJacve.setVisibility(View.GONE);
+//                            LinearTodos.setVisibility(View.VISIBLE);
+//                        } else if (which == 1) {
+//                            StrServer = "cecra.ath.cx:9085";
+//                            Picasso.with(getApplicationContext()).
+//                                    load(R.drawable.cecra)
+//                                    .error(R.drawable.ic_baseline_error_24)
+//                                    .fit()
+//                                    .centerInside()
+//                                    .into(imgEmpresa);
+//                            Versiones task1 = new Versiones();
+//                            task1.execute();
+//                            LinearJacve.setVisibility(View.GONE);
+//                            LinearTodos.setVisibility(View.VISIBLE);
+//                        } else if (which == 2) {
+//                            StrServer = "guvi.ath.cx:9080";
+//                            Picasso.with(getApplicationContext()).
+//                                    load(R.drawable.guvi)
+//                                    .error(R.drawable.ic_baseline_error_24)
+//                                    .fit()
+//                                    .centerInside()
+//                                    .into(imgEmpresa);
 //
+//                            Versiones task1 = new Versiones();
+//                            task1.execute();
+//                            LinearJacve.setVisibility(View.GONE);
+//                            LinearTodos.setVisibility(View.VISIBLE);
+//                        } else if (which == 3) {
+//
+//                            StrServer = "cedistabasco.ddns.net:9085";
+//                            Picasso.with(getApplicationContext()).
+//                                    load(R.drawable.pressa)
+//                                    .error(R.drawable.ic_baseline_error_24)
+//                                    .fit()
+//                                    .centerInside()
+//                                    .into(imgEmpresa);
+//                            Versiones task1 = new Versiones();
+//                            task1.execute();
+//                            LinearJacve.setVisibility(View.GONE);
+//                            LinearTodos.setVisibility(View.VISIBLE);
+//                        } else if (which == 4) {
+//                            StrServer = "vipla.ath.cx:9085";
+//                            Picasso.with(getApplicationContext()).
+//                                    load(R.drawable.vipla)
+//                                    .error(R.drawable.ic_baseline_error_24)
+//                                    .fit()
+//                                    .centerInside()
+//                                    .into(imgEmpresa);
+//                            Versiones task1 = new Versiones();
+//                            task1.execute();
+//                            LinearJacve.setVisibility(View.GONE);
+//                            LinearTodos.setVisibility(View.VISIBLE);
+//                        } else if (which == 5) {
+//                            StrServer = "sprautomotive.servehttp.com:9090";
+//                            Picasso.with(getApplicationContext()).
+//                                    load(R.drawable.sprimage)
+//                                    .error(R.drawable.ic_baseline_error_24)
+//                                    .fit()
+//                                    .centerInside()
+//                                    .into(imgEmpresa);
+//                            Versiones task1 = new Versiones();
+//                            task1.execute();
+//                            LinearJacve.setVisibility(View.GONE);
+//                            LinearTodos.setVisibility(View.VISIBLE);
+//                        } else if (which == 6) {
+//                            StrServer = "vazlocolombia.dyndns.org:9085";
+//                            Picasso.with(getApplicationContext()).
+//                                    load(R.drawable.colombia2)
+//                                    .error(R.drawable.ic_baseline_error_24)
+//                                    .fit()
+//                                    .centerInside()
+//                                    .into(imgEmpresa);
+//                            Versiones task1 = new Versiones();
+//                            task1.execute();
+//                            LinearJacve.setVisibility(View.GONE);
+//                            LinearTodos.setVisibility(View.VISIBLE);
+//                        }else if (which == 7) {
+//                            Versiones task1 = new Versiones();
+//                            task1.execute();
+//                            StrServer = "bpr.ath.cx:9095";
+//                            Picasso.with(getApplicationContext()).
+//                                    load(R.drawable.logobpr)
+//                                    .error(R.drawable.ic_baseline_error_24)
+//                                    .fit()
+//                                    .centerInside()
+//                                    .into(imgEmpresa);
+//
+//
+//                            LinearJacve.setVisibility(View.GONE);
+//                            LinearTodos.setVisibility(View.VISIBLE);
+//                        }else if (which == 8) {
+//                            Versiones task1 = new Versiones();
+//                            task1.execute();
+//                            StrServer = "vazquin.ath.cx:9085";
+//                            Picasso.with(getApplicationContext()).
+//                                    load(R.drawable.vazquinlogo)
+//                                    .error(R.drawable.ic_baseline_error_24)
+//                                    .fit()
+//                                    .centerInside()
+//                                    .into(imgEmpresa);
+//
+//
+//                            LinearJacve.setVisibility(View.GONE);
+//                            LinearTodos.setVisibility(View.VISIBLE);
 //                        }
-
-                        if (which == 0) {
-                            StrServer = "autodis.ath.cx:9085";
-                            Picasso.with(getApplicationContext()).
-                                    load(R.drawable.autodis)
-                                    .error(R.drawable.ic_baseline_error_24)
-                                    .fit()
-                                    .centerInside()
-                                    .into(imgEmpresa);
-                            Versiones task1 = new Versiones();
-                            task1.execute();
-                            LinearJacve.setVisibility(View.GONE);
-                            LinearTodos.setVisibility(View.VISIBLE);
-                        } else if (which == 1) {
-                            StrServer = "cecra.ath.cx:9085";
-                            Picasso.with(getApplicationContext()).
-                                    load(R.drawable.cecra)
-                                    .error(R.drawable.ic_baseline_error_24)
-                                    .fit()
-                                    .centerInside()
-                                    .into(imgEmpresa);
-                            Versiones task1 = new Versiones();
-                            task1.execute();
-                            LinearJacve.setVisibility(View.GONE);
-                            LinearTodos.setVisibility(View.VISIBLE);
-                        } else if (which == 2) {
-                            StrServer = "guvi.ath.cx:9085";
-                            Picasso.with(getApplicationContext()).
-                                    load(R.drawable.guvi)
-                                    .error(R.drawable.ic_baseline_error_24)
-                                    .fit()
-                                    .centerInside()
-                                    .into(imgEmpresa);
-
-                            Versiones task1 = new Versiones();
-                            task1.execute();
-                            LinearJacve.setVisibility(View.GONE);
-                            LinearTodos.setVisibility(View.VISIBLE);
-                        } else if (which == 3) {
-
-                            StrServer = "cedistabasco.ddns.net:9085";
-                            Picasso.with(getApplicationContext()).
-                                    load(R.drawable.pressa)
-                                    .error(R.drawable.ic_baseline_error_24)
-                                    .fit()
-                                    .centerInside()
-                                    .into(imgEmpresa);
-                            Versiones task1 = new Versiones();
-                            task1.execute();
-                            LinearJacve.setVisibility(View.GONE);
-                            LinearTodos.setVisibility(View.VISIBLE);
-                        } else if (which == 4) {
-                            StrServer = "vipla.ath.cx:9085";
-                            Picasso.with(getApplicationContext()).
-                                    load(R.drawable.vipla)
-                                    .error(R.drawable.ic_baseline_error_24)
-                                    .fit()
-                                    .centerInside()
-                                    .into(imgEmpresa);
-                            Versiones task1 = new Versiones();
-                            task1.execute();
-                            LinearJacve.setVisibility(View.GONE);
-                            LinearTodos.setVisibility(View.VISIBLE);
-                        } else if (which == 5) {
-                            StrServer = "sprautomotive.servehttp.com:9090";
-                            Picasso.with(getApplicationContext()).
-                                    load(R.drawable.sprimage)
-                                    .error(R.drawable.ic_baseline_error_24)
-                                    .fit()
-                                    .centerInside()
-                                    .into(imgEmpresa);
-                            Versiones task1 = new Versiones();
-                            task1.execute();
-                            LinearJacve.setVisibility(View.GONE);
-                            LinearTodos.setVisibility(View.VISIBLE);
-                        } else if (which == 6) {
-                            StrServer = "vazlocolombia.dyndns.org:9085";
-                            Picasso.with(getApplicationContext()).
-                                    load(R.drawable.colombia2)
-                                    .error(R.drawable.ic_baseline_error_24)
-                                    .fit()
-                                    .centerInside()
-                                    .into(imgEmpresa);
-                            Versiones task1 = new Versiones();
-                            task1.execute();
-                            LinearJacve.setVisibility(View.GONE);
-                            LinearTodos.setVisibility(View.VISIBLE);
-                        }else if (which == 7) {
-                            Versiones task1 = new Versiones();
-                            task1.execute();
-                            StrServer = "bpr.ath.cx:9095";
-                            Picasso.with(getApplicationContext()).
-                                    load(R.drawable.logobpr)
-                                    .error(R.drawable.ic_baseline_error_24)
-                                    .fit()
-                                    .centerInside()
-                                    .into(imgEmpresa);
-
-
-                            LinearJacve.setVisibility(View.GONE);
-                            LinearTodos.setVisibility(View.VISIBLE);
-                        }else if (which == 8) {
-                            Versiones task1 = new Versiones();
-                            task1.execute();
-                            StrServer = "vazquin.ath.cx:9085";
-                            Picasso.with(getApplicationContext()).
-                                    load(R.drawable.vazquinlogo)
-                                    .error(R.drawable.ic_baseline_error_24)
-                                    .fit()
-                                    .centerInside()
-                                    .into(imgEmpresa);
-
-
-                            LinearJacve.setVisibility(View.GONE);
-                            LinearTodos.setVisibility(View.VISIBLE);
-                        }
 
 
 
@@ -421,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(jsonStr);
                     version =jsonObject.getString("Version");
-
+                    urlactualizar=jsonObject.getString("URL");
 
                     Resultado=1;
                 } catch (final JSONException e) {
@@ -437,23 +440,23 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             if (Resultado==1){
-                if (version.equals("2.10.8")) {
+                String versionapp=getString(R.string.version);
+                if (version.equals(versionapp)) {
 
                 }else{
-                    AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
-                    alerta.setMessage("La versión instalada no está actualizada por favor comuníquese con su proveedor para actualizar.").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle("AVISO");
+                    builder.setMessage("Hay una nueva actualización\n¿Ir a actualizar app?");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("ACTUALIZAR", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.cancel();
-                            editor.clear().commit();
-                            System.exit(0);
-                            finish();
+                            openLink();
                         }
                     });
-
-                    AlertDialog titulo = alerta.create();
-                    titulo.setTitle("Version desactualizada");
-                    titulo.show();
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    dialog.setCancelable(false);
                 }
             }else{
                 AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
@@ -461,8 +464,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
-                        System.exit(0);
-                        finish();
+
                     }
                 });
 
@@ -476,7 +478,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    private void openLink(){
+        Uri uri=Uri.parse(urlactualizar);
+        startActivityForResult(new Intent(Intent.ACTION_VIEW,uri),1);
+        //startActivity(new Intent(Intent.ACTION_VIEW,uri));
+    }//openLink
 
     private void trasactiv() {
         guardarDatos();

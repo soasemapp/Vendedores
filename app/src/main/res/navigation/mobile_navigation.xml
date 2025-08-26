@@ -76,6 +76,10 @@
         android:name="com.example.kepler201.activities.ActivityVentasXlinea"
         android:label="ActivityVentasXlinea"
         tools:layout="@layout/activity_ventas_linea"/>
+    <activity
+        android:id="@+id/activityConsultaDocumentosElectronicos"
+        android:name="com.example.kepler201.activities.Consultas.ActivityConsultaDocumentosEletronicos"
+        android:label="ActivityConsultaDocumentosEletronicos" />
 
 
 </navigation>

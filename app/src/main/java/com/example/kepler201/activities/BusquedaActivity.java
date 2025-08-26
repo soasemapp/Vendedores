@@ -145,7 +145,7 @@ public class BusquedaActivity extends AppCompatActivity {
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
                 break;
-            case "guvi.ath.cx:9085":
+            case "guvi.ath.cx:9080":
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "cedistabasco.ddns.net:9085":
@@ -166,7 +166,7 @@ public class BusquedaActivity extends AppCompatActivity {
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "vazquin.ath.cx:9085":
-                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
             default:
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
@@ -1016,10 +1016,7 @@ public class BusquedaActivity extends AppCompatActivity {
                             Producto = Numero.getString("Producto");
                             Descripcion = Numero.getString("Descripcion");
                             Linea = Numero.getString("Linea");
-                            if(StrServer.equals("jacve.dyndns.org:9085")) {
-                                TipoFotos = Numero.getString("TipoFotos");
-                                LineaFotos = Numero.getString("LineaFotos");
-                            }
+
                             Precio = Numero.getJSONObject("precio_base");
                             precio_base = Precio.getString("valor").equals("") ? "0" : Precio.getString("valor");
                             Precio = Numero.getJSONObject("precio_ajuste");

@@ -48,7 +48,7 @@ public class ActivityBackOrders extends AppCompatActivity {
 
     String FechaIncial, FechaFinal;
     private Spinner spinerClie;
-    ImageView ConsultaFacturas, BackOreders, FacturasVencidas, Cliente0Ventas;
+    ImageView ConsultaFacturas,DocEletronicos, BackOreders, FacturasVencidas, Cliente0Ventas;
     private EditText fechaEn, fechaSa;
     private TableLayout tableLayout;
     TextView txtClave, txtFecha, txtClaveDelProducto, getTxtDescP, txtBackOrder, txtFolio, Existencia;
@@ -104,7 +104,6 @@ public class ActivityBackOrders extends AppCompatActivity {
         FacturasVencidas = findViewById(R.id.FacturasVencidas);
         Cliente0Ventas = findViewById(R.id.Cliente0Ventas);
         CheckExistencia =findViewById(R.id.CheckExistencia);
-
 
 
 
@@ -375,6 +374,7 @@ public class ActivityBackOrders extends AppCompatActivity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                mDialog.show();
 
             }//onPreExecute
 

@@ -5,10 +5,10 @@ android {
 
     defaultConfig {
         applicationId "com.example.kepler201"
-        minSdkVersion 26
+        minSdkVersion 21
         targetSdkVersion 33
-        versionCode 1
-        versionName "2.10"
+        versionCode 3
+        versionName "@string/version"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
          multiDexEnabled true

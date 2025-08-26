@@ -25,6 +25,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import dmax.dialog.SpotsDialog;
+
 public class ActivityPerfil extends AppCompatActivity {
 
 
@@ -32,7 +34,7 @@ public class ActivityPerfil extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private SharedPreferences preference;
     Button sucursal;
-
+    AlertDialog mDialog;
     //TextView
     ArrayList<SucursalSANDG> listasucursal = new ArrayList<>();
     String strusr="", strpass="", strname="", strlname="", strtype="", strtype2="", strma="", strco="", strcodBra="",strbran="",strcodBra2="",strbran2="", StrServer="";
@@ -43,7 +45,8 @@ String cambiarsucursal;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
         MyToolbar.show(this, "Perfil", true);
-
+        mDialog = new SpotsDialog(ActivityPerfil.this);
+        mDialog.setCancelable(false);
         TextView usr = findViewById(R.id.txtusr);
         TextView password =  findViewById(R.id.txtpass);
         TextView name =  findViewById(R.id.txtname);
@@ -141,7 +144,7 @@ String cambiarsucursal;
                         .centerInside()
                         .into(imgEmpresa);
                 break;
-            case "guvi.ath.cx:9085":
+            case "guvi.ath.cx:9080":
                 Picasso.with(getApplicationContext()).load(R.drawable.guvi)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
@@ -220,6 +223,7 @@ if(cambiarsucursal.equals("1")) {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            mDialog.show();
         }//onPreExecute
 
         @Override
@@ -292,7 +296,7 @@ if(cambiarsucursal.equals("1")) {
         @Override
         protected void onPostExecute(Void aBoolean) {
             super.onPostExecute(aBoolean);
-
+mDialog.dismiss();
 
         }//onPost
 

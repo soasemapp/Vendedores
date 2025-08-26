@@ -100,7 +100,7 @@ public class locateActivity extends AppCompatActivity {
         ButtonDireccion.setEnabled(false);
         AsyncClientes task = new AsyncClientes();
         task.execute();
-        String[] btn_Opcion = {"Mi Localizacion", "Cambiar Localizacion", "Localizacion Cliente", "Trazar Ruta"};
+        String[] btn_Opcion = {"Mi Localizacion", "Localizacion Cliente", "Trazar Ruta"};
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, btn_Opcion);
@@ -149,7 +149,7 @@ public class locateActivity extends AppCompatActivity {
                     startActivity(vendedoresMaps);
 
 
-                } else if (i == 1) {
+                } /*else if (i == 1) {
 
                     String NombreCliente = listaclientG.get(positionClient).getNombreCliente();
                     String claveCliente = listaclientG.get(positionClient).getUserCliente();
@@ -170,7 +170,7 @@ public class locateActivity extends AppCompatActivity {
                     vendedoresMaps.putExtra("DirLongitud", DirLongitud);
 
                     startActivity(vendedoresMaps);
-                } else if (i == 2) {
+                }*/ else if (i == 1) {
 
                     String NombreCliente = listaclientG.get(positionClient).getNombreCliente();
                     String claveCliente = listaclientG.get(positionClient).getUserCliente();
@@ -208,7 +208,7 @@ public class locateActivity extends AppCompatActivity {
                     }
 
 
-                } else if (i == 3) {
+                } else if (i == 2) {
 
 
                     String NombreCliente = listaclientG.get(positionClient).getNombreCliente();

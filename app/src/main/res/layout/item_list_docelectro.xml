@@ -29,12 +29,12 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/Clave"
+                        android:id="@+id/FOLIO"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
                         android:layout_marginTop="5dp"
-                        android:text="@string/cliente"
+                        android:text="FOLIO"
                         android:textColor="#F32121"
                         android:textSize="30sp"
                         android:textStyle="bold" />
@@ -42,6 +42,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
                         android:background="@color/PrimaryColor" />
+                    <TextView
+                        android:id="@+id/CLAVECLIEN"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:textStyle="bold"
+                        android:text="CLAVE CLIENTE"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/NomCliente"
@@ -53,15 +62,7 @@
                         android:textStyle="bold"
                         android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/Folio"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:textStyle="bold"
-                        android:text="@string/folio_de_factura"
-                        android:textSize="15sp" />
+
 <!--
                     <TextView
                         android:id="@+id/Fecha"
@@ -81,6 +82,15 @@
                         android:layout_marginStart="5dp"
                         android:layout_marginBottom="5dp"
                         android:text="@string/plazo"
+                        android:textSize="15sp" />
+                    <TextView
+                        android:id="@+id/FechaFactura"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:text="Fecha Factura"
                         android:textSize="15sp" />
 
                     <TextView
@@ -112,6 +122,15 @@
                         android:layout_marginBottom="5dp"
                         android:text="@string/saldo"
                         android:textSize="15sp" />
+                    <TextView
+                        android:id="@+id/UUID"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:text="UUID"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/Sucursal"
@@ -136,34 +155,21 @@
                 android:layout_height="wrap_content"
                 >
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="VER FACTURA"
+                    android:layout_margin="5dp"
+                    android:text="VER DOCUMENTO"
                     android:textColor="@color/white"
                     android:background="@drawable/roundbutton"
                     android:backgroundTint="@color/PrimaryColor"
                     android:layout_marginStart="10dp"
                     android:layout_gravity=""
                     android:textSize="14sp"
-                    android:onClick="verfactura"
+                    android:onClick="verfacturaspdfxml"
                     tools:ignore="RtlHardcoded" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="VER DETALLES"
-                    android:textColor="@color/white"
-                    android:background="@drawable/roundbutton"
-                    android:backgroundTint="@color/cardview_dark_background"
-                    android:layout_marginStart="110dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_gravity="right"
 
-                    android:textSize="14sp"
-                    android:onClick="detalleFactura"
-                    tools:ignore="RtlHardcoded" />
             </LinearLayout>
 
             <View

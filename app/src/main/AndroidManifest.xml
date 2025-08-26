@@ -12,6 +12,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
 
     <application
         android:allowBackup="true"
@@ -22,6 +26,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.kepler201.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <activity
             android:name=".activities.Pagos.RegitrodepagosActivity"
             android:exported="false"
@@ -166,6 +181,12 @@
             android:configChanges="screenSize|orientation"
             android:parentActivityName=".activities.inicioActivity"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".activities.Consultas.ActivityConsultaDocumentosEletronicos"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.inicioActivity"
+            android:screenOrientation="portrait" />
+
 
 
 

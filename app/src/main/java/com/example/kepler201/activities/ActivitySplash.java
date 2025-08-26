@@ -58,7 +58,7 @@ public class ActivitySplash extends AppCompatActivity {
                         .into(imgVi);
 
                 break;
-            case "guvi.ath.cx:9085":
+            case "guvi.ath.cx:9080":
 
                 Picasso.with(getApplicationContext()).
                         load(R.drawable.guvi)

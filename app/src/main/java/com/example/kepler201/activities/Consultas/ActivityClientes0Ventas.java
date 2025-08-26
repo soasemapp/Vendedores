@@ -37,7 +37,7 @@ import dmax.dialog.SpotsDialog;
 
 public class ActivityClientes0Ventas extends AppCompatActivity {
 
-    ImageView ConsultaFacturas, BackOreders, FacturasVencidas, Cliente0Ventas;
+    ImageView ConsultaFacturas,DocEletronicos, BackOreders, FacturasVencidas, Cliente0Ventas;
     private EditText eddias;
 
     ArrayList<BusquedaCliente0VentasSANDG> listasearch = new ArrayList<>();
@@ -82,6 +82,8 @@ public class ActivityClientes0Ventas extends AppCompatActivity {
 
 
         eddias.setText("45");
+
+
 
 
         ConsultaFacturas.setOnClickListener(new View.OnClickListener() {

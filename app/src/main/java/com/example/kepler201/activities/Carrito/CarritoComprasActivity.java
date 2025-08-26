@@ -243,7 +243,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
                 break;
-            case "guvi.ath.cx:9085":
+            case "guvi.ath.cx:9080":
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "cedistabasco.ddns.net:9085":
@@ -263,8 +263,8 @@ public class CarritoComprasActivity extends AppCompatActivity {
             case "bpr.ath.cx:9095":
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
                 break;
-            case "http://vazquin.ath.cx:9085":
-                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+            case "vazquin.ath.cx:9085":
+                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
 
             default:
@@ -467,12 +467,14 @@ ButtonAdd.setEnabled(false);
 
         if (!preferenceClie.contains("CodeClien")) {
             Listaclientes();
+        }else{
+
+            Validacion();
+            Consulta();
+            Montototal();
         }
 
 
-        Validacion();
-        Consulta();
-        Montototal();
 
         Calendar c = Calendar.getInstance();
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateformatActually = new SimpleDateFormat("yyyy-MM-dd");
@@ -1192,7 +1194,10 @@ ButtonAdd.setEnabled(false);
         @Override
         protected void onPostExecute(Void aBoolean) {
             super.onPostExecute(aBoolean);
-            mDialog.dismiss();
+
+            Validacion();
+            Consulta();
+            Montototal();
         }//onPost
     }
 
@@ -1677,6 +1682,7 @@ ButtonAdd.setEnabled(false);
         txtSubtotal2.setText(Html.fromHtml("SubTotal:<font color=#000000>$</font><font color=#000000>" + formatNumberCurrency(SubtotalStr) + "</font>"));
         txtiva.setText(Html.fromHtml("Iva:<font color=#000000>$</font><font color=#000000>" + formatNumberCurrency(ivstr) + "</font>"));
         txtMontototal.setText(Html.fromHtml("Total:<font color=#000000>$</font><font color=#FF0000>" + formatNumberCurrency(MontoStr) + "</font>"));
+        mDialog.dismiss();
 
     }
 
@@ -2443,7 +2449,7 @@ ButtonAdd.setEnabled(false);
         }
         AdaptadorCarrito adapter = new AdaptadorCarrito(listaCarShoping, Desc1, StrServer, context, Empresa);
         recyclerCarrtio.setAdapter(adapter);
-        mDialog.dismiss();
+
 
 
         db.close();

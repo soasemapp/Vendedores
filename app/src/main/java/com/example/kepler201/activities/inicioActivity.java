@@ -418,7 +418,7 @@ String mensaje;
                         .centerInside()
                         .into(imageViewdrawer);
                 break;
-            case "guvi.ath.cx:9085":
+            case "guvi.ath.cx:9080":
                 Empresa = strbran;
                 Picasso.with(getApplicationContext()).load(R.drawable.guvi)
                         .error(R.drawable.ic_baseline_error_24)

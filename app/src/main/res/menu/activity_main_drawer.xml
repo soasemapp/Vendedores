@@ -8,69 +8,87 @@
             android:id="@+id/activityPerfil"
             android:icon="@drawable/icon_user"
             android:iconTint="@null"
-            android:title="Perfil" />
+            android:title="Perfil"
+            />
 
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_baseline_home_24"
-            android:title="@string/menu_home" />
+            android:title="@string/menu_home"
+            android:iconTint="@null"/>
 
         <item
             android:id="@+id/busquedaActivity"
             android:icon="@drawable/ic_baseline_search_24"
-            android:title="Busqueda" />
+            android:title="Busqueda"
+            android:iconTint="@null"/>
 
         <item
             android:id="@+id/activityConsultaProductos"
             android:icon="@drawable/icon_existencia"
-            android:title="Consulta de existencias" />
+            android:title="Consulta de existencias"
+            android:iconTint="@null"/>
 
 
 
         <item
             android:id="@+id/listaPreciosActivity"
             android:icon="@drawable/list_precio"
-            android:title="Lista de precios" />
+            android:title="Lista de precios"
+            android:iconTint="@null"/>
 
 
         <item
             android:id="@+id/activityScreenFirst"
             android:icon="@drawable/ic_baseline_auto_graph_24"
-            android:title="Grafica de Ventas" />
+            android:title="Grafica de Ventas"
+            android:iconTint="@null"/>
 
         <item
             android:id="@+id/activity_ventas_linea"
             android:icon="@drawable/ic_ventas_tabla"
             android:title="Ventas por Linea"
+            android:iconTint="@null"
             />
 
 
         <item
             android:id="@+id/activityAgenda"
             android:icon="@drawable/ic_baseline_book_24"
-            android:title="Agenda" />
+            android:title="Agenda"
+            android:iconTint="@null"/>
 
         <item
             android:id="@+id/activityClientes0Ventas"
             android:title="@string/consultas"
             android:icon="@drawable/ic_baseline_menu_book_24"
+            android:iconTint="@null"
+            />
+        <item
+            android:id="@+id/activityConsultaDocumentosElectronicos"
+            android:title="E-DOCUMENTOS"
+            android:icon="@drawable/icon_documento"
+            android:iconTint="@null"
             />
         <item
             android:id="@+id/activityAltasPagos"
             android:title="@string/pagos"
             android:icon="@drawable/ic_baseline_attach_money_24"
+            android:iconTint="@null"
             />
 
         <item
             android:id="@+id/regitrodepagosActivity"
             android:title="@string/pagos"
             android:icon="@drawable/ic_baseline_attach_money_24"
+            android:iconTint="@null"
             />
 
         <item
             android:id="@+id/activityConsulCoti"
             android:title="@string/pedidos"
             android:icon="@drawable/ic_baseline_airport_shuttle_24"
+            android:iconTint="@null"
             />
 
 
@@ -79,6 +97,7 @@
             android:id="@+id/activityHistorial"
             android:title="@string/historial"
             android:icon="@drawable/icons8_historial"
+            android:iconTint="@null"
             />
 
 
@@ -87,6 +106,7 @@
             android:title="@string/mapa"
             android:iconTint="@null"
             android:icon="@drawable/icons8_marcador_de_mapa_100"
+
              />
 
 

@@ -13,8 +13,7 @@
         android:padding="8dp"
         android:gravity="center"
         android:orientation="horizontal">
-
-        <LinearLayout
+               <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -118,6 +117,7 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
 
 
     </LinearLayout>

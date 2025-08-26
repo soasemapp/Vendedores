@@ -173,7 +173,7 @@ TextView txtcompras;
             case "cecra.ath.cx:9085":
                 Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
                 break;
-            case "guvi.ath.cx:9085":
+            case "guvi.ath.cx:9080":
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "cedistabasco.ddns.net:9085":
@@ -194,7 +194,7 @@ TextView txtcompras;
                 Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
                 break;
             case "vazquin.ath.cx:9085":
-                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
             default:
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
@@ -837,10 +837,6 @@ TextView txtcompras;
                     PrecioBase=(Precios.getString("precio_base").equals("") ? " " : Precios.getString("precio_base"));
                     Descripcion=(Precios.getString("Descripcion").equals("") ? " " : Precios.getString("Descripcion"));
                     Linea=(Precios.getString("Linea").equals("") ? " " : Precios.getString("Linea"));
-                    if(StrServer.equals("jacve.dyndns.org:9085")) {
-                        TipoFotos = (Precios.getString("TipoFotos").equals("") ? " " : Precios.getString("TipoFotos"));
-                        LineaFotos = (Precios.getString("LineaFotos").equals("") ? " " : Precios.getString("LineaFotos"));
-                    }
 
 
 
