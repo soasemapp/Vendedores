@@ -45,7 +45,7 @@ import java.util.HashMap;
 
 public class ActivityAgenda extends AppCompatActivity {
     private static final int REQUEST_LOCATION = 1;
-    private static final double RADIO_ACTIVACION = 15.0; // metros
+    private static final double RADIO_ACTIVACION = 25.0; // metros
 
 
     private RecyclerView recyclerAgenda;
