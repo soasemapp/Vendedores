@@ -211,9 +211,8 @@ public class ActivityAgenda extends AppCompatActivity {
         //adapter.actualizarProximidadClientes(proximidad);
     }
 
-    public void cargarUbicacionesCliente(int position) {
-        ClaveCliente = listaAgenda.get(position).getCliente();
-        listaUbicaciones.clear();
+    public void cargarUbicacionesCliente() {
+
         new DireccionesTask().execute();
     }
 
@@ -221,31 +220,35 @@ public class ActivityAgenda extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
-                HttpHandler sh = new HttpHandler();
-                String url = "http://" + StrServer + "/enviomapaapp?cliente=" + URLEncoder.encode(ClaveCliente, "UTF-8");
-                String jsonStr = sh.makeServiceCall(url, strusr, strpass);
 
-                if (jsonStr != null) {
-                    JSONObject json = new JSONObject(jsonStr);
-                    listaUbicaciones.clear();
+                for (int j = 0; j < listaAgenda.size(); j++) {
+                    ClaveCliente = listaAgenda.get(j).getCliente();
+                    HttpHandler sh = new HttpHandler();
+                    String url = "http://" + StrServer + "/enviomapaapp?cliente=" + URLEncoder.encode(ClaveCliente, "UTF-8");
+                    String jsonStr = sh.makeServiceCall(url, strusr, strpass);
 
-                    if (json.has("Dir")) {
-                        JSONObject jitems = json.getJSONObject("Dir");
-                        for (int i = 0; i < jitems.length(); i++) {
-                            String key = "" + i + "";
-                            if (jitems.has(key)) {
-                                JSONObject item = jitems.getJSONObject(key);
-                                listaUbicaciones.add(new Envio2SANDG(
-                                        ClaveCliente, // Usamos el ID del cliente
-                                        item.optString("k_direcciones", ""),
-                                        item.optString("k_latitud", "0"),
-                                        item.optString("k_longitud", "0")
-                                ));
+                    if (jsonStr != null) {
+                        JSONObject json = new JSONObject(jsonStr);
+
+                        if (json.has("Dir")) {
+                            JSONObject jitems = json.getJSONObject("Dir");
+                            for (int i = 0; i < jitems.length(); i++) {
+                                String key = "" + i + "";
+                                if (jitems.has(key)) {
+                                    JSONObject item = jitems.getJSONObject(key);
+                                    listaUbicaciones.add(new Envio2SANDG(
+                                            ClaveCliente, // Usamos el ID del cliente
+                                            item.optString("k_direcciones", ""),
+                                            item.optString("k_latitud", "0"),
+                                            item.optString("k_longitud", "0")
+                                    ));
+                                }
                             }
+
                         }
-                        return true;
                     }
                 }
+
             } catch (Exception e) {
                 Log.e("DireccionesTask", "Error: " + e.getMessage());
                 return false;
@@ -352,8 +355,11 @@ public class ActivityAgenda extends AppCompatActivity {
         protected void onPostExecute(Boolean success) {
             if (success && !listaAgenda.isEmpty()) {
                 adapter.notifyDataSetChanged();
+                listaUbicaciones.clear();
                 // Cargar ubicaciones del primer cliente automáticamente
-                cargarUbicacionesCliente(0);
+
+                    cargarUbicacionesCliente();
+
             }
         }
     }
