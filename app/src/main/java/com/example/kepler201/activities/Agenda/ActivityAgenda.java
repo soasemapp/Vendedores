@@ -45,7 +45,7 @@ import java.util.HashMap;
 
 public class ActivityAgenda extends AppCompatActivity {
     private static final int REQUEST_LOCATION = 1;
-    private static final double RADIO_ACTIVACION = 25.0; // metros
+    private static final double RADIO_ACTIVACION = 50.0; // metros
 
 
     private RecyclerView recyclerAgenda;
@@ -262,7 +262,12 @@ public class ActivityAgenda extends AppCompatActivity {
                 adapter.actualizarUbicaciones(listaUbicaciones);
 
                 if (listaUbicaciones.isEmpty()) {
-                    Toast.makeText(ActivityAgenda.this, "El cliente no tiene ubicaciones registradas.", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(ActivityAgenda.this, "El cliente no tiene ubicaciones registradas.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(
+                            ActivityAgenda.this,
+                            "El cliente " + ClaveCliente + " no tiene ubicaciones registradas.",
+                            Toast.LENGTH_LONG
+                    ).show();
                     return;
                 }
 
@@ -281,7 +286,12 @@ public class ActivityAgenda extends AppCompatActivity {
                 }
 
                 if (todasInvalidas) {
-                    Toast.makeText(ActivityAgenda.this, "El cliente no tiene ubicaciones válidas (latitud y longitud requeridas).", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(ActivityAgenda.this, "El cliente no tiene ubicaciones válidas (latitud y longitud requeridas).", Toast.LENGTH_LONG).show();
+                    Toast.makeText(
+                            ActivityAgenda.this,
+                            "El cliente " + ClaveCliente + " no tiene ubicaciones válidas (latitud y longitud requeridas).",
+                            Toast.LENGTH_LONG
+                    ).show();
                     return;
                 }
 

@@ -166,7 +166,7 @@ public class AdapterAgenda extends RecyclerView.Adapter<AdapterAgenda.ViewHolder
                     if (estaCerca) {
                         cambiarEstado(agenda.getCliente(), position, "EN PROCESO");
                     } else {
-                        Toast.makeText(context, "Debes estar a menos de 15 metros de una ubicación del cliente.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Debes estar a menos de 50 metros de una ubicación del cliente.", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(context, "No se pudo obtener ubicación actual", Toast.LENGTH_SHORT).show();
@@ -230,7 +230,7 @@ public class AdapterAgenda extends RecyclerView.Adapter<AdapterAgenda.ViewHolder
                         builder.setNegativeButton("No", null);
                         builder.show();
                     } else {
-                        Toast.makeText(context, "Debes estar a menos de 15 metros de una ubicación del cliente para finalizar la visita.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Debes estar a menos de 50 metros de una ubicación del cliente para finalizar la visita.", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(context, "No se pudo obtener ubicación actual", Toast.LENGTH_SHORT).show();
