@@ -210,6 +210,14 @@ String cambiarsucursal;
                         .into(imgEmpresa);
 
                 break;
+            case "pesbac.ath.cx:9095":
+                Picasso.with(getApplicationContext()).load(R.drawable.pesbacdark)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+
+                break;
         }
 if(cambiarsucursal.equals("1")) {
     sucursal.setEnabled(true);

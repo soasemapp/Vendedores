@@ -130,6 +130,15 @@ public class ActivitySplash extends AppCompatActivity {
                         .into(imgVi);
 
                 break;
+            case "pesbac.ath.cx:9095":
+                Picasso.with(getApplicationContext()).
+                        load(R.drawable.pesbacdark)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgVi);
+
+                break;
 
             default:
                 Picasso.with(getApplicationContext()).

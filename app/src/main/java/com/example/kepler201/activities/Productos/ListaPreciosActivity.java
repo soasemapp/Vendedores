@@ -132,6 +132,10 @@ public class ListaPreciosActivity extends AppCompatActivity {
             case "vazquin.ath.cx:9085":
                 Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
                 break;
+            case "pesbac.ath.cx:9095":
+                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
+                break;
+
             default:
                 Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
                 break;

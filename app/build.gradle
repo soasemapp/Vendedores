@@ -7,7 +7,7 @@ android {
         applicationId "com.example.kepler201"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 3
+        versionCode 4
         versionName "@string/version"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -44,7 +44,7 @@ dependencies {
     implementation 'com.google.zxing:core:3.3.0'
     implementation files('libs\\com.android.volley-2015.05.28.jar')
     implementation 'com.github.bumptech.glide:glide:4.15.1'
-    implementation files('D:\\StudioProjects\\Vendedores Con Brayan\\app\\libs\\autoimageslider-1.4.0.aar')
+    implementation files('libs\\autoimageslider-1.4.0.aar')
 
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
     testImplementation 'junit:junit:4.13.2'

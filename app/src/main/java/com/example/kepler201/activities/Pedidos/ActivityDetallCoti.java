@@ -587,32 +587,38 @@ public class ActivityDetallCoti extends AppCompatActivity {
                                 pedidoButton.setEnabled(true);
                             }
                         } else {
-                            int posi = spinnerVia.getSelectedItemPosition();
-                            if (listasearch4.get(posi).getEntregadirecta().equals("1")) {
-                                ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
-                                task.execute();
-                            } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_enviogratis) && Integer.parseInt(listasearch4.get(posi).getMonto()) == 0 && listasearch4.get(posi).getPorcentaje().equals("0") && listasearch4.get(posi).getEntregadirecta().equals("0")) {
-                                ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
-                                task.execute();
-                            } else if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis)) {
-                                ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
-                                task.execute();
-                            } else {
-                                if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis) && Integer.parseInt(listasearch4.get(posi).getMonto()) == 0) {
-                                    AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
-                                    alerta1.setMessage("Deberias seleccionar  otra via de embarque diferente a esta").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            dialogInterface.cancel();
+                            if(confEnvio.equals("0") && !monto_porcentaje.equals("0") && !monto_enviogratis.equals("0")){
+                                int posi = spinnerVia.getSelectedItemPosition();
+                                if (listasearch4.get(posi).getEntregadirecta().equals("1")) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+                                } else if (Double.parseDouble(MontoStr) >= Double.parseDouble(monto_enviogratis) && Integer.parseInt(listasearch4.get(posi).getMonto()) == 0 && listasearch4.get(posi).getPorcentaje().equals("0") && listasearch4.get(posi).getEntregadirecta().equals("0")) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+                                } else if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis)) {
+                                    ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                    task.execute();
+                                } else {
+                                    if (Double.parseDouble(MontoStr) < Double.parseDouble(monto_enviogratis) && Integer.parseInt(listasearch4.get(posi).getMonto()) == 0) {
+                                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityDetallCoti.this);
+                                        alerta1.setMessage("Deberias seleccionar  otra via de embarque diferente a esta").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.cancel();
 
-                                        }
-                                    });
-                                    AlertDialog titulo1 = alerta1.create();
-                                    titulo1.setTitle("Selecciona otra via de embarque");
-                                    titulo1.show();
-                                    pedidoButton.setEnabled(true);
+                                            }
+                                        });
+                                        AlertDialog titulo1 = alerta1.create();
+                                        titulo1.setTitle("Selecciona otra via de embarque");
+                                        titulo1.show();
+                                        pedidoButton.setEnabled(true);
+                                    }
                                 }
+                            }else{
+                                ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
+                                task.execute();
                             }
+
                         }
                     } else {
                         ActivityDetallCoti.ValidaPedidoMexico task = new ActivityDetallCoti.ValidaPedidoMexico();
