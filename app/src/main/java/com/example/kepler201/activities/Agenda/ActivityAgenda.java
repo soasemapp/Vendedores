@@ -309,7 +309,7 @@ public class ActivityAgenda extends AppCompatActivity {
                             });
                 }
             } else {
-                Toast.makeText(ActivityAgenda.this, "Error al obtener las direcciones del cliente.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivityAgenda.this, "Error al obtener las direcciones del cliente"+ClaveCliente, Toast.LENGTH_SHORT).show();
             }
         }
 

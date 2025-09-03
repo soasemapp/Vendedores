@@ -157,7 +157,7 @@ public class AdapterAgenda extends RecyclerView.Adapter<AdapterAgenda.ViewHolder
                                 result
                         );
 
-                        if (result[0] <= 15.0) {
+                        if (result[0] <= 50.0) {
                             estaCerca = true;
                             break;
                         }
@@ -205,7 +205,7 @@ public class AdapterAgenda extends RecyclerView.Adapter<AdapterAgenda.ViewHolder
                                 result
                         );
 
-                        if (result[0] <= 15.0f) {
+                        if (result[0] <= 50.0f) {
                             estaCerca = true;
                             break;
                         }
