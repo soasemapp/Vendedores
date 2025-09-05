@@ -39,6 +39,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.kepler201.Adapter.AdapterDetalleCompras;
 import com.example.kepler201.Adapter.AdapterDetalleExistencia;
+import com.example.kepler201.Adapter.AdapterDetalleVentasyDev;
 import com.example.kepler201.ConexionSQLiteHelper;
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.AplicacionesSANDG;
@@ -48,6 +49,7 @@ import com.example.kepler201.SetterandGetter.CompraasSANDG;
 import com.example.kepler201.SetterandGetter.ConversionesSANDG;
 import com.example.kepler201.SetterandGetter.DisponibilidadSANDG;
 import com.example.kepler201.SetterandGetter.ImagenesSandG;
+import com.example.kepler201.SetterandGetter.VentasDevSANDG;
 import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
@@ -85,12 +87,13 @@ public class DetalladoProductosActivity extends AppCompatActivity {
     ArrayList<AplicacionesSANDG> Aplicaciones = new ArrayList<>();
     ArrayList<DisponibilidadSANDG> Existencias = new ArrayList<>();
     ArrayList<CompraasSANDG> Compras = new ArrayList<>();
+    ArrayList<VentasDevSANDG> VentasDev = new ArrayList<>();
 
     TextView Descripciontxt, ClaveProdcutotxt, Preciotxt,Lineatxt;
     String strClave = null;
     String strCantidad = "1";
     EditText Cantidad;
-    RecyclerView RecyclerProductos,RecyclerCompras;
+    RecyclerView RecyclerProductos,RecyclerCompras,RecyclerVentas;
     Context context = this;
     ImageView imageproducto;
     Button btnCarShoping;
@@ -135,6 +138,8 @@ public class DetalladoProductosActivity extends AppCompatActivity {
     String fechacompras;
     String cantidadcompras;
 TextView txtcompras;
+TextView txtVenDev;
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,8 +235,10 @@ TextView txtcompras;
             strClave = Producto;
         }
         txtcompras =findViewById(R.id.txtCompras);
+        txtVenDev =findViewById(R.id.txtVenDev);
         RecyclerProductos = findViewById(R.id.listExistencias);
         RecyclerCompras =findViewById(R.id.listCompras);
+        RecyclerVentas=findViewById(R.id.listVenDev);
         Descripciontxt = findViewById(R.id.Descr);
         Lineatxt = findViewById(R.id.Linea);
         ClaveProdcutotxt = findViewById(R.id.Clave);
@@ -269,6 +276,7 @@ TextView txtcompras;
         Aplicaciones = new ArrayList<>();
         RecyclerProductos.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         RecyclerCompras.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        RecyclerVentas.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         if (strClave == null && strCantidad == null) {
             ListProductosPrecios task = new ListProductosPrecios();
@@ -786,6 +794,12 @@ TextView txtcompras;
             String SucursalNom;
 
 
+            String SucursalVeDe;
+            String FolioVeDe;
+            String CantidadVeDe;
+            String FechaVeDe;
+            String TipoVeDe;
+
             HttpHandler sh = new HttpHandler();
             String parametros = "producto="+Producto+"&cliente="+Cliente;
             String url = "http://" + StrServer + "/aplicacionesapp?" + parametros;
@@ -831,6 +845,21 @@ TextView txtcompras;
                             SucursalNom=(Numero2json.getString("Nombre").equals("") ? " " : Numero2json.getString("Nombre"));
 
                             Compras.add(new CompraasSANDG(Folio, Fecha, Cantidad, Sucursal, SucursalNom));
+                        }
+                    }
+
+                    if(itemjson.has("VentaDev")){
+                        Comprasjson= itemjson .getJSONObject("VentaDev");
+                        for (int i = 0; i < Comprasjson.length(); i++) {
+                            Numero2json = Comprasjson.getJSONObject("" + i + "");
+
+                            SucursalVeDe=(Numero2json.getString("Sucursal").equals("") ? " " : Numero2json.getString("Sucursal"));
+                            FolioVeDe=(Numero2json.getString("Folio").equals("") ? " " : Numero2json.getString("Folio"));
+                            CantidadVeDe=(Numero2json.getString("Cantidad").equals("") ? " " : Numero2json.getString("Cantidad"));
+                            FechaVeDe=(Numero2json.getString("Fecha").equals("") ? " " : Numero2json.getString("Fecha"));
+                            TipoVeDe=(Numero2json.getString("Tipo").equals("") ? " " : Numero2json.getString("Tipo"));
+
+                            VentasDev.add(new VentasDevSANDG(SucursalVeDe, FolioVeDe, CantidadVeDe, FechaVeDe, TipoVeDe));
                         }
                     }
 
@@ -906,6 +935,16 @@ TextView txtcompras;
                 RecyclerCompras.setVisibility(View.GONE);
                 txtcompras .setVisibility(View.GONE);
             }
+
+
+            if (VentasDev.size()>0){
+                AdapterDetalleVentasyDev adapteven= new AdapterDetalleVentasyDev(VentasDev);
+                RecyclerVentas.setAdapter(adapteven);
+            }else {
+                RecyclerVentas.setVisibility(View.GONE);
+                txtVenDev .setVisibility(View.GONE);
+            }
+
 
             TableRow.LayoutParams layaoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
             TableRow.LayoutParams layaoutDes = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);

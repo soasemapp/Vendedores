@@ -260,6 +260,7 @@
                         app:boxCornerRadiusTopStart="10dp"
                         app:counterEnabled="true"
                         app:counterMaxLength="60"
+                        android:maxLength="60"
                         app:startIconDrawable="@drawable/icons_burbuja_de_di_logo_con_puntos"
                         app:startIconTint="@null">
 
@@ -295,6 +296,7 @@
                         app:boxCornerRadiusTopStart="10dp"
                         app:counterEnabled="true"
                         app:counterMaxLength="60"
+                        android:maxLength="60"
                         app:startIconDrawable="@drawable/icons_burbuja_de_di_logo_con_puntos"
                         app:startIconTint="@null">
 
@@ -329,6 +331,7 @@
                         app:boxCornerRadiusTopStart="10dp"
                         app:counterEnabled="true"
                         app:counterMaxLength="60"
+                        android:maxLength="60"
                         app:startIconDrawable="@drawable/icons_burbuja_de_di_logo_con_puntos"
                         app:startIconTint="@null">
 
