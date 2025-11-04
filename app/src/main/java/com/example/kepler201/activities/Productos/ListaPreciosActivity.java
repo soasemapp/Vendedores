@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -23,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kepler201.Adapter.AdapterListPrecio;
+import com.example.kepler201.ConexionSQLiteHelper;
 import com.example.kepler201.R;
 import com.example.kepler201.SetterandGetter.ListLineaSANDG;
 import com.example.kepler201.SetterandGetter.ListPrecSANDG;
@@ -32,7 +35,9 @@ import com.example.kepler201.activities.Carrito.CarritoComprasActivity;
 import com.example.kepler201.activities.DetalladoProductosActivity;
 import com.example.kepler201.includes.HttpHandler;
 import com.example.kepler201.includes.MyToolbar;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -56,15 +61,15 @@ public class ListaPreciosActivity extends AppCompatActivity {
     ArrayList<ListTypeSANDG> listaTipo = new ArrayList<>();
     ArrayList<listDipoSucuSANDG> listaExistencia = new ArrayList<>();
     ArrayList<ListPrecSANDG> listaLisPrec = new ArrayList<>();
-    Context context=this ;
+    Context context = this;
     String Productoadd;
     String Precioadd;
     String Existenciaadd;
     String Descripcionadd;
-    String Empresa="";
+    String Empresa = "";
     CheckBox linea;
     CheckBox tipo;
-
+    String extIm;
     int n = 2000;
     String[] search1 = new String[n];
 
@@ -90,61 +95,21 @@ public class ListaPreciosActivity extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+        Empresa = preference.getString("URL", "");
+        extIm = preference.getString("EXT", "");
 
-        recyclerPrecios =  findViewById(R.id.listprec);
-        SpinnerLinea =  findViewById(R.id.spinnerLinea);
-        SpinnerTipo =  findViewById(R.id.spinnerType);
-        btnSearch =  findViewById(R.id.btnSearch);
-        linea =  findViewById(R.id.checkLinea);
-        tipo =  findViewById(R.id.checkType);
+        recyclerPrecios = findViewById(R.id.listprec);
+        SpinnerLinea = findViewById(R.id.spinnerLinea);
+        SpinnerTipo = findViewById(R.id.spinnerType);
+        btnSearch = findViewById(R.id.btnSearch);
+        linea = findViewById(R.id.checkLinea);
+        tipo = findViewById(R.id.checkType);
 
 
-        switch (StrServer) {
-            case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "autodis.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "cecra.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "guvi.ath.cx:9080":
-                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "cedistabasco.ddns.net:9085":
-                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
-                break;
-            case "sprautomotive.servehttp.com:9090":
-            case "sprautomotive.servehttp.com:9095":
-            case "sprautomotive.servehttp.com:9080":
-                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
-                break;
-            case "vipla.ath.cx:9085":
-                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "vazlocolombia.dyndns.org:9085":
-                Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
-                break;
-            case "bpr.ath.cx:9095":
-                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "vazquin.ath.cx:9085":
-                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "pesbac.ath.cx:9095":
-                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
-                break;
-
-            default:
-                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
-                break;
-        }
-
-        SearchProducto =  findViewById(R.id.SearchProducto);
-        Existencia =  findViewById(R.id.Existencia);
-        ListaPrecios =  findViewById(R.id.ListaPrecios);
-        Conversiones =  findViewById(R.id.Conversiones);
+        SearchProducto = findViewById(R.id.SearchProducto);
+        Existencia = findViewById(R.id.Existencia);
+        ListaPrecios = findViewById(R.id.ListaPrecios);
+        Conversiones = findViewById(R.id.Conversiones);
 
         tipo.setChecked(false);
         SpinnerTipo.setEnabled(false);
@@ -183,51 +148,51 @@ public class ListaPreciosActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                listaLisPrec = new ArrayList<>();
+                recyclerPrecios.setLayoutManager(new LinearLayoutManager(ListaPreciosActivity.this));
+
+                for (int i = 0; i < search1.length; i++) {
+                    int posi = SpinnerLinea.getSelectedItemPosition();
+                    if (posi == i) {
+                        strLinea = search1[i];
+                        break;
+                    }
+                }
+
+
+                for (int i = 0; i < search2.length; i++) {
+                    int posi = SpinnerTipo.getSelectedItemPosition();
+                    if (posi == i) {
+                        strType = search2[i];
+                        break;
+                    }
+                }
+
+                if (SpinnerLinea.getSelectedItemPosition() == 0 && SpinnerTipo.getSelectedItemPosition() != 0 && tipo.isChecked()) {
                     listaLisPrec = new ArrayList<>();
                     recyclerPrecios.setLayoutManager(new LinearLayoutManager(ListaPreciosActivity.this));
+                    strLinea = "";
+                    ListaPreciosActivity.AsyncCallWS3 task3 = new ListaPreciosActivity.AsyncCallWS3();
+                    task3.execute();
 
-                    for (int i = 0; i < search1.length; i++) {
-                        int posi = SpinnerLinea.getSelectedItemPosition();
-                        if (posi == i) {
-                            strLinea = search1[i];
-                            break;
+                } else if (SpinnerLinea.getSelectedItemPosition() != 0 && SpinnerTipo.getSelectedItemPosition() == 0 && linea.isChecked()) {
+                    strType = "";
+                    ListaPreciosActivity.AsyncCallWS3 task3 = new ListaPreciosActivity.AsyncCallWS3();
+                    task3.execute();
+
+                } else if (SpinnerLinea.getSelectedItemPosition() == 0 && SpinnerTipo.getSelectedItemPosition() == 0) {
+                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPreciosActivity.this);
+                    alerta.setMessage("Selecciona una linea o tipo para realizar la busqueda ").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
                         }
-                    }
+                    });
 
-
-                    for (int i = 0; i < search2.length; i++) {
-                        int posi = SpinnerTipo.getSelectedItemPosition();
-                        if (posi == i) {
-                            strType = search2[i];
-                            break;
-                        }
-                    }
-
-                    if (SpinnerLinea.getSelectedItemPosition() == 0 && SpinnerTipo.getSelectedItemPosition() != 0 && tipo.isChecked()) {
-                        listaLisPrec = new ArrayList<>();
-                        recyclerPrecios.setLayoutManager(new LinearLayoutManager(ListaPreciosActivity.this));
-                        strLinea = "";
-                        ListaPreciosActivity.AsyncCallWS3 task3 = new ListaPreciosActivity.AsyncCallWS3();
-                        task3.execute();
-
-                    } else if (SpinnerLinea.getSelectedItemPosition() != 0 && SpinnerTipo.getSelectedItemPosition() == 0 && linea.isChecked()) {
-                        strType = "";
-                        ListaPreciosActivity.AsyncCallWS3 task3 = new ListaPreciosActivity.AsyncCallWS3();
-                        task3.execute();
-
-                    } else if (SpinnerLinea.getSelectedItemPosition() == 0 && SpinnerTipo.getSelectedItemPosition() == 0) {
-                        AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPreciosActivity.this);
-                        alerta.setMessage("Selecciona una linea o tipo para realizar la busqueda ").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-
-                        AlertDialog titulo = alerta.create();
-                        titulo.setTitle("¡ERROR DE BUSQUEDA!");
-                        titulo.show();
-                    }
+                    AlertDialog titulo = alerta.create();
+                    titulo.setTitle("¡ERROR DE BUSQUEDA!");
+                    titulo.show();
+                }
 
 
             }
@@ -310,7 +275,6 @@ public class ListaPreciosActivity extends AppCompatActivity {
     }
 
 
-
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
     private class AsyncCallWS extends AsyncTask<Void, Void, Void> {
@@ -335,7 +299,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
                         jitems = jsonObject.getJSONObject("item");
                         Numero = jitems.getJSONObject("" + i + "");
 
-                        if(!Numero.getString("k_Linea").equals("")) {
+                        if (!Numero.getString("k_Linea").equals("")) {
                             listaLinea.add(new ListLineaSANDG((Numero.getString("k_CodeLinea").equals("") ? "" : Numero.getString("k_CodeLinea")),
                                     (Numero.getString("k_Linea").equals("") ? "" : Numero.getString("k_Linea"))));
                         }
@@ -389,8 +353,6 @@ public class ListaPreciosActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
 
 
-
-
             String[] opciones = new String[listaLinea.size() + 1];
             opciones[0] = "--Todas las Lineas--";
             search1[0] = "--Todas las Lineas--";
@@ -432,10 +394,10 @@ public class ListaPreciosActivity extends AppCompatActivity {
                         jitems = jsonObject.getJSONObject("item");
                         Numero = jitems.getJSONObject("" + i + "");
 
-                        if(!Numero.getString("k_Type").equals("")){
+                        if (!Numero.getString("k_Type").equals("")) {
 
-                            listaTipo.add(new ListTypeSANDG((Numero.getString("k_CodeType").equals("")?"":Numero.getString("k_CodeType")),
-                                    (Numero.getString("k_Type").equals("")?"":Numero.getString("k_Type"))));
+                            listaTipo.add(new ListTypeSANDG((Numero.getString("k_CodeType").equals("") ? "" : Numero.getString("k_CodeType")),
+                                    (Numero.getString("k_Type").equals("") ? "" : Numero.getString("k_Type"))));
 
                         }
 
@@ -506,7 +468,6 @@ public class ListaPreciosActivity extends AppCompatActivity {
     }
 
 
-
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
     private class AsyncCallWS3 extends AsyncTask<Void, Void, Void> {
@@ -520,11 +481,11 @@ public class ListaPreciosActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
 
-            String parametros ;
-            if(linea.isChecked()){
-                parametros = "linea=" + strLinea+"&sucursal="+strcodBra;
-            }else{
-                parametros = "tipo="+strType+"&sucursal="+strcodBra;
+            String parametros;
+            if (linea.isChecked()) {
+                parametros = "linea=" + strLinea + "&sucursal=" + strcodBra;
+            } else {
+                parametros = "tipo=" + strType + "&sucursal=" + strcodBra;
             }
 
             String url = "http://" + StrServer + "/lisprecioapp?" + parametros;
@@ -543,8 +504,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
                                 (Numero.getString("k_NomPro").equals("") ? " " : Numero.getString("k_NomPro")),
                                 (Numero.getString("k_CodBarras").equals("") ? "S/N" : Numero.getString("k_CodBarras")),
                                 (Numero.getString("k_Existencia1").equals("") ? "" : Numero.getString("k_Existencia1")),
-                                (Numero.getString("k_Importe").equals("") ? " " : Numero.getString("k_Importe"))));
-
+                                (Numero.getString("k_Importe").equals("") ? " " : Numero.getString("k_Importe")),""));
 
 
                     }
@@ -594,62 +554,168 @@ public class ListaPreciosActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
 
-            AdapterListPrecio adapter = new AdapterListPrecio(listaLisPrec,context,Empresa);
-            recyclerPrecios.setAdapter(adapter);
-            mDialog.dismiss();
+            Imagenes task1 = new Imagenes();
+            task1.execute();
+
+
         }
 
 
     }
 
 
-    public void ListaPrecExiste (View view){
-        listaExistencia.clear();
-        int position = recyclerPrecios.getChildAdapterPosition(Objects.requireNonNull(recyclerPrecios.findContainingItemView(view)));
-        Productoadd = listaLisPrec.get(position).getCodeProdu();
-        ListaPreciosActivity.ListaPre task = new ListaPreciosActivity.ListaPre();
-        task.execute();
-    }
 
-    @SuppressWarnings("deprecation")
-    @SuppressLint("StaticFieldLeak")
-    private class ListaPre extends AsyncTask<Void, Void, Void> {
+
+    private class Imagenes extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
-            mDialog.show();
+
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            HttpHandler sh = new HttpHandler();
-            String parametros = "sucursal=" + strcodBra+"&producto="+Productoadd;
-            String url = "http://" + StrServer + "/disposucapp?" + parametros;
-            String jsonStr = sh.makeServiceCall(url, strusr, strpass);
-            if (jsonStr != null) {
-                try {
-                    JSONObject jitems, Numero, Clave, Nombre;
-                    JSONObject jsonObject = new JSONObject(jsonStr);
-                    jitems = jsonObject.getJSONObject("Item");
+            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")) {
+                for (int i = 0; i < listaLisPrec.size(); i++) {
 
-                    for (int i = 0; i < jitems.length(); i++) {
+                    String Producto = listaLisPrec.get(i).getCodeProdu();
+
+
+                    HttpHandler sh = new HttpHandler();
+                    String url = Empresa + Producto;
+                    String jsonStr = sh.makeServiceCall(url, "", "");
+                    jsonStr = jsonStr.replace("\\", "");
+                    if (jsonStr != null) {
+                        try {
+                            // Convertir el JSON a un array
+                            JSONArray jsonArray = new JSONArray(jsonStr);
+
+                            JSONObject objeto = jsonArray.getJSONObject(0);
+                            objeto.getString("principal");
+                            String url1 = objeto.getString("principal");
+                            listaLisPrec.get(i).setUrl(url1);
+
+
+                        } catch (final JSONException e) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AlertDialog.Builder alerta1 = new AlertDialog.Builder(ListaPreciosActivity.this);
+                                    alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.cancel();
+                                        }
+                                    });
+                                    AlertDialog titulo1 = alerta1.create();
+                                    titulo1.setTitle("Hubo un problema");
+                                    titulo1.show();
+
+                                }//run
+                            });
+                        }//catch JSON EXCEPTION
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder alerta1 = new AlertDialog.Builder(ListaPreciosActivity.this);
+                                alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+
+                                    }
+                                });
+                                AlertDialog titulo1 = alerta1.create();
+                                titulo1.setTitle("Hubo un problema");
+                                titulo1.show();
+
+                            }//run
+                        });//runUniTthread
+                    }//else
+
+
+                }
+            }
+            return null;
+
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.P)
+        @Override
+        protected void onPostExecute(Void result) {
+            AdapterListPrecio adapter = new AdapterListPrecio(listaLisPrec, context, Empresa);
+            recyclerPrecios.setAdapter(adapter);
+            mDialog.dismiss();
+
+        }
+    }
+
+        public void ListaPrecExiste(View view) {
+            listaExistencia.clear();
+            int position = recyclerPrecios.getChildAdapterPosition(Objects.requireNonNull(recyclerPrecios.findContainingItemView(view)));
+            Productoadd = listaLisPrec.get(position).getCodeProdu();
+            ListaPreciosActivity.ListaPre task = new ListaPreciosActivity.ListaPre();
+            task.execute();
+        }
+
+        @SuppressWarnings("deprecation")
+        @SuppressLint("StaticFieldLeak")
+        private class ListaPre extends AsyncTask<Void, Void, Void> {
+
+            @Override
+            protected void onPreExecute() {
+                mDialog.show();
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                HttpHandler sh = new HttpHandler();
+                String parametros = "sucursal=" + strcodBra + "&producto=" + Productoadd;
+                String url = "http://" + StrServer + "/disposucapp?" + parametros;
+                String jsonStr = sh.makeServiceCall(url, strusr, strpass);
+                if (jsonStr != null) {
+                    try {
+                        JSONObject jitems, Numero, Clave, Nombre;
+                        JSONObject jsonObject = new JSONObject(jsonStr);
                         jitems = jsonObject.getJSONObject("Item");
-                        Numero = jitems.getJSONObject("" + i + "");
 
-                        listaExistencia.add(new listDipoSucuSANDG(
-                                (Numero.getString("k_Clave").equals("")? " " : Numero.getString("k_Clave")),
-                                (Numero.getString("k_Nom").equals("")? " " : Numero.getString("k_Nom")),
-                                (Numero.getString("k_Disp").equals("")? " " : Numero.getString("k_Disp"))));
+                        for (int i = 0; i < jitems.length(); i++) {
+                            jitems = jsonObject.getJSONObject("Item");
+                            Numero = jitems.getJSONObject("" + i + "");
+
+                            listaExistencia.add(new listDipoSucuSANDG(
+                                    (Numero.getString("k_Clave").equals("") ? " " : Numero.getString("k_Clave")),
+                                    (Numero.getString("k_Nom").equals("") ? " " : Numero.getString("k_Nom")),
+                                    (Numero.getString("k_Disp").equals("") ? " " : Numero.getString("k_Disp"))));
 
 
+                        }
+                    } catch (final JSONException e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder alerta1 = new AlertDialog.Builder(ListaPreciosActivity.this);
+                                alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
 
-                    }
-                } catch (final JSONException e) {
+                                    }
+                                });
+                                AlertDialog titulo1 = alerta1.create();
+                                titulo1.setTitle("Hubo un problema");
+                                titulo1.show();
+
+                            }//run
+                        });
+                    }//catch JSON EXCEPTION
+                } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             AlertDialog.Builder alerta1 = new AlertDialog.Builder(ListaPreciosActivity.this);
-                            alerta1.setMessage("El Json tiene un problema").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     dialogInterface.cancel();
@@ -661,69 +727,50 @@ public class ListaPreciosActivity extends AppCompatActivity {
                             titulo1.show();
 
                         }//run
-                    });
-                }//catch JSON EXCEPTION
-            } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AlertDialog.Builder alerta1 = new AlertDialog.Builder(ListaPreciosActivity.this);
-                        alerta1.setMessage("Upss hubo un problema verifica tu conexion a internet").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-
-                            }
-                        });
-                        AlertDialog titulo1 = alerta1.create();
-                        titulo1.setTitle("Hubo un problema");
-                        titulo1.show();
-
-                    }//run
-                });//runUniTthread
-            }//else
-            return null;
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.P)
-        @Override
-        protected void onPostExecute(Void result) {
-            if (listaExistencia.size()>0){
-                StringBuilder mensaje= new StringBuilder();
-                for (int i = 0; i < listaExistencia.size(); i++) {
-                    mensaje.append(listaExistencia.get(i).getNombre()).append(" = ").append(listaExistencia.get(i).getDisponibilidad()).append(" PZA ").append("\n");
-                }
-
-                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPreciosActivity.this);
-                alerta.setMessage(mensaje.toString()).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
-
-                AlertDialog titulo = alerta.create();
-                titulo.setTitle("Producto:"+Productoadd);
-                titulo.show();
-
-            }else{
-                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPreciosActivity.this);
-                alerta.setMessage("No hay existencia para este producto").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
-
-                AlertDialog titulo = alerta.create();
-                titulo.setTitle("Error");
-                titulo.show();
+                    });//runUniTthread
+                }//else
+                return null;
             }
 
-            mDialog.dismiss();
+            @RequiresApi(api = Build.VERSION_CODES.P)
+            @Override
+            protected void onPostExecute(Void result) {
+                if (listaExistencia.size() > 0) {
+                    StringBuilder mensaje = new StringBuilder();
+                    for (int i = 0; i < listaExistencia.size(); i++) {
+                        mensaje.append(listaExistencia.get(i).getNombre()).append(" = ").append(listaExistencia.get(i).getDisponibilidad()).append(" PZA ").append("\n");
+                    }
+
+                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPreciosActivity.this);
+                    alerta.setMessage(mensaje.toString()).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+
+                    AlertDialog titulo = alerta.create();
+                    titulo.setTitle("Producto:" + Productoadd);
+                    titulo.show();
+
+                } else {
+                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPreciosActivity.this);
+                    alerta.setMessage("No hay existencia para este producto").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+
+                    AlertDialog titulo = alerta.create();
+                    titulo.setTitle("Error");
+                    titulo.show();
+                }
+
+                mDialog.dismiss();
+            }
+
+
         }
 
-
     }
-
-}

@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical"
 
-    tools:context=".activities.Consultas.ActivityConsultaFaturas">
+    tools:context=".activities.Consultas.ActivityConsultaDocumentosEletronicos">
 
     <include layout="@layout/action_bar_toolbar" />
 

@@ -7,13 +7,15 @@ public class ListPrecSANDG {
     String CodBarras;
     String Existencia1;
     String Importe;
+    String url;
 
-    public ListPrecSANDG(String codeProdu, String nomProd, String codBarras, String existencia1, String importe) {
+    public ListPrecSANDG(String codeProdu, String nomProd, String codBarras, String existencia1, String importe, String url) {
         CodeProdu = codeProdu;
         NomProd = nomProd;
         CodBarras = codBarras;
         Existencia1 = existencia1;
         Importe = importe;
+        this.url = url;
     }
 
     public String getCodeProdu() {
@@ -54,5 +56,13 @@ public class ListPrecSANDG {
 
     public void setImporte(String importe) {
         Importe = importe;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

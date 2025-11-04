@@ -1142,8 +1142,8 @@ public class RegitrodepagosActivity extends AppCompatActivity {
     private void RegistroPagos() {
         String SOAP_ACTION = "SoapAction1";
         String METHOD_NAME = "SoapAction1";
-        String NAMESPACE = "http://" + StrServer + "/libreria/";
-        String URL = "http://" + StrServer + "/libreria";
+        String NAMESPACE = "http://" + StrServer + "/libreriaapp/";
+        String URL = "http://" + StrServer + "/libreriaapp";
 
 
         try {

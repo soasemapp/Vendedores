@@ -87,6 +87,7 @@ public class HomeFragment extends Fragment {
     int dato = 0;
     ConexionSQLiteHelper conn;
     int datos;
+    String extIm;
 
     private String urlactualizar;
     private String version;
@@ -170,46 +171,12 @@ public class HomeFragment extends Fragment {
         strcodBra = preference.getString("codBra", "null");
         strco = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+        Empresa =preference.getString("URL","");
+        extIm =preference.getString("EXT","");
         ProductosNuevosStr = preference.getString("Productosnuevos", "0");
 
 
-        switch (StrServer) {
-            case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "autodis.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "cecra.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "guvi.ath.cx:9080":
-                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "cedistabasco.ddns.net:9085":
-                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
-                break;
-            case "sprautomotive.servehttp.com:9090":
-            case "sprautomotive.servehttp.com:9095":
-            case "sprautomotive.servehttp.com:9080":
-                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
-                break;
-            case "vipla.ath.cx:9085":
-                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "vazlocolombia.dyndns.org:9085":
-                Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
-                break;
-            case "bpr.ath.cx:9095":
-                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "vazquin.ath.cx:9085":
-                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
-                break;
-            default:
-                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
-                break;
-        }
+
 
         Cliente = preferenceClie.getString("CodeClien", "null");
         Nombre = preferenceClie.getString("NomClien", "null");
@@ -1168,7 +1135,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")) {
+            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")  ){
 
                 String Productos = "";
                 for (int i = 0; i < ListaProductosGeneral.size(); i++) {

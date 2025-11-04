@@ -45,17 +45,19 @@ public class AdaptadorProductosVazlo extends RecyclerView.Adapter<AdaptadorProdu
     @Override
     public void onBindViewHolder(ViewHolderProductosNuevos holder, int position) {
 
-        if(Empresa.equals("https://www.jacve.mx/tools/pictures-urlProductos?ids=") || Empresa.equals("https://www.guvi.mx/tools/pictures-urlProductos?ids=")||    Empresa .equals("https://www.cecra.mx/tools/pictures-urlProductos?ids=") || Empresa .equals("https://www.vipla.mx/tools/pictures-urlProductos?ids=")){
-            EmpresaAd = "";
-            EmpresaAd=listaproductos.get(position).getUrl();
-        }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
+
+        if (Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
             EmpresaAd="";
             EmpresaAd=Empresa+listaproductos.get(position).getClave()+"/4.webp";
 
+        }else if(Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/rodatech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/partech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/shark/")){
+            EmpresaAd="";
+            EmpresaAd=Empresa+listaproductos.get(position).getClave()+"/4.webp";
         }else {
             EmpresaAd = "";
-            EmpresaAd = Empresa + listaproductos.get(position).getClave() + ".jpg";
+            EmpresaAd=listaproductos.get(position).getUrl();
         }
+
 
 
 

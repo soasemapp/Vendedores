@@ -168,7 +168,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
     Context context = this;
 
     LinearLayout CliOcul;
-
+    String extIm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,23 +202,27 @@ public class CarritoComprasActivity extends AppCompatActivity {
         ButtonCliente = findViewById(R.id.btnClientes);
 
 
-        strusr = preference.getString("user", "null");
-        strpass = preference.getString("pass", "null");
-        strname = preference.getString("name", "null");
-        strlname = preference.getString("lname", "null");
-        strtype = preference.getString("type", "null");
-        strbran = preference.getString("branch", "null");
-        strma = preference.getString("email", "null");
-        strcodBra = preference.getString("codBra", "null");
-        strcode = preference.getString("code", "null");
-        StrServer = preference.getString("Server", "null");
+        strusr = preference.getString("user", "");
+        strpass = preference.getString("pass", "");
+        strname = preference.getString("name", "");
+        strlname = preference.getString("lname", "");
+        strtype = preference.getString("type", "");
+        strbran = preference.getString("branch", "");
+        strma = preference.getString("email", "");
+        strcodBra = preference.getString("codBra", "");
+        strcode = preference.getString("code", "");
+        StrServer = preference.getString("Server", "");
+        Empresa =preference.getString("URL","");
+        extIm =preference.getString("EXT","");
 
-        rfc = preferenceClie.getString("RFC", "null");
-        plazo = preferenceClie.getString("PLAZO", "null");
-        Calle = preferenceClie.getString("Calle", "null");
-        Colonia = preferenceClie.getString("Colonia", "null");
-        Poblacion = preferenceClie.getString("Poblacion", "null");
-        Via = preferenceClie.getString("Via", "null");
+
+
+        rfc = preferenceClie.getString("RFC", "");
+        plazo = preferenceClie.getString("PLAZO", "");
+        Calle = preferenceClie.getString("Calle", "");
+        Colonia = preferenceClie.getString("Colonia", "");
+        Poblacion = preferenceClie.getString("Poblacion", "");
+        Via = preferenceClie.getString("Via", "");
         DescPro = preferenceClie.getString("DescPro", "0");
         Desc1 = preferenceClie.getString("Desc1", "0");
         Comentario1 = preferenceClie.getString("Comentario1", "");
@@ -233,47 +237,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
 
 
 
-        switch (StrServer) {
-            case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "autodis.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "cecra.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "guvi.ath.cx:9080":
-                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "cedistabasco.ddns.net:9085":
-                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
-                break;
-            case "sprautomotive.servehttp.com:9090":
-            case "sprautomotive.servehttp.com:9095":
-            case "sprautomotive.servehttp.com:9080":
-                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
-                break;
-            case "vipla.ath.cx:9085":
-                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "vazlocolombia.dyndns.org:9085":
-                Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
-                break;
-            case "bpr.ath.cx:9095":
-                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "vazquin.ath.cx:9085":
-                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "pesbac.ath.cx:9095":
-                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
-                break;
 
-            default:
-                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
-                break;
-        }
 
         Cantidad123.setText("1");
 
@@ -2468,7 +2432,7 @@ ButtonAdd.setEnabled(false);
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080") ){
+            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")  ){
                 for (int i = 0; i < listaCarShoping2.size(); i++) {
 
                 String Producto = listaCarShoping2.get(i).getParte();

@@ -27,6 +27,7 @@ public class AdapterListPrecio extends RecyclerView.Adapter<AdapterListPrecio.Vi
     Context context;
     String Empresa="";
     String EmpresaNuevaa="";
+    String EmpresaAd="";
 
 
     public AdapterListPrecio(ArrayList<ListPrecSANDG> listaLisPrec, Context context,String empresa) {
@@ -59,6 +60,20 @@ public class AdapterListPrecio extends RecyclerView.Adapter<AdapterListPrecio.Vi
             Empresa=EmpresaNuevaa+listaLisPrec.get(position).getCodeProdu()+".jpg";
 
         }
+
+
+        if (Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
+            Empresa="";
+            Empresa=Empresa+listaLisPrec.get(position).getCodeProdu()+"/4.webp";
+
+        }else if(Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/rodatech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/partech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/shark/")){
+            Empresa="";
+            Empresa=Empresa+listaLisPrec.get(position).getCodeProdu()+"/4.webp";
+        }else {
+            Empresa = "";
+            Empresa=listaLisPrec.get(position).getUrl();
+        }
+
 
 
         Picasso.with(context).

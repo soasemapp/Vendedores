@@ -52,18 +52,18 @@ public class AdapterSearchProduct extends RecyclerView.Adapter<AdapterSearchProd
                 : (Double.parseDouble(listProductos.get(position).getPrecioAjuste()) == 0 ? Html.fromHtml("<font color = #E81414>No disponible</font>") : Html.fromHtml("<font color = #48E305>$" + formatNumberCurrency(listProductos.get(position).getPrecioAjuste()) + "</font>"))));
 
 
-
-        if(Empresa.equals("https://www.jacve.mx/tools/pictures-urlProductos?ids=") || Empresa.equals("https://www.guvi.mx/tools/pictures-urlProductos?ids=")||    Empresa .equals("https://www.cecra.mx/tools/pictures-urlProductos?ids=") || Empresa .equals("https://www.vipla.mx/tools/pictures-urlProductos?ids=")){
-            EmpresaNuevaa="";
-            EmpresaNuevaa=listProductos.get(position).getUrl();
-        }else  if (!EmpresaNuevaa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
+        if (Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
             EmpresaNuevaa="";
             EmpresaNuevaa=Empresa+listProductos.get(position).getProductos()+"/4.webp";
-        }else{
-            EmpresaNuevaa="";
-            EmpresaNuevaa=Empresa+listProductos.get(position).getProductos()+".jpg";
 
+        }else if(Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/rodatech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/partech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/shark/")){
+            EmpresaNuevaa="";
+            EmpresaNuevaa=Empresa+listProductos.get(position).getProductos()+"/4.webp";
+        }else {
+            EmpresaNuevaa = "";
+            EmpresaNuevaa=listProductos.get(position).getUrl();
         }
+
 
         if (!EmpresaNuevaa.equals("")) {
 

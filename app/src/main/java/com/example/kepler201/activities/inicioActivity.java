@@ -48,12 +48,12 @@ public class inicioActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor2;
 
 
-    String CONFIGURACION="";
+    String CONFIGURACION = "";
     String CONFIGURACION2;
 
     ConexionSQLiteHelper conn;
 
-String mensaje;
+    String mensaje;
 
     //TextView
     String strusr, strpass, strname, strlname, strtype, strbran, strma, strco, strcodBra, StrServer;
@@ -61,7 +61,12 @@ String mensaje;
     String Empresa;
 
 
+    String URL;
+    String extIm;
+
+
     private AlertDialog mDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,33 +90,125 @@ String mensaje;
         StrServer = preference.getString("Server", null);
 
 
+        switch (StrServer) {
+            case "jacve.dyndns.org:9085":
+                URL = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                break;
+            case "autodis.ath.cx:9085":
+                URL = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                break;
+            case "cecra.ath.cx:9085":
+                URL = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                break;
+            case "guvi.ath.cx:9080":
+                URL = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                break;
+            case "cedistabasco.ddns.net:9085":
+                URL = "https://www.pressa.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                break;
+            case "sprautomotive.servehttp.com:9090":
+                URL = getString(R.string.urlImagenesSPR) + "rodatech/";
+                extIm = getString(R.string.ext);
+                editor.putString("URL", URL);
+                editor.putString("EXT", extIm);
+                editor.commit();
+                break;
+            case "sprautomotive.servehttp.com:9095":
+                URL = getString(R.string.urlImagenesSPR) + "partech/";
+                extIm = getString(R.string.ext);
+                editor.putString("URL", URL);
+                editor.putString("EXT", extIm);
+                editor.commit();
+                break;
+            case "sprautomotive.servehttp.com:9080":
+                URL = getString(R.string.urlImagenesSPR) + "shark/";
+                extIm = getString(R.string.ext);
+                editor.putString("URL", URL);
+                editor.putString("EXT", extIm);
+                editor.commit();
+                break;
+            case "vipla.ath.cx:9085":
+                URL = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                break;
+            case "vazlocolombia.dyndns.org:9085":
+                URL = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                break;
+            case "bpr.ath.cx:9095":
+                URL = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                break;
+            case "vazquin.ath.cx:9085":
+                URL = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                break;
+            case "pesbac.ath.cx:9095":
+                URL = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                break;
+
+            default:
+                URL = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                break;
+        }
+
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.}
 
-            mAppBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_home, R.id.busquedaActivity,R.id.activityConsultaProductos, R.id.activityPerfil, R.id.activityAgenda, R.id.activityClientes0Ventas, R.id.activityAltasPagos,R.id.regitrodepagosActivity
-                    , R.id.activityConsulCoti,  R.id.activityHistorial,R.id.activityValdatipo,R.id.activityScreenFirst,R.id.listaPreciosActivity)
-                    .setDrawerLayout(drawer)
-                    .build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_home, R.id.busquedaActivity, R.id.activityConsultaProductos, R.id.activityPerfil, R.id.activityAgenda, R.id.activityClientes0Ventas, R.id.activityAltasPagos, R.id.regitrodepagosActivity
+                , R.id.activityConsulCoti, R.id.activityHistorial, R.id.activityValdatipo, R.id.activityScreenFirst, R.id.listaPreciosActivity)
+                .setDrawerLayout(drawer)
+                .build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-    hideItem();
+        hideItem();
 
     }
-    private void hideItem()
-    {
 
-        if(strtype.equals("ADMIN")){
+    private void hideItem() {
+
+        if (strtype.equals("ADMIN")) {
 
             navigationView = findViewById(R.id.nav_view);
             Menu nav_Menu = navigationView.getMenu();
             nav_Menu.findItem(R.id.activityValdatipo).setVisible(true);
-        }else{
+        } else {
             navigationView = findViewById(R.id.nav_view);
             Menu nav_Menu = navigationView.getMenu();
             nav_Menu.findItem(R.id.activityValdatipo).setVisible(false);
@@ -121,7 +218,6 @@ String mensaje;
         task.execute();
 
     }
-
 
 
     @SuppressWarnings("deprecation")
@@ -142,14 +238,14 @@ String mensaje;
                 try {
                     JSONObject jItem;
                     JSONObject jitems;
-                    String Repartidores="";
+                    String Repartidores = "";
                     JSONObject jsonObject = new JSONObject(jsonStr);
-                    if(jsonObject.length()!=0) {
+                    if (jsonObject.length() != 0) {
                         jItem = jsonObject.getJSONObject("Item");
                         for (int i = 0; i < jItem.length(); i++) {
                             jitems = jItem.getJSONObject("" + i);
                             CONFIGURACION = jitems.getString("RegistroPagos");
-                            CONFIGURACION2= jitems.getString("GraficaPresupuesto");
+                            CONFIGURACION2 = jitems.getString("GraficaPresupuesto");
                         }
                     }
                 } catch (final JSONException e) {
@@ -200,21 +296,20 @@ String mensaje;
             navigationView = findViewById(R.id.nav_view);
             Menu nav_Menu = navigationView.getMenu();
 
-
-            if(CONFIGURACION.equals("0")){
+            if (CONFIGURACION.equals("0")) {
 
                 nav_Menu.findItem(R.id.activityAltasPagos).setVisible(true);
                 nav_Menu.findItem(R.id.regitrodepagosActivity).setVisible(false);
-            }else{
+            } else {
 
                 nav_Menu.findItem(R.id.activityAltasPagos).setVisible(false);
                 nav_Menu.findItem(R.id.regitrodepagosActivity).setVisible(true);
             }
 
-            if(CONFIGURACION2.equals("0")){
-                nav_Menu.findItem(R.id.activity_ventas_linea).setVisible(true);
-                nav_Menu.findItem(R.id.activityScreenFirst).setVisible(false);
-            }else{
+            if (CONFIGURACION2.equals("0")) {
+                nav_Menu.findItem(R.id.activity_ventas_linea).setVisible(false);
+                nav_Menu.findItem(R.id.activityScreenFirst).setVisible(true);
+            } else {
                 nav_Menu.findItem(R.id.activity_ventas_linea).setVisible(true);
                 nav_Menu.findItem(R.id.activityScreenFirst).setVisible(false);
             }
@@ -223,8 +318,6 @@ String mensaje;
 
 
     }
-
-
 
 
     @Override
@@ -259,6 +352,7 @@ String mensaje;
                 MenuItem itemRod = menu.findItem(R.id.RodatechMenu);
                 MenuItem itemPartech = menu.findItem(R.id.PartechMenu);
                 MenuItem itemSharck = menu.findItem(R.id.SharkMenu);
+
                 itemRod.setVisible(false);
                 itemPartech.setVisible(true);
                 itemSharck.setVisible(true);
@@ -306,53 +400,52 @@ String mensaje;
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-            if (id == R.id.cerrarSe) {
-                editor.clear().commit();
-                editor2.clear().commit();
-                BorrarCarrito();
-                BorrarProductos();
-                Intent cerrar = new Intent(this, MainActivity.class);
-                startActivity(cerrar);
-                System.exit(0);
-                finish();
+        if (id == R.id.cerrarSe) {
+            editor.clear().commit();
+            editor2.clear().commit();
+            BorrarCarrito();
+            BorrarProductos();
+            Intent cerrar = new Intent(this, MainActivity.class);
+            startActivity(cerrar);
+            System.exit(0);
+            finish();
 
-            }else if (id == R.id.CarrComp){
-                Intent Shoping = new Intent(this, CarritoComprasActivity.class);
-                 startActivity(Shoping);
+        } else if (id == R.id.CarrComp) {
+            Intent Shoping = new Intent(this, CarritoComprasActivity.class);
+            startActivity(Shoping);
 
 
-            }else if (id == R.id.RodatechMenu){
-        StrServer = "sprautomotive.servehttp.com:9090";
-        editor.putString("Server", StrServer);
-        editor.commit();
-                BorrarCarrito();
-                BorrarProductos();
-        overridePendingTransition(0, 0);
-        startActivity(getIntent());
-        overridePendingTransition(0, 0);
-        finish();
-    }else if (id == R.id.PartechMenu){
-        StrServer = "sprautomotive.servehttp.com:9095";
-        editor.putString("Server", StrServer);
-        editor.commit();
-                BorrarCarrito();
-                BorrarProductos();
-        overridePendingTransition(0, 0);
-        startActivity(getIntent());
-        overridePendingTransition(0, 0);
-        finish();
-    }else if (id == R.id.SharkMenu){
-        StrServer = "sprautomotive.servehttp.com:9080";
-        editor.putString("Server", StrServer);
-        editor.commit();
-                BorrarCarrito();
-                BorrarProductos();
-        overridePendingTransition(0, 0);
-        startActivity(getIntent());
-        overridePendingTransition(0, 0);
-        finish();
-    }
-
+        } else if (id == R.id.RodatechMenu) {
+            StrServer = "sprautomotive.servehttp.com:9090";
+            editor.putString("Server", StrServer);
+            editor.commit();
+            BorrarCarrito();
+            BorrarProductos();
+            overridePendingTransition(0, 0);
+            startActivity(getIntent());
+            overridePendingTransition(0, 0);
+            finish();
+        } else if (id == R.id.PartechMenu) {
+            StrServer = "sprautomotive.servehttp.com:9095";
+            editor.putString("Server", StrServer);
+            editor.commit();
+            BorrarCarrito();
+            BorrarProductos();
+            overridePendingTransition(0, 0);
+            startActivity(getIntent());
+            overridePendingTransition(0, 0);
+            finish();
+        } else if (id == R.id.SharkMenu) {
+            StrServer = "sprautomotive.servehttp.com:9080";
+            editor.putString("Server", StrServer);
+            editor.commit();
+            BorrarCarrito();
+            BorrarProductos();
+            overridePendingTransition(0, 0);
+            startActivity(getIntent());
+            overridePendingTransition(0, 0);
+            finish();
+        }
 
 
         return super.onOptionsItemSelected(item);
@@ -366,6 +459,7 @@ String mensaje;
         db.execSQL("DELETE FROM sqlite_sequence WHERE name='carrito'");
         db.close();
     }
+
     private void BorrarProductos() {
         conn = new ConexionSQLiteHelper(inicioActivity.this, "bd_Carrito", null, 1);
         SQLiteDatabase db = conn.getReadableDatabase();
@@ -488,11 +582,6 @@ String mensaje;
         }
         tvEmpresa.setText(Empresa);
         tvNombre.setText(strname + " " + strlname);
-
-
-
-
-
 
 
     }

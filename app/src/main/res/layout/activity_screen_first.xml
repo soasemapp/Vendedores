@@ -60,6 +60,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+                    <ImageView
+                        android:id="@+id/imgEmpresa"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="5dp"
+                        android:src="@drawable/jacve"></ImageView>
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"
@@ -73,7 +79,7 @@
 
                             <com.github.mikephil.charting.charts.BarChart
                                 android:id="@+id/barChart"
-                                android:layout_width="600dp"
+                                android:layout_width="400dp"
                                 android:layout_height="300dp" />
 
 

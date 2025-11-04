@@ -119,7 +119,7 @@ public class ActivityConverciones extends AppCompatActivity {
     private List<String> imageUrls  = new ArrayList<>();
     Boolean animation=true;
     private AnimationDrawable Producto360;
-
+    String extIm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,49 +191,10 @@ public class ActivityConverciones extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+        Empresa =preference.getString("URL","");
+        extIm =preference.getString("EXT","");
 
 
-        switch (StrServer) {
-            case "jacve.dyndns.org:9085":
-                Empresa = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "autodis.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "cecra.ath.cx:9085":
-                Empresa = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "guvi.ath.cx:9080":
-                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "cedistabasco.ddns.net:9085":
-                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
-                break;
-            case "sprautomotive.servehttp.com:9090":
-            case "sprautomotive.servehttp.com:9095":
-            case "sprautomotive.servehttp.com:9080":
-                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
-                break;
-            case "vipla.ath.cx:9085":
-                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "vazlocolombia.dyndns.org:9085":
-                Empresa = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
-                break;
-            case "bpr.ath.cx:9095":
-                Empresa = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "vazquin.ath.cx:9085":
-                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
-                break;
-            case "pesbac.ath.cx:9095":
-                Empresa = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
-                break;
-
-            default:
-                Empresa = "https://www.pressa.mx/es-mx/img/products/xl/";
-                break;
-        }
         EmpresaEd=Empresa;
 
         btnCarShoping.setOnClickListener(new View.OnClickListener() {
@@ -709,7 +670,7 @@ if (jsonarray>0){
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("cedistabasco.ddns.net:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080") ){
+            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")  ){
 
                 HttpHandler sh = new HttpHandler();
 
@@ -800,15 +761,13 @@ if (jsonarray>0){
 
 //Muestra Imagen Principal
 
-
-                if(Empresa.equals("https://www.jacve.mx/tools/pictures-urlProductos?ids=") || Empresa.equals("https://www.guvi.mx/tools/pictures-urlProductos?ids=")||    Empresa .equals("https://www.cecra.mx/tools/pictures-urlProductos?ids=")|| Empresa .equals("https://www.vipla.mx/tools/pictures-urlProductos?ids=")){
-
-
-                }else  if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
+                if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
                     EmpresaFotos=Empresa+productoStr+"/4.webp";
-                }else{
-                    EmpresaFotos=Empresa+productoStr+".jpg";
 
+                }else if(!Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/rodatech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/partech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/shark/")){
+                    EmpresaFotos=Empresa+productoStr+"/4.webp";
+                }else {
+                    EmpresaFotos=Empresa+productoStr+".jpg";
                 }
 
                 if (!EmpresaFotos.equals("")) {

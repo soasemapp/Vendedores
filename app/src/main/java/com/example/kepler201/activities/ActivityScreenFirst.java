@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,9 +17,11 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowMetrics;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -38,6 +41,7 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,6 +85,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
     String mensaje = "";
     float EaglePor = 0;
     float VazloPor =0;
+    float VendidoPor = 0;
     float RodatechPor = 0;
     float PartechPor = 0;
     float SharkPor = 0;
@@ -96,6 +101,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
     float Kff=0;
     AlertDialog mDialog;
     String date;
+    ImageView imgEmpresa;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -119,6 +125,10 @@ public class ActivityScreenFirst extends AppCompatActivity {
         plusPorspect = findViewById(R.id.plusProspectos);
         Agen = findViewById(R.id.agendatabla);
         Prospect = findViewById(R.id.ProspectTarea);
+        imgEmpresa=findViewById(R.id.imgEmpresa);
+
+
+
 
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");
@@ -130,6 +140,109 @@ public class ActivityScreenFirst extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strco = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+
+        switch (StrServer) {
+            case "jacve.dyndns.org: ":
+                Picasso.with(getApplicationContext()).load(R.drawable.jacve)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+
+                break;
+            case "autodis.ath.cx:9085":
+
+                Picasso.with(getApplicationContext()).load(R.drawable.autodis)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+
+                break;
+            case "cecra.ath.cx:9085":
+                Picasso.with(getApplicationContext()).load(R.drawable.cecra)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+                break;
+            case "guvi.ath.cx:9080":
+                Picasso.with(getApplicationContext()).load(R.drawable.guvi)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+                break;
+            case "vipla.ath.cx:9085":
+                Picasso.with(getApplicationContext()).load(R.drawable.vipla)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+                break;
+            case "cedistabasco.ddns.net:9085":
+                Picasso.with(getApplicationContext()).load(R.drawable.pressa)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+                break;
+            case "sprautomotive.servehttp.com:9090":
+                Picasso.with(getApplicationContext()).load(R.drawable.rodatech)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+                break;
+            case "sprautomotive.servehttp.com:9095":
+                Picasso.with(getApplicationContext()).load(R.drawable.partech)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+                break;
+            case "sprautomotive.servehttp.com:9080":
+                Picasso.with(getApplicationContext()).load(R.drawable.shark)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+                break;
+            case "vazlocolombia.dyndns.org:9085":
+                Picasso.with(getApplicationContext()).load(R.drawable.colombia2)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+
+                break;
+            case "bpr.ath.cx:9095":
+                Picasso.with(getApplicationContext()).load(R.drawable.logobpr)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+
+                break;
+            case "vazquin.ath.cx:9085":
+                Picasso.with(getApplicationContext()).load(R.drawable.vazquinlogo)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+
+                break;
+            case "pesbac.ath.cx:9095":
+                Picasso.with(getApplicationContext()).load(R.drawable.pesbacdark)
+                        .error(R.drawable.ic_baseline_error_24)
+                        .fit()
+                        .centerInside()
+                        .into(imgEmpresa);
+
+                break;
+        }
+
 
 
         plusAgenda.setOnClickListener(new View.OnClickListener() {
@@ -284,11 +397,15 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         for (int i = 0; i < jitems.length(); i++) {
                             jitems = jsonObject.getJSONObject("Item");
                             Numero = jitems.getJSONObject("" + i + "");
+
+
+                            String pedidos=(Numero.getString("k_Pedido").equals("") ? " " : Numero.getString("k_Pedido"));
+
                             listaPresupuesto.add(new PresupuestoLineaSANDG((Numero.getString("k_Vendido").equals("") ? " " : Numero.getString("k_Vendido")),
                                     (Numero.getString("k_Linea").equals("") ? " " : Numero.getString("k_Linea")),
                                     (Numero.getString("k_Presupuesto").equals("") ? " " : Numero.getString("k_Presupuesto")),
                                     (Numero.getString("k_ProximidadRe").equals("") ? " " : Numero.getString("k_ProximidadRe")),
-                                    (Numero.getString("k_Lineaname").equals("") ? " " : Numero.getString("k_Lineaname"))));
+                                    (Numero.getString("k_Lineaname").equals("") ? " " : Numero.getString("k_Lineaname")),pedidos));
 
 
                         }
@@ -348,24 +465,44 @@ public class ActivityScreenFirst extends AppCompatActivity {
                     case "sprautomotive.servehttp.com:9075": {
 
                         float RodatechPresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
-
                         float RodatechVendido = Float.parseFloat(listaPresupuesto.get(0).getVendido());
 
-                        RodatechPor = (RodatechVendido * 100) / RodatechPresu;
+                        float pedido = Float.parseFloat(listaPresupuesto.get(0).getPedido());
 
+
+
+                        RodatechPor = (RodatechVendido * 100) / RodatechPresu;
+                        VendidoPor=(pedido*100)/RodatechPresu;
                         BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
-                        BarDataSet barDataSet1 = new BarDataSet(RodaGr(), "Rodatech");
+                        BarDataSet barDataSet2 = new BarDataSet(SPRVendido(VendidoPor), "Pedido");
+                        BarDataSet barDataSet1 = new BarDataSet(RodaGr(), "Facturado");
+
 
                         barDataSet0.setColor(Color.RED);
                         barDataSet1.setColor(Color.GREEN);
+                        barDataSet2.setColor(Color.BLUE);
 
                         BarData barData = new BarData();
                         barData.addDataSet(barDataSet0);
+                        barData.addDataSet(barDataSet2);
                         barData.addDataSet(barDataSet1);
+
+                        WindowMetrics metrics = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            metrics = getWindowManager().getCurrentWindowMetrics();
+                        }
+                        Rect bounds = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            bounds = metrics.getBounds();
+                        }
+
+                        int ancho = bounds.width();
+                        int alto = bounds.height();
+
 
 
                         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                                /*width*/ 1000,
+                                /*width*/ ancho,
                                 /*height*/ 1000
                         );
                         barChart.setLayoutParams(param);
@@ -377,25 +514,42 @@ public class ActivityScreenFirst extends AppCompatActivity {
                     case "sprautomotive.servehttp.com:9095": {
 
                         float PartechPresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
-
-
                         float PartechVendido = Float.parseFloat(listaPresupuesto.get(0).getVendido());
-
+                        float pedido = Float.parseFloat(listaPresupuesto.get(0).getPedido());
 
                         PartechPor = (PartechVendido * 100) / PartechPresu;
-
+                        VendidoPor=(pedido*100)/PartechPresu;
                         BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
-                        BarDataSet barDataSet1 = new BarDataSet(ParteGr(), "Partech");
+                        BarDataSet barDataSet2 = new BarDataSet(SPRVendido(VendidoPor), "Pedido");
+                        BarDataSet barDataSet1 = new BarDataSet(ParteGr(), "Facturado");
 
                         barDataSet0.setColor(Color.RED);
+                        barDataSet2.setColor(Color.BLUE);
                         barDataSet1.setColor(Color.YELLOW);
+
 
                         BarData barData = new BarData();
                         barData.addDataSet(barDataSet0);
+                        barData.addDataSet(barDataSet2);
                         barData.addDataSet(barDataSet1);
 
+
+                        WindowMetrics metrics = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            metrics = getWindowManager().getCurrentWindowMetrics();
+                        }
+                        Rect bounds = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            bounds = metrics.getBounds();
+                        }
+
+                        int ancho = bounds.width();
+                        int alto = bounds.height();
+
+
+
                         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                                /*width*/ 1000,
+                                /*width*/ ancho,
                                 /*height*/ 1000
                         );
                         barChart.setLayoutParams(param);
@@ -409,22 +563,43 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         float SharkPresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
 
                         float SharkVendido = Float.parseFloat(listaPresupuesto.get(0).getVendido());
-
+                        float pedido = Float.parseFloat(listaPresupuesto.get(0).getPedido());
 
                         SharkPor = (SharkVendido * 100) / SharkPresu;
+                        VendidoPor=(pedido*100)/SharkPresu;
 
                         BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
-                        BarDataSet barDataSet1 = new BarDataSet(SharkGr(), "SHARK");
+                        BarDataSet barDataSet2 = new BarDataSet(SPRVendido(VendidoPor), "Pedido");
+                        BarDataSet barDataSet1 = new BarDataSet(SharkGr(), "Facturado");
 
                         barDataSet0.setColor(Color.RED);
+                        barDataSet2.setColor(Color.BLUE);
                         barDataSet1.setColor(Color.CYAN);
 
                         BarData barData = new BarData();
                         barData.addDataSet(barDataSet0);
+                        barData.addDataSet(barDataSet2);
                         barData.addDataSet(barDataSet1);
 
+
+
+
+                        WindowMetrics metrics = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            metrics = getWindowManager().getCurrentWindowMetrics();
+                        }
+                        Rect bounds = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            bounds = metrics.getBounds();
+                        }
+
+                        int ancho = bounds.width();
+                        int alto = bounds.height();
+
+
+
                         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                                /*width*/ 1000,
+                                /*width*/ ancho,
                                 /*height*/ 1000
                         );
                         barChart.setLayoutParams(param);
@@ -543,6 +718,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         barChart.setData(barData);
                         barChart.setDrawGridBackground(false);
                         barChart.setDrawBarShadow(false);
+
                         barChart.animateY(2000);
 
                         barChart.invalidate();
@@ -940,22 +1116,29 @@ switch (StrServer){
     }
     private ArrayList<BarEntry> RodaGr() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(2, RodatechPor));
+        barEntries.add(new BarEntry(3, RodatechPor));
         return barEntries;
     }
 
     private ArrayList<BarEntry> ParteGr() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(2, PartechPor));
+        barEntries.add(new BarEntry(3, PartechPor));
         return barEntries;
     }
 
 
     private ArrayList<BarEntry> SharkGr() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(2, SharkPor));
+        barEntries.add(new BarEntry(3, SharkPor));
         return barEntries;
     }
+
+    private ArrayList<BarEntry> SPRVendido(float vendido) {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barEntries.add(new BarEntry(2, vendido));
+        return barEntries;
+    }
+
 
 
 
