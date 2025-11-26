@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     int Resultado = 0;
     String[] opciones1 = {""};
 
+    String PuertoOperativo,PuertoConsulta;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                                         .into(imgEmpresa);
                                 LinearJacve.setVisibility(View.VISIBLE);
                                 LinearTodos.setVisibility(View.GONE);
+
                                 Versiones task1 = new Versiones();
                                 task1.execute();
 
@@ -121,6 +124,9 @@ public class MainActivity extends AppCompatActivity {
                                 task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
+                                PuertoOperativo=getString(R.string.PuertoautodisOperativo);;
+                                PuertoConsulta=getString(R.string.PuertoautodisConsulta);
+
                             } else if (which == 1) {
                                 StrServer = "cecra.ath.cx:9085";
                                 Picasso.with(getApplicationContext()).
@@ -338,6 +344,8 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("codBra2", loginSave.getCodeBranch());
         editor.putString("branch2", loginSave.getBranch());
         editor.putString("Server", StrServer);
+        editor.putString("PuertoOperativo", PuertoOperativo);
+        editor.putString("PuertoConsulta",PuertoConsulta);
         editor.putString("type2", null);
         //editor.putString("tokenId",token);
         editor.commit();
