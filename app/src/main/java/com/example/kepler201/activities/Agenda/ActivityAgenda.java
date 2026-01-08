@@ -51,7 +51,7 @@ public class ActivityAgenda extends AppCompatActivity {
     private RecyclerView recyclerAgenda;
     private ArrayList<AgendaSANDG> listaAgenda = new ArrayList<>();
     private ArrayList<Envio2SANDG> listaUbicaciones = new ArrayList<>();
-    private String strusr, strpass, strcode, StrServer;
+    private String strusr, strpass, strcode, StrServer,PuertoOperativo,PuertoConsulta;
     private String ClaveCliente = "";
     private String StrFecha;
 
@@ -94,6 +94,10 @@ public class ActivityAgenda extends AppCompatActivity {
         strpass = preference.getString("pass", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+        PuertoOperativo = preference.getString("PuertoOperativo", "");
+        PuertoConsulta = preference.getString("PuertoConsulta", "");
+
+
     }
 
     private void initViews() {

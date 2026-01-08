@@ -238,18 +238,17 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
 
-
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnCotizar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|bottom"
-                        app:elevation="5dp"
                         android:layout_margin="7dp"
                         android:background="@drawable/roundbutton"
                         android:backgroundTint="@color/PrimaryColor"
                         android:text="@string/realizar_cotizacion"
-                        android:textColor="#FFFFFF" />
+                        android:textColor="#FFFFFF"
+                        app:elevation="5dp" />
 
                 </LinearLayout>
                 <View

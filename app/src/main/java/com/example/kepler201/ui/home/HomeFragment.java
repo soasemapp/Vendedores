@@ -309,8 +309,8 @@ public class HomeFragment extends Fragment {
                 break;
             case "vazlocolombia.dyndns.org:9085":
                 EagleOcultar.setVisibility(View.VISIBLE);
-                TrackOneOcultar.setVisibility(View.GONE);
-                RodatechOcultar.setVisibility(View.GONE);
+                TrackOneOcultar.setVisibility(View.VISIBLE);
+                RodatechOcultar.setVisibility(View.VISIBLE);
                 PartechOcultar.setVisibility(View.GONE);
                 SharkOcultar.setVisibility(View.GONE);
                 VazloOcultar.setVisibility(View.GONE);

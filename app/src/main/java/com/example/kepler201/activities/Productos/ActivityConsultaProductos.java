@@ -1436,13 +1436,13 @@ String Empresa;
 
 //Muestra Imagen Principal
 
-                if (!Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
-                    EmpresaFotos=Empresa+productoStr+"/4.webp";
+                if (Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
+                    EmpresaFotos=Empresa+productoStr+".jpg";
 
-                }else if(!Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/rodatech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/partech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/shark/")){
+                }else if(Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/rodatech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/partech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/shark/")){
                     EmpresaFotos=Empresa+productoStr+"/4.webp";
                 }else {
-                    EmpresaFotos=Empresa+productoStr+".jpg";
+                    EmpresaFotos=Empresa+productoStr+"/4.webp";
                 }
 
 

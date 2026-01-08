@@ -52,19 +52,12 @@ public class AdapterListPrecio extends RecyclerView.Adapter<AdapterListPrecio.Vi
         holder.CodBarras.setText(Html.fromHtml("Codigo de Barras: <br> <font color ='#000000'>" +listaLisPrec.get(position).getCodBarras()+"</font>"));
         holder.Importe.setText(Html.fromHtml("Importe: <br> <font color ='#000000'>$</font><font color ='#4CAF50'>" +formatNumberCurrency(listaLisPrec.get(position).getImporte())+"</font>"));
 
-        if (!EmpresaNuevaa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
-            Empresa="";
-            Empresa=EmpresaNuevaa+listaLisPrec.get(position).getCodeProdu()+"/4.webp";
-        }else{
-            Empresa="";
-            Empresa=EmpresaNuevaa+listaLisPrec.get(position).getCodeProdu()+".jpg";
 
-        }
 
 
         if (Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
             Empresa="";
-            Empresa=Empresa+listaLisPrec.get(position).getCodeProdu()+"/4.webp";
+            Empresa=Empresa+listaLisPrec.get(position).getCodeProdu()+".jpg";
 
         }else if(Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/rodatech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/partech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/shark/")){
             Empresa="";
