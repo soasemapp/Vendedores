@@ -137,7 +137,7 @@
     <string name="tipo">TIPO</string>
     <string name="email">E-MAIL</string>
     <string name="codigo_del_vendedor">Codigo del Vendedor</string>
-    <string name="version">2.10.15</string>
+    <string name="version">2.10.16</string>
     <string name="Empresa">cedis</string><!-- Si es Hazak poner "hazak" si son los cedis poner "cedis" -->
     <string name="bienvenido">Bienvenido</string>
     <string name="contrase_a">Contraseña</string>

@@ -221,6 +221,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
 
 
 
+
         rfc = preferenceClie.getString("RFC", "");
         plazo = preferenceClie.getString("PLAZO", "");
         Calle = preferenceClie.getString("Calle", "");

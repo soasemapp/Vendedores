@@ -107,6 +107,8 @@ public class ActivityAgendaRegister extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+        StrServer = preference.getString("Server", "null");
+        StrServer = preference.getString("Server", "null");
 
         ptoOp = preference.getString("PuertoOperativo", "");
         ptoCons = preference.getString("PuertoConsulta", "");

@@ -54,7 +54,7 @@ public class AdapterSearchProduct extends RecyclerView.Adapter<AdapterSearchProd
 
         if (Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
             EmpresaNuevaa="";
-            EmpresaNuevaa=Empresa+listProductos.get(position).getProductos()+"/4.webp";
+            EmpresaNuevaa=Empresa+listProductos.get(position).getProductos()+".jpg";
 
         }else if(Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/rodatech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/partech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/shark/")){
             EmpresaNuevaa="";
