@@ -140,6 +140,9 @@ public class DetalladoProductosActivity extends AppCompatActivity {
 TextView txtcompras;
 TextView txtVenDev;
     String extIm;
+    String ptoOp;
+    String ptoCons;
+
 
     @Override
 
@@ -166,6 +169,9 @@ TextView txtVenDev;
         StrServer = preference.getString("Server", "null");
         Empresa =preference.getString("URL","");
         extIm =preference.getString("EXT","");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
 
@@ -402,7 +408,7 @@ TextView txtVenDev;
 
                 HttpHandler sh = new HttpHandler();
                 String parametros = "cliente=" + Cliente + "&sucursal=" + strcodBra + "&producto=" + Producto;
-                String url = "http://" + StrServer + "/backorder?" + parametros;
+                String url = "http://" + StrServer+ptoCons + "/backorder?" + parametros;
                 String jsonStr = sh.makeServiceCall(url, strusr, strpass);
                 if (jsonStr != null) {
                     try {
@@ -501,7 +507,7 @@ TextView txtVenDev;
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "producto=" + Producto;
-            String url = "http://" + StrServer + "/conversionesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/conversionesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -655,7 +661,7 @@ TextView txtVenDev;
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "producto="+Producto+"&sucursal="+strcodBra;
-            String url = "http://" + StrServer + "/equivalenciaapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/equivalenciaapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -763,7 +769,7 @@ TextView txtVenDev;
 
             HttpHandler sh = new HttpHandler();
             String parametros = "producto="+Producto+"&cliente="+Cliente;
-            String url = "http://" + StrServer + "/aplicacionesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/aplicacionesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1075,7 +1081,7 @@ TextView txtVenDev;
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")  ){        HttpHandler sh = new HttpHandler();
+            if (!ptoOp.equals("vazlocolombia.dyndns.org:9085") && !ptoOp.equals("sprautomotive.servehttp.com:9090") && !ptoOp.equals("sprautomotive.servehttp.com:9095") && !ptoOp.equals("sprautomotive.servehttp.com:9080")  ){        HttpHandler sh = new HttpHandler();
 
                 String url = Empresa + Producto;
                 String jsonStr = sh.makeServiceCall(url, strusr, strpass);
@@ -1216,7 +1222,7 @@ if (!EmpresaFotos.equals("")){
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + Cliente+"&producto="+Producto+"&cantidad="+strCantidad+"&existencia=0&sucursal="+strcodBra;
-            String url = "http://" + StrServer + "/carritoapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/carritoapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

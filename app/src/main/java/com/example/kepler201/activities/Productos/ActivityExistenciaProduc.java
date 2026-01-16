@@ -74,6 +74,7 @@ public class ActivityExistenciaProduc extends AppCompatActivity {
 
     CheckBox linea;
     CheckBox Clasificacion;
+    String ptoCons,ptoOp;
 
 
     @Override
@@ -96,6 +97,9 @@ public class ActivityExistenciaProduc extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
         recyclerExisteClasiFic =  findViewById(R.id.listExiste);
         Spinnerclasifi =  findViewById(R.id.SpinnerClasi);
@@ -317,8 +321,8 @@ public class ActivityExistenciaProduc extends AppCompatActivity {
     private void conectar3() {
         String SOAP_ACTION = "ListLiPre";
         String METHOD_NAME = "ListLiPre";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
+        String NAMESPACE = "http://" + StrServer+ptoOp + "/WSk75Branch/";
+        String URL = "http://" + StrServer+ptoOp + "/WSk75Branch";
 
 
         try {
@@ -396,8 +400,8 @@ public class ActivityExistenciaProduc extends AppCompatActivity {
     private void conectar() {
         String SOAP_ACTION = "ListClasi";
         String METHOD_NAME = "ListClasi";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
+        String NAMESPACE = "http://" + StrServer+ptoOp + "/WSk75Branch/";
+        String URL = "http://" + StrServer+ptoOp + "/WSk75Branch";
 
 
         try {
@@ -532,8 +536,8 @@ public class ActivityExistenciaProduc extends AppCompatActivity {
     private void ExistenciaCla() {
         String SOAP_ACTION = "DispoSuc";
         String METHOD_NAME = "DispoSuc";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
+        String NAMESPACE = "http://" + StrServer+ptoOp + "/WSk75items/";
+        String URL = "http://" + StrServer+ptoOp + "/WSk75items";
 
 
         try {
@@ -580,8 +584,8 @@ public class ActivityExistenciaProduc extends AppCompatActivity {
 
         String SOAP_ACTION = "ExistClasif";
         String METHOD_NAME = "ExistClasif";
-        String NAMESPACE = "http://" + StrServer + "/WSk75Branch/";
-        String URL = "http://" + StrServer + "/WSk75Branch";
+        String NAMESPACE = "http://" + StrServer+ptoOp + "/WSk75Branch/";
+        String URL = "http://" + StrServer+ptoOp + "/WSk75Branch";
 
         try {
 

@@ -39,6 +39,9 @@ public class ActivityVentasXlinea extends AppCompatActivity {
     String strusr, strpass, strname, strlname, strtype, strbran, strma, StrServer, strcodBra, strcode;
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
+    String ptoOp;
+    String ptoCons;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,9 @@ public class ActivityVentasXlinea extends AppCompatActivity {
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
 
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
+
         Vendedi.setText(strname + " " + strlname);
 
         recyclerView = findViewById(R.id.recyclerView);
@@ -75,7 +81,7 @@ public class ActivityVentasXlinea extends AppCompatActivity {
         String fecha = FechaUtils.obtenerPrimerDiaDelMesActualFormatoWebService();
         String ano = FechaUtils.obtenerAnoActualFormatoWebService();
 
-        new ObtenerVentasTask().execute(vendedor, fecha, ano,StrServer);
+        new ObtenerVentasTask().execute(vendedor, fecha, ano,ptoOp);
     }
 
     private class ObtenerVentasTask extends AsyncTask<String, Void, List<VentaLinea>> {

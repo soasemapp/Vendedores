@@ -60,6 +60,8 @@ public class ActivityFacturasVencidas extends AppCompatActivity {
     String strusr = "", strpass = "", strname = "", strlname = "", strtype = "", strbran = "", strma = "", strco = "", strclien = "", strcodBra, StrServer = "";
     AlertDialog mDialog;
     String date;
+    String ptoOp, ptoCons;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +93,9 @@ public class ActivityFacturasVencidas extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strco = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
         Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
@@ -232,7 +237,7 @@ public class ActivityFacturasVencidas extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strco + "&cliente=" + strclien  + "&fecha=" + date ;
-            String url = "http://" + StrServer + "/facturasvencidasapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/facturasvencidasapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -475,7 +480,7 @@ public class ActivityFacturasVencidas extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strco;
-            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

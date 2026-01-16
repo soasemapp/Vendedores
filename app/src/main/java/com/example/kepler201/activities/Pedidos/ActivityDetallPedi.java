@@ -56,6 +56,8 @@ public class ActivityDetallPedi extends AppCompatActivity {
     String MontoStr;
     String Desc1;
     double IvaVariado = 0;
+    String ptoOp,ptoCons;
+
 
 
     @Override
@@ -82,6 +84,9 @@ public class ActivityDetallPedi extends AppCompatActivity {
         StrServer = preference.getString("Server", "null");
         ClaveFolDialog = getIntent().getStringExtra("Folio");
         ClaveNumDialog = getIntent().getStringExtra("NumSucu");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
         Folio = findViewById(R.id.txtFolio);
         Sucursal = findViewById(R.id.txtSucursal);
@@ -118,7 +123,7 @@ public class ActivityDetallPedi extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "sucursal="+strcodBra+"&folio="+ClaveFolDialog;
-            String url = "http://" + StrServer + "/pedidosdetallapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/pedidosdetallapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

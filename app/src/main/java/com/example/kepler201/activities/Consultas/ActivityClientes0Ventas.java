@@ -48,6 +48,7 @@ public class ActivityClientes0Ventas extends AppCompatActivity {
     String mensaje = "";
     String strusr, strpass, strname, strlname, strtype, strbran, strcodBra, strma, StrServer;
     AlertDialog mDialog;
+    String ptoOp, ptoCons;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -78,7 +79,8 @@ public class ActivityClientes0Ventas extends AppCompatActivity {
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
 
-
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
         eddias.setText("45");
@@ -176,7 +178,7 @@ public class ActivityClientes0Ventas extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor="+strcode+"&dias="+strdias;
-            String url = "http://" + StrServer + "/clientes0ventasapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/clientes0ventasapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -272,7 +274,7 @@ public class ActivityClientes0Ventas extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente="+ClaveDialog;
-            String url = "http://" + StrServer + "/clientes0ventasdetallapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/clientes0ventasdetallapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

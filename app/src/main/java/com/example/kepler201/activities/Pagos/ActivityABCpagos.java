@@ -80,6 +80,8 @@ public class ActivityABCpagos extends AppCompatActivity {
     int n1 = 2000;
     String[] search2 = new String[n1];
 
+    String ptoOp, ptoCons;
+
     String Strcodevendedor = "", strcodBra, Strcliente = "", Strdate = "", Strfacturas = "", Strimporte = "", StrBanco = "", StrForma = "", StrComentarios1 = "", StrComentarios2 = "", StrComentarios3 = "", StrServer = "";
 
     @SuppressLint("SetTextI18n")
@@ -119,6 +121,9 @@ public class ActivityABCpagos extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
         Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
@@ -306,7 +311,7 @@ public class ActivityABCpagos extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strcode;
-            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -401,7 +406,7 @@ public class ActivityABCpagos extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer + "/bancoapp";
+            String url = "http://" + StrServer+ptoCons + "/bancoapp";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -493,7 +498,7 @@ public class ActivityABCpagos extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "agente=" + strcode + "&clave=" + Strcliente + "&fecha=" + Strdate +"&importe=" + String.valueOf(Strimporte) + "&facturas=" + Strfacturas + "&banco=" + StrBanco + "&formapago=" + StrForma + "&comentario1=" + StrComentarios1 + "&comentario2=" + StrComentarios2 + "&comentario3=" + StrComentarios3;
-            String url = "http://" + StrServer + "/registropagoapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/registropagoapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -586,7 +591,7 @@ public class ActivityABCpagos extends AppCompatActivity {
 
             HttpHandler sh = new HttpHandler();
             String parametros = "agente=" + strcode;
-            String url = "http://" + StrServer + "/consultapagoapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/consultapagoapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -941,7 +946,7 @@ public class ActivityABCpagos extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "fecha="+fecha123+"&hora="+hora123+"&clave="+clave123;
-            String url = "http://" + StrServer + "/eliminarpagounoapp?"+parametros;
+            String url = "http://" + StrServer+ptoOp + "/eliminarpagounoapp?"+parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

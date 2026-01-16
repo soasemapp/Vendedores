@@ -102,6 +102,8 @@ public class ActivityScreenFirst extends AppCompatActivity {
     AlertDialog mDialog;
     String date;
     ImageView imgEmpresa;
+    String ptoOp;
+    String ptoCons;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -141,8 +143,11 @@ public class ActivityScreenFirst extends AppCompatActivity {
         strco = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
 
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
-        switch (StrServer) {
+
+        switch (StrServer+ptoOp) {
             case "jacve.dyndns.org: ":
                 Picasso.with(getApplicationContext()).load(R.drawable.jacve)
                         .error(R.drawable.ic_baseline_error_24)
@@ -381,7 +386,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "fecha=" + StrFecha + "&vendedor=" + strco + "&mes=" +  StrMes + "&ano=" + StrAño;
-            String url = "http://" + StrServer + "/graficaapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/graficaapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -460,7 +465,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             if (listaPresupuesto.size() != 0) {
 
-                switch (StrServer) {
+                switch (StrServer+ptoOp) {
                     case "sprautomotive.servehttp.com:9090":
                     case "sprautomotive.servehttp.com:9075": {
 
@@ -837,7 +842,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
 
             } else {
 
-switch (StrServer){
+switch (StrServer+ptoOp){
     case"jacve.dyndns.org:9085":
 
 
@@ -1156,7 +1161,7 @@ switch (StrServer){
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strco + "&fecha=" + StrFecha2;
-            String url = "http://" + StrServer + "/agendaapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/agendaapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1363,7 +1368,7 @@ switch (StrServer){
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strco + "&fecha=" + StrFecha2;
-            String url = "http://" + StrServer + "/prospectoapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/prospectoapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

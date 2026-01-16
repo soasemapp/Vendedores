@@ -49,6 +49,7 @@ public class ActivityBackOrdersAdd extends AppCompatActivity {
     Button ButtonCliente;
     private EditText fechaEn, fechaSa;
     String date,date2,FechaIncial,FechaFinal;
+    String ptoOp, ptoCons;
 
     ArrayList<BackordersADDSANDG> listaBackOrders = new ArrayList<>();
     @Override
@@ -74,6 +75,9 @@ public class ActivityBackOrdersAdd extends AppCompatActivity {
         fechaEn = findViewById(R.id.fechaendtrada);
         fechaSa = findViewById(R.id.fechasalida);
         Button btnsearch = findViewById(R.id.btnSearch);
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
         ButtonCliente.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,8 +203,8 @@ public class ActivityBackOrdersAdd extends AppCompatActivity {
     private void conectar() {
         String SOAP_ACTION = "SearchClient";
         String METHOD_NAME = "SearchClient";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
+        String NAMESPACE = "http://" + StrServer+ptoOp + "/WSk75items/";
+        String URL = "http://" + StrServer+ptoOp + "/WSk75items";
 
 
         try {
@@ -269,8 +273,8 @@ public class ActivityBackOrdersAdd extends AppCompatActivity {
     private void conecta2() {
         String SOAP_ACTION = "BackOrders";
         String METHOD_NAME = "BackOrders";
-        String NAMESPACE = "http://" + StrServer + "/WSk75items/";
-        String URL = "http://" + StrServer + "/WSk75items";
+        String NAMESPACE = "http://" + StrServer+ptoOp + "/WSk75items/";
+        String URL = "http://" + StrServer+ptoOp + "/WSk75items";
 
 
         try {

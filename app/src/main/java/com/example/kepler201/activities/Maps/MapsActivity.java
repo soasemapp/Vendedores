@@ -71,11 +71,14 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
     String mensaje = "";
     String Validacion;
     String DirLatitud, DirLongitud;
+    String ptoOp, ptoCons;
     TextView Vendedortxt, Clientetxt, Direcciontxt;
+
 
     private Context context = this;
     private List<LatLng> mPolylineList;
     private PolylineOptions mPolylineOptions;
+
 
 
     @Override
@@ -103,6 +106,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
         vald = getIntent().getIntExtra("val", 0);
         NombreCliente = getIntent().getStringExtra("NomCliente");
@@ -407,7 +413,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + ClaveCliente+"&direccion="+idDireccion+"&latitud="+String.valueOf(Latitud)+"&longitud="+String.valueOf(Longitud)+"&valcon=1";
-            String url = "http://" + StrServer + "/asigncordenadasapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/asigncordenadasapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

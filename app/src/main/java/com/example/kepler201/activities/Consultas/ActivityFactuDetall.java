@@ -40,6 +40,8 @@ public class ActivityFactuDetall extends AppCompatActivity {
     String ClaveNumDialog = "";
     String Cliente = "";
     String mensaje = "";
+    String ptoOp, ptoCons;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,9 @@ public class ActivityFactuDetall extends AppCompatActivity {
         ClaveNumDialog = getIntent().getStringExtra("NumSucu");
         Cliente = getIntent().getStringExtra("Cliente");
         MyToolbar.show(this, "Factura:" + ClaveFolDialog, true);
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
 
@@ -94,7 +99,7 @@ public class ActivityFactuDetall extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "folio=" + ClaveFolDialog + "&sucursal=" + ClaveNumDialog + "&cliente=" + Cliente;
-            String url = "http://" + StrServer + "/facturadetalladaapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/facturadetalladaapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

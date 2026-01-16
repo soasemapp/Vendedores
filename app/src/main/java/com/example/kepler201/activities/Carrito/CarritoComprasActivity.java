@@ -169,6 +169,7 @@ public class CarritoComprasActivity extends AppCompatActivity {
 
     LinearLayout CliOcul;
     String extIm;
+    String ptoOp,ptoCons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,6 +215,9 @@ public class CarritoComprasActivity extends AppCompatActivity {
         StrServer = preference.getString("Server", "");
         Empresa =preference.getString("URL","");
         extIm =preference.getString("EXT","");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
 
@@ -501,7 +505,7 @@ ButtonAdd.setEnabled(false);
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "producto="+productoStr+"&sucursal="+strcodBra;
-            String url = "http://" + StrServer + "/productoconsultaapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/productoconsultaapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -589,7 +593,7 @@ ButtonAdd.setEnabled(false);
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "producto="+ClaveProducto+"&sucursal="+strcodBra;
-            String url = "http://" + StrServer + "/equivalenciaapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/equivalenciaapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -867,7 +871,7 @@ ButtonAdd.setEnabled(false);
 
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + strscliente + "&sucursal=" + strcodBra + "&producto=" + productoStr;
-            String url = "http://" + StrServer + "/backorder?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/backorder?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -980,7 +984,7 @@ ButtonAdd.setEnabled(false);
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + strscliente2+"&producto="+strClave+"&cantidad="+strCantidad+"&existencia=0&sucursal="+strcodBra;
-            String url = "http://" + StrServer + "/carritoapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/carritoapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1097,7 +1101,7 @@ ButtonAdd.setEnabled(false);
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strcode;
-            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1248,15 +1252,15 @@ ButtonAdd.setEnabled(false);
     private void conectar1() {
         String SOAP_ACTION = "NewDoc";
         String METHOD_NAME = "NewDoc";
-        String NAMESPACE = "http://" + StrServer + "/WSk80Docs/";
-        String URL = "http://" + StrServer + "/WSk80Docs";
+        String NAMESPACE = "http://" + StrServer+ptoOp + "/WSk80Docs/";
+        String URL = "http://" + StrServer+ptoOp + "/WSk80Docs";
 
 
         try {
 
             SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
             xmlCarritoCompras soapEnvelope = new xmlCarritoCompras(SoapEnvelope.VER11);
-            soapEnvelope.xmlCarritoCompras(Comentario, strcode, Nombre, Cliente, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass, rfc, plazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, Calle, Colonia, Poblacion, listaCarShoping, StrServer, Clave, descuEagle, descuRodatech, descuPartec, descuShark, descuTrackone);
+            soapEnvelope.xmlCarritoCompras(Comentario, strcode, Nombre, Cliente, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass, rfc, plazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, Calle, Colonia, Poblacion, listaCarShoping, StrServer+ptoOp, Clave, descuEagle, descuRodatech, descuPartec, descuShark, descuTrackone);
             soapEnvelope.dotNet = true;
             soapEnvelope.implicitTypes = true;
             soapEnvelope.setOutputSoapObject(Request);
@@ -1365,15 +1369,15 @@ ButtonAdd.setEnabled(false);
     private void conectarColombia() {
         String SOAP_ACTION = "NewDoc";
         String METHOD_NAME = "NewDoc";
-        String NAMESPACE = "http://" + StrServer + "/WSk80Docs/";
-        String URL = "http://" + StrServer + "/WSk80Docs";
+        String NAMESPACE = "http://" + StrServer+ptoOp + "/WSk80Docs/";
+        String URL = "http://" + StrServer+ptoOp + "/WSk80Docs";
 
 
         try {
 
             SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
             xmlCarritoCompras2 soapEnvelope = new xmlCarritoCompras2(SoapEnvelope.VER11);
-            soapEnvelope.xmlCarritoCompras(Comentario, strcode, Nombre, Cliente, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass, rfc, plazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, Calle, Colonia, Poblacion, listaCarShoping, StrServer);
+            soapEnvelope.xmlCarritoCompras(Comentario, strcode, Nombre, Cliente, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass, rfc, plazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, Calle, Colonia, Poblacion, listaCarShoping, StrServer+ptoOp);
             soapEnvelope.dotNet = true;
             soapEnvelope.implicitTypes = true;
             soapEnvelope.setOutputSoapObject(Request);
@@ -1418,7 +1422,7 @@ ButtonAdd.setEnabled(false);
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + Cliente+"&monto="+MontoStr+"&vendedor="+strcode+"&descuento="+Desc1+"&subtotal="+SubdescuentoValida;
-            String url = "http://" + StrServer + "/validapedcol2app?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/validapedcol2app?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1492,7 +1496,7 @@ ButtonAdd.setEnabled(false);
 
                     mDialog.show();
 
-                    if (StrServer.equals("vazlocolombia.dyndns.org:9085")) {
+                    if (StrServer.equals(getString(R.string.strservervazlocolombia))) {
                         CarritoComprasActivity.CarritoColombia task4 = new CarritoComprasActivity.CarritoColombia();
                         task4.execute();
                     } else {
@@ -1524,7 +1528,7 @@ ButtonAdd.setEnabled(false);
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + Cliente+"&monto="+MontoStr+"&vendedor="+strcode;
-            String url = "http://" + StrServer + "/validapedmex2app?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/validapedmex2app?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1594,7 +1598,7 @@ ButtonAdd.setEnabled(false);
 
                     mDialog.show();
 
-                    if (StrServer.equals("vazlocolombia.dyndns.org:9085")) {
+                    if (StrServer.equals(getString(R.string.strservervazlocolombia))) {
                         CarritoComprasActivity.CarritoColombia task4 = new CarritoComprasActivity.CarritoColombia();
                         task4.execute();
                     } else {
@@ -2432,7 +2436,7 @@ ButtonAdd.setEnabled(false);
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")  ){
+            if (!StrServer.equals(getString(R.string.strservervazlocolombia)) && !StrServer.equals(getString(R.string.strserverspr)+ptoOp) && !StrServer.equals(getString(R.string.strserverspr)+ptoOp) && !StrServer.equals(getString(R.string.strserverspr)+":9080")  ){
                 for (int i = 0; i < listaCarShoping2.size(); i++) {
 
                 String Producto = listaCarShoping2.get(i).getParte();

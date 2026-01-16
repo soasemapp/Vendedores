@@ -101,6 +101,8 @@ public class ActivityConsultaProductos extends AppCompatActivity {
     String ValidaEqui;
     String EmpresaFotos="";
 
+    String ptoOp,ptoCons;
+
     String strClave = " ", strDesc = " ", strCodeBar = " ", strPrecio = " ";
     String strCantidad = "1", strscliente, strscliente2, strscliente3;
     AlertDialog mDialog;
@@ -196,6 +198,9 @@ String Empresa;
         StrServer = preference.getString("Server", "null");
         Empresa =preference.getString("URL","");
         extIm =preference.getString("EXT","");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
         EmpresaEd=Empresa;
@@ -694,7 +699,7 @@ String Empresa;
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "producto="+ClaveProducto+"&sucursal="+strcodBra;
-            String url = "http://" + StrServer + "/equivalenciaapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/equivalenciaapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -869,7 +874,7 @@ String Empresa;
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "producto="+productoStr+"&sucursal="+strcodBra;
-            String url = "http://" + StrServer + "/productoconsultaapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/productoconsultaapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -956,7 +961,7 @@ String Empresa;
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "producto=" + productoStr;
-            String url = "http://" + StrServer + "/conversionesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/conversionesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1112,7 +1117,7 @@ String Empresa;
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strcode;
-            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1200,7 +1205,7 @@ String Empresa;
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + strscliente2+"&producto="+productoStr+"&cantidad="+strCantidad+"&existencia=0&sucursal="+strcodBra;
-            String url = "http://" + StrServer + "/carritoapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/carritoapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1356,7 +1361,7 @@ String Empresa;
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")  ){
+            if (!ptoOp.equals("vazlocolombia.dyndns.org:9085") && !ptoOp.equals("sprautomotive.servehttp.com:9090") && !ptoOp.equals("sprautomotive.servehttp.com:9095") && !ptoOp.equals("sprautomotive.servehttp.com:9080")  ){
 
                 HttpHandler sh = new HttpHandler();
 
@@ -1548,7 +1553,7 @@ String Empresa;
             HttpHandler sh = new HttpHandler();
 
             String parametros = "sucursal=" + strscliente+"&producto="+productoStr;
-            String url = "http://" + StrServer + "/disposucapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/disposucapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

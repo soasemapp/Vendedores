@@ -56,6 +56,7 @@ public class ActivitySegumientoPedidos extends AppCompatActivity {
     String strscliente;
     String mensaje = "";
 
+
     ArrayList<SearachClientSANDG> listaclientG = new ArrayList<>();
     ArrayList<SeguimientoPedidosSANDG> listaSeguimientoPe = new ArrayList<>();
 
@@ -64,6 +65,8 @@ public class ActivitySegumientoPedidos extends AppCompatActivity {
     String date;
     String date2;
     AlertDialog mDialog;
+
+    String ptoOp,ptoCons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,9 @@ public class ActivitySegumientoPedidos extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
         tableLayout = findViewById(R.id.table);
@@ -254,7 +260,7 @@ public class ActivitySegumientoPedidos extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strcode;
-            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -346,7 +352,7 @@ public class ActivitySegumientoPedidos extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "fechainicial=" + FechaIncial + "&fechafinal=" + FechaFinal + "&cliente=" + strscliente + "&vendedor=" + strcode;
-            String url = "http://" + StrServer + "/seguimientopedidosapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/seguimientopedidosapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

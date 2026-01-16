@@ -64,6 +64,7 @@ public class ActivityConsultaPagos extends AppCompatActivity {
     ArrayList<RegistroPagosSANDG> listaAltasPa = new ArrayList<>();
     TextView txtFecha, txtHora, txtCcliente, txtNCliente, txtFacturas, txtImporte, txtNBanco, txtFpago, txtComentario1, txtComentario2, txtComentario3;
     AlertDialog mDialog;
+    String ptoOp, ptoCons;
 
 
 
@@ -97,6 +98,9 @@ public class ActivityConsultaPagos extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strco = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
         vendedor.setText(strname + " " + strlname);
@@ -229,7 +233,7 @@ public class ActivityConsultaPagos extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strco;
-            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -322,7 +326,7 @@ public class ActivityConsultaPagos extends AppCompatActivity {
 
             HttpHandler sh = new HttpHandler();
             String parametros = "agente=" + strco+"&cliente="+strcliente+"&fechaEntrada="+strFeinic+"&fechaSalida="+strFefina+"&confirmar="+check;
-            String url = "http://" + StrServer + "/consultapagoapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/consultapagoapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

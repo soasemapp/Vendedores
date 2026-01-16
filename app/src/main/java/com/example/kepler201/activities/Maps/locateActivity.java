@@ -57,6 +57,7 @@ public class locateActivity extends AppCompatActivity {
 
     String mensaje = "";
     String strClaveCli;
+    String ptoOp, ptoCons;
 
     int positionClient, positionDireccion;
 
@@ -81,6 +82,9 @@ public class locateActivity extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
         ButtonCliente = findViewById(R.id.btnClientes);
         ButtonDireccion = findViewById(R.id.btnDirecciones);
@@ -331,7 +335,7 @@ public class locateActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strcode;
-            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -419,7 +423,7 @@ public class locateActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + strClaveCli;
-            String url = "http://" + StrServer + "/enviomapaapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/enviomapaapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

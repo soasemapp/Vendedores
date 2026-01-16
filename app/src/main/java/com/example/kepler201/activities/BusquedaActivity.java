@@ -110,6 +110,10 @@ public class BusquedaActivity extends AppCompatActivity {
     String Empresa;
     String extIm;
 
+    String ptoOp;
+    String ptoCons;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +142,9 @@ public class BusquedaActivity extends AppCompatActivity {
         Empresa =preference.getString("URL","");
         extIm =preference.getString("EXT","");
         BusquedaProducto = getIntent().getStringExtra("Producto");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
 
@@ -424,7 +431,7 @@ public class BusquedaActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strco;
-            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -533,7 +540,7 @@ public class BusquedaActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + strscliente + "&producto=1000R&cantidad=1&existencia=0&sucursal=" + strcodBra;
-            String url = "http://" + StrServer + "/carritoapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/carritoapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -709,7 +716,7 @@ public class BusquedaActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "marca=" + marca + "&modelo=" + modelo;
-            String url = "http://" + StrServer + "/listalineasapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listalineasapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -797,7 +804,7 @@ public class BusquedaActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer + "/listamarcaapp";
+            String url = "http://" + StrServer+ptoCons + "/listamarcaapp";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -877,7 +884,7 @@ public class BusquedaActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "marca=" + claveMarca;
-            String url = "http://" + StrServer + "/listalineasmodelosapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/listalineasmodelosapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -957,7 +964,7 @@ public class BusquedaActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + strscliente + "&fechainicial=" + fechainicio + "&marca=" + marca + "&modelo=" + modelo + "&linea=" + linea + "&checkano=" + check;
-            String url = "http://" + StrServer + "/buscadormmfapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/buscadormmfapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1070,7 +1077,7 @@ public class BusquedaActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")  ){
+            if (!ptoOp.equals("vazlocolombia.dyndns.org:9085") && !ptoOp.equals("sprautomotive.servehttp.com:9090") && !ptoOp.equals("sprautomotive.servehttp.com:9095") && !ptoOp.equals("sprautomotive.servehttp.com:9080")  ){
 
                 String Productos = "";
                 for (int i = 0; i < listProdu1.size(); i++) {
@@ -1204,7 +1211,7 @@ public class BusquedaActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + strscliente + "&producto=" + BusquedaProducto ;
-            String url = "http://" + StrServer + "/buscadorgeneralapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/buscadorgeneralapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

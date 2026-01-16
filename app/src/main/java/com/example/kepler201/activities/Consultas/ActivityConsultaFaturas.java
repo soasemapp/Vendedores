@@ -53,9 +53,9 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
 
     String FechaIncial, FechaFinal;
     private Spinner spinerClie;
-    ImageView ConsultaFacturas, BackOreders,DocEletronicos, FacturasVencidas, Cliente0Ventas;
+    ImageView ConsultaFacturas, BackOreders, DocEletronicos, FacturasVencidas, Cliente0Ventas;
     private EditText fechaEn, fechaSa;
-Context context=this;
+    Context context = this;
 
     ArrayList<ConsulFacfturasSANDG> listasearch = new ArrayList<>();
     RecyclerView recyclerConsulta;
@@ -71,7 +71,7 @@ Context context=this;
     String strusr, strpass, strname, strlname, strtype, strbran, strma, strcodBra, strcode, StrServer;
     String strscliente = "";
     String mensaje = "";
-    String base64="";
+    String base64 = "";
     ArrayList<SearachClientSANDG> listaclientG = new ArrayList<>();
 
     int n = 2000;
@@ -80,6 +80,9 @@ Context context=this;
     String date;
     String date2;
     AlertDialog mDialog;
+
+    String ptoOp, ptoCons;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +109,9 @@ Context context=this;
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
         spinerClie = findViewById(R.id.spinnerClie);
@@ -290,7 +296,7 @@ Context context=this;
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strcode;
-            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -384,7 +390,7 @@ Context context=this;
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strcode + "&cliente=" + strscliente + "&fechainicial=" + FechaIncial + "&fechafinal=" + FechaFinal;
-            String url = "http://" + StrServer + "/consultafacturasapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/consultafacturasapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -461,7 +467,7 @@ Context context=this;
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + Cliente + "&sucursal=" + ClaveNumDialog + "&folio=" + ClaveFolDialog+ "&tipo=1"  ;
-            String url = "http://" + StrServer + "/pdffacturaapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/pdffacturaapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

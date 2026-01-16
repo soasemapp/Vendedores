@@ -69,6 +69,9 @@ public class ActivityConsultaDocumentosEletronicos extends AppCompatActivity {
     String base64pdf="",base64xml="";
     Context context=this;
     String tipodialog;
+
+    String ptoOp,ptoCons;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +92,9 @@ public class ActivityConsultaDocumentosEletronicos extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
         txttipodocumento = findViewById(R.id.tipdoc);
         btntipdocu = findViewById(R.id.btntipodocu);
@@ -215,7 +221,7 @@ public class ActivityConsultaDocumentosEletronicos extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer + "/listasucursalapp";
+            String url = "http://" + StrServer+ptoCons + "/listasucursalapp";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -330,7 +336,7 @@ mDialog.dismiss();
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strcode;
-            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -521,7 +527,7 @@ mDialog.dismiss();
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
 
-            String url = "http://" + StrServer + "/docelect?" + parametrosfactura;
+            String url = "http://" + StrServer+ptoOp + "/docelect?" + parametrosfactura;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -598,7 +604,7 @@ mDialog.dismiss();
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + Cliente + "&sucursal=" + ClaveNumDialog + "&folio=" + ClaveFolDialog+ "&tipo="+TIPO  ;
-            String url = "http://" + StrServer + "/pdffacturaapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/pdffacturaapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

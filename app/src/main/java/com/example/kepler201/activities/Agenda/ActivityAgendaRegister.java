@@ -52,6 +52,7 @@ public class ActivityAgendaRegister extends AppCompatActivity {
     ArrayList<SearachClientSANDG> listaActividades = new ArrayList<>();
     LinearLayout partechlay,OcultarCedis,OcultarJacve;
     String date;
+    String ptoOp,ptoCons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +107,9 @@ public class ActivityAgendaRegister extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
 
@@ -361,7 +365,7 @@ public class ActivityAgendaRegister extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strcode;
-            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -444,7 +448,7 @@ public class ActivityAgendaRegister extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
 
-            String url = "http://" + StrServer + "/agendaactividadapp";
+            String url = "http://" + StrServer+ptoCons + "/agendaactividadapp";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -620,7 +624,7 @@ public class ActivityAgendaRegister extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "fecha="+Strdatetoday+"&vendedor="+strcode+"&cliente="+strscliente+"&actividad="+strsActividades+"&parteh="+Partech+"&eagle="+Eagle+"&rodatech="+Rodatech+"&tg="+TG+"&trackone="+Trackone+"&vazlo="+Vazlo+"&fechavis="+Strdate+"&comentario="+strcomentario+"&agendo="+strusr;
-            String url = "http://" + StrServer + "/agendaregisterapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/agendaregisterapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

@@ -30,6 +30,9 @@ public class ActivityValdatipo extends AppCompatActivity {
     ArrayList<ValTipousSANDG> listasearch = new ArrayList<>();
     ConexionSQLiteHelper conn;
     private SharedPreferences preferenceClie;
+    String ptoOp;
+    String ptoCons;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,9 @@ public class ActivityValdatipo extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strco = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
 
@@ -72,7 +78,7 @@ public class ActivityValdatipo extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strco;
-            String url = "http://" + StrServer + "/listasvendedoresapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listasvendedoresapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

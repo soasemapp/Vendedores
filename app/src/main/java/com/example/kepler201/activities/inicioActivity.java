@@ -63,6 +63,8 @@ public class inicioActivity extends AppCompatActivity {
 
     String URL;
     String extIm;
+    String ptoOp;
+    String ptoCons;
 
 
     private AlertDialog mDialog;
@@ -89,8 +91,11 @@ public class inicioActivity extends AppCompatActivity {
         strco = preference.getString("code", null);
         StrServer = preference.getString("Server", null);
 
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
-        switch (StrServer) {
+
+        switch (StrServer+ptoOp) {
             case "jacve.dyndns.org:9085":
                 URL = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
                 editor.putString("URL", URL);
@@ -232,7 +237,7 @@ public class inicioActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer + "/configuracion";
+            String url = "http://" + StrServer+ptoOp + "/configuracion";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -346,7 +351,7 @@ public class inicioActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.inicio, menu);
 
-        switch (StrServer) {
+        switch (StrServer+ptoOp) {
             case "sprautomotive.servehttp.com:9090": {
                 MenuItem item = menu.findItem(R.id.MenuSPR);
                 MenuItem itemRod = menu.findItem(R.id.RodatechMenu);
@@ -484,7 +489,7 @@ public class inicioActivity extends AppCompatActivity {
         final TextView tvEmpresa = vistaHeader.findViewById(R.id.idEmpresa),
                 tvNombre = vistaHeader.findViewById(R.id.idnombre);
 
-        switch (StrServer) {
+        switch (StrServer+ptoOp) {
             case "jacve.dyndns.org:9085":
                 Empresa = strbran;
                 Picasso.with(getApplicationContext()).load(R.drawable.jacvelogo)

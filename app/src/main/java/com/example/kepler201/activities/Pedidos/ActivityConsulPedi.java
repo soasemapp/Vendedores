@@ -52,6 +52,8 @@ public class ActivityConsulPedi extends AppCompatActivity {
     ArrayList<ConsulPediSANDG> listaConsulPedi = new ArrayList<>();
     RecyclerView recyclerConsulPedi;
 
+    String ptoOp,ptoCons;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +74,9 @@ public class ActivityConsulPedi extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
         Button btnsearch =  findViewById(R.id.btnSearch);
         SeguimiPed =  findViewById(R.id.seguPed);
@@ -186,7 +191,7 @@ public class ActivityConsulPedi extends AppCompatActivity {
             HttpHandler sh = new HttpHandler();
             String parametros = "sucursal="+strcodBra+"&vendedor="+strcode+"&fecha="+FechaIncial;
 
-            String url = "http://" + StrServer + "/pedidosapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/pedidosapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

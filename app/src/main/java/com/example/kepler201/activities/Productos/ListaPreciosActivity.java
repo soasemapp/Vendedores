@@ -76,6 +76,8 @@ public class ListaPreciosActivity extends AppCompatActivity {
     int n1 = 2000;
     String[] search2 = new String[n1];
 
+    String ptoOp,ptoCons;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +99,9 @@ public class ListaPreciosActivity extends AppCompatActivity {
         StrServer = preference.getString("Server", "null");
         Empresa = preference.getString("URL", "");
         extIm = preference.getString("EXT", "");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
         recyclerPrecios = findViewById(R.id.listprec);
         SpinnerLinea = findViewById(R.id.spinnerLinea);
@@ -287,7 +292,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer + "/ListLiPreapp";
+            String url = "http://" + StrServer+ptoCons + "/ListLiPreapp";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -382,7 +387,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer + "/ListLiTyapp";
+            String url = "http://" + StrServer+ptoCons + "/ListLiTyapp";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -488,7 +493,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
                 parametros = "tipo=" + strType + "&sucursal=" + strcodBra;
             }
 
-            String url = "http://" + StrServer + "/lisprecioapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/lisprecioapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -575,7 +580,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")) {
+            if (!ptoOp.equals("vazlocolombia.dyndns.org:9085") && !ptoOp.equals("sprautomotive.servehttp.com:9090") && !ptoOp.equals("sprautomotive.servehttp.com:9095") && !ptoOp.equals("sprautomotive.servehttp.com:9080")) {
                 for (int i = 0; i < listaLisPrec.size(); i++) {
 
                     String Producto = listaLisPrec.get(i).getCodeProdu();
@@ -672,7 +677,7 @@ public class ListaPreciosActivity extends AppCompatActivity {
             protected Void doInBackground(Void... params) {
                 HttpHandler sh = new HttpHandler();
                 String parametros = "sucursal=" + strcodBra + "&producto=" + Productoadd;
-                String url = "http://" + StrServer + "/disposucapp?" + parametros;
+                String url = "http://" + StrServer+ptoCons + "/disposucapp?" + parametros;
                 String jsonStr = sh.makeServiceCall(url, strusr, strpass);
                 if (jsonStr != null) {
                     try {

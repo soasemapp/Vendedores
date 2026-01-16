@@ -51,7 +51,7 @@ public class ActivityAgenda extends AppCompatActivity {
     private RecyclerView recyclerAgenda;
     private ArrayList<AgendaSANDG> listaAgenda = new ArrayList<>();
     private ArrayList<Envio2SANDG> listaUbicaciones = new ArrayList<>();
-    private String strusr, strpass, strcode, StrServer;
+    private String strusr, strpass, strcode, StrServer,ptoOp,ptoCons;
     private String ClaveCliente = "";
     private String StrFecha;
 
@@ -94,6 +94,9 @@ public class ActivityAgenda extends AppCompatActivity {
         strpass = preference.getString("pass", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
+
     }
 
     private void initViews() {
@@ -224,7 +227,7 @@ public class ActivityAgenda extends AppCompatActivity {
                 for (int j = 0; j < listaAgenda.size(); j++) {
                     ClaveCliente = listaAgenda.get(j).getCliente();
                     HttpHandler sh = new HttpHandler();
-                    String url = "http://" + StrServer + "/enviomapaapp?cliente=" + URLEncoder.encode(ClaveCliente, "UTF-8");
+                    String url = "http://" +  StrServer+ptoCons + "/enviomapaapp?cliente=" + URLEncoder.encode(ClaveCliente, "UTF-8");
                     String jsonStr = sh.makeServiceCall(url, strusr, strpass);
 
                     if (jsonStr != null) {
@@ -322,7 +325,7 @@ public class ActivityAgenda extends AppCompatActivity {
             HttpHandler sh = new HttpHandler();
             //String url = "http://" + StrServer + "/agendaapp?vendedor=" + strcode + "&fecha=2025-07-02";
             //String parametros = "vendedor=" + strcode + "&fecha=" + StrFecha;
-           String url = "http://" + StrServer + "/agendaapp?vendedor=" + strcode + "&fecha=" + StrFecha;
+           String url = "http://" + StrServer+ptoCons + "/agendaapp?vendedor=" + strcode + "&fecha=" + StrFecha;
 
             try {
                 String jsonStr = sh.makeServiceCall(url, strusr, strpass);

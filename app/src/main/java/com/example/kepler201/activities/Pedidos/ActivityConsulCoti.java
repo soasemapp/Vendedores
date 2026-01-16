@@ -36,6 +36,7 @@ public class ActivityConsulCoti extends AppCompatActivity {
     ImageView SeguimiPed, ConsulPed, ConsulCot;
     String strusr, strpass, strname, strlname, strtype, strbran, strma, strcodBra, strcode, StrServer;
     String mensaje = "";
+    String ptoOp, ptoCons;
     AlertDialog mDialog;
     ArrayList<ConsulCotiSANDG> listaConsulCoti = new ArrayList<>();
     RecyclerView recyclerConsulCoti;
@@ -60,6 +61,9 @@ public class ActivityConsulCoti extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
         SeguimiPed =  findViewById(R.id.seguPed);
@@ -133,7 +137,7 @@ public class ActivityConsulCoti extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "sucursal="+strcodBra+"&vendedor="+strcode;
-            String url = "http://" + StrServer + "/cotizacionesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/cotizacionesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

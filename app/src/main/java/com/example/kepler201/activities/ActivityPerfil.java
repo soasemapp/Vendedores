@@ -38,6 +38,7 @@ public class ActivityPerfil extends AppCompatActivity {
     //TextView
     ArrayList<SucursalSANDG> listasucursal = new ArrayList<>();
     String strusr="", strpass="", strname="", strlname="", strtype="", strtype2="", strma="", strco="", strcodBra="",strbran="",strcodBra2="",strbran2="", StrServer="";
+    String ptoOp,ptoCons;
 String cambiarsucursal;
     @SuppressLint("SetTextI18n")
     @Override
@@ -73,6 +74,9 @@ String cambiarsucursal;
         StrServer = preference.getString("Server", "");
         strtype2 = preference.getString("type2", null);
         cambiarsucursal = preference.getString("cambiarsucursal", "0");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
         usr.setText("                                          " + strusr);
@@ -119,7 +123,7 @@ String cambiarsucursal;
             }
         });
 
-        switch (StrServer) {
+        switch (StrServer+ptoOp) {
             case "jacve.dyndns.org: ":
                 Picasso.with(getApplicationContext()).load(R.drawable.jacve)
                         .error(R.drawable.ic_baseline_error_24)
@@ -237,7 +241,7 @@ if(cambiarsucursal.equals("1")) {
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer + "/listasucursalapp";
+            String url = "http://" + StrServer+ptoCons + "/listasucursalapp";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

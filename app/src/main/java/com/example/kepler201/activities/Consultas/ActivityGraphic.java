@@ -24,6 +24,8 @@ public class ActivityGraphic extends AppCompatActivity {
     String[] Client = {"Inactivos", "Activos"};
     int[] earnig = new int[2];
     String strusr, strpass, strname, strlname, strtype, strbran, strma, StrServer, strcodBra, strco;
+    String ptoOp, ptoCons;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,9 @@ public class ActivityGraphic extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strco = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
         setupPiechart();
     }

@@ -129,6 +129,8 @@ public class ActivityDetallCoti extends AppCompatActivity {
     String DESCdOCUMENTO;
     String monto_porcentaje="", monto_enviogratis="", confEnvio="";
 
+    String ptoOp,ptoCons;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,6 +153,9 @@ public class ActivityDetallCoti extends AppCompatActivity {
         StrServer = preference.getString("Server", "null");
         ClaveFolDialog = getIntent().getStringExtra("Folio");
         ClaveNumDialog = getIntent().getStringExtra("NumSucu");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
         Folio = findViewById(R.id.txtFolio);
         Sucursal = findViewById(R.id.txtSucursal);
@@ -652,7 +657,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
             int saldoint;
             HttpHandler sh = new HttpHandler();
             String parametros = "sucursal=" + ClaveNumDialog + "&folio=" + ClaveFolDialog;
-            String url = "http://" + StrServer + "/cotizaciondetallapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/cotizaciondetallapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -911,7 +916,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + strClaveCli + "&monto=" + MontoStr + "&vendedor=" + strcode + "&descuento=" + Desc1 + "&subtotal=" + SubdescuentoValida;
-            String url = "http://" + StrServer + "/validapedcolapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/validapedcolapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1153,7 +1158,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + strClaveCli + "&monto=" + MontoStr + "&vendedor=" + strcode;
-            String url = "http://" + StrServer + "/validapedmexapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/validapedmexapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1340,15 +1345,15 @@ public class ActivityDetallCoti extends AppCompatActivity {
     private void conectar3() {
         String SOAP_ACTION = "NewDoc";
         String METHOD_NAME = "NewDoc";
-        String NAMESPACE = "http://" + StrServer + "/WSk80Docs/";
-        String URL = "http://" + StrServer + "/WSk80Docs";
+        String NAMESPACE = "http://" + StrServer+ptoOp + "/WSk80Docs/";
+        String URL = "http://" + StrServer+ptoOp + "/WSk80Docs";
 
 
         try {
 
             SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
             xmlPedido soapEnvelope = new xmlPedido(SoapEnvelope.VER11);
-            soapEnvelope.xmlPedido(strComentario, strcode, strNombreCliente, strClaveCli, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass, StrRFC, StrPlazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, StrCalle, StrColonia, StrPoblacion, Folio1, strVia, stridEnvio, listasearch2, StrServer, Eagle, Rodatech, Partech, Shark, Trackoone, DESCdOCUMENTO);
+            soapEnvelope.xmlPedido(strComentario, strcode, strNombreCliente, strClaveCli, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass, StrRFC, StrPlazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, StrCalle, StrColonia, StrPoblacion, Folio1, strVia, stridEnvio, listasearch2, StrServer+ptoOp, Eagle, Rodatech, Partech, Shark, Trackoone, DESCdOCUMENTO);
             soapEnvelope.dotNet = true;
             soapEnvelope.implicitTypes = true;
             soapEnvelope.setOutputSoapObject(Request);
@@ -1392,7 +1397,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
             String clavevia="",nombrevia="",monto="",procentaje="",entregadir="";
             HttpHandler sh = new HttpHandler();
 
-            String url = "http://" + StrServer + "/listaviaapp";
+            String url = "http://" + StrServer+ptoCons + "/listaviaapp";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1522,7 +1527,7 @@ public class ActivityDetallCoti extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + strClaveCli;
-            String url = "http://" + StrServer + "/enviosapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/enviosapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1629,15 +1634,15 @@ public class ActivityDetallCoti extends AppCompatActivity {
     private void conectar7() {
         String SOAP_ACTION = "NewDoc";
         String METHOD_NAME = "NewDoc";
-        String NAMESPACE = "http://" + StrServer + "/WSk80Docs/";
-        String URL = "http://" + StrServer + "/WSk80Docs";
+        String NAMESPACE = "http://" + StrServer+ptoOp + "/WSk80Docs/";
+        String URL = "http://" + StrServer+ptoOp + "/WSk80Docs";
 
 
         try {
 
             SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
             xmlNewDoc42 soapEnvelope = new xmlNewDoc42(SoapEnvelope.VER11);
-            soapEnvelope.xmlNewDoc42(strComentario, strcode, strNombreCliente, strClaveCli, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass, StrRFC, StrPlazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, StrCalle, StrColonia, StrPoblacion, Folio1, strVia, stridEnvio, listasearch2, StrServer);
+            soapEnvelope.xmlNewDoc42(strComentario, strcode, strNombreCliente, strClaveCli, StrFechaActaul, StrFechaVencimiento, strcodBra, strusr, strpass, StrRFC, StrPlazo, MontoStr, ivstr, DescuentoStr, DescPro, Desc1, StrCalle, StrColonia, StrPoblacion, Folio1, strVia, stridEnvio, listasearch2, StrServer+ptoOp);
             soapEnvelope.dotNet = true;
             soapEnvelope.implicitTypes = true;
             soapEnvelope.setOutputSoapObject(Request);

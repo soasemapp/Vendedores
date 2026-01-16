@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     String[] opciones1 = {""};
 
     String PuertoOperativo,PuertoConsulta;
+    String ptoOp;
+    String ptoCons;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -70,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         LinearJacve = findViewById(R.id.LinearJacve);
         preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
         editor = preference.edit();
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
         btnSERVIDOR.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                         String Empresa = getString(R.string.Empresa);
                         if (Empresa.equals("cedis")) {
                             if (which == 0) {
-                                StrServer = "jacve.dyndns.org:9085";
+                                StrServer = "jacve.dyndns.org";
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.jacve)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -107,13 +111,16 @@ public class MainActivity extends AppCompatActivity {
                                 LinearJacve.setVisibility(View.VISIBLE);
                                 LinearTodos.setVisibility(View.GONE);
 
+                                PuertoOperativo=getString(R.string.PuertojacveOperativo);
+                                PuertoConsulta=getString(R.string.PuertojacveConsulta);
+
                                 Versiones task1 = new Versiones();
                                 task1.execute();
 
                             }
 
                             if (which == 0) {
-                                StrServer = "autodis.ath.cx:9085";
+                                StrServer = "autodis.ath.cx";
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.autodis)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -124,11 +131,11 @@ public class MainActivity extends AppCompatActivity {
                                 task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
-                                PuertoOperativo=getString(R.string.PuertoautodisOperativo);;
+                                PuertoOperativo=getString(R.string.PuertoautodisOperativo);
                                 PuertoConsulta=getString(R.string.PuertoautodisConsulta);
 
                             } else if (which == 1) {
-                                StrServer = "cecra.ath.cx:9085";
+                                StrServer = "cecra.ath.cx";
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.cecra)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -139,8 +146,11 @@ public class MainActivity extends AppCompatActivity {
                                 task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
+
+                                PuertoOperativo=getString(R.string.PuertocecraOperativo);
+                                PuertoConsulta=getString(R.string.PuertocecraConsulta);
                             } else if (which == 2) {
-                                StrServer = "guvi.ath.cx:9080";
+                                StrServer = "guvi.ath.cx";
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.guvi)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -152,9 +162,13 @@ public class MainActivity extends AppCompatActivity {
                                 task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
+
+                                PuertoOperativo=getString(R.string.PuertoguviOperativo);
+                                PuertoConsulta=getString(R.string.PuertoguviConsulta);
+
                             } else if (which == 3) {
 
-                                StrServer = "cedistabasco.ddns.net:9085";
+                                StrServer = "cedistabasco.ddns.net";
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.pressa)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -165,8 +179,12 @@ public class MainActivity extends AppCompatActivity {
                                 task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
+
+                                PuertoOperativo=getString(R.string.PuertotabascoOperativo);
+                                PuertoConsulta=getString(R.string.PuertotabascoConsulta);
+
                             } else if (which == 4) {
-                                StrServer = "vipla.ath.cx:9085";
+                                StrServer = "vipla.ath.cx";
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.vipla)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -177,8 +195,12 @@ public class MainActivity extends AppCompatActivity {
                                 task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
+
+                                PuertoOperativo=getString(R.string.PuertoviplaOperativo);
+                                PuertoConsulta=getString(R.string.PuertoviplaConsulta);
+
                             } else if (which == 5) {
-                                StrServer = "sprautomotive.servehttp.com:9090";
+                                StrServer = "sprautomotive.servehttp.com";
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.sprimage)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -189,8 +211,12 @@ public class MainActivity extends AppCompatActivity {
                                 task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
+
+                                PuertoOperativo=getString(R.string.PuertosprOperativo);
+                                PuertoConsulta=getString(R.string.PuertosprConsulta);
+
                             } else if (which == 6) {
-                                StrServer = "vazlocolombia.dyndns.org:9085";
+                                StrServer = "vazlocolombia.dyndns.org";
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.colombia2)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -201,10 +227,13 @@ public class MainActivity extends AppCompatActivity {
                                 task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
+                                PuertoOperativo=getString(R.string.PuertovazlocolombiaOperativo);
+                                PuertoConsulta=getString(R.string.PuertovazlocolombiaConsulta);
+
                             } else if (which == 7) {
                                 Versiones task1 = new Versiones();
                                 task1.execute();
-                                StrServer = "bpr.ath.cx:9095";
+                                StrServer = "bpr.ath.cx";
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.logobpr)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -215,10 +244,14 @@ public class MainActivity extends AppCompatActivity {
 
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
+
+                                PuertoOperativo=getString(R.string.PuertobprOperativo);
+                                PuertoConsulta=getString(R.string.PuertobprConsulta);
+
                             } else if (which == 8) {
                                 Versiones task1 = new Versiones();
                                 task1.execute();
-                                StrServer = "vazquin.ath.cx:9085";
+                                StrServer = "vazquin.ath.cx";
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.vazquinlogo)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -229,10 +262,14 @@ public class MainActivity extends AppCompatActivity {
 
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
+
+                                PuertoOperativo=getString(R.string.PuertovazquinOperativo);
+                                PuertoConsulta=getString(R.string.PuertovazquinConsulta);
+
                             } else if (which == 9) {
                                 Versiones task1 = new Versiones();
                                 task1.execute();
-                                StrServer = "pesbac.ath.cx:9095";
+                                StrServer = "pesbac.ath.cx";
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.pesbaclight)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -243,11 +280,15 @@ public class MainActivity extends AppCompatActivity {
 
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
+
+                                PuertoOperativo=getString(R.string.PuertopesbacOperativo);
+                                PuertoConsulta=getString(R.string.PuertopesbacConsulta);
+
                             }
 
                         } else {
                             if (which == 0) {
-                                StrServer = "jacve.dyndns.org:9085";
+                                StrServer = "jacve.dyndns.org";
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.jacve)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -256,6 +297,10 @@ public class MainActivity extends AppCompatActivity {
                                         .into(imgEmpresa);
                                 LinearJacve.setVisibility(View.VISIBLE);
                                 LinearTodos.setVisibility(View.GONE);
+
+                                PuertoOperativo=getString(R.string.PuertojacveOperativo);
+                                PuertoConsulta=getString(R.string.PuertojacveConsulta);
+
                                 Versiones task1 = new Versiones();
                                 task1.execute();
 
@@ -365,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer + "/loginapp";
+            String url = "http://" + StrServer+ptoOp + "/loginapp";
             String jsonStr = sh.makeServiceCall(url, getUsuario, getPass);
             if (jsonStr != null) {
                 try {
@@ -462,7 +507,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer + "/versionesapp?Clave=1";
+            String url = "http://" + StrServer+ptoOp + "/versionesapp?Clave=1";
             String jsonStr = sh.makeServiceCall(url, "WEBPETI", "W3B3P3T1");
             if (jsonStr != null) {
                 try {
@@ -551,7 +596,7 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "usuario=" + getUsuario + "&identificador=" + id + "&accion=LOG IN&parametro= ";
-            String url = "http://" + StrServer + "/logapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/logapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, getUsuario, getPass);
             if (jsonStr != null) {
                 try {

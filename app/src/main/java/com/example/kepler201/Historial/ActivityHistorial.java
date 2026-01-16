@@ -90,6 +90,8 @@ public class ActivityHistorial extends AppCompatActivity {
 
     AlertDialog mDialog;
     String strVendedor = "", strCliente = "", strLinea = "", strTipo = "", strFecha = "";
+    String ptoOp, ptoCons;
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -122,6 +124,9 @@ public class ActivityHistorial extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
         vendedor.setText(strname + " " + strlname);
 
@@ -320,7 +325,7 @@ public class ActivityHistorial extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strcode;
-            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -412,7 +417,7 @@ public class ActivityHistorial extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer + "/ListLiPreapp";
+            String url = "http://" + StrServer+ptoCons + "/ListLiPreapp";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -509,7 +514,7 @@ public class ActivityHistorial extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer + "/ListLiTyapp";
+            String url = "http://" + StrServer+ptoCons + "/ListLiTyapp";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -610,7 +615,7 @@ public class ActivityHistorial extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor="+strVendedor+"&clinte="+strCliente+"&linea="+strLinea+"&tipo="+strTipo+"&fecha="+strFecha;
-            String url = "http://" + StrServer + "/historialapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/historialapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

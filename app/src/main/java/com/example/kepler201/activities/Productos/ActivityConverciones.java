@@ -120,6 +120,9 @@ public class ActivityConverciones extends AppCompatActivity {
     Boolean animation=true;
     private AnimationDrawable Producto360;
     String extIm;
+    String ptoOp;
+    String ptoCons;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,6 +196,9 @@ public class ActivityConverciones extends AppCompatActivity {
         StrServer = preference.getString("Server", "null");
         Empresa =preference.getString("URL","");
         extIm =preference.getString("EXT","");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
         EmpresaEd=Empresa;
@@ -471,7 +477,7 @@ public class ActivityConverciones extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "conversion=" + productoStr;
-            String url = "http://" + StrServer + "/conversionproapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/conversionproapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -670,7 +676,7 @@ if (jsonarray>0){
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")  ){
+            if (!ptoOp.equals("vazlocolombia.dyndns.org:9085") && !ptoOp.equals("sprautomotive.servehttp.com:9090") && !ptoOp.equals("sprautomotive.servehttp.com:9095") && !ptoOp.equals("sprautomotive.servehttp.com:9080")  ){
 
                 HttpHandler sh = new HttpHandler();
 
@@ -814,7 +820,7 @@ if (jsonarray>0){
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "producto=" + strClave;
-            String url = "http://" + StrServer + "/conversionesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/conversionesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -971,7 +977,7 @@ if (jsonarray>0){
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strcode;
-            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1074,7 +1080,7 @@ if (jsonarray>0){
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + strscliente2+"&producto="+productoStr+"&cantidad="+strCantidad+"&existencia=0&sucursal="+strcodBra;
-            String url = "http://" + StrServer + "/carritoapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/carritoapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {

@@ -120,6 +120,8 @@ public class HomeFragment extends Fragment {
     String ProductosNuevosStr, Empresa;
     LinearLayout EagleOcultar, TrackOneOcultar, RodatechOcultar, PartechOcultar, SharkOcultar, MechanicOcultar, GspOcultar, VazloOcultar, ZoomsOcultar, KFFOcultar;
 
+    String ptoOp;
+    String ptoCons;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -174,7 +176,8 @@ public class HomeFragment extends Fragment {
         Empresa =preference.getString("URL","");
         extIm =preference.getString("EXT","");
         ProductosNuevosStr = preference.getString("Productosnuevos", "0");
-
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
 
 
 
@@ -794,7 +797,7 @@ public class HomeFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + strscliente + "&producto=1000R&cantidad=1&existencia=0&sucursal=" + strcodBra;
-            String url = "http://" + StrServer + "/carritoapp?" + parametros;
+            String url = "http://" + StrServer+ptoOp + "/carritoapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -860,7 +863,7 @@ public class HomeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer + "/listasucursalapp";
+            String url = "http://" + StrServer+ptoCons + "/listasucursalapp";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -947,7 +950,7 @@ public class HomeFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strco;
-            String url = "http://" + StrServer + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer+ptoCons + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1060,7 +1063,7 @@ public class HomeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer + "/listapronuevosapp";
+            String url = "http://" + StrServer+ptoOp + "/listapronuevosapp";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1135,7 +1138,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals("vazlocolombia.dyndns.org:9085") && !StrServer.equals("sprautomotive.servehttp.com:9090") && !StrServer.equals("sprautomotive.servehttp.com:9095") && !StrServer.equals("sprautomotive.servehttp.com:9080")  ){
+            if (!StrServer.equals(getString(R.string.strservervazlocolombia)) && !StrServer.equals(getString(R.string.strserverspr)+ptoOp) && !StrServer.equals(getString(R.string.strserverspr)+ptoOp) && !StrServer.equals(getString(R.string.strserverspr)+":9080")){
 
                 String Productos = "";
                 for (int i = 0; i < ListaProductosGeneral.size(); i++) {
@@ -1531,7 +1534,7 @@ public class HomeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer + "/versionesapp?Clave=1";
+            String url = "http://" + StrServer+ptoOp + "/versionesapp?Clave=1";
             String jsonStr = sh.makeServiceCall(url, "WEBPETI", "W3B3P3T1");
             if (jsonStr != null) {
                 try {
