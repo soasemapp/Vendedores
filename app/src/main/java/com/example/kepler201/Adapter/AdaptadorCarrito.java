@@ -112,7 +112,7 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.View
 
         if (Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
             EmpresaAd="";
-            EmpresaAd=Empresa+listaCarrito.get(position).getParte()+"/.jpg";
+            EmpresaAd=Empresa+listaCarrito.get(position).getParte()+".jpg";
         }else if(Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/rodatech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/partech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/shark/")){
             EmpresaAd="";
             EmpresaAd=Empresa+listaCarrito.get(position).getParte()+"/4.webp";

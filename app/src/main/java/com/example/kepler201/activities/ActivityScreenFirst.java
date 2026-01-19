@@ -392,7 +392,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
                 try {
                     JSONObject json = new JSONObject(jsonStr);
                     Log.d("JSON Response", jsonStr);
-
+                    String pedidos="";
 
                     if (json.length() != 0) {
                         JSONObject jitems, Numero;
@@ -403,8 +403,10 @@ public class ActivityScreenFirst extends AppCompatActivity {
                             jitems = jsonObject.getJSONObject("Item");
                             Numero = jitems.getJSONObject("" + i + "");
 
+if(StrServer.equals("sprautomotive.servehttp.com:9090")||StrServer.equals("sprautomotive.servehttp.com:9075")||StrServer.equals("sprautomotive.servehttp.com:9095")||StrServer.equals("sprautomotive.servehttp.com:9080")){
+     pedidos=(Numero.getString("k_Pedido").equals("") ? " " : Numero.getString("k_Pedido"));
+}
 
-                            String pedidos=(Numero.getString("k_Pedido").equals("") ? " " : Numero.getString("k_Pedido"));
 
                             listaPresupuesto.add(new PresupuestoLineaSANDG((Numero.getString("k_Vendido").equals("") ? " " : Numero.getString("k_Vendido")),
                                     (Numero.getString("k_Linea").equals("") ? " " : Numero.getString("k_Linea")),
@@ -422,7 +424,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         public void run() {
                             mDialog.dismiss();
                             AlertDialog.Builder alerta1 = new AlertDialog.Builder(ActivityScreenFirst.this);
-                            alerta1.setMessage("El Json tiene un problema lol q mal").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            alerta1.setMessage("El Json tiene un problema ").setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
 
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -622,7 +624,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         RodatechPor = (GenralVendido * 100) / GeneralPresu;
 
                         BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
-                        BarDataSet barDataSet1 = new BarDataSet(RodaGr(), "Venta");
+                        BarDataSet barDataSet1 = new BarDataSet(SPRVendido(RodatechPor), "Venta");
 
                         barDataSet0.setColor(Color.RED);
                         barDataSet1.setColor(Color.BLUE);
@@ -630,9 +632,22 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         BarData barData = new BarData();
                         barData.addDataSet(barDataSet0);
                         barData.addDataSet(barDataSet1);
+                        WindowMetrics metrics = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            metrics = getWindowManager().getCurrentWindowMetrics();
+                        }
+                        Rect bounds = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            bounds = metrics.getBounds();
+                        }
+
+                        int ancho = bounds.width();
+                        int alto = bounds.height();
+
+
 
                         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                                /*width*/ 1000,
+                                /*width*/ ancho,
                                 /*height*/ 1000
                         );
                         barChart.setLayoutParams(param);

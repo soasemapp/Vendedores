@@ -49,7 +49,7 @@ String EmpresaAd;
 
         if (Empresa.equals("https://vazlo.com.mx/assets/img/productos/chica/jpg/")){
             EmpresaAd="";
-            EmpresaAd=Empresa+listaproductos.get(position).getClave()+"/.jpg";
+            EmpresaAd=Empresa+listaproductos.get(position).getClave()+".jpg";
 
 
         }else if(Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/rodatech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/partech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/shark/")){

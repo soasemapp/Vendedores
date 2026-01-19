@@ -7,7 +7,7 @@ android {
         applicationId "com.example.kepler201"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 5
+        versionCode 7
         versionName "@string/version"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
