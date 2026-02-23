@@ -23,11 +23,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -74,7 +76,7 @@ public class DetalladoProductosActivity extends AppCompatActivity {
     String Producto="", claveVentana = null, Descripcion="", PrecioAjustado="0", PrecioBase="0",Linea="",TipoFotos="",LineaFotos="";
     TextView  txtClavePro, txtCant, txtPrecio, txtDesc, txtImporte;
     TextView txtClave, txtClavecompetencia, txtnombreCompetencia;
-    LinearLayout TableProd;
+    LinearLayout TableProd,Tablaventasdevo;
 
     private boolean multicolor = true;
     TableRow fila;
@@ -120,6 +122,15 @@ public class DetalladoProductosActivity extends AppCompatActivity {
     String Comentario1;
     String Comentario2;
     String Comentario3;
+    String descuEagle;
+    String descuRodatech;
+    String descuPartec;
+    String descuShark;
+    String descuTrackone;
+
+    String descuentoinfo;
+    String clasificacion;
+
     String Cliente = "";
     String DescPro;
     String Desc1;
@@ -142,6 +153,7 @@ TextView txtVenDev;
     String extIm;
     String ptoOp;
     String ptoCons;
+
 
 
     @Override
@@ -190,6 +202,13 @@ TextView txtVenDev;
         Comentario1 = preferenceClie.getString("Comentario1", "");
         Comentario2 = preferenceClie.getString("Comentario2", "");
         Comentario3 = preferenceClie.getString("Comentario3", "");
+        descuEagle = preferenceClie.getString("Eagle", "");
+        descuRodatech = preferenceClie.getString("Rodatech", "");
+        descuPartec = preferenceClie.getString("Partech", "");
+        descuShark = preferenceClie.getString("Shark", "");
+        descuTrackone = preferenceClie.getString("Trackone", "");
+        descuentoinfo = preferenceClie.getString("descuentoinfo", "");
+        clasificacion = preferenceClie.getString("clasificacion", "");
 
         TableProd = findViewById(R.id.ProTable);
 
@@ -203,6 +222,7 @@ TextView txtVenDev;
         }
         txtcompras =findViewById(R.id.txtCompras);
         txtVenDev =findViewById(R.id.txtVenDev);
+        Tablaventasdevo=findViewById(R.id.ventaslinear);
         RecyclerProductos = findViewById(R.id.listExistencias);
         RecyclerCompras =findViewById(R.id.listCompras);
         RecyclerVentas=findViewById(R.id.listVenDev);
@@ -721,8 +741,8 @@ TextView txtVenDev;
         protected void onPostExecute(Void result) {
 
 
-            Converciones task1 = new Converciones();
-            task1.execute();
+            Converciones task2 = new Converciones();
+            task2.execute();
 
         }
 
@@ -909,6 +929,7 @@ TextView txtVenDev;
                 RecyclerVentas.setAdapter(adapteven);
             }else {
                 RecyclerVentas.setVisibility(View.GONE);
+                Tablaventasdevo.setVisibility(View.GONE);
                 txtVenDev .setVisibility(View.GONE);
             }
 
@@ -1022,8 +1043,8 @@ TextView txtVenDev;
                 tableLayout.addView(fila);
             }
 
-            EquivaProdu task1 = new EquivaProdu();
-            task1.execute();
+            EquivaProdu task3 = new EquivaProdu();
+            task3.execute();
         }
 
     }
@@ -1032,33 +1053,52 @@ TextView txtVenDev;
         DecimalFormat formatter = new DecimalFormat("###,###,##0.00");
         return formatter.format(Double.parseDouble(number));
     }
-
     private void loadImagesAndStartAnimation() {
+        // 1. Mostramos el cargador antes de empezar
+        final ProgressBar loader = findViewById(R.id.loadingProgress);
+        loader.setVisibility(View.VISIBLE);
 
-        for (String url : imageUrls) {
+        final Drawable[] orderedFrames = new Drawable[imageUrls.size()];
+        final int[] loadedCount = {0};
+
+        for (int i = 0; i < imageUrls.size(); i++) {
+            final int index = i;
             Glide.with(this)
                     .asDrawable()
-                    .load(url)
+                    .load(imageUrls.get(i))
                     .into(new CustomTarget<Drawable>() {
                         @Override
                         public void onResourceReady(@NonNull Drawable resource, Transition<? super Drawable> transition) {
-                            Producto360.addFrame(resource, 100); // Duración de cada frame en ms
-                            if (Producto360.getNumberOfFrames() == imageUrls.size()) {
-                                Producto360.setOneShot(false); // Repetir la animación
+                            orderedFrames[index] = resource;
+                            loadedCount[0]++;
+
+                            // 2. Actualizamos opcionalmente el progreso
+                            // loader.setProgress((loadedCount[0] * 100) / imageUrls.size());
+
+                            if (loadedCount[0] == imageUrls.size()) {
+                                // 3. OCULTAR el cargador, ya tenemos todo
+                                loader.setVisibility(View.GONE);
+
+                                for (Drawable frame : orderedFrames) {
+                                    Producto360.addFrame(frame, 100);
+                                }
+                                Producto360.setOneShot(false);
                                 Producto360.start();
                             }
                         }
 
                         @Override
-                        public void onLoadCleared(Drawable placeholder) {
-                            // No es necesario manejar esto en este caso
+                        public void onLoadCleared(Drawable placeholder) {}
+
+                        @Override
+                        public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                            super.onLoadFailed(errorDrawable);
+                            // Manejo de error: si una falla, podrías ocultar el loader también
+                            loader.setVisibility(View.GONE);
                         }
                     });
         }
     }
-
-
-
 
     @Override
     protected void onDestroy() {
@@ -1081,8 +1121,8 @@ TextView txtVenDev;
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!ptoOp.equals("vazlocolombia.dyndns.org:9085") && !ptoOp.equals("sprautomotive.servehttp.com:9090") && !ptoOp.equals("sprautomotive.servehttp.com:9095") && !ptoOp.equals("sprautomotive.servehttp.com:9080")  ){        HttpHandler sh = new HttpHandler();
-
+            if (!StrServer.equals(getString(R.string.strservervazlocolombia)) && !StrServer.equals(getString(R.string.strserverspr))){
+                HttpHandler sh = new HttpHandler();
                 String url = Empresa + Producto;
                 String jsonStr = sh.makeServiceCall(url, strusr, strpass);
                 jsonStr = jsonStr.replace("\\", "");
@@ -1175,10 +1215,7 @@ TextView txtVenDev;
 
                 }else if(Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/rodatech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/partech/") || Empresa.equals("https://sprautomotive.com/es_MX/res/img/products/md/shark/")){
                     EmpresaFotos=Empresa+Producto+"/4.webp";
-                }else {
-                    EmpresaFotos=Empresa+Producto+"/4.webp";
                 }
-
 
 
 
@@ -1237,33 +1274,37 @@ if (!EmpresaFotos.equals("")){
                         jitems = jsonObject.getJSONObject("Cotizacion");
                         Numero = jitems.getJSONObject("" + i + "");
                         listaCarShoping.add(new CarritoVentasSANDG(
-                                (Numero.getString("k_Cliente").equals("")?"":Numero.getString("k_Cliente")),
-                                (Numero.getString("k_parte").equals("")?"":Numero.getString("k_parte")),
-                                (Numero.getString("k_exis").equals("")?"":Numero.getString("k_exis")),
-                                (Numero.getString("k_Q").equals("")?"":Numero.getString("k_Q")),
-                                (Numero.getString("k_unidad").equals("")?"":Numero.getString("k_unidad")),
-                                (Numero.getString("k_precio").equals("")?"":Numero.getString("k_precio")),
-                                (Numero.getString("k_desc1").equals("")?"0":Numero.getString("k_desc1")),
-                                (Numero.getString("k_desc2").equals("")?"0":Numero.getString("k_desc2")),
-                                (Numero.getString("k_desc3").equals("")?"0":Numero.getString("k_desc3")),
-                                (Numero.getString("k_monto").equals("")?"0":Numero.getString("k_monto")),
-                                (Numero.getString("k_descr").equals("")?"":Numero.getString("k_descr")),
-                                (Numero.getString("k_rfc").equals("")?"":Numero.getString("k_rfc")),
-                                (Numero.getString("k_plazo").equals("")?"0":Numero.getString("k_plazo")),
-                                (Numero.getString("k_calle").equals("")?"":Numero.getString("k_calle")),
-                                (Numero.getString("k_colo").equals("")?"":Numero.getString("k_colo")),
-                                (Numero.getString("k_pobla").equals("")?"":Numero.getString("k_pobla")),
-                                (Numero.getString("k_via").equals("")?"":Numero.getString("k_via")),
-                                (Numero.getString("k_87").equals("")?"":Numero.getString("k_87")),
-                                (Numero.getString("k_desc1fac").equals("")?"0":Numero.getString("k_desc1fac")),
-                                (Numero.getString("k_comentario1").equals("")?"":Numero.getString("k_comentario1")),
-                                (Numero.getString("k_comentario2").equals("")?"":Numero.getString("k_comentario2")),
-                                (Numero.getString("k_comentario3").equals("")?"":Numero.getString("k_comentario3")),
-                                (Numero.getString("k_descEAGLE").equals("")?"0":Numero.getString("k_descEAGLE")),
-                                (Numero.getString("k_descRODATECH").equals("")?"0":Numero.getString("k_descRODATECH")),
-                                (Numero.getString("k_descPARTECH").equals("")?"0":Numero.getString("k_descPARTECH")),
-                                (Numero.getString("k_descSHARK").equals("")?"0":Numero.getString("k_descSHARK")),
-                                (Numero.getString("k_descTRACKONE").equals("")?"0":Numero.getString("k_descTRACKONE")),""));
+                                (Numero.getString("k_Cliente").equals("") ? "" : Numero.getString("k_Cliente")),
+                                (Numero.getString("k_parte").equals("") ? "" : Numero.getString("k_parte")),
+                                (Numero.getString("k_exis").equals("") ? "" : Numero.getString("k_exis")),
+                                (Numero.getString("k_Q").equals("") ? "" : Numero.getString("k_Q")),
+                                (Numero.getString("k_unidad").equals("") ? "" : Numero.getString("k_unidad")),
+                                (Numero.getString("k_precio").equals("") ? "" : Numero.getString("k_precio")),
+                                (Numero.getString("k_desc1").equals("") ? "0" : Numero.getString("k_desc1")),
+                                (Numero.getString("k_desc2").equals("") ? "0" : Numero.getString("k_desc2")),
+                                (Numero.getString("k_desc3").equals("") ? "0" : Numero.getString("k_desc3")),
+                                (Numero.getString("k_monto").equals("") ? "0" : Numero.getString("k_monto")),
+                                (Numero.getString("k_descr").equals("") ? "" : Numero.getString("k_descr")),
+                                (Numero.getString("k_rfc").equals("") ? "" : Numero.getString("k_rfc")),
+                                (Numero.getString("k_plazo").equals("") ? "0" : Numero.getString("k_plazo")),
+                                (Numero.getString("k_calle").equals("") ? "" : Numero.getString("k_calle")),
+                                (Numero.getString("k_colo").equals("") ? "" : Numero.getString("k_colo")),
+                                (Numero.getString("k_pobla").equals("") ? "" : Numero.getString("k_pobla")),
+                                (Numero.getString("k_via").equals("") ? "" : Numero.getString("k_via")),
+                                (Numero.getString("k_87").equals("") ? "" : Numero.getString("k_87")),
+                                (Numero.getString("k_desc1fac").equals("") ? "0" : Numero.getString("k_desc1fac")),
+                                (Numero.getString("k_comentario1").equals("") ? "" : Numero.getString("k_comentario1")),
+                                (Numero.getString("k_comentario2").equals("") ? "" : Numero.getString("k_comentario2")),
+                                (Numero.getString("k_comentario3").equals("") ? "" : Numero.getString("k_comentario3")),
+                                (Numero.getString("k_descEAGLE").equals("") ? "0" : Numero.getString("k_descEAGLE")),
+                                (Numero.getString("k_descRODATECH").equals("") ? "0" : Numero.getString("k_descRODATECH")),
+                                (Numero.getString("k_descPARTECH").equals("") ? "0" : Numero.getString("k_descPARTECH")),
+                                (Numero.getString("k_descSHARK").equals("") ? "0" : Numero.getString("k_descSHARK")),
+                                (Numero.getString("k_descTRACKONE").equals("") ? "0" : Numero.getString("k_descTRACKONE")),
+                                "",
+                                (Numero.getString("k_descuentoinfo").equals("") ? "0" : Numero.getString("k_descuentoinfo")),
+                                (Numero.getString("k_clasificacion").equals("") ? "0" : Numero.getString("k_clasificacion"))));
+
                     }
                 } catch (final JSONException e) {
                     runOnUiThread(new Runnable() {
@@ -1324,6 +1365,13 @@ if (!EmpresaFotos.equals("")){
                 Comentario1 = listaCarShoping.get(0).getComentario1();
                 Comentario2 = listaCarShoping.get(0).getComentario2();
                 Comentario3 = listaCarShoping.get(0).getComentario3();
+                descuEagle = listaCarShoping.get(0).getEagle();
+                descuRodatech = listaCarShoping.get(0).getRodatech();
+                descuPartec = listaCarShoping.get(0).getPartech();
+                descuShark = listaCarShoping.get(0).getShark();
+                descuTrackone = listaCarShoping.get(0).getTrackoone();
+                descuentoinfo=listaCarShoping.get(0).getDescuentoinfo();
+                clasificacion=listaCarShoping.get(0).getClasificacion();
 
 
                 guardarDatos2();
@@ -1364,8 +1412,6 @@ if (!EmpresaFotos.equals("")){
 
 
     private void guardarDatos2() {
-
-        editor.putString("Nombre", Nombre);
         editor.putString("RFC", rfc);
         editor.putString("PLAZO", plazo);
         editor.putString("Calle", Calle);
@@ -1377,12 +1423,16 @@ if (!EmpresaFotos.equals("")){
         editor.putString("Comentario1", Comentario1);
         editor.putString("Comentario2", Comentario2);
         editor.putString("Comentario3", Comentario3);
-        editor.putString("Vendedor", Vendedor);
-
+        editor.putString("Eagle", descuEagle);
+        editor.putString("Rodatech", descuRodatech);
+        editor.putString("Partech", descuPartec);
+        editor.putString("Shark", descuShark);
+        editor.putString("Trackone", descuTrackone);
+        editor.putString("descuentoinfo", descuentoinfo);
+        editor.putString("clasificacion", clasificacion);
 
         editor.commit();
     }
-
     private void Consulta() {
         listaCarShoping2 = new ArrayList<>();
         conect = new ConexionSQLiteHelper(DetalladoProductosActivity.this, "bd_Carrito", null, 1);

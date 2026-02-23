@@ -49,6 +49,7 @@ import com.example.kepler201.activities.BusquedaActivity;
 import com.example.kepler201.activities.DetalladoProductosActivity;
 import com.example.kepler201.activities.MainActivity;
 import com.example.kepler201.includes.HttpHandler;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -122,6 +123,7 @@ public class HomeFragment extends Fragment {
 
     String ptoOp;
     String ptoCons;
+    String URL;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -173,12 +175,124 @@ public class HomeFragment extends Fragment {
         strcodBra = preference.getString("codBra", "null");
         strco = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
-        Empresa =preference.getString("URL","");
-        extIm =preference.getString("EXT","");
+        Empresa = preference.getString("URL", "");
+        extIm = preference.getString("EXT", "");
         ProductosNuevosStr = preference.getString("Productosnuevos", "0");
         ptoOp = preference.getString("PuertoOperativo", "");
         ptoCons = preference.getString("PuertoConsulta", "");
 
+
+        switch (StrServer) {
+            case "jacve.dyndns.org":
+                URL = "https://www.hazakautoparts.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                editor.apply();
+                break;
+            case "autodis.ath.cx":
+                URL = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                editor.apply();
+                break;
+            case "cecra.ath.cx":
+                URL = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                editor.apply();
+                break;
+            case "guvi.ath.cx":
+                URL = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                editor.apply();
+                break;
+            case "cedistabasco.ddns.net":
+                URL = "https://www.pressa.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                editor.apply();
+                break;
+            case "sprautomotive.servehttp.com":
+
+                if (ptoOp.equals(":9090")) {
+                    URL = getString(R.string.urlImagenesSPR) + "rodatech/";
+                    extIm = getString(R.string.ext);
+                    editor.putString("URL", URL);
+                    editor.putString("EXT", extIm);
+                    editor.commit();
+                    editor.apply();
+                } else if (ptoOp.equals(":9095")) {
+
+                    URL = getString(R.string.urlImagenesSPR) + "partech/";
+                    extIm = getString(R.string.ext);
+                    editor.putString("URL", URL);
+                    editor.putString("EXT", extIm);
+                    editor.commit();
+                    editor.apply();
+                } else if (ptoOp.equals(":9080")) {
+                    URL = getString(R.string.urlImagenesSPR) + "shark/";
+                    extIm = getString(R.string.ext);
+                    editor.putString("URL", URL);
+                    editor.putString("EXT", extIm);
+                    editor.commit();
+                    editor.apply();
+                }
+
+                break;
+            case "vipla.ath.cx":
+                URL = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                editor.apply();
+                break;
+            case "vazlocolombia.dyndns.org":
+                URL = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                editor.apply();
+                break;
+            case "bpr.ath.cx":
+                URL = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                editor.apply();
+                break;
+            case "vazquin.ath.cx":
+                URL = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                editor.apply();
+                break;
+            case "pesbac.ath.cx":
+                URL = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                editor.apply();
+                break;
+
+            default:
+                URL = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
+                editor.putString("URL", URL);
+                editor.putString("EXT", "");
+                editor.commit();
+                editor.apply();
+                break;
+        }
+
+
+        Empresa = preference.getString("URL", "");
+        extIm = preference.getString("EXT", "");
 
 
         Cliente = preferenceClie.getString("CodeClien", "null");
@@ -273,44 +387,48 @@ public class HomeFragment extends Fragment {
         });
 
         switch (StrServer) {
-            case "sprautomotive.servehttp.com:9090":
-                EagleOcultar.setVisibility(View.GONE);
-                TrackOneOcultar.setVisibility(View.GONE);
-                RodatechOcultar.setVisibility(View.VISIBLE);
-                PartechOcultar.setVisibility(View.GONE);
-                SharkOcultar.setVisibility(View.GONE);
-                VazloOcultar.setVisibility(View.GONE);
-                MechanicOcultar.setVisibility(View.GONE);
-                GspOcultar.setVisibility(View.GONE);
-                ZoomsOcultar.setVisibility(View.GONE);
-                KFFOcultar.setVisibility(View.GONE);
+            case "sprautomotive.servehttp.com":
 
+                if (ptoOp.equals(":9090")) {
+                    EagleOcultar.setVisibility(View.GONE);
+                    TrackOneOcultar.setVisibility(View.GONE);
+                    RodatechOcultar.setVisibility(View.VISIBLE);
+                    PartechOcultar.setVisibility(View.GONE);
+                    SharkOcultar.setVisibility(View.GONE);
+                    VazloOcultar.setVisibility(View.GONE);
+                    MechanicOcultar.setVisibility(View.GONE);
+                    GspOcultar.setVisibility(View.GONE);
+                    ZoomsOcultar.setVisibility(View.GONE);
+                    KFFOcultar.setVisibility(View.GONE);
+
+                } else if (ptoOp.equals(":9095")) {
+
+                    EagleOcultar.setVisibility(View.GONE);
+                    TrackOneOcultar.setVisibility(View.GONE);
+                    RodatechOcultar.setVisibility(View.GONE);
+                    PartechOcultar.setVisibility(View.VISIBLE);
+                    VazloOcultar.setVisibility(View.GONE);
+                    SharkOcultar.setVisibility(View.GONE);
+                    MechanicOcultar.setVisibility(View.GONE);
+                    GspOcultar.setVisibility(View.GONE);
+                    ZoomsOcultar.setVisibility(View.GONE);
+                    KFFOcultar.setVisibility(View.GONE);
+
+                } else if (ptoOp.equals(":9080")) {
+
+                    EagleOcultar.setVisibility(View.GONE);
+                    TrackOneOcultar.setVisibility(View.GONE);
+                    RodatechOcultar.setVisibility(View.GONE);
+                    PartechOcultar.setVisibility(View.GONE);
+                    SharkOcultar.setVisibility(View.VISIBLE);
+                    VazloOcultar.setVisibility(View.GONE);
+                    MechanicOcultar.setVisibility(View.GONE);
+                    GspOcultar.setVisibility(View.GONE);
+                    ZoomsOcultar.setVisibility(View.GONE);
+                    KFFOcultar.setVisibility(View.GONE);
+                }
                 break;
-            case "sprautomotive.servehttp.com:9095":
-                EagleOcultar.setVisibility(View.GONE);
-                TrackOneOcultar.setVisibility(View.GONE);
-                RodatechOcultar.setVisibility(View.GONE);
-                PartechOcultar.setVisibility(View.VISIBLE);
-                VazloOcultar.setVisibility(View.GONE);
-                SharkOcultar.setVisibility(View.GONE);
-                MechanicOcultar.setVisibility(View.GONE);
-                GspOcultar.setVisibility(View.GONE);
-                ZoomsOcultar.setVisibility(View.GONE);
-                KFFOcultar.setVisibility(View.GONE);
-                break;
-            case "sprautomotive.servehttp.com:9080":
-                EagleOcultar.setVisibility(View.GONE);
-                TrackOneOcultar.setVisibility(View.GONE);
-                RodatechOcultar.setVisibility(View.GONE);
-                PartechOcultar.setVisibility(View.GONE);
-                SharkOcultar.setVisibility(View.VISIBLE);
-                VazloOcultar.setVisibility(View.GONE);
-                MechanicOcultar.setVisibility(View.GONE);
-                GspOcultar.setVisibility(View.GONE);
-                ZoomsOcultar.setVisibility(View.GONE);
-                KFFOcultar.setVisibility(View.GONE);
-                break;
-            case "vazlocolombia.dyndns.org:9085":
+            case "vazlocolombia.dyndns.org":
                 EagleOcultar.setVisibility(View.VISIBLE);
                 TrackOneOcultar.setVisibility(View.VISIBLE);
                 RodatechOcultar.setVisibility(View.VISIBLE);
@@ -322,7 +440,7 @@ public class HomeFragment extends Fragment {
                 ZoomsOcultar.setVisibility(View.GONE);
                 KFFOcultar.setVisibility(View.GONE);
                 break;
-            case "autodis.ath.cx:9085":
+            case "autodis.ath.cx":
                 EagleOcultar.setVisibility(View.VISIBLE);
                 TrackOneOcultar.setVisibility(View.VISIBLE);
                 RodatechOcultar.setVisibility(View.GONE);
@@ -334,7 +452,7 @@ public class HomeFragment extends Fragment {
                 ZoomsOcultar.setVisibility(View.GONE);
                 KFFOcultar.setVisibility(View.GONE);
                 break;
-            case "jacve.dyndns.org:9085":
+            case "jacve.dyndns.org":
                 EagleOcultar.setVisibility(View.GONE);
                 TrackOneOcultar.setVisibility(View.GONE);
                 RodatechOcultar.setVisibility(View.GONE);
@@ -346,7 +464,7 @@ public class HomeFragment extends Fragment {
                 ZoomsOcultar.setVisibility(View.VISIBLE);
                 KFFOcultar.setVisibility(View.VISIBLE);
                 break;
-            case "bpr.ath.cx:9095":
+            case "bpr.ath.cx":
                 EagleOcultar.setVisibility(View.VISIBLE);
                 TrackOneOcultar.setVisibility(View.VISIBLE);
                 RodatechOcultar.setVisibility(View.GONE);
@@ -358,7 +476,7 @@ public class HomeFragment extends Fragment {
                 ZoomsOcultar.setVisibility(View.GONE);
                 KFFOcultar.setVisibility(View.GONE);
                 break;
-            case "vazquin.ath.cx:9085":
+            case "vazquin.ath.cx":
                 EagleOcultar.setVisibility(View.VISIBLE);
                 TrackOneOcultar.setVisibility(View.VISIBLE);
                 RodatechOcultar.setVisibility(View.GONE);
@@ -440,10 +558,35 @@ public class HomeFragment extends Fragment {
 
                 switch (fila.getString(3)) {
                     case "1":
-                        ListaProductosEagle.add(new ProductosNuevosSANDG(fila.getString(1),
-                                fila.getString(2),
-                                fila.getString(3),
-                                fila.getString(4)));
+                        if (StrServer.equals(getString(R.string.strserverspr))) {
+
+                            if (ptoOp.equals(":9090")) {
+                                ListaProductosRodatech.add(new ProductosNuevosSANDG(fila.getString(1),
+                                        fila.getString(2),
+                                        fila.getString(3),
+                                        fila.getString(4)));
+
+                            } else if (ptoOp.equals(":9095")) {
+                                ListaProductosPartech.add(new ProductosNuevosSANDG(fila.getString(1),
+                                        fila.getString(2),
+                                        fila.getString(3),
+                                        fila.getString(4)));
+
+                            } else if (ptoOp.equals(":9080")) {
+                                ListaProductosShark.add(new ProductosNuevosSANDG(fila.getString(1),
+                                        fila.getString(2),
+                                        fila.getString(3),
+                                        fila.getString(4)));
+                            }
+
+                        } else {
+                            ListaProductosEagle.add(new ProductosNuevosSANDG(fila.getString(1),
+                                    fila.getString(2),
+                                    fila.getString(3),
+                                    fila.getString(4)));
+                        }
+
+
                         break;
                     case "2":
                         ListaProductosRodatech.add(new ProductosNuevosSANDG(fila.getString(1),
@@ -487,7 +630,7 @@ public class HomeFragment extends Fragment {
                                 fila.getString(4)));
                         break;
                     case "14":
-                        if (!StrServer.equals("jacve.dyndns.org:9085")) {
+                        if (!StrServer.equals("jacve.dyndns.org")) {
                             ListaProductosVazlo.add(new ProductosNuevosSANDG(fila.getString(1),
                                     fila.getString(2),
                                     fila.getString(3),
@@ -797,7 +940,7 @@ public class HomeFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "cliente=" + strscliente + "&producto=1000R&cantidad=1&existencia=0&sucursal=" + strcodBra;
-            String url = "http://" + StrServer+ptoOp + "/carritoapp?" + parametros;
+            String url = "http://" + StrServer + ptoOp + "/carritoapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -863,7 +1006,7 @@ public class HomeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer+ptoCons + "/listasucursalapp";
+            String url = "http://" + StrServer + ptoCons + "/listasucursalapp";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -950,7 +1093,7 @@ public class HomeFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             String parametros = "vendedor=" + strco;
-            String url = "http://" + StrServer+ptoCons + "/listaclientesapp?" + parametros;
+            String url = "http://" + StrServer + ptoCons + "/listaclientesapp?" + parametros;
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1063,7 +1206,7 @@ public class HomeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer+ptoOp + "/listapronuevosapp";
+            String url = "http://" + StrServer + ptoCons + "/listapronuevosapp";
             String jsonStr = sh.makeServiceCall(url, strusr, strpass);
             if (jsonStr != null) {
                 try {
@@ -1118,9 +1261,18 @@ public class HomeFragment extends Fragment {
 
 
             }*/
+            if (ListaProductosGeneral.size() > 0) {
+                Imagenes task1 = new Imagenes();
+                task1.execute();
 
-            Imagenes task1 = new Imagenes();
-            task1.execute();
+            } else {
+                if (strcodBra.equals("")) {
+                    new SucursalesLista().execute();
+                } else {
+                    mDialog.dismiss();
+                }
+
+            }
 
 
         }
@@ -1138,7 +1290,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals(getString(R.string.strservervazlocolombia)) && !StrServer.equals(getString(R.string.strserverspr)+ptoOp) && !StrServer.equals(getString(R.string.strserverspr)+ptoOp) && !StrServer.equals(getString(R.string.strserverspr)+":9080")){
+            if (!StrServer.equals(getString(R.string.strservervazlocolombia)) && !StrServer.equals(getString(R.string.strserverspr))) {
 
                 String Productos = "";
                 for (int i = 0; i < ListaProductosGeneral.size(); i++) {
@@ -1219,7 +1371,27 @@ public class HomeFragment extends Fragment {
                 Url = ListaProductosGeneral.get(i).getUrl();
 
                 switch (Tipo) {
+
+
                     case "1":
+
+                        if (StrServer.equals(getString(R.string.strserverspr))) {
+
+                            if (ptoOp.equals(":9090")) {
+                                ListaProductosRodatech.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
+
+                            } else if (ptoOp.equals(":9095")) {
+                                ListaProductosPartech.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
+
+                            } else if (ptoOp.equals(":9080")) {
+                                ListaProductosShark.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
+                            }
+
+                        } else {
+                            ListaProductosEagle.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
+                        }
+
+
                         ListaProductosEagle.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
                         break;
                     case "2":
@@ -1245,7 +1417,7 @@ public class HomeFragment extends Fragment {
                         ListaProductosMechanic.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
                         break;
                     case "14":
-                        if (!StrServer.equals("jacve.dyndns.org:9085")) {
+                        if (!StrServer.equals("jacve.dyndns.org")) {
                             ListaProductosVazlo.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
                         } else {
                             ListaProductoskff.add(new ProductosNuevosSANDG(Clave, Descripcion, Tipo, Url));
@@ -1504,16 +1676,11 @@ public class HomeFragment extends Fragment {
 
                 }
             });
-
-
-
-
             if (strcodBra.equals("")) {
                 new SucursalesLista().execute();
             } else {
                 mDialog.dismiss();
             }
-
 
         }
 
@@ -1534,7 +1701,7 @@ public class HomeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://" + StrServer+ptoOp + "/versionesapp?Clave=1";
+            String url = "http://" + StrServer + ptoOp + "/versionesapp?Clave=1";
             String jsonStr = sh.makeServiceCall(url, "WEBPETI", "W3B3P3T1");
             if (jsonStr != null) {
                 try {

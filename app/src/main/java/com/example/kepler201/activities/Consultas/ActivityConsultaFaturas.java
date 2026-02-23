@@ -494,7 +494,7 @@ public class ActivityConsultaFaturas extends AppCompatActivity {
 
             // Decodifica y guarda
             byte[] decoded = Base64.decode(base64, Base64.DEFAULT);
-            File file = new File(context.getExternalFilesDir(null), "archivo.pdf");
+            File file = new File(context.getExternalFilesDir(null), Cliente+"_"+ClaveFolDialog+"_"+ClaveNumDialog+".pdf");
             FileOutputStream fos = null;
             try {
                 fos = new FileOutputStream(file);

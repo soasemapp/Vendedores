@@ -289,7 +289,7 @@ public class AdapterAgenda extends RecyclerView.Adapter<AdapterAgenda.ViewHolder
                 listaAgenda.get(position).getActividad(),
                 listaAgenda.get(position).getEstatus(),
                 strcode,
-                StrServer,
+                 StrServer  ,
                 strusr,
                 strpass
         );

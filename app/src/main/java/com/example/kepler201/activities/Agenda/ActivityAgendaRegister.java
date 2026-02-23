@@ -107,8 +107,6 @@ public class ActivityAgendaRegister extends AppCompatActivity {
         strcodBra = preference.getString("codBra", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
-        StrServer = preference.getString("Server", "null");
-        StrServer = preference.getString("Server", "null");
 
         ptoOp = preference.getString("PuertoOperativo", "");
         ptoCons = preference.getString("PuertoConsulta", "");
@@ -116,7 +114,7 @@ public class ActivityAgendaRegister extends AppCompatActivity {
 
 
 
-        if (!StrServer.equals("vazlocolombia.dyndns.org:9085")){
+        if (!StrServer.equals(getString(R.string.strservervazlocolombia))){
             etiqueta.setText("TG");
             partechlay.setVisibility(View.VISIBLE);
         }else{
@@ -125,7 +123,7 @@ public class ActivityAgendaRegister extends AppCompatActivity {
             partechlay.setVisibility(View.GONE);
         }
 
-        if (StrServer.equals("jacve.dyndns.org:9085")){
+        if (StrServer.equals(getString(R.string.strserverjacve))){
             OcultarJacve.setVisibility(View.VISIBLE);
             OcultarJacve.setEnabled(false);
             OcultarCedis.setVisibility(View.GONE);

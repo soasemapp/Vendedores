@@ -30,8 +30,10 @@ public class CarritoVentasSANDG {
     String Shark;
     String Trackoone;
     String Url;
+    String descuentoinfo;
+    String Clasificacion;
 
-    public CarritoVentasSANDG(String cliente, String parte, String existencia, String cantidad, String unidad, String precio, String desc1, String desc2, String desc3, String monto, String descr, String rfc, String plazo, String calle, String colonia, String poblacion, String via, String descPro, String desc1Fac, String comentario1, String comentario2, String comentario3, String eagle, String rodatech, String partech, String shark, String trackoone, String url) {
+    public CarritoVentasSANDG(String cliente, String parte, String existencia, String cantidad, String unidad, String precio, String desc1, String desc2, String desc3, String monto, String descr, String rfc, String plazo, String calle, String colonia, String poblacion, String via, String descPro, String desc1Fac, String comentario1, String comentario2, String comentario3, String eagle, String rodatech, String partech, String shark, String trackoone, String url, String descuentoinfo, String clasificacion) {
         this.cliente = cliente;
         this.parte = parte;
         this.existencia = existencia;
@@ -60,6 +62,8 @@ public class CarritoVentasSANDG {
         Shark = shark;
         Trackoone = trackoone;
         Url = url;
+        this.descuentoinfo = descuentoinfo;
+        Clasificacion = clasificacion;
     }
 
     public String getCliente() {
@@ -284,5 +288,21 @@ public class CarritoVentasSANDG {
 
     public void setUrl(String url) {
         Url = url;
+    }
+
+    public String getDescuentoinfo() {
+        return descuentoinfo;
+    }
+
+    public void setDescuentoinfo(String descuentoinfo) {
+        this.descuentoinfo = descuentoinfo;
+    }
+
+    public String getClasificacion() {
+        return Clasificacion;
+    }
+
+    public void setClasificacion(String clasificacion) {
+        Clasificacion = clasificacion;
     }
 }

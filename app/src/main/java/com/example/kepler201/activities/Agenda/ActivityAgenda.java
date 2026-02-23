@@ -61,6 +61,7 @@ public class ActivityAgenda extends AppCompatActivity {
     private LocationCallback locationCallback;
     private float distanciaMinimaActual;
     private boolean isActivityVisible = false;
+    String ptoOp,ptoCons;
 
 
     private AdapterAgenda adapter;
@@ -90,10 +91,16 @@ public class ActivityAgenda extends AppCompatActivity {
 
     private void loadSharedPreferences() {
         SharedPreferences preference = getSharedPreferences("Login", Context.MODE_PRIVATE);
+
         strusr = preference.getString("user", "null");
         strpass = preference.getString("pass", "null");
         strcode = preference.getString("code", "null");
         StrServer = preference.getString("Server", "null");
+
+        ptoOp = preference.getString("PuertoOperativo", "");
+        ptoCons = preference.getString("PuertoConsulta", "");
+
+
     }
 
     private void initViews() {
@@ -106,7 +113,7 @@ public class ActivityAgenda extends AppCompatActivity {
 
     private void setupRecyclerView() {
         recyclerAgenda.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AdapterAgenda(listaAgenda, listaUbicaciones, this, strcode, StrServer, strusr, strpass);
+        adapter = new AdapterAgenda(listaAgenda, listaUbicaciones, this, strcode, StrServer+ptoCons, strusr, strpass);
         recyclerAgenda.setAdapter(adapter);
     }
 
@@ -224,7 +231,7 @@ public class ActivityAgenda extends AppCompatActivity {
                 for (int j = 0; j < listaAgenda.size(); j++) {
                     ClaveCliente = listaAgenda.get(j).getCliente();
                     HttpHandler sh = new HttpHandler();
-                    String url = "http://" + StrServer + "/enviomapaapp?cliente=" + URLEncoder.encode(ClaveCliente, "UTF-8");
+                    String url = "http://" +  StrServer+ptoCons + "/enviomapaapp?cliente=" + URLEncoder.encode(ClaveCliente, "UTF-8");
                     String jsonStr = sh.makeServiceCall(url, strusr, strpass);
 
                     if (jsonStr != null) {
@@ -322,7 +329,7 @@ public class ActivityAgenda extends AppCompatActivity {
             HttpHandler sh = new HttpHandler();
             //String url = "http://" + StrServer + "/agendaapp?vendedor=" + strcode + "&fecha=2025-07-02";
             //String parametros = "vendedor=" + strcode + "&fecha=" + StrFecha;
-           String url = "http://" + StrServer + "/agendaapp?vendedor=" + strcode + "&fecha=" + StrFecha;
+           String url = "http://" +  StrServer+ptoCons  + "/agendaapp?vendedor=" + strcode + "&fecha=" + StrFecha;
 
             try {
                 String jsonStr = sh.makeServiceCall(url, strusr, strpass);

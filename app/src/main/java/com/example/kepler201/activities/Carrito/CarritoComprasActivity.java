@@ -124,6 +124,9 @@ public class CarritoComprasActivity extends AppCompatActivity {
     String descuShark;
     String descuTrackone;
 
+    String descuentoinfo;
+    String clasificacion;
+
 
     String ExistenciaProd;
     String ClaveProducto = "";
@@ -240,13 +243,16 @@ public class CarritoComprasActivity extends AppCompatActivity {
         descuShark = preferenceClie.getString("Shark", "");
         descuTrackone = preferenceClie.getString("Trackone", "");
 
+        descuentoinfo = preferenceClie.getString("descuentoinfo", "");
+        clasificacion = preferenceClie.getString("clasificacion", "");
+
 
 
 
 
         Cantidad123.setText("1");
 
-        IvaVariado = ((!StrServer.equals("vazlocolombia.dyndns.org:9085")) ? 0.16 : 0.19);
+        IvaVariado = ((!StrServer.equals(getString(R.string.strservervazlocolombia))) ? 0.16 : 0.19);
 
 
         vald = getIntent().getIntExtra("val", 0);
@@ -295,7 +301,7 @@ ButtonAdd.setEnabled(false);
                 NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
                 productoStr = productosEd.getText().toString();
                 if (networkInfo != null && networkInfo.isConnected()) {
-                    if (!productoStr.isEmpty() && !Cliente.equals("null") && !Cantidad123.getText().toString().equals("")) {
+                    if (!productoStr.isEmpty() && !Cliente.equals("") && !Cantidad123.getText().toString().equals("")) {
                         if (listaCarShoping.size() > 0) {
 
                             for (int i = 0; i < listaCarShoping.size(); i++) {
@@ -379,7 +385,7 @@ ButtonAdd.setEnabled(false);
 
                 mDialog.show();
 
-                if (StrServer.equals("vazlocolombia.dyndns.org:9085")) {
+                if (StrServer.equals(getString(R.string.strservervazlocolombia))) {
 
                     if (listaCarShoping.size() != 0) {
 
@@ -479,6 +485,8 @@ ButtonAdd.setEnabled(false);
         editor.putString("Partech", descuPartec);
         editor.putString("Shark", descuShark);
         editor.putString("Trackone", descuTrackone);
+        editor.putString("descuentoinfo", descuentoinfo);
+        editor.putString("clasificacion", clasificacion);
 
         editor.commit();
     }
@@ -663,7 +671,7 @@ ButtonAdd.setEnabled(false);
                     if (networkInfo != null && networkInfo.isConnected()) {
                         listaCarShoping2.clear();
                         strCantidad = Cantidad123.getText().toString();
-                        strscliente2 = preferenceClie.getString("CodeClien", "null");
+                        strscliente2 = preferenceClie.getString("CodeClien", "");
                         if (!strCantidad.isEmpty() && !strCantidad.equals("0") && !strClave.isEmpty()) {
 
                             int Diponibilidad = Integer.parseInt(ExistenciaProd);
@@ -749,7 +757,7 @@ ButtonAdd.setEnabled(false);
                             guardarDatos();
                             listaCarShoping2.clear();
                             strCantidad = Cantidad123.getText().toString();
-                            strscliente2 = preferenceClie.getString("CodeClien", "null");
+                            strscliente2 = preferenceClie.getString("CodeClien", "");
 
                             CarritoComprasASYC();
 
@@ -769,7 +777,7 @@ ButtonAdd.setEnabled(false);
                                     guardarDatos();
                                     listaCarShoping2.clear();
                                     strCantidad = Cantidad123.getText().toString();
-                                    strscliente2 = preferenceClie.getString("CodeClien", "null");
+                                    strscliente2 = preferenceClie.getString("CodeClien", "");
 
                                     CarritoComprasASYC();
                                     dialog.dismiss();
@@ -787,7 +795,7 @@ ButtonAdd.setEnabled(false);
                                     guardarDatos();
                                     listaCarShoping2.clear();
                                     strCantidad = Cantidad123.getText().toString();
-                                    strscliente2 = preferenceClie.getString("CodeClien", "null");
+                                    strscliente2 = preferenceClie.getString("CodeClien", "");
 
                                     CarritoComprasASYC();
                                     dialog.dismiss();
@@ -804,7 +812,7 @@ ButtonAdd.setEnabled(false);
                             guardarDatos();
                             listaCarShoping2.clear();
                             strCantidad = Cantidad123.getText().toString();
-                            strscliente2 = preferenceClie.getString("CodeClien", "null");
+                            strscliente2 = preferenceClie.getString("CodeClien", "");
 
                             CarritoComprasASYC();
 
@@ -1029,7 +1037,10 @@ ButtonAdd.setEnabled(false);
                                     (Numero.getString("k_descRODATECH").equals("") ? "0" : Numero.getString("k_descRODATECH")),
                                     (Numero.getString("k_descPARTECH").equals("") ? "0" : Numero.getString("k_descPARTECH")),
                                     (Numero.getString("k_descSHARK").equals("") ? "0" : Numero.getString("k_descSHARK")),
-                                    (Numero.getString("k_descTRACKONE").equals("") ? "0" : Numero.getString("k_descTRACKONE")),""));
+                                    (Numero.getString("k_descTRACKONE").equals("") ? "0" : Numero.getString("k_descTRACKONE")),
+                                    "",
+                                    (Numero.getString("k_descuentoinfo").equals("") ? "0" : Numero.getString("k_descuentoinfo")),
+                                    (Numero.getString("k_clasificacion").equals("") ? "0" : Numero.getString("k_clasificacion"))));
 
                            }
                     }
@@ -2437,7 +2448,8 @@ ButtonAdd.setEnabled(false);
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!StrServer.equals(getString(R.string.strservervazlocolombia)) && !StrServer.equals(getString(R.string.strserverspr)+ptoOp) && !StrServer.equals(getString(R.string.strserverspr)+ptoOp) && !StrServer.equals(getString(R.string.strserverspr)+":9080")  ){
+            if (!StrServer.equals(getString(R.string.strservervazlocolombia)) && !StrServer.equals(getString(R.string.strserverspr))){
+
                 for (int i = 0; i < listaCarShoping2.size(); i++) {
 
                 String Producto = listaCarShoping2.get(i).getParte();
@@ -2529,6 +2541,8 @@ ButtonAdd.setEnabled(false);
                 descuPartec = listaCarShoping2.get(0).getPartech();
                 descuShark = listaCarShoping2.get(0).getShark();
                 descuTrackone = listaCarShoping2.get(0).getTrackoone();
+                descuentoinfo=listaCarShoping2.get(0).getDescuentoinfo();
+                clasificacion=listaCarShoping2.get(0).getClasificacion();
                 guardarDatos2();
             }
             try {
@@ -2575,12 +2589,12 @@ ButtonAdd.setEnabled(false);
 
     @SuppressLint("SetTextI18n")
     private void mostarCliente() {
-        Cliente = preferenceClie.getString("CodeClien", "null");
-        Nombre = preferenceClie.getString("NomClien", "null");
-        txtClaveCliente.setText(Html.fromHtml((Cliente.equals("null") ? "No hay Cliente" : "<font color = #FF0000>" + Cliente + "</font> <br>") + (Nombre.equals("null") ? "" : Nombre)));
+        Cliente = preferenceClie.getString("CodeClien", "");
+        Nombre = preferenceClie.getString("NomClien", "");
+        txtClaveCliente.setText(Html.fromHtml((Cliente.equals("null") ? "No hay Cliente" : "<font color = #FF0000>" + Cliente + "</font> <br>") + (Nombre.equals("") ? "" : Nombre)));
 
-        if (!Cliente.equals("null")) {
-            if(StrServer.equals("vazlocolombia.dyndns.org:9085")){
+        if (!Cliente.equals("")) {
+            if(StrServer.equals(getString(R.string.strservervazlocolombia))){
                 Infor.setVisibility(View.VISIBLE);
                 Infor.setText(Html.fromHtml("Calle:" + Calle + "<br>" +
                         "RFC:" + rfc + "<br>" +
@@ -2589,7 +2603,7 @@ ButtonAdd.setEnabled(false);
 
                 comentario.setText(Comentario1 + "\n" + " " + Comentario2 + "\n" + " " + Comentario3);
 
-            }else if(StrServer.equals("vipla.ath.cx:9085")){
+            }else if(StrServer.equals(getString(R.string.strservervipla))){
                 Infor.setVisibility(View.VISIBLE);
                 Infor.setText(Html.fromHtml("Calle:" + Calle + "<br>" +
                         "RFC:" + rfc + "<br>" +
@@ -2602,7 +2616,9 @@ ButtonAdd.setEnabled(false);
                 Infor.setText(Html.fromHtml("Calle:" + Calle + "<br>" +
                         "Colonia:" + Colonia + "<br>" +
                         "Poblacion:" + Poblacion + "<br>" +
-                        "Descuento:" + Desc1));
+                        "Descuento PP:" + DescPro + "<br>" +
+                        "Descuento Inf:" + descuentoinfo + "<br>" +
+                        "Clasificacion:" + clasificacion));
 
                 comentario.setText(Comentario1 + "\n" + " " + Comentario2 + "\n" + " " + Comentario3);
 

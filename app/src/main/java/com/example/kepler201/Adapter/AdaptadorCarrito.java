@@ -67,7 +67,7 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.View
         holder.Cantidad.setText(listaCarrito.get(position).getCantidad());
         holder.Unidad.setText(listaCarrito.get(position).getUnidad());
 
-        if(StrServer.equals("vipla.ath.cx:9085")){
+        if(StrServer.equals("vipla.ath.cx")){
 
             Precio = listaCarrito.get(position).getPrecio();
             Descuento=listaCarrito.get(position).getDesc1();
@@ -82,7 +82,7 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.View
             holder.Descuento.setVisibility(View.GONE);
             holder.Monto.setText(Html.fromHtml("Total: $<font color ='#FF0000'>" +formatNumberCurrency(String.valueOf(monto))+"</font>"));
 
-        }else if(!StrServer.equals("vazlocolombia.dyndns.org:9085")){
+        }else if(!StrServer.equals("vazlocolombia.dyndns.org")){
 
             Precio = listaCarrito.get(position).getPrecio();
             Descuento=listaCarrito.get(position).getDesc1();

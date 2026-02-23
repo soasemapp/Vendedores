@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -1221,33 +1222,36 @@ String Empresa;
                         Numero = jitems.getJSONObject("" + i + "");
 
                         listaCarShoping.add(new CarritoVentasSANDG(
-                                (Numero.getString("k_Cliente").equals("anyType{}") ? " " : Numero.getString("k_Cliente")),
-                                (Numero.getString("k_parte").equals("anyType{}") ? " " : Numero.getString("k_parte")),
-                                (Numero.getString("k_exis").equals("anyType{}") ? "0" : Numero.getString("k_exis")),
-                                (Numero.getString("k_Q").equals("anyType{}") ? " " : Numero.getString("k_Q")),
-                                (Numero.getString("k_unidad").equals("anyType{}") ? " " : Numero.getString("k_unidad")),
-                                (Numero.getString("k_precio").equals("anyType{}") ? "" : Numero.getString("k_precio")),
-                                (Numero.getString("k_desc1").equals("anyType{}") ? " " : Numero.getString("k_desc1")),
-                                (Numero.getString("k_desc2").equals("anyType{}") ? " " : Numero.getString("k_desc2")),
-                                (Numero.getString("k_desc3").equals("anyType{}") ? " " : Numero.getString("k_desc3")),
-                                (Numero.getString("k_monto").equals("anyType{}") ? " " : Numero.getString("k_monto")),
-                                (Numero.getString("k_descr").equals("anyType{}") ? " " : Numero.getString("k_descr")),
-                                (Numero.getString("k_rfc").equals("anyType{}") ? " " : Numero.getString("k_rfc")),
-                                (Numero.getString("k_plazo").equals("anyType{}") ? " " : Numero.getString("k_plazo")),
-                                (Numero.getString("k_calle").equals("anyType{}") ? " " : Numero.getString("k_calle")),
-                                (Numero.getString("k_colo").equals("anyType{}") ? " " : Numero.getString("k_colo")),
-                                (Numero.getString("k_pobla").equals("anyType{}") ? " " : Numero.getString("k_pobla")),
-                                (Numero.getString("k_via").equals("anyType{}") ? " " : Numero.getString("k_via")),
-                                (Numero.getString("k_87").equals("anyType{}") ? "0" : Numero.getString("k_87")),
-                                (Numero.getString("k_desc1fac").equals("anyType{}") ? "0" : Numero.getString("k_desc1fac")),
-                                (Numero.getString("k_comentario1").equals("anyType{}") ? "" : Numero.getString("k_comentario1")),
-                                (Numero.getString("k_comentario2").equals("anyType{}") ? "" : Numero.getString("k_comentario2")),
-                                (Numero.getString("k_comentario3").equals("anyType{}") ? "" : Numero.getString("k_comentario3")),
-                                (Numero.getString("k_descEAGLE").equals("anyType{}") ? "" : Numero.getString("k_descEAGLE")),
-                                (Numero.getString("k_descRODATECH").equals("anyType{}") ? "" : Numero.getString("k_descRODATECH")),
-                                (Numero.getString("k_descPARTECH").equals("anyType{}") ? "" : Numero.getString("k_descPARTECH")),
-                                (Numero.getString("k_descSHARK").equals("anyType{}") ? "" : Numero.getString("k_descSHARK")),
-                                (Numero.getString("k_descTRACKONE").equals("anyType{}") ? "" : Numero.getString("k_descTRACKONE")),""));
+                                (Numero.getString("k_Cliente").equals("") ? "" : Numero.getString("k_Cliente")),
+                                (Numero.getString("k_parte").equals("") ? "" : Numero.getString("k_parte")),
+                                (Numero.getString("k_exis").equals("") ? "" : Numero.getString("k_exis")),
+                                (Numero.getString("k_Q").equals("") ? "" : Numero.getString("k_Q")),
+                                (Numero.getString("k_unidad").equals("") ? "" : Numero.getString("k_unidad")),
+                                (Numero.getString("k_precio").equals("") ? "" : Numero.getString("k_precio")),
+                                (Numero.getString("k_desc1").equals("") ? "0" : Numero.getString("k_desc1")),
+                                (Numero.getString("k_desc2").equals("") ? "0" : Numero.getString("k_desc2")),
+                                (Numero.getString("k_desc3").equals("") ? "0" : Numero.getString("k_desc3")),
+                                (Numero.getString("k_monto").equals("") ? "0" : Numero.getString("k_monto")),
+                                (Numero.getString("k_descr").equals("") ? "" : Numero.getString("k_descr")),
+                                (Numero.getString("k_rfc").equals("") ? "" : Numero.getString("k_rfc")),
+                                (Numero.getString("k_plazo").equals("") ? "0" : Numero.getString("k_plazo")),
+                                (Numero.getString("k_calle").equals("") ? "" : Numero.getString("k_calle")),
+                                (Numero.getString("k_colo").equals("") ? "" : Numero.getString("k_colo")),
+                                (Numero.getString("k_pobla").equals("") ? "" : Numero.getString("k_pobla")),
+                                (Numero.getString("k_via").equals("") ? "" : Numero.getString("k_via")),
+                                (Numero.getString("k_87").equals("") ? "" : Numero.getString("k_87")),
+                                (Numero.getString("k_desc1fac").equals("") ? "0" : Numero.getString("k_desc1fac")),
+                                (Numero.getString("k_comentario1").equals("") ? "" : Numero.getString("k_comentario1")),
+                                (Numero.getString("k_comentario2").equals("") ? "" : Numero.getString("k_comentario2")),
+                                (Numero.getString("k_comentario3").equals("") ? "" : Numero.getString("k_comentario3")),
+                                (Numero.getString("k_descEAGLE").equals("") ? "0" : Numero.getString("k_descEAGLE")),
+                                (Numero.getString("k_descRODATECH").equals("") ? "0" : Numero.getString("k_descRODATECH")),
+                                (Numero.getString("k_descPARTECH").equals("") ? "0" : Numero.getString("k_descPARTECH")),
+                                (Numero.getString("k_descSHARK").equals("") ? "0" : Numero.getString("k_descSHARK")),
+                                (Numero.getString("k_descTRACKONE").equals("") ? "0" : Numero.getString("k_descTRACKONE")),
+                                "",
+                                (Numero.getString("k_descuentoinfo").equals("") ? "0" : Numero.getString("k_descuentoinfo")),
+                                (Numero.getString("k_clasificacion").equals("") ? "0" : Numero.getString("k_clasificacion"))));
 
 
                     }
@@ -1361,7 +1365,7 @@ String Empresa;
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!ptoOp.equals("vazlocolombia.dyndns.org:9085") && !ptoOp.equals("sprautomotive.servehttp.com:9090") && !ptoOp.equals("sprautomotive.servehttp.com:9095") && !ptoOp.equals("sprautomotive.servehttp.com:9080")  ){
+            if (!StrServer.equals(getString(R.string.strservervazlocolombia)) && !StrServer.equals(getString(R.string.strserverspr))){
 
                 HttpHandler sh = new HttpHandler();
 
@@ -1486,29 +1490,51 @@ String Empresa;
     }
 
     private void loadImagesAndStartAnimation() {
+        // 1. Mostramos el cargador antes de empezar
+        final ProgressBar loader = findViewById(R.id.loadingProgress);
+        loader.setVisibility(View.VISIBLE);
 
-        for (String url : imageUrls) {
+        final Drawable[] orderedFrames = new Drawable[imageUrls.size()];
+        final int[] loadedCount = {0};
+
+        for (int i = 0; i < imageUrls.size(); i++) {
+            final int index = i;
             Glide.with(this)
                     .asDrawable()
-                    .load(url)
+                    .load(imageUrls.get(i))
                     .into(new CustomTarget<Drawable>() {
                         @Override
                         public void onResourceReady(@NonNull Drawable resource, Transition<? super Drawable> transition) {
-                            Producto360.addFrame(resource, 100); // Duración de cada frame en ms
-                            if (Producto360.getNumberOfFrames() == imageUrls.size()) {
-                                Producto360.setOneShot(false); // Repetir la animación
+                            orderedFrames[index] = resource;
+                            loadedCount[0]++;
+
+                            // 2. Actualizamos opcionalmente el progreso
+                            // loader.setProgress((loadedCount[0] * 100) / imageUrls.size());
+
+                            if (loadedCount[0] == imageUrls.size()) {
+                                // 3. OCULTAR el cargador, ya tenemos todo
+                                loader.setVisibility(View.GONE);
+
+                                for (Drawable frame : orderedFrames) {
+                                    Producto360.addFrame(frame, 100);
+                                }
+                                Producto360.setOneShot(false);
                                 Producto360.start();
                             }
                         }
 
                         @Override
-                        public void onLoadCleared(Drawable placeholder) {
-                            // No es necesario manejar esto en este caso
+                        public void onLoadCleared(Drawable placeholder) {}
+
+                        @Override
+                        public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                            super.onLoadFailed(errorDrawable);
+                            // Manejo de error: si una falla, podrías ocultar el loader también
+                            loader.setVisibility(View.GONE);
                         }
                     });
         }
     }
-
     private void Consulta() {
         listaCarShoping2 = new ArrayList<>();
         conect = new ConexionSQLiteHelper(ActivityConsultaProductos.this, "bd_Carrito", null, 1);

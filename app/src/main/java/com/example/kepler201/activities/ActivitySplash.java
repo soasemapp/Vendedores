@@ -32,7 +32,7 @@ public class ActivitySplash extends AppCompatActivity {
 
 
         switch (StrServer) {
-            case "jacve.dyndns.org:9085":
+            case "jacve.dyndns.org":
                 Picasso.with(getApplicationContext()).
                         load(R.drawable.jacve)
                         .error(R.drawable.ic_baseline_error_24)
@@ -40,7 +40,7 @@ public class ActivitySplash extends AppCompatActivity {
                         .centerInside()
                         .into(imgVi);
                 break;
-            case "autodis.ath.cx:9085":
+            case "autodis.ath.cx":
                 Picasso.with(getApplicationContext()).
                         load(R.drawable.autodis)
                         .error(R.drawable.ic_baseline_error_24)
@@ -48,7 +48,7 @@ public class ActivitySplash extends AppCompatActivity {
                         .centerInside()
                         .into(imgVi);
                 break;
-            case "cecra.ath.cx:9085":
+            case "cecra.ath.cx":
 
                 Picasso.with(getApplicationContext()).
                         load(R.drawable.cecra)
@@ -58,7 +58,7 @@ public class ActivitySplash extends AppCompatActivity {
                         .into(imgVi);
 
                 break;
-            case "guvi.ath.cx:9080":
+            case "guvi.ath.cx":
 
                 Picasso.with(getApplicationContext()).
                         load(R.drawable.guvi)
@@ -68,7 +68,7 @@ public class ActivitySplash extends AppCompatActivity {
                         .into(imgVi);
 
                 break;
-            case "cedistabasco.ddns.net:9085":
+            case "cedistabasco.ddns.net":
 
                 Picasso.with(getApplicationContext()).
                         load(R.drawable.pressa)
@@ -78,7 +78,7 @@ public class ActivitySplash extends AppCompatActivity {
                         .into(imgVi);
 
                 break;
-            case "vipla.ath.cx:9085":
+            case "vipla.ath.cx":
 
                 Picasso.with(getApplicationContext()).
                         load(R.drawable.vipla)
@@ -88,11 +88,7 @@ public class ActivitySplash extends AppCompatActivity {
                         .into(imgVi);
 
                 break;
-            case "sprautomotive.servehttp.com:9090":
-            case "sprautomotive.servehttp.com:9095":
-
-            case "sprautomotive.servehttp.com:9080":
-
+            case "sprautomotive.servehttp.com":
                 Picasso.with(getApplicationContext()).
                         load(R.drawable.sprimage)
                         .error(R.drawable.ic_baseline_error_24)
@@ -102,7 +98,7 @@ public class ActivitySplash extends AppCompatActivity {
 
                 break;
 
-            case "vazlocolombia.dyndns.org:9085":
+            case "vazlocolombia.dyndns.org":
 
                 Picasso.with(getApplicationContext()).
                         load(R.drawable.colombia2)
@@ -112,7 +108,7 @@ public class ActivitySplash extends AppCompatActivity {
                         .into(imgVi);
 
                 break;
-            case "bpr.ath.cx:9095":
+            case "bpr.ath.cx":
                 Picasso.with(getApplicationContext()).
                         load(R.drawable.logobpr)
                         .error(R.drawable.ic_baseline_error_24)
@@ -121,7 +117,7 @@ public class ActivitySplash extends AppCompatActivity {
                         .into(imgVi);
 
                 break;
-            case "vazquin.ath.cx:9085":
+            case "vazquin.ath.cx":
                 Picasso.with(getApplicationContext()).
                         load(R.drawable.vazquinlogo)
                         .error(R.drawable.ic_baseline_error_24)
@@ -130,7 +126,7 @@ public class ActivitySplash extends AppCompatActivity {
                         .into(imgVi);
 
                 break;
-            case "pesbac.ath.cx:9095":
+            case "pesbac.ath.cx":
                 Picasso.with(getApplicationContext()).
                         load(R.drawable.pesbacdark)
                         .error(R.drawable.ic_baseline_error_24)

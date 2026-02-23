@@ -147,7 +147,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
         ptoCons = preference.getString("PuertoConsulta", "");
 
 
-        switch (StrServer+ptoOp) {
+        switch (StrServer) {
             case "jacve.dyndns.org: ":
                 Picasso.with(getApplicationContext()).load(R.drawable.jacve)
                         .error(R.drawable.ic_baseline_error_24)
@@ -156,7 +156,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         .into(imgEmpresa);
 
                 break;
-            case "autodis.ath.cx:9085":
+            case "autodis.ath.cx":
 
                 Picasso.with(getApplicationContext()).load(R.drawable.autodis)
                         .error(R.drawable.ic_baseline_error_24)
@@ -165,56 +165,59 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         .into(imgEmpresa);
 
                 break;
-            case "cecra.ath.cx:9085":
+            case "cecra.ath.cx":
                 Picasso.with(getApplicationContext()).load(R.drawable.cecra)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
                         .centerInside()
                         .into(imgEmpresa);
                 break;
-            case "guvi.ath.cx:9080":
+            case "guvi.ath.cx":
                 Picasso.with(getApplicationContext()).load(R.drawable.guvi)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
                         .centerInside()
                         .into(imgEmpresa);
                 break;
-            case "vipla.ath.cx:9085":
+            case "vipla.ath.cx":
                 Picasso.with(getApplicationContext()).load(R.drawable.vipla)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
                         .centerInside()
                         .into(imgEmpresa);
                 break;
-            case "cedistabasco.ddns.net:9085":
+            case "cedistabasco.ddns.net":
                 Picasso.with(getApplicationContext()).load(R.drawable.pressa)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
                         .centerInside()
                         .into(imgEmpresa);
                 break;
-            case "sprautomotive.servehttp.com:9090":
-                Picasso.with(getApplicationContext()).load(R.drawable.rodatech)
-                        .error(R.drawable.ic_baseline_error_24)
-                        .fit()
-                        .centerInside()
-                        .into(imgEmpresa);
+            case "sprautomotive.servehttp.com":
+
+                if(ptoOp.equals(":9090")){
+                    Picasso.with(getApplicationContext()).load(R.drawable.rodatech)
+                            .error(R.drawable.ic_baseline_error_24)
+                            .fit()
+                            .centerInside()
+                            .into(imgEmpresa);
+                }else if(ptoOp.equals(":9095")){
+
+                    Picasso.with(getApplicationContext()).load(R.drawable.partech)
+                            .error(R.drawable.ic_baseline_error_24)
+                            .fit()
+                            .centerInside()
+                            .into(imgEmpresa);
+                }else if(ptoOp.equals(":9080")){
+
+                    Picasso.with(getApplicationContext()).load(R.drawable.shark)
+                            .error(R.drawable.ic_baseline_error_24)
+                            .fit()
+                            .centerInside()
+                            .into(imgEmpresa);
+                }
                 break;
-            case "sprautomotive.servehttp.com:9095":
-                Picasso.with(getApplicationContext()).load(R.drawable.partech)
-                        .error(R.drawable.ic_baseline_error_24)
-                        .fit()
-                        .centerInside()
-                        .into(imgEmpresa);
-                break;
-            case "sprautomotive.servehttp.com:9080":
-                Picasso.with(getApplicationContext()).load(R.drawable.shark)
-                        .error(R.drawable.ic_baseline_error_24)
-                        .fit()
-                        .centerInside()
-                        .into(imgEmpresa);
-                break;
-            case "vazlocolombia.dyndns.org:9085":
+            case "vazlocolombia.dyndns.org":
                 Picasso.with(getApplicationContext()).load(R.drawable.colombia2)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
@@ -222,7 +225,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         .into(imgEmpresa);
 
                 break;
-            case "bpr.ath.cx:9095":
+            case "bpr.ath.cx":
                 Picasso.with(getApplicationContext()).load(R.drawable.logobpr)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
@@ -230,7 +233,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         .into(imgEmpresa);
 
                 break;
-            case "vazquin.ath.cx:9085":
+            case "vazquin.ath.cx":
                 Picasso.with(getApplicationContext()).load(R.drawable.vazquinlogo)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
@@ -238,7 +241,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
                         .into(imgEmpresa);
 
                 break;
-            case "pesbac.ath.cx:9095":
+            case "pesbac.ath.cx":
                 Picasso.with(getApplicationContext()).load(R.drawable.pesbacdark)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
@@ -403,7 +406,7 @@ public class ActivityScreenFirst extends AppCompatActivity {
                             jitems = jsonObject.getJSONObject("Item");
                             Numero = jitems.getJSONObject("" + i + "");
 
-if(StrServer.equals("sprautomotive.servehttp.com:9090")||StrServer.equals("sprautomotive.servehttp.com:9075")||StrServer.equals("sprautomotive.servehttp.com:9095")||StrServer.equals("sprautomotive.servehttp.com:9080")){
+if(StrServer.equals("sprautomotive.servehttp.com")){
      pedidos=(Numero.getString("k_Pedido").equals("") ? " " : Numero.getString("k_Pedido"));
 }
 
@@ -467,155 +470,155 @@ if(StrServer.equals("sprautomotive.servehttp.com:9090")||StrServer.equals("sprau
         protected void onPostExecute(Void result) {
             if (listaPresupuesto.size() != 0) {
 
-                switch (StrServer+ptoOp) {
-                    case "sprautomotive.servehttp.com:9090":
-                    case "sprautomotive.servehttp.com:9075": {
+                switch (StrServer) {
+                    case "sprautomotive.servehttp.com": {
 
-                        float RodatechPresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
-                        float RodatechVendido = Float.parseFloat(listaPresupuesto.get(0).getVendido());
+                        if(ptoOp.equals(":9090")){
+                            float RodatechPresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
+                            float RodatechVendido = Float.parseFloat(listaPresupuesto.get(0).getVendido());
 
-                        float pedido = Float.parseFloat(listaPresupuesto.get(0).getPedido());
-
-
-
-                        RodatechPor = (RodatechVendido * 100) / RodatechPresu;
-                        VendidoPor=(pedido*100)/RodatechPresu;
-                        BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
-                        BarDataSet barDataSet2 = new BarDataSet(SPRVendido(VendidoPor), "Pedido");
-                        BarDataSet barDataSet1 = new BarDataSet(RodaGr(), "Facturado");
+                            float pedido = Float.parseFloat(listaPresupuesto.get(0).getPedido());
 
 
-                        barDataSet0.setColor(Color.RED);
-                        barDataSet1.setColor(Color.GREEN);
-                        barDataSet2.setColor(Color.BLUE);
 
-                        BarData barData = new BarData();
-                        barData.addDataSet(barDataSet0);
-                        barData.addDataSet(barDataSet2);
-                        barData.addDataSet(barDataSet1);
+                            RodatechPor = (RodatechVendido * 100) / RodatechPresu;
+                            VendidoPor=(pedido*100)/RodatechPresu;
+                            BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+                            BarDataSet barDataSet2 = new BarDataSet(SPRVendido(VendidoPor), "Pedido");
+                            BarDataSet barDataSet1 = new BarDataSet(RodaGr(), "Facturado");
 
-                        WindowMetrics metrics = null;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            metrics = getWindowManager().getCurrentWindowMetrics();
+
+                            barDataSet0.setColor(Color.RED);
+                            barDataSet1.setColor(Color.GREEN);
+                            barDataSet2.setColor(Color.BLUE);
+
+                            BarData barData = new BarData();
+                            barData.addDataSet(barDataSet0);
+                            barData.addDataSet(barDataSet2);
+                            barData.addDataSet(barDataSet1);
+
+                            WindowMetrics metrics = null;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                metrics = getWindowManager().getCurrentWindowMetrics();
+                            }
+                            Rect bounds = null;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                bounds = metrics.getBounds();
+                            }
+
+                            int ancho = bounds.width();
+                            int alto = bounds.height();
+
+
+
+                            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                                    /*width*/ ancho,
+                                    /*height*/ 1000
+                            );
+                            barChart.setLayoutParams(param);
+                            barChart.setData(barData);
+                            barChart.animateY(2000);
+                            barChart.invalidate();
+                        }else if(ptoOp.equals(":9095")){
+                            float PartechPresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
+                            float PartechVendido = Float.parseFloat(listaPresupuesto.get(0).getVendido());
+                            float pedido = Float.parseFloat(listaPresupuesto.get(0).getPedido());
+
+                            PartechPor = (PartechVendido * 100) / PartechPresu;
+                            VendidoPor=(pedido*100)/PartechPresu;
+                            BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+                            BarDataSet barDataSet2 = new BarDataSet(SPRVendido(VendidoPor), "Pedido");
+                            BarDataSet barDataSet1 = new BarDataSet(ParteGr(), "Facturado");
+
+                            barDataSet0.setColor(Color.RED);
+                            barDataSet2.setColor(Color.BLUE);
+                            barDataSet1.setColor(Color.YELLOW);
+
+
+                            BarData barData = new BarData();
+                            barData.addDataSet(barDataSet0);
+                            barData.addDataSet(barDataSet2);
+                            barData.addDataSet(barDataSet1);
+
+
+                            WindowMetrics metrics = null;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                metrics = getWindowManager().getCurrentWindowMetrics();
+                            }
+                            Rect bounds = null;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                bounds = metrics.getBounds();
+                            }
+
+                            int ancho = bounds.width();
+                            int alto = bounds.height();
+
+
+
+                            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                                    /*width*/ ancho,
+                                    /*height*/ 1000
+                            );
+                            barChart.setLayoutParams(param);
+                            barChart.setData(barData);
+                            barChart.animateY(2000);
+                            barChart.invalidate();
+
+                        }else if(ptoOp.equals(":9080")){
+                            float SharkPresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
+
+                            float SharkVendido = Float.parseFloat(listaPresupuesto.get(0).getVendido());
+                            float pedido = Float.parseFloat(listaPresupuesto.get(0).getPedido());
+
+                            SharkPor = (SharkVendido * 100) / SharkPresu;
+                            VendidoPor=(pedido*100)/SharkPresu;
+
+                            BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+                            BarDataSet barDataSet2 = new BarDataSet(SPRVendido(VendidoPor), "Pedido");
+                            BarDataSet barDataSet1 = new BarDataSet(SharkGr(), "Facturado");
+
+                            barDataSet0.setColor(Color.RED);
+                            barDataSet2.setColor(Color.BLUE);
+                            barDataSet1.setColor(Color.CYAN);
+
+                            BarData barData = new BarData();
+                            barData.addDataSet(barDataSet0);
+                            barData.addDataSet(barDataSet2);
+                            barData.addDataSet(barDataSet1);
+
+
+
+
+                            WindowMetrics metrics = null;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                metrics = getWindowManager().getCurrentWindowMetrics();
+                            }
+                            Rect bounds = null;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                bounds = metrics.getBounds();
+                            }
+
+                            int ancho = bounds.width();
+                            int alto = bounds.height();
+
+
+
+                            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                                    /*width*/ ancho,
+                                    /*height*/ 1000
+                            );
+                            barChart.setLayoutParams(param);
+                            barChart.setData(barData);
+                            barChart.animateY(2000);
+                            barChart.invalidate();
+
                         }
-                        Rect bounds = null;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            bounds = metrics.getBounds();
-                        }
-
-                        int ancho = bounds.width();
-                        int alto = bounds.height();
 
 
 
-                        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                                /*width*/ ancho,
-                                /*height*/ 1000
-                        );
-                        barChart.setLayoutParams(param);
-                        barChart.setData(barData);
-                        barChart.animateY(2000);
-                        barChart.invalidate();
                         break;
                     }
-                    case "sprautomotive.servehttp.com:9095": {
-
-                        float PartechPresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
-                        float PartechVendido = Float.parseFloat(listaPresupuesto.get(0).getVendido());
-                        float pedido = Float.parseFloat(listaPresupuesto.get(0).getPedido());
-
-                        PartechPor = (PartechVendido * 100) / PartechPresu;
-                        VendidoPor=(pedido*100)/PartechPresu;
-                        BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
-                        BarDataSet barDataSet2 = new BarDataSet(SPRVendido(VendidoPor), "Pedido");
-                        BarDataSet barDataSet1 = new BarDataSet(ParteGr(), "Facturado");
-
-                        barDataSet0.setColor(Color.RED);
-                        barDataSet2.setColor(Color.BLUE);
-                        barDataSet1.setColor(Color.YELLOW);
-
-
-                        BarData barData = new BarData();
-                        barData.addDataSet(barDataSet0);
-                        barData.addDataSet(barDataSet2);
-                        barData.addDataSet(barDataSet1);
-
-
-                        WindowMetrics metrics = null;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            metrics = getWindowManager().getCurrentWindowMetrics();
-                        }
-                        Rect bounds = null;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            bounds = metrics.getBounds();
-                        }
-
-                        int ancho = bounds.width();
-                        int alto = bounds.height();
-
-
-
-                        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                                /*width*/ ancho,
-                                /*height*/ 1000
-                        );
-                        barChart.setLayoutParams(param);
-                        barChart.setData(barData);
-                        barChart.animateY(2000);
-                        barChart.invalidate();
-                        break;
-                    }
-                    case "sprautomotive.servehttp.com:9080": {
-
-                        float SharkPresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
-
-                        float SharkVendido = Float.parseFloat(listaPresupuesto.get(0).getVendido());
-                        float pedido = Float.parseFloat(listaPresupuesto.get(0).getPedido());
-
-                        SharkPor = (SharkVendido * 100) / SharkPresu;
-                        VendidoPor=(pedido*100)/SharkPresu;
-
-                        BarDataSet barDataSet0 = new BarDataSet(barEntries0(), "Meta");
-                        BarDataSet barDataSet2 = new BarDataSet(SPRVendido(VendidoPor), "Pedido");
-                        BarDataSet barDataSet1 = new BarDataSet(SharkGr(), "Facturado");
-
-                        barDataSet0.setColor(Color.RED);
-                        barDataSet2.setColor(Color.BLUE);
-                        barDataSet1.setColor(Color.CYAN);
-
-                        BarData barData = new BarData();
-                        barData.addDataSet(barDataSet0);
-                        barData.addDataSet(barDataSet2);
-                        barData.addDataSet(barDataSet1);
-
-
-
-
-                        WindowMetrics metrics = null;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            metrics = getWindowManager().getCurrentWindowMetrics();
-                        }
-                        Rect bounds = null;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            bounds = metrics.getBounds();
-                        }
-
-                        int ancho = bounds.width();
-                        int alto = bounds.height();
-
-
-
-                        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                                /*width*/ ancho,
-                                /*height*/ 1000
-                        );
-                        barChart.setLayoutParams(param);
-                        barChart.setData(barData);
-                        barChart.animateY(2000);
-                        barChart.invalidate();
-                        break;
-                    }
-                    case "vazlocolombia.dyndns.org:9085": {
+                    case "vazlocolombia.dyndns.org": {
 
                         float GeneralPresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
 
@@ -657,7 +660,7 @@ if(StrServer.equals("sprautomotive.servehttp.com:9090")||StrServer.equals("sprau
                         barChart.invalidate();
                         break;
                     }
-                    case "jacve.dyndns.org:9085": {
+                    case "jacve.dyndns.org": {
 
 
                         float GSPAMORTIGUADORPRESU = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
@@ -744,7 +747,7 @@ if(StrServer.equals("sprautomotive.servehttp.com:9090")||StrServer.equals("sprau
                         barChart.invalidate();
 
                         break;
-                    }   case "autodis.ath.cx:9085": {
+                    }   case "autodis.ath.cx": {
 
                         float EaglePresu = Float.parseFloat(listaPresupuesto.get(0).getPresopUesto());
                         float TrackonePresu = Float.parseFloat(listaPresupuesto.get(1).getPresopUesto());
@@ -857,8 +860,8 @@ if(StrServer.equals("sprautomotive.servehttp.com:9090")||StrServer.equals("sprau
 
             } else {
 
-switch (StrServer+ptoOp){
-    case"jacve.dyndns.org:9085":
+switch (StrServer){
+    case"jacve.dyndns.org":
 
 
 
@@ -899,7 +902,7 @@ switch (StrServer+ptoOp){
         barChart.animateY(2000);
         barChart.invalidate();
         break;
-    case"autodis.ath.cx:9085":
+    case"autodis.ath.cx":
 
 
         barDataSet0 = new BarDataSet(barEntries0(), "Meta");
@@ -919,7 +922,7 @@ switch (StrServer+ptoOp){
         barChart.animateY(2000);
         barChart.invalidate();
         break;
-    case"vazlocolombia.dyndns.org:9085":
+    case"vazlocolombia.dyndns.org":
 
 
       barDataSet0 = new BarDataSet(barEntries0(), "Meta");
@@ -936,57 +939,52 @@ switch (StrServer+ptoOp){
         barChart.animateY(2000);
         barChart.invalidate();
         break;
-        case"sprautomotive.servehttp.com:9080":
+        case"sprautomotive.servehttp.com":
+
+            if(ptoOp.equals(":9090")){
+                barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+                barDataSet1 = new BarDataSet(RodaGr(), "Rodatech");
+
+                barDataSet0.setColor(Color.RED);
+                barDataSet1.setColor(Color.GREEN);
+
+                barData = new BarData();
+                barData.addDataSet(barDataSet0);
+                barData.addDataSet(barDataSet1);
+
+                barChart.setData(barData);
+                barChart.animateY(2000);
+                barChart.invalidate();
+            }else if(ptoOp.equals(":9095")){
+                barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+                barDataSet1 = new BarDataSet(ParteGr(), "Partech");
+
+                barDataSet0.setColor(Color.RED);
+                barDataSet1.setColor(Color.YELLOW);
 
 
-             barDataSet0 = new BarDataSet(barEntries0(), "Meta");
-             barDataSet1 = new BarDataSet(SharkGr(), "SHARK");
+                barData = new BarData();
+                barData.addDataSet(barDataSet0);
+                barData.addDataSet(barDataSet1);
 
-            barDataSet0.setColor(Color.RED);
-            barDataSet1.setColor(Color.CYAN);
+                barChart.setData(barData);
+                barChart.animateY(2000);
+                barChart.invalidate();
+            }else if(ptoOp.equals(":9080")){
+                barDataSet0 = new BarDataSet(barEntries0(), "Meta");
+                barDataSet1 = new BarDataSet(SharkGr(), "SHARK");
 
-             barData = new BarData();
-            barData.addDataSet(barDataSet0);
-            barData.addDataSet(barDataSet1);
+                barDataSet0.setColor(Color.RED);
+                barDataSet1.setColor(Color.CYAN);
 
-            barChart.setData(barData);
-            barChart.animateY(2000);
-            barChart.invalidate();
-            break;
-        case"sprautomotive.servehttp.com:9095":
+                barData = new BarData();
+                barData.addDataSet(barDataSet0);
+                barData.addDataSet(barDataSet1);
 
-
-             barDataSet0 = new BarDataSet(barEntries0(), "Meta");
-             barDataSet1 = new BarDataSet(ParteGr(), "Partech");
-
-            barDataSet0.setColor(Color.RED);
-            barDataSet1.setColor(Color.YELLOW);
-
-
-             barData = new BarData();
-            barData.addDataSet(barDataSet0);
-            barData.addDataSet(barDataSet1);
-
-            barChart.setData(barData);
-            barChart.animateY(2000);
-            barChart.invalidate();
-            break;
-        case "sprautomotive.servehttp.com:9090":
-
-             barDataSet0 = new BarDataSet(barEntries0(), "Meta");
-             barDataSet1 = new BarDataSet(RodaGr(), "Rodatech");
-
-            barDataSet0.setColor(Color.RED);
-            barDataSet1.setColor(Color.GREEN);
-
-            barData = new BarData();
-            barData.addDataSet(barDataSet0);
-            barData.addDataSet(barDataSet1);
-
-            barChart.setData(barData);
-            barChart.animateY(2000);
-            barChart.invalidate();
-
+                barChart.setData(barData);
+                barChart.animateY(2000);
+                barChart.invalidate();
+            }
             break;
     default:
 

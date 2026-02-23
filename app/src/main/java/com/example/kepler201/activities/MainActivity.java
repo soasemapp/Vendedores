@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     int Resultado = 0;
     String[] opciones1 = {""};
 
-    String PuertoOperativo,PuertoConsulta;
     String ptoOp;
     String ptoCons;
 
@@ -100,140 +99,127 @@ public class MainActivity extends AppCompatActivity {
 
                         String Empresa = getString(R.string.Empresa);
                         if (Empresa.equals("cedis")) {
-                            if (which == 0) {
-                                StrServer = "jacve.dyndns.org";
-                                Picasso.with(getApplicationContext()).
-                                        load(R.drawable.jacve)
-                                        .error(R.drawable.ic_baseline_error_24)
-                                        .fit()
-                                        .centerInside()
-                                        .into(imgEmpresa);
-                                LinearJacve.setVisibility(View.VISIBLE);
-                                LinearTodos.setVisibility(View.GONE);
-
-                                PuertoOperativo=getString(R.string.PuertojacveOperativo);
-                                PuertoConsulta=getString(R.string.PuertojacveConsulta);
-
-                                Versiones task1 = new Versiones();
-                                task1.execute();
-
-                            }
 
                             if (which == 0) {
-                                StrServer = "autodis.ath.cx";
+                                StrServer = getString(R.string.strserverautodis);
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.autodis)
                                         .error(R.drawable.ic_baseline_error_24)
                                         .fit()
                                         .centerInside()
                                         .into(imgEmpresa);
-                                Versiones task1 = new Versiones();
-                                task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
-                                PuertoOperativo=getString(R.string.PuertoautodisOperativo);
-                                PuertoConsulta=getString(R.string.PuertoautodisConsulta);
+                                ptoOp=getString(R.string.PuertoautodisOperativo);
+                                ptoCons=getString(R.string.PuertoautodisConsulta);
+                                Versiones task1 = new Versiones();
+                                task1.execute();
+
 
                             } else if (which == 1) {
-                                StrServer = "cecra.ath.cx";
+                                StrServer = getString(R.string.strservercecra);
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.cecra)
                                         .error(R.drawable.ic_baseline_error_24)
                                         .fit()
                                         .centerInside()
                                         .into(imgEmpresa);
-                                Versiones task1 = new Versiones();
-                                task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
 
-                                PuertoOperativo=getString(R.string.PuertocecraOperativo);
-                                PuertoConsulta=getString(R.string.PuertocecraConsulta);
+                                ptoOp=getString(R.string.PuertocecraOperativo);
+                                ptoCons=getString(R.string.PuertocecraConsulta);
+                                Versiones task1 = new Versiones();
+                                task1.execute();
+
                             } else if (which == 2) {
-                                StrServer = "guvi.ath.cx";
+                                StrServer = getString(R.string.strserverguvi);
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.guvi)
                                         .error(R.drawable.ic_baseline_error_24)
                                         .fit()
                                         .centerInside()
                                         .into(imgEmpresa);
-
-                                Versiones task1 = new Versiones();
-                                task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
 
-                                PuertoOperativo=getString(R.string.PuertoguviOperativo);
-                                PuertoConsulta=getString(R.string.PuertoguviConsulta);
+                                ptoOp=getString(R.string.PuertoguviOperativo);
+                                ptoCons=getString(R.string.PuertoguviConsulta);
+                                Versiones task1 = new Versiones();
+                                task1.execute();
+
 
                             } else if (which == 3) {
 
-                                StrServer = "cedistabasco.ddns.net";
+                                StrServer = getString(R.string.strservertabasco);
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.pressa)
                                         .error(R.drawable.ic_baseline_error_24)
                                         .fit()
                                         .centerInside()
                                         .into(imgEmpresa);
-                                Versiones task1 = new Versiones();
-                                task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
 
-                                PuertoOperativo=getString(R.string.PuertotabascoOperativo);
-                                PuertoConsulta=getString(R.string.PuertotabascoConsulta);
+                                ptoOp=getString(R.string.PuertotabascoOperativo);
+                                ptoCons=getString(R.string.PuertotabascoConsulta);
+                                Versiones task1 = new Versiones();
+                                task1.execute();
+
 
                             } else if (which == 4) {
-                                StrServer = "vipla.ath.cx";
+                                StrServer = getString(R.string.strservervipla);
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.vipla)
                                         .error(R.drawable.ic_baseline_error_24)
                                         .fit()
                                         .centerInside()
                                         .into(imgEmpresa);
-                                Versiones task1 = new Versiones();
-                                task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
 
-                                PuertoOperativo=getString(R.string.PuertoviplaOperativo);
-                                PuertoConsulta=getString(R.string.PuertoviplaConsulta);
+                                ptoOp=getString(R.string.PuertoviplaOperativo);
+                                ptoCons=getString(R.string.PuertoviplaConsulta);
+                                Versiones task1 = new Versiones();
+                                task1.execute();
+
 
                             } else if (which == 5) {
-                                StrServer = "sprautomotive.servehttp.com";
+                                StrServer = getString(R.string.strserverspr);
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.sprimage)
                                         .error(R.drawable.ic_baseline_error_24)
                                         .fit()
                                         .centerInside()
                                         .into(imgEmpresa);
-                                Versiones task1 = new Versiones();
-                                task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
 
-                                PuertoOperativo=getString(R.string.PuertosprOperativo);
-                                PuertoConsulta=getString(R.string.PuertosprConsulta);
+                                ptoOp=getString(R.string.PuertoRodatechOperativo);
+                                ptoCons=getString(R.string.PuertoRodatechConsulta);
+                                Versiones task1 = new Versiones();
+                                task1.execute();
+
 
                             } else if (which == 6) {
-                                StrServer = "vazlocolombia.dyndns.org";
+                                StrServer = getString(R.string.strservervazlocolombia);
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.colombia2)
                                         .error(R.drawable.ic_baseline_error_24)
                                         .fit()
                                         .centerInside()
                                         .into(imgEmpresa);
-                                Versiones task1 = new Versiones();
-                                task1.execute();
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
-                                PuertoOperativo=getString(R.string.PuertovazlocolombiaOperativo);
-                                PuertoConsulta=getString(R.string.PuertovazlocolombiaConsulta);
-
-                            } else if (which == 7) {
+                                ptoOp=getString(R.string.PuertovazlocolombiaOperativo);
+                                ptoCons=getString(R.string.PuertovazlocolombiaConsulta);
                                 Versiones task1 = new Versiones();
                                 task1.execute();
-                                StrServer = "bpr.ath.cx";
+
+
+                            } else if (which == 7) {
+
+                                StrServer = getString(R.string.strserverbpr);
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.logobpr)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -245,13 +231,14 @@ public class MainActivity extends AppCompatActivity {
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
 
-                                PuertoOperativo=getString(R.string.PuertobprOperativo);
-                                PuertoConsulta=getString(R.string.PuertobprConsulta);
+                                ptoOp=getString(R.string.PuertobprOperativo);
+                                ptoCons=getString(R.string.PuertobprConsulta);
 
-                            } else if (which == 8) {
                                 Versiones task1 = new Versiones();
                                 task1.execute();
-                                StrServer = "vazquin.ath.cx";
+                            } else if (which == 8) {
+
+                                StrServer = getString(R.string.strservervazquin);
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.vazquinlogo)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -263,13 +250,14 @@ public class MainActivity extends AppCompatActivity {
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
 
-                                PuertoOperativo=getString(R.string.PuertovazquinOperativo);
-                                PuertoConsulta=getString(R.string.PuertovazquinConsulta);
-
-                            } else if (which == 9) {
+                                ptoOp=getString(R.string.PuertovazquinOperativo);
+                                ptoCons=getString(R.string.PuertovazquinConsulta);
                                 Versiones task1 = new Versiones();
                                 task1.execute();
-                                StrServer = "pesbac.ath.cx";
+
+                            } else if (which == 9) {
+
+                                StrServer = getString(R.string.strserverpesbac);
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.pesbaclight)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -281,14 +269,16 @@ public class MainActivity extends AppCompatActivity {
                                 LinearJacve.setVisibility(View.GONE);
                                 LinearTodos.setVisibility(View.VISIBLE);
 
-                                PuertoOperativo=getString(R.string.PuertopesbacOperativo);
-                                PuertoConsulta=getString(R.string.PuertopesbacConsulta);
+                                ptoOp=getString(R.string.PuertopesbacOperativo);
+                                ptoCons=getString(R.string.PuertopesbacConsulta);
+                                Versiones task1 = new Versiones();
+                                task1.execute();
 
                             }
 
                         } else {
                             if (which == 0) {
-                                StrServer = "jacve.dyndns.org";
+                                StrServer = getString(R.string.strserverjacve);
                                 Picasso.with(getApplicationContext()).
                                         load(R.drawable.jacve)
                                         .error(R.drawable.ic_baseline_error_24)
@@ -298,8 +288,8 @@ public class MainActivity extends AppCompatActivity {
                                 LinearJacve.setVisibility(View.VISIBLE);
                                 LinearTodos.setVisibility(View.GONE);
 
-                                PuertoOperativo=getString(R.string.PuertojacveOperativo);
-                                PuertoConsulta=getString(R.string.PuertojacveConsulta);
+                                ptoOp=getString(R.string.PuertojacveOperativo);
+                                ptoCons=getString(R.string.PuertojacveConsulta);
 
                                 Versiones task1 = new Versiones();
                                 task1.execute();
@@ -389,8 +379,8 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("codBra2", loginSave.getCodeBranch());
         editor.putString("branch2", loginSave.getBranch());
         editor.putString("Server", StrServer);
-        editor.putString("PuertoOperativo", PuertoOperativo);
-        editor.putString("PuertoConsulta",PuertoConsulta);
+        editor.putString("PuertoOperativo", ptoOp);
+        editor.putString("PuertoConsulta",ptoCons);
         editor.putString("type2", null);
         //editor.putString("tokenId",token);
         editor.commit();

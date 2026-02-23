@@ -432,7 +432,7 @@ public class xmlPedido extends SoapSerializationEnvelope {
 
 
             writer.startTag(tem, "k_iva");
-            writer.text(((!Server.equals("vazlocolombia.dyndns.org:9085")?"16" : "19")));
+            writer.text(((!Server.equals("vazlocolombia.dyndns.org")?"16" : "19")));
             writer.endTag(tem, "k_iva");
 
             writer.startTag(tem, "k_ieps");

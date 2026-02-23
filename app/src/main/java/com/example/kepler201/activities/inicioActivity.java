@@ -59,7 +59,7 @@ public class inicioActivity extends AppCompatActivity {
     String strusr, strpass, strname, strlname, strtype, strbran, strma, strco, strcodBra, StrServer;
 
     String Empresa;
-
+    String PuertoOperativo,PuertoConsulta;
 
     String URL;
     String extIm;
@@ -95,96 +95,7 @@ public class inicioActivity extends AppCompatActivity {
         ptoCons = preference.getString("PuertoConsulta", "");
 
 
-        switch (StrServer+ptoOp) {
-            case "jacve.dyndns.org:9085":
-                URL = "https://www.jacve.mx/tools/pictures-urlProductos?ids=";
-                editor.putString("URL", URL);
-                editor.putString("EXT", "");
-                editor.commit();
-                break;
-            case "autodis.ath.cx:9085":
-                URL = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
-                editor.putString("URL", URL);
-                editor.putString("EXT", "");
-                editor.commit();
-                break;
-            case "cecra.ath.cx:9085":
-                URL = "https://www.cecra.mx/tools/pictures-urlProductos?ids=";
-                editor.putString("URL", URL);
-                editor.putString("EXT", "");
-                editor.commit();
-                break;
-            case "guvi.ath.cx:9080":
-                URL = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
-                editor.putString("URL", URL);
-                editor.putString("EXT", "");
-                editor.commit();
-                break;
-            case "cedistabasco.ddns.net:9085":
-                URL = "https://www.pressa.mx/tools/pictures-urlProductos?ids=";
-                editor.putString("URL", URL);
-                editor.putString("EXT", "");
-                editor.commit();
-                break;
-            case "sprautomotive.servehttp.com:9090":
-                URL = getString(R.string.urlImagenesSPR) + "rodatech/";
-                extIm = getString(R.string.ext);
-                editor.putString("URL", URL);
-                editor.putString("EXT", extIm);
-                editor.commit();
-                break;
-            case "sprautomotive.servehttp.com:9095":
-                URL = getString(R.string.urlImagenesSPR) + "partech/";
-                extIm = getString(R.string.ext);
-                editor.putString("URL", URL);
-                editor.putString("EXT", extIm);
-                editor.commit();
-                break;
-            case "sprautomotive.servehttp.com:9080":
-                URL = getString(R.string.urlImagenesSPR) + "shark/";
-                extIm = getString(R.string.ext);
-                editor.putString("URL", URL);
-                editor.putString("EXT", extIm);
-                editor.commit();
-                break;
-            case "vipla.ath.cx:9085":
-                URL = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
-                editor.putString("URL", URL);
-                editor.putString("EXT", "");
-                editor.commit();
-                break;
-            case "vazlocolombia.dyndns.org:9085":
-                URL = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
-                editor.putString("URL", URL);
-                editor.putString("EXT", "");
-                editor.commit();
-                break;
-            case "bpr.ath.cx:9095":
-                URL = "https://www.guvi.mx/tools/pictures-urlProductos?ids=";
-                editor.putString("URL", URL);
-                editor.putString("EXT", "");
-                editor.commit();
-                break;
-            case "vazquin.ath.cx:9085":
-                URL = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
-                editor.putString("URL", URL);
-                editor.putString("EXT", "");
-                editor.commit();
-                break;
-            case "pesbac.ath.cx:9095":
-                URL = "https://www.vipla.mx/tools/pictures-urlProductos?ids=";
-                editor.putString("URL", URL);
-                editor.putString("EXT", "");
-                editor.commit();
-                break;
 
-            default:
-                URL = "https://vazlo.com.mx/assets/img/productos/chica/jpg/";
-                editor.putString("URL", URL);
-                editor.putString("EXT", "");
-                editor.commit();
-                break;
-        }
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -421,8 +332,10 @@ public class inicioActivity extends AppCompatActivity {
 
 
         } else if (id == R.id.RodatechMenu) {
-            StrServer = "sprautomotive.servehttp.com:9090";
-            editor.putString("Server", StrServer);
+            PuertoOperativo=getString(R.string.PuertoRodatechOperativo);
+            PuertoConsulta=getString(R.string.PuertoRodatechConsulta);
+            editor.putString("PuertoOperativo", PuertoOperativo);
+            editor.putString("PuertoConsulta",PuertoConsulta);
             editor.commit();
             BorrarCarrito();
             BorrarProductos();
@@ -431,8 +344,10 @@ public class inicioActivity extends AppCompatActivity {
             overridePendingTransition(0, 0);
             finish();
         } else if (id == R.id.PartechMenu) {
-            StrServer = "sprautomotive.servehttp.com:9095";
-            editor.putString("Server", StrServer);
+            PuertoOperativo=getString(R.string.PuertoPartechOperativo);
+            PuertoConsulta=getString(R.string.PuertoPartechConsulta);
+            editor.putString("PuertoOperativo", PuertoOperativo);
+            editor.putString("PuertoConsulta",PuertoConsulta);
             editor.commit();
             BorrarCarrito();
             BorrarProductos();
@@ -441,7 +356,10 @@ public class inicioActivity extends AppCompatActivity {
             overridePendingTransition(0, 0);
             finish();
         } else if (id == R.id.SharkMenu) {
-            StrServer = "sprautomotive.servehttp.com:9080";
+            PuertoOperativo=getString(R.string.PuertoTGOperativo);
+            PuertoConsulta=getString(R.string.PuertoTGConsulta);
+            editor.putString("PuertoOperativo", PuertoOperativo);
+            editor.putString("PuertoConsulta",PuertoConsulta);
             editor.putString("Server", StrServer);
             editor.commit();
             BorrarCarrito();

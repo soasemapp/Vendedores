@@ -7,34 +7,59 @@
     <string name="nav_header_subtitle">Ventas</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="version">2.10.20</string>
+    <string name="Empresa">cedis</string> <!-- Si es Hazak poner "hazak" si son los cedis poner "cedis" -->
 
-    <string name="PuertoautodisOperativo">:9085</string>
-    <string name="PuertoautodisConsulta">:9086</string>
     <string name="PuertojacveOperativo">:9085</string>
     <string name="PuertojacveConsulta">:9085</string>
+
+
+    <string name="PuertoautodisOperativo">:9085</string>
+    <string name="PuertoautodisConsulta">:9080</string>
+
+
     <string name="PuertocecraOperativo">:9085</string>
     <string name="PuertocecraConsulta">:9086</string>
+
     <string name="PuertoguviOperativo">:9080</string>
     <string name="PuertoguviConsulta">:9081</string>
+
     <string name="PuertotabascoOperativo">:9085</string>
     <string name="PuertotabascoConsulta">:9086</string>
+
     <string name="PuertoviplaOperativo">:9085</string>
     <string name="PuertoviplaConsulta">:9086</string>
-    <string name="PuertosprOperativo">:9090</string>
-    <string name="PuertosprConsulta">:9090</string>
+
+
+    <string name="PuertoRodatechOperativo">:9090</string>
+    <string name="PuertoRodatechConsulta">:9090</string>
+
+
+    <string name="PuertoPartechOperativo">:9095</string>
+    <string name="PuertoPartechConsulta">:9095</string>
+
+    <string name="PuertoTGOperativo">:9080</string>
+    <string name="PuertoTGConsulta">:9080</string>
+
     <string name="PuertovazlocolombiaOperativo">:9085</string>
     <string name="PuertovazlocolombiaConsulta">:9085</string>
+
+
     <string name="PuertobprOperativo">:9095</string>
     <string name="PuertobprConsulta">:9096</string>
+
     <string name="PuertovazquinOperativo">:9085</string>
     <string name="PuertovazquinConsulta">:9086</string>
+
     <string name="PuertopesbacOperativo">:9095</string>
     <string name="PuertopesbacConsulta">:9096</string>
 
     <string name="PuertocamriOperativo">:9085</string>
     <string name="PuertocamriConsulta">:9086</string>
+
     <string name="PuertovartuOperativo">:9080</string>
     <string name="PuertovartuConsulta">:9081</string>
+
     <string name="PuertoarewaOperativo">:9075</string>
     <string name="PuertoarewaConsulta">:9076</string>
 
@@ -137,8 +162,6 @@
     <string name="tipo">TIPO</string>
     <string name="email">E-MAIL</string>
     <string name="codigo_del_vendedor">Codigo del Vendedor</string>
-    <string name="version">2.10.18</string>
-    <string name="Empresa">cedis</string><!-- Si es Hazak poner "hazak" si son los cedis poner "cedis" -->
     <string name="bienvenido">Bienvenido</string>
     <string name="contrase_a">Contraseña</string>
     <string name="periodo_sin_ventas_dias">Periodo sin ventas(Dias)</string>

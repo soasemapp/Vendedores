@@ -123,8 +123,8 @@ String cambiarsucursal;
             }
         });
 
-        switch (StrServer+ptoOp) {
-            case "jacve.dyndns.org: ":
+        switch (StrServer) {
+            case "jacve.dyndns.org ":
                 Picasso.with(getApplicationContext()).load(R.drawable.jacve)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
@@ -132,7 +132,7 @@ String cambiarsucursal;
                         .into(imgEmpresa);
 
                 break;
-            case "autodis.ath.cx:9085":
+            case "autodis.ath.cx":
 
                 Picasso.with(getApplicationContext()).load(R.drawable.autodis)
                         .error(R.drawable.ic_baseline_error_24)
@@ -141,56 +141,42 @@ String cambiarsucursal;
                         .into(imgEmpresa);
 
                 break;
-            case "cecra.ath.cx:9085":
+            case "cecra.ath.cx":
                 Picasso.with(getApplicationContext()).load(R.drawable.cecra)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
                         .centerInside()
                         .into(imgEmpresa);
                 break;
-            case "guvi.ath.cx:9080":
+            case "guvi.ath.cx":
                 Picasso.with(getApplicationContext()).load(R.drawable.guvi)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
                         .centerInside()
                         .into(imgEmpresa);
                 break;
-            case "vipla.ath.cx:9085":
+            case "vipla.ath.cx":
                 Picasso.with(getApplicationContext()).load(R.drawable.vipla)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
                         .centerInside()
                         .into(imgEmpresa);
                 break;
-            case "cedistabasco.ddns.net:9085":
+            case "cedistabasco.ddns.net":
                 Picasso.with(getApplicationContext()).load(R.drawable.pressa)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
                         .centerInside()
                         .into(imgEmpresa);
                 break;
-            case "sprautomotive.servehttp.com:9090":
+            case "sprautomotive.servehttp.com":
                 Picasso.with(getApplicationContext()).load(R.drawable.sprimage)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
                         .centerInside()
                         .into(imgEmpresa);
                 break;
-            case "sprautomotive.servehttp.com:9095":
-                Picasso.with(getApplicationContext()).load(R.drawable.sprimage)
-                        .error(R.drawable.ic_baseline_error_24)
-                        .fit()
-                        .centerInside()
-                        .into(imgEmpresa);
-                break;
-            case "sprautomotive.servehttp.com:9080":
-                Picasso.with(getApplicationContext()).load(R.drawable.sprimage)
-                        .error(R.drawable.ic_baseline_error_24)
-                        .fit()
-                        .centerInside()
-                        .into(imgEmpresa);
-                break;
-            case "vazlocolombia.dyndns.org:9085":
+            case "vazlocolombia.dyndns.org":
                 Picasso.with(getApplicationContext()).load(R.drawable.colombia2)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
@@ -198,7 +184,7 @@ String cambiarsucursal;
                         .into(imgEmpresa);
 
                 break;
-            case "bpr.ath.cx:9095":
+            case "bpr.ath.cx":
                 Picasso.with(getApplicationContext()).load(R.drawable.logobpr)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
@@ -206,7 +192,7 @@ String cambiarsucursal;
                         .into(imgEmpresa);
 
                 break;
-            case "vazquin.ath.cx:9085":
+            case "vazquin.ath.cx":
                 Picasso.with(getApplicationContext()).load(R.drawable.vazquinlogo)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()
@@ -214,7 +200,7 @@ String cambiarsucursal;
                         .into(imgEmpresa);
 
                 break;
-            case "pesbac.ath.cx:9095":
+            case "pesbac.ath.cx":
                 Picasso.with(getApplicationContext()).load(R.drawable.pesbacdark)
                         .error(R.drawable.ic_baseline_error_24)
                         .fit()

@@ -228,7 +228,7 @@ public class xmlNewDoc42 extends SoapSerializationEnvelope {
         double ivaCal;
         double MontoTotal;
 
-        ivaCal = Subtotal2 * (!Server.equals("vazlocolombia.dyndns.org:9085") ? 0.16 : 0.19);
+        ivaCal = Subtotal2 * (!Server.equals("vazlocolombia.dyndns.org") ? 0.16 : 0.19);
         MontoTotal = Subtotal2 + ivaCal;
 
         Iva = String.valueOf(ivaCal);

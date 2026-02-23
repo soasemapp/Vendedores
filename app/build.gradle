@@ -7,11 +7,11 @@ android {
         applicationId "com.example.kepler201"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 7
+        versionCode 10
         versionName "@string/version"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-         multiDexEnabled true
+        multiDexEnabled true
     }
 
     buildTypes {
